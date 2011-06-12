@@ -1,0 +1,10 @@
+invitat.htm
+komplet.htm
+napol.htm
+popol.htm
+posvcit.htm
+predpol.htm
+rchvaly.htm
+vespery.htm
+
+2011-01-25: premenované (pridaný prefix "m_" = modlitba)
