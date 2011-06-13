@@ -20,12 +20,14 @@ public class Server extends Thread
     boolean running;
     static String scriptname;
     String language;
+    String persistentOpts;
 
-    public Server(Context _ctx, String sn, String lang) throws IOException {
+    public Server(Context _ctx, String sn, String lang, String opts) throws IOException {
       int i;
       boolean ok = true;
       scriptname = sn;
       language = lang;
+      persistentOpts = opts;
       ctx = _ctx;
       for (i=50000; i>20000; i--) {
         ok = true;
@@ -44,6 +46,14 @@ public class Server extends Thread
 
     public synchronized void setLanguage(String lang) {
       language = lang;
+    }
+
+    public synchronized void setOpts(String s) {
+      persistentOpts = s;
+    }
+
+    public synchronized String getOpts() {
+      return persistentOpts;
     }
 
     public void run() {
@@ -73,7 +83,7 @@ public class Server extends Thread
       }
     }
 
-    native void main(FileDescriptor outfd, FileDescriptor infd, String environ);
+    native String main(FileDescriptor outfd, FileDescriptor infd, String environ);
     native FileDescriptor[] createPipe();
 
     int checkfile(String fn) {
@@ -161,9 +171,9 @@ public class Server extends Thread
         Copy cpin = new Copy( new ByteArrayInputStream(buf, 0, cntlen), new FdOutputStream(pipein[1]) );
         cpin.start();
         if (!postmethod) {
-          main(pipe[1], pipein[0], "REQUEST_METHOD=GET\001QUERY_STRING=" + qs + "\001WWW_j=" + language + "\001");
+          persistentOpts = main(pipe[1], pipein[0], "REQUEST_METHOD=GET\001QUERY_STRING=" + qs + "\001WWW_j=" + language + "\001");
         } else {
-          main(pipe[1], pipein[0], "REQUEST_METHOD=POST\001CONTENT_TYPE=application/x-www-form-urlencoded\001CONTENT_LENGTH=" +
+          persistentOpts = main(pipe[1], pipein[0], "REQUEST_METHOD=POST\001CONTENT_TYPE=application/x-www-form-urlencoded\001CONTENT_LENGTH=" +
               cntlen + "\001QUERY_STRING=" + qs + "\001WWW_j=" + language + "\001");
         }
         boolean ok;

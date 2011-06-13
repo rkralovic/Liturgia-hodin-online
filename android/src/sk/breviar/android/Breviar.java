@@ -16,6 +16,8 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
+import android.util.Log;
+import android.text.Html;
 
 public class Breviar extends Activity
 {
@@ -25,9 +27,13 @@ public class Breviar extends Activity
     String language;
     static final String prefname = "BreviarPrefs";
 
+    void goHome() {
+      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes" + Html.fromHtml(S.getOpts()));
+    }
+
     void resetLanguage() {
       S.setLanguage(language);
-      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes");
+      goHome();
     }
 
     /** Called when the activity is first created. */
@@ -41,10 +47,11 @@ public class Breviar extends Activity
       // Restore preferences
       SharedPreferences settings = getSharedPreferences(prefname, 0);
       language = settings.getString("language", "sk");
+      String opts = settings.getString("params", "");
 
       if (S==null) {
         try {
-          S = new Server(this, scriptname, language);
+          S = new Server(this, scriptname, language, opts);
         } catch (IOException e) {
           finish();
         }
@@ -53,8 +60,7 @@ public class Breviar extends Activity
       setContentView(R.layout.breviar);
 
       wv = (WebView)findViewById(R.id.wv);
-      if (wv.restoreState(savedInstanceState) == null)
-        wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes");
+      if (wv.restoreState(savedInstanceState) == null) goHome();
 
       wv.getSettings().setBuiltInZoomControls(true);
       wv.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
@@ -81,7 +87,7 @@ public class Breviar extends Activity
  
       ((Button)findViewById(R.id.todayBtn)).setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-          wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes");
+          goHome();
         }
       });
  
@@ -105,6 +111,9 @@ public class Breviar extends Activity
       SharedPreferences settings = getSharedPreferences(prefname, 0);
       SharedPreferences.Editor editor = settings.edit();
       editor.putString("language", language);
+      if (S != null) {
+        editor.putString("params", S.getOpts());
+      }
 
       // Commit the edits!
       editor.commit();

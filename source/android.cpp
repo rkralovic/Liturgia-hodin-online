@@ -9,6 +9,7 @@
 #include <string.h>
 #include <errno.h>
 #include "myexpt.h"
+#include "liturgia.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -155,8 +156,9 @@ void closeFd(JNIEnv* env, jobject fd) {
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_sk_breviar_android_Server_main(JNIEnv* env, jobject thiz, jobject outfd, jobject infd, jstring environ) {
+JNIEXPORT jstring JNICALL Java_sk_breviar_android_Server_main(JNIEnv* env, jobject thiz, jobject outfd, jobject infd, jstring environ) {
   const char* params[] = { "breviar.cgi", NULL };
+  jstring jout;
 
   inst = thiz;
   environment = (char *)env->GetStringUTFChars(environ, NULL);
@@ -173,6 +175,10 @@ JNIEXPORT void JNICALL Java_sk_breviar_android_Server_main(JNIEnv* env, jobject 
   
   //__android_log_print(ANDROID_LOG_INFO, "Breviar", "calling main");
   main(1, params);
+  char pom2[MAX_STR], pom3[MAX_STR];
+  strcpy(pom2, ""); strcpy(pom3, "");
+  prilep_request_options(pom2, pom3, ANO);
+  jout = env->NewStringUTF(pom2);
 
   //__android_log_print(ANDROID_LOG_INFO, "Breviar", "main finished");
   env->ReleaseStringUTFChars(environ, environment);
@@ -185,6 +191,8 @@ JNIEXPORT void JNICALL Java_sk_breviar_android_Server_main(JNIEnv* env, jobject 
   // should be closed by main
   out_fd = NULL;
   jenv = NULL;
+
+  return jout;
 }
 
 JNIEXPORT void JNICALL Java_sk_breviar_android_FdInputStream_closefd(JNIEnv* env, jclass thiz, jobject fd) { closeFd(env, fd); }
