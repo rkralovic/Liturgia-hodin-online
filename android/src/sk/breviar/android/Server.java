@@ -19,11 +19,13 @@ public class Server extends Thread
     Context ctx;
     boolean running;
     static String scriptname;
+    String language;
 
-    public Server(Context _ctx, String sn) throws IOException {
+    public Server(Context _ctx, String sn, String lang) throws IOException {
       int i;
       boolean ok = true;
       scriptname = sn;
+      language = lang;
       ctx = _ctx;
       for (i=50000; i>20000; i--) {
         ok = true;
@@ -38,6 +40,10 @@ public class Server extends Thread
       port = i;
       running = true;
       setDaemon(true);
+    }
+
+    public synchronized void setLanguage(String lang) {
+      language = lang;
     }
 
     public void run() {
@@ -98,7 +104,7 @@ public class Server extends Thread
       }
     }
 
-    void handle(Socket client) throws IOException {
+    synchronized void handle(Socket client) throws IOException {
       String dokument = "unknown";
       BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
       byte[] buf;
@@ -155,10 +161,10 @@ public class Server extends Thread
         Copy cpin = new Copy( new ByteArrayInputStream(buf, 0, cntlen), new FdOutputStream(pipein[1]) );
         cpin.start();
         if (!postmethod) {
-          main(pipe[1], pipein[0], "REQUEST_METHOD=GET\001QUERY_STRING=" + qs + "\001");
+          main(pipe[1], pipein[0], "REQUEST_METHOD=GET\001QUERY_STRING=" + qs + "\001WWW_j=" + language + "\001");
         } else {
           main(pipe[1], pipein[0], "REQUEST_METHOD=POST\001CONTENT_TYPE=application/x-www-form-urlencoded\001CONTENT_LENGTH=" +
-              cntlen + "\001QUERY_STRING=" + qs + "\001");
+              cntlen + "\001QUERY_STRING=" + qs + "\001WWW_j=" + language + "\001");
         }
         boolean ok;
         do {

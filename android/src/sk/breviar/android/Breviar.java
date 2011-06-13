@@ -12,12 +12,23 @@ import android.net.Uri;
 import android.widget.Button;
 import android.view.View;
 import android.view.Window;
+import android.content.SharedPreferences;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
 
 public class Breviar extends Activity
 {
     WebView wv;
     Server S = null;
     static String scriptname = "cgi-bin/l.cgi";
+    String language;
+    static final String prefname = "BreviarPrefs";
+
+    void resetLanguage() {
+      S.setLanguage(language);
+      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes");
+    }
 
     /** Called when the activity is first created. */
     @Override
@@ -27,9 +38,13 @@ public class Breviar extends Activity
 
       requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+      // Restore preferences
+      SharedPreferences settings = getSharedPreferences(prefname, 0);
+      language = settings.getString("language", "sk");
+
       if (S==null) {
         try {
-          S = new Server(this, scriptname);
+          S = new Server(this, scriptname, language);
         } catch (IOException e) {
           finish();
         }
@@ -82,9 +97,47 @@ public class Breviar extends Activity
       wv.saveState(outState);
     }
 
+    protected void onStop(){
+      super.onStop();
+
+      // We need an Editor object to make preference changes.
+      // All objects are from android.context.Context
+      SharedPreferences settings = getSharedPreferences(prefname, 0);
+      SharedPreferences.Editor editor = settings.edit();
+      editor.putString("language", language);
+
+      // Commit the edits!
+      editor.commit();
+    }
+
     @Override
     public void onDestroy() {
       if (S != null) S.stopServer();
       super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+      // Inflate the currently selected menu XML resource.
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate( R.menu.menu, menu );
+      return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      // Handle item selection
+      switch (item.getItemId()) {
+        case R.id.lang_sk:
+          language = "sk";
+          resetLanguage();
+          return true;
+        case R.id.lang_cz:
+          language = "cz";
+          resetLanguage();
+          return true;
+        default:
+          return super.onOptionsItemSelected(item);
+      }
     }
 }
