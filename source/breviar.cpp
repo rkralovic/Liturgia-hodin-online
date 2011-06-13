@@ -13345,7 +13345,7 @@ int main(int argc, char **argv){
 	 *
 	 * 2009-08-05: prerobenie ËÌtania jazyka (skopÌrovanÈ eöte na jedno vyööie miesto); uû by sa <title> malo vypisovaù pri generovanÌ inojazyËn˝ch modlitieb spr·vne
 	 */
-        myhpage_init_globals();
+    myhpage_init_globals();
 	_global_opt[OPT_0_SPECIALNE] = GLOBAL_OPTION_NULL;
 	_global_opt[OPT_1_CASTI_MODLITBY] = GLOBAL_OPTION_NULL;
 	_global_opt[OPT_3_SPOLOCNA_CAST] = MODL_SPOL_CAST_NEURCENA;
