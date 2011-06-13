@@ -33,7 +33,8 @@ public class Breviar extends Activity
 
     void resetLanguage() {
       S.setLanguage(language);
-      goHome();
+      // musime zahodit aj nastavenia, mozu byt ine. A zresetovalo by to aj jazyk spat.
+      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes" );
     }
 
     /** Called when the activity is first created. */
