@@ -295,6 +295,8 @@
 #include "myexpt.h" /* export do suboru alebo na konzolu printf */
 #include "myhpage.h" /* hlavicka(); patka(); */
 
+#include "android.h"
+
 /* 2005-03-28: Pridane, pokusy nahradit uncgi */
 char *_global_buf; /* 2006-08-01: túto premennú tiež alokujeme */
 char *_global_buf2; /* 2006-08-01: vytvorené; túto premennú tiež alokujeme */
@@ -320,6 +322,12 @@ char *_global_buf2; /* 2006-08-01: vytvorené; túto premennú tiež alokujeme */
 // #ifndef OS_linux
 #include "breviar.h" /* su tam deklarovane nasledovne globalne premenne a main() */
 // #endif
+
+#ifdef IO_ANDROID
+#define STDIN_FILE stdin_pipe
+#else
+#define STDIN_FILE stdin
+#endif
 
 /* ------------------------------------------------------------------- */
 /* globalne premenne -- deklarovane v liturgia.h, definovane tu */
@@ -682,7 +690,7 @@ short int postread(void){
 	}
 	do
 	{
-		got = fread(buf + sofar, 1, size - sofar, stdin);
+		got = fread(buf + sofar, 1, size - sofar, STDIN_FILE);
 		sofar += got;
 	} while (got && sofar < size);
 

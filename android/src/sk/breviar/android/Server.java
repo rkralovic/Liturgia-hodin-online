@@ -72,7 +72,7 @@ public class Server extends Thread
 
     int checkfile(String fn) {
       int ret;
-      fn.replace('_', 'x');
+      fn = fn.replace("/_", "/x");
       try {
         InputStream tst = ctx.getAssets().open(fn);
         tst.close();
@@ -85,7 +85,7 @@ public class Server extends Thread
 
     void reader(String fn, FileDescriptor fd) {
       //Log.v("Breviar: Server:", "reader(" + fn + ") called");
-      fn.replace('_', 'x');
+      fn = fn.replace("/_", "/x");
       try {
         new Copy( ctx.getAssets().open(fn), new FdOutputStream(fd) ).start();
       } catch (IOException e) {
@@ -101,6 +101,7 @@ public class Server extends Thread
     void handle(Socket client) throws IOException {
       String dokument = "unknown";
       BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+      byte[] buf;
 
       boolean postmethod = false;
       int cntlen=0;
@@ -126,9 +127,12 @@ public class Server extends Thread
         }
       }
       if (postmethod) {
-        char[] buf = new char[cntlen];
-        in.read(buf, 0, cntlen);
-        dokument = dokument + new String(buf);
+        char[] buf2 = new char[cntlen];
+        in.read(buf2, 0, cntlen);
+        buf = new String(buf2).getBytes();
+      } else {
+        cntlen = 0;
+        buf = new byte[0];
       }
       // Log.v("breviar", "document = " + dokument);
 
@@ -146,7 +150,16 @@ public class Server extends Thread
         FileDescriptor[] pipe = createPipe();
         Copy cp = new Copy( new FdInputStream(pipe[0]), client.getOutputStream() );
         cp.start();
-        main(pipe[1], null, "REQUEST_METHOD=GET\001QUERY_STRING=" + dokument.substring(scriptname.length()+1) + "\001");
+        String qs = dokument.substring(scriptname.length()+1);
+        FileDescriptor[] pipein = createPipe();
+        Copy cpin = new Copy( new ByteArrayInputStream(buf, 0, cntlen), new FdOutputStream(pipein[1]) );
+        cpin.start();
+        if (!postmethod) {
+          main(pipe[1], pipein[0], "REQUEST_METHOD=GET\001QUERY_STRING=" + qs + "\001");
+        } else {
+          main(pipe[1], pipein[0], "REQUEST_METHOD=POST\001CONTENT_TYPE=application/x-www-form-urlencoded\001CONTENT_LENGTH=" +
+              cntlen + "\001QUERY_STRING=" + qs + "\001");
+        }
         boolean ok;
         do {
           try {
