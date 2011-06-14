@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.util.Log;
 import android.text.Html;
+import android.net.Uri;
+import android.content.Intent;
 
 public class Breviar extends Activity
 {
@@ -35,6 +37,15 @@ public class Breviar extends Activity
       S.setLanguage(language);
       // musime zahodit aj nastavenia, mozu byt ine. A zresetovalo by to aj jazyk spat.
       wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes" );
+    }
+
+    public boolean tryOpenBible(String url) {
+      try {
+        startActivity(new Intent("sk.ksp.riso.svpismo.action.SHOW", Uri.parse(url)));
+      } catch (android.content.ActivityNotFoundException e) {
+        return false;
+      }
+      return true;
     }
 
     /** Called when the activity is first created. */
@@ -69,6 +80,9 @@ public class Breviar extends Activity
       wv.setWebViewClient(new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+          if (url.startsWith("http://dkc.kbs.sk")) {
+            if (tryOpenBible(url)) return true;
+          }
           view.loadUrl(url);
           return true;
         }
