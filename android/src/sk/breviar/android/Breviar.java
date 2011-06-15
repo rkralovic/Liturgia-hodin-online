@@ -80,6 +80,9 @@ public class Breviar extends Activity
       wv.setWebViewClient(new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+          if (url.startsWith("mailto:")) {
+            return false;
+          }
           if (url.startsWith("http://dkc.kbs.sk")) {
             if (tryOpenBible(url)) return true;
           }
