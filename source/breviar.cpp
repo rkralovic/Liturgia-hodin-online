@@ -4896,7 +4896,19 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		}
 #ifdef LITURGICKE_CITANIA
 		if (cit) {
-		  sprintf(pom, "</td>\n%s, %s, %s", cit->citania, cit->zalm, cit->aleluja);
+		  sprintf(pom, "<br><a href=\"http://dkc.kbs.sk/?d=%d&amp;m=%d&amp;y=%d&amp;c=", _local_den.den, _local_den.mesiac, _local_den.rok);
+		  strcat(_global_string, pom);
+		  strcat(_global_string, remove_diacritics(StringEncode(cit->citania)));
+
+		  sprintf(pom, "&amp;zalm=");
+		  strcat(_global_string, pom);
+		  strcat(_global_string, StringEncode(cit->zalm));
+
+		  sprintf(pom, "&amp;aleluja=");
+		  strcat(_global_string, pom);
+		  strcat(_global_string, StringEncode(cit->aleluja));
+
+		  sprintf(pom, "\">%s</a></td>", cit->citania);
 		  strcat(_global_string, pom);
 		}
 #endif

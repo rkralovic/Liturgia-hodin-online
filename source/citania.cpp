@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <android/log.h>
+
 static struct citanie Citania[] = {
 #include "citania-gen.cpp"
   { NULL, NULL, NULL, NULL }
@@ -11,17 +13,25 @@ static struct citanie Citania[] = {
 static int nc = -1;
 
 static int cmpcitanie(const void *a, const void *b) {
-  return strcmp(((struct citanie *)a)->kod, ((struct citanie *)b)->kod);
+  return strcmp((const char *)a, ((struct citanie *)b)->kod);
 }
 
 struct citanie *najdiCitanie(const char *kod) {
   struct citanie *c;
-  if (nc ==-1) {
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "called najdiCitanie");
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", kod);
+  if (nc == -1) {
+    __android_log_print(ANDROID_LOG_INFO, "Breviar", "init");
     for (nc=0; Citania[nc].kod; nc++);
+    __android_log_print(ANDROID_LOG_INFO, "Breviar", "init done");
   }
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "bsearch");
   c = (citanie *)bsearch(kod, Citania, nc, sizeof(struct citanie), cmpcitanie);
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "bsearch done");
   if (!c) return NULL;
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "c not null");
   if (!c->citania[0]) return NULL;
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "known");
   return c;
 };
 
@@ -36,6 +46,7 @@ static char ferialnyCyklus(_struct_dm *d) {
 char *getCode(_struct_dm *d) {
   static char buf[100];
 
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "called getcode");
   if (d->smer == 1) { sprintf(buf, "%02d%02d%d", d->smer, d->litobd, d->denvt); // Velkonocne trojdnie
   } else if (d->smer == 2) { // niektore maju nedelny cyklus, niektore nie (Popolcova streda).
     if (d->meno[0]) {        // zatial dame pismeno cyklu vzdy; neublizi to.
@@ -60,6 +71,32 @@ char *getCode(_struct_dm *d) {
   } else {
     sprintf(buf, "%02d%c%02d%02d%02d", d->smer, ferialnyCyklus(d), d->litobd, d->tyzden, d->denvt);
   }
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", buf);
   return buf;
 }
 
+char *StringEncode(const char *in) {
+  static unsigned char tab[17]="0123456789ABCDEF";
+  int i;
+  const char *s;
+  static char out[65536];
+
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "encode called");
+  for (s=(const char *)in,i=0; i<sizeof(out)-5 && *s; s++) {
+    if (
+        ( (*s>='a')&&(*s<='z') ) ||
+        ( (*s>='A')&&(*s<='Z') ) ||
+        ( (*s>='0')&&(*s<='9') )
+       ) {
+      out[i]=*s;
+      i+=1;
+    } else {
+      out[i]='%';
+      out[i+1]=tab[(*s) >> 4];
+      out[i+2]=tab[(*s) & 0xf];
+      i+=3;
+    }
+  }
+  out[i]=0;
+  return out;
+}
