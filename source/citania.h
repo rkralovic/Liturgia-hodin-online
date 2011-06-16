@@ -1,0 +1,13 @@
+#ifndef __CITANIA_H_
+#define __CITANIA_H_
+
+#include "breviar.h"
+
+struct citanie {
+  const char *kod, *citania, *zalm, *aleluja;
+};
+
+struct citanie *najdiCitanie(const char *kod);
+char *getCode(_struct_dm *d);
+
+#endif

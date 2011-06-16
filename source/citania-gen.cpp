@@ -92,7 +92,7 @@
  { "02C070603", "Iz 50,4-9b;Ž 69,8-34; Mt 26,14-25", "Vo svojej veľkej láske vyslyš ma, Pane.", "" }, /* , , 2007-04-04 */
  { "02C100300", "Sk 5,27b<po*>-32.40b<pri*>-41; Ž 30,2-13; Zjv 5,11-14; Jn 21,1-19", "Budem ťa, Pane, oslavovať, že si ma vyslobodil.", "" }, /* , 3. veľkonočná nedeľa, 2007-04-22 */
  { "02C100400", "Sk 13,14.43-52; Ž 100,2-5; Zjv 7,9.14b<To *>-17; Jn 10,27-30", "Sme jeho ľud a ovce z jeho stáda.", "" }, /* , 4. veľkonočná nedeľa, 2007-04-29 */
- { "02C100500", "Sk 14,21b<Pot*>-27;Ž 145,8-13; Zjv 21,1-5a<*nové.">; Jn 13,31-33a<*vami.>.34-35", "Oslavovať ťa chcem naveky, Bože, môj Kráľ.", "" }, /* , 5. veľkonočná nedeľa, 2007-05-06 */
+ { "02C100500", "Sk 14,21b<Pot*>-27;Ž 145,8-13; Zjv 21,1-5a<*nové.\">; Jn 13,31-33a<*vami.>.34-35", "Oslavovať ťa chcem naveky, Bože, môj Kráľ.", "" }, /* , 5. veľkonočná nedeľa, 2007-05-06 */
  { "02C100600", "Sk 15,1-2.22-29; Ž 67,2-8; Zjv 21,10-14.22-23; Jn 14,23-29", "Velebte Pána, všetky národy.", "" }, /* , 6. veľkonočná nedeľa, 2007-05-13 */
  { "02C110700", "Sk 7,55-60; Ž 97,1-9; Zjv 22,12-14.16-17.20; Jn 17,20-26", "Pán kraľuje, Najvyšší na celej zemi.", "" }, /* , 7. veľkonočná nedeľa, 2007-05-20 */
  { "03AKrista Krala", "Ez 34,11-12. 15-17; Ž 93,1ab. 1c-2. 5; 1Kor 15,20-26. 28; Mt 25,31-46", "Pán kraľuje, oslavujme ho", "" }, /* (slávnosť), 34. nedeľa v období cez rok - Krista Kráľa, 2008-11-23 */
@@ -223,7 +223,7 @@
  { "06C0513", "1Kr 19,16b<Saf*>.19-21; Ž 16,1-11; Gal 5,1.13-18; Lk 9,51-62", "Ty, Pane, si moje jediné dobro.", "" }, /* , 13. nedeľa v období cez rok, 2007-07-01 */
  { "06C0514", "Iz 66,10-14c<*hom>; Ž 66,1-20; Gal 6,14-18; Lk 10,1-12.17-20", "Jasaj Bohu, celá zem.", "" }, /* , 14. nedeľa v období cez rok, 2007-07-08 */
  { "06C0515", "Dt 30,10-14; Ž 69,14-37 /al./ Ž 19,8-11; Kol 1,15-20; Lk 10,26 37", "Hľadajte, pokorní, Pána a srdce vám oživne. /al./ Rozhodnutia Pánove sú správne, potešujú srdce.", "" }, /* , 15. nedeľa v období cez rok, 2007-07-15 */
- { "06C0516", "Gn 18,1-10a<*na.">; Ž 15,2-5; Kol 1,24-28; Lk 10,38-42", "Pane, kto smie bývať v tvojom svätom stánku?", "" }, /* , 16. nedeľa v období cez rok, 2007-07-22 */
+ { "06C0516", "Gn 18,1-10a<*na.\">; Ž 15,2-5; Kol 1,24-28; Lk 10,38-42", "Pane, kto smie bývať v tvojom svätom stánku?", "" }, /* , 16. nedeľa v období cez rok, 2007-07-22 */
  { "06C0517", "Gn 18,20-32; Ž 138,1-8; Kol 2,12-14; Lk 11,1-13", "Vyslyš ma, Pane, keď ťa budem vzývať.", "" }, /* , 17. nedeľa v období cez rok, 2007-07-29 */
  { "06C0518", "Kaz 1,2. 2,21-23; Ž 90,3-17; Kol 3,1-5.9-11; Lk 12,13-21", "Pane, stal si sa nám útočišťom z pokolenia na pokolenie.", "" }, /* , 18. nedeľa v období cez rok, 2007-08-05 */
  { "06C0519", "Múd 18,6-9; Ž 33,1-22; Hebr 11,1-2.8-19; Lk 12,32-48", "Blažený ľud, ktorý si Pán vyvolil za dedičstvo.", "" }, /* , 19. nedeľa v období cez rok, 2007-08-12 */
@@ -321,7 +321,7 @@
  { "091020102", "1Jn 2,12-17; Ž 96,1-2a. 2b-3. 5b<Pán*>-6; Lk 2,36-40", "Tešte sa, nebesia, a plesaj, zem.", "" }, /* , , 2008-12-30 */
  { "091020103", "1Jn 2,18-21; Ž 96,1-2.11-12a.12b-13; Jn 1,1-18", "Tešte sa, nebesia, a plesaj zem.", "" }, /* (ľubovoľná spomienka), Svätého Silvestra I., pápeža, 2008-12-31 */
  { "091060004", "Dt 30,15-20; Ž 1,1-2. 3. 4+6; Lk 9,22-25", "Blažený človek, čo v Pána skladá dôveru", "Robte pokánie, hovorí Pán; priblížilo sa nebeské kráľovstvo" }, /* , , 2009-02-26 */
- { "091060005", "Iz 58,1-9b<*m!">; Ž 51,3-19; Mt 9,14-15", "Bože, ty nepohŕdaš srdcom skrúšeným a poníženým.", "" }, /* (spomienka), Svätého Polykarpa, biskupa mučeníka, 2007-02-23 */
+ { "091060005", "Iz 58,1-9b<*m!\">; Ž 51,3-19; Mt 9,14-15", "Bože, ty nepohŕdaš srdcom skrúšeným a poníženým.", "" }, /* (spomienka), Svätého Polykarpa, biskupa mučeníka, 2007-02-23 */
  { "091060005", "Iz 58,1-9b<*som..>; Ž 51,3-4. 5-6a<*šil>. 18-19; Mt 9,14-15", "Bože, ty nepohŕdaš srdcom skrúšeným a poníženým", "Milujte dobro a nie zlo; budete žiť a Pán bude s vami." }, /* , , 2009-02-27 */
  { "091060006", "Iz 58,9c<Ke*>-14; Ž 86,1-2. 3-4. 5-6; Lk 5,27-32", "Ukáž mi, Pane, svoju cestu a budem kráčať v tvojej pravde.", "Nechcem smrť bezbožného, hovorí Pán; ale aby sa obrátil od svojej cesty a žil." }, /* , , 2009-02-28 */
  { "091060006", "Iz 58,9c<Ke*>-14; Ž 86,1-6; Lk 5,27-32", "Ukáž mi, Pane, svoju cestu a budem kráčať v tvojej pravde.", "" }, /* , , 2007-02-24 */
@@ -429,7 +429,7 @@
  { "10Sv. Andreja-Svorada a Benedikta, pustovnikov", "1Kr 19,16b<Saf*>.19-21 /al./ Flp 4,4-9; Ž 16,1-2a<*án.>+5.7-8.11; Lk 12,35-40", "Ty, Pane, si moje jediné dobro.", "Bdejte celý čas a modlite sa, aby ste sa mohli postaviť pred Syna človeka." }, /* (sviatok), v Nitrianskej diecéze sviatok, 2009-07-17 */
  { "10Sv. Andreja-Svorada a Benedikta, pustovnikov", "1Kr 19,16b. 19-21 /al./ Flp 4,4-9; Ž 16,1-2a<*án.>+5. 7-8. 11; Lk 12,35-40", "Ty, Pane, si moje jediné dobro", "" }, /* (sviatok), V Nitrianskej diecéze, 2008-07-17 */
  { "10Sv. Cyrila, mnicha, a sv. Metoda, biskupa, patronov Europy", "Iz 52,7-10; Ž 96; Mk 16,15-20", "Pán zvestoval svoju slávu.", "Choďte a učte všetky národy, hovorí Pán; ja som s vami po všetky dni až do skončenia sveta." }, /* , /al./ zo spomienky, 2009-02-14 */
- { "10Sv. Filipa Neriho, knaza", "Gn 11,1-9 /al./ Ex 19,3-8a<*n.">.16-20b /al./ Ez 37,1-14 /al./ Joel 3,1-5; Ž 104,1-2.24-30; Rim 8,22-27; Jn 7,37-39", "Pane, zošli svojho Ducha a obnov tvárnosť zeme.", "" }, /* , Nedeľa zoslania Ducha Svätého (vigília), 2007-05-26 */
+ { "10Sv. Filipa Neriho, knaza", "Gn 11,1-9 /al./ Ex 19,3-8a<*n.\">.16-20b /al./ Ez 37,1-14 /al./ Joel 3,1-5; Ž 104,1-2.24-30; Rim 8,22-27; Jn 7,37-39", "Pane, zošli svojho Ducha a obnov tvárnosť zeme.", "" }, /* , Nedeľa zoslania Ducha Svätého (vigília), 2007-05-26 */
  { "10Sv. Frantiska Xaverskeho, knaza", "Iz 52,7-10; Ž 96,1-2a. 2b-3. 4-5; 1Kor 9,16-19.22-23; Mk 16,15-20", "Zvestujte všetkým národom zázraky Pánove.", "" }, /* (V Banskobystrickej diecéze sviatok), Svätého Františka Xaverského, kňaza, patróna diecézy, 2008-12-03 */
  { "10Sv. Frantiska Xaverskeho, knaza", "1Kor 9,16-19.22-23; Ž 122,1-2. 3-4a. 4b-5. 6-7. 8-9; Mk 16,15-20", "Zvestujte všetkým národom zázraky Pánove.", "" }, /* (V Banskobystrickej diecéze sviatok), Svätého Františka Xaverského, kňaza, 2007-12-03 */
  { "10Sv. Ireneja, biskupa a mucenika", "Sk 3,1-10; Ž 19,2-3. 4-5; Gal 1,11-20; Jn 21,15-19", "Po celej zemi rozlieha sa ich hlas", "" }, /* (vigília), Svätých Petra a Pavla, apoštolov, 2008-06-28 */
@@ -901,7 +901,7 @@
  { "131110706", "Sk 28,16-20.30-31; Ž 11,4-7; Jn 21,20-25", "Pán tróni na nebesiach; statoční uvidia jeho tvár.", "" }, /* (spomienka), Svätého Filipa Neriho, kňaza, 2007-05-26 */
  { "132000101", "Iz 2,1-5 /al./ Iz 4,2-6; Ž 122,1-2. 4-5. 6-7. 7-8; Mt 8,5-11", "S radosťou pôjdeme do domu Pánovho.", "" }, /* (spomienka), Svätého Františka Xaverského, kňaza, 2007-12-03 */
  { "132000102", "Iz 11,1-10; Ž 72,2. 7-8. 12-13. 17; Lk 10,21-24", "V jeho dňoch bude prekvitať spravodlivosť a plnosť pokoja.", "" }, /* (ľubovoľná spomienka), Svätého Jána Damascénskeho, kňaza učiteľa cirkvi, 2007-12-04 */
- { "132000103", "Iz 25,6-10a<*u.">; Ž 23,1-3. 4. 5. 6; Mt 15,29-37", "Budem bývať v dome Pánovom mnoho a mnoho dni.", "" }, /* , , 2007-12-05 */
+ { "132000103", "Iz 25,6-10a<*u.\">; Ž 23,1-3. 4. 5. 6; Mt 15,29-37", "Budem bývať v dome Pánovom mnoho a mnoho dni.", "" }, /* , , 2007-12-05 */
  { "132000104", "Iz 26,1-6; Ž 118,1+8-9. 19-21. 25-27a<*lom.>; Mt 7,21.24-27", "Požehnaný, ktorý prichádza v mene Pánovom.", "" }, /* (ľubovoľná spomienka), Svätého Mikuláša, biskupa, 2007-12-06 */
  { "132000105", "Iz 29,17-24; Ž 27,1. 4. 13-14; Mt 9,27-31", "Pán je moje svetlo a moja spása.", "" }, /* (spomienka), Svätého Ambróza, biskupa učiteľa cirkvi, 2007-12-07 */
  { "132000201", "Iz 35,1-10; Ž 85,9ab<*svätým>+10. 11-12. 13-14; Lk 5,17-26", "Hľa, náš Boh príde a spasí nás.", "" }, /* , , 2007-12-10 */

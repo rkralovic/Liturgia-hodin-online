@@ -1313,6 +1313,8 @@ _struct_den_mesiac prva_adventna_nedela(short int rok);
 short int nedelny_cyklus(short int por, short int rok);
 short int nedelny_cyklus(short int den, short int mesiac, short int rok);
 short int nedelny_cyklus(_struct_den_mesiac den_a_mesiac, short int rok);
+short int ferialny_cyklus(short int por, short int rok);
+short int ferialny_cyklus(short int den, short int mesiac, short int rok);
 _struct_dm por_den_mesiac_dm(short int poradie, short int rok);
 short int tyzden_cez_rok_po_vn(short int rok);
 short int cislo_nedele_cez_rok_po_vn(short int rok);

@@ -296,6 +296,7 @@
 #include "myhpage.h" /* hlavicka(); patka(); */
 
 #include "android.h"
+#include "citania.h"
 
 /* 2005-03-28: Pridane, pokusy nahradit uncgi */
 char *_global_buf; /* 2006-08-01: túto premennú tiež alokujeme */
@@ -4448,6 +4449,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	short int obyc = NIE;
 	short int liturgicka_farba = LIT_FARBA_NEURCENA; /* 2006-08-19: pridané */
 	short int liturgicka_farba_alt = LIT_FARBA_NEURCENA; /* 2011-03-24: pridané */
+        struct citanie *cit = NULL;
 
 	Log("-- init_global_string(EXPORT_DNA_%d, %d, %s) -- zaèiatok (inicializuje tri _global_string* premenné)\n",
 		typ, poradie_svateho, nazov_modlitby(modlitba));
@@ -4475,12 +4477,14 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		case 1:
 			/* do _local_den priradim dane slavenie */
 			_local_den = _global_svaty1;
+			cit = najdiCitanie(getCode(&_global_svaty1));
 			Log("priradujem _local_den = _global_svaty1;\n");
 			break; /* case 1: */
 		case 2:
 			if(_global_pocet_svatych > 1){
 				/* do _local_den priradim dane slavenie */
 				_local_den = _global_svaty2;
+				cit = najdiCitanie(getCode(&_global_svaty2));
 				Log("priradujem _local_den = _global_svaty2;\n");
 			}
 			else{
@@ -4498,6 +4502,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			if(_global_pocet_svatych > 2){
 				/* teraz do _local_den priradim dane slavenie */
 				_local_den = _global_svaty3;
+				cit = najdiCitanie(getCode(&_global_svaty3));
 				Log("priradujem _local_den = _global_svaty3;\n");
 			}
 			else{
@@ -4536,6 +4541,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 				)){
 				/* do _local_den priradim dane slavenie */
 				_local_den = _global_svaty1;
+				cit = najdiCitanie(getCode(&_global_svaty1));
 				Log("priradujem _local_den = _global_svaty1;\n");
 			}
 			else{
@@ -4547,6 +4553,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			break; /* case 0: */
 	}/* switch(poradie_svateho) */
 
+	if (!cit) cit = najdiCitanie(getCode(&_global_den));
 	Log("1:_local_den.meno == %s\n", _local_den.meno); /* 08/03/2000A.D. */
 
 	/* 21/03/2000A.D.
@@ -4887,6 +4894,12 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			sprintf(pom, "<!-- kalendár nie je urèený správne -->");
 			strcat(_global_string, pom);
 		}
+#ifdef LITURGICKE_CITANIA
+		if (cit) {
+		  sprintf(pom, "</td>\n%s, %s, %s", cit->citania, cit->zalm, cit->aleluja);
+		  strcat(_global_string, pom);
+		}
+#endif
 	}/* lokalizácia slávenia a kalendár */
 
 	Log("  -- _global_string == %s\n", _global_string);
