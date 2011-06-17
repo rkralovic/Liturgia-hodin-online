@@ -11,5 +11,6 @@ struct citanie *najdiCitanie(const char *kod);
 char *getCode(_struct_dm *d);
 
 char *StringEncode(const char *in);
+char *toUtf(const char *in);
 
 #endif

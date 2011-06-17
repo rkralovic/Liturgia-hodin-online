@@ -4553,6 +4553,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			break; /* case 0: */
 	}/* switch(poradie_svateho) */
 
+        int ma_nazov = 0;
 	if (!cit) cit = najdiCitanie(getCode(&_global_den));
 	Log("1:_local_den.meno == %s\n", _local_den.meno); /* 08/03/2000A.D. */
 
@@ -4693,6 +4694,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 				strcat(pom, "</span>");
 			}
 			strcat(_global_string, pom);
+                        ma_nazov = 1;
 		}/* nede¾a */
 		else{ /* nie nede¾a */
 			Log("deò iný ako nede¾a, ktorý nemá vlastný názov... (_global_string == %s)\n", _global_string);
@@ -4779,6 +4781,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 					}/* default, cezroèné obdobie a ostatné "obyèajné" dni */
 #endif
 					strcat(_global_string, pom);
+                                        ma_nazov = 1;
 				}/* nie export na viac dní */
 				else 
 					Log("else [ (typ != EXPORT_DNA_VIAC_DNI) && (typ != EXPORT_DNA_VIAC_DNI_SIMPLE) ] \n");
@@ -4788,6 +4791,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 						sprintf(pom2, html_text_tyzden_zaltara_cislo[_global_jazyk], _local_den.tyzden);
 						strcat(pom, pom2);
 						strcat(_global_string, pom);
+                                                ma_nazov = 1;
 					}
 				/* inak ostane string prazdny */
 
@@ -4817,6 +4821,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			strcat(_global_string, caps_BIG(_local_den.meno));
 		else
 			strcat(_global_string, _local_den.meno);
+                ma_nazov = 1;
 
 		if((farba == COLOR_RED) && (typ != EXPORT_DNA_VIAC_DNI_TXT)){
 			/* zmenene <font color> na <span>, 2003-07-02 */
@@ -4896,20 +4901,23 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		}
 #ifdef LITURGICKE_CITANIA
 		if (cit) {
-		  sprintf(pom, "<br><a href=\"http://dkc.kbs.sk/?d=%d&amp;m=%d&amp;y=%d&amp;c=", _local_den.den, _local_den.mesiac, _local_den.rok);
-		  strcat(_global_string, pom);
-		  strcat(_global_string, remove_diacritics(StringEncode(cit->citania)));
+                  if (typ == EXPORT_DNA_DNES || typ == EXPORT_DNA_VIAC_DNI) {
+                    if (ma_nazov) strcat(_global_string, "<br>");
+                    sprintf(pom, "<br><a href=\"svpismo://svpismo.riso.ksp.sk/?d=%d&amp;m=%d&amp;y=%d&amp;c=", _local_den.den, _local_den.mesiac, _local_den.rok);
+                    strcat(_global_string, pom);
+                    strcat(_global_string, StringEncode(remove_diacritics(cit->citania)));
 
-		  sprintf(pom, "&amp;zalm=");
-		  strcat(_global_string, pom);
-		  strcat(_global_string, StringEncode(cit->zalm));
+                    sprintf(pom, "&amp;zalm=");
+                    strcat(_global_string, pom);
+                    strcat(_global_string, StringEncode(toUtf(cit->zalm)));
 
-		  sprintf(pom, "&amp;aleluja=");
-		  strcat(_global_string, pom);
-		  strcat(_global_string, StringEncode(cit->aleluja));
+                    sprintf(pom, "&amp;aleluja=");
+                    strcat(_global_string, pom);
+                    strcat(_global_string, StringEncode(toUtf(cit->aleluja)));
 
-		  sprintf(pom, "\">%s</a></td>", cit->citania);
-		  strcat(_global_string, pom);
+                    sprintf(pom, "\">%s</a></td>", cit->citania);
+                    strcat(_global_string, pom);
+                  }
 		}
 #endif
 	}/* lokalizácia slávenia a kalendár */

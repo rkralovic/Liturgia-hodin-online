@@ -86,6 +86,9 @@ public class Breviar extends Activity
           if (url.startsWith("http://dkc.kbs.sk")) {
             if (tryOpenBible(url)) return true;
           }
+          if (url.startsWith("svpismo:")) {
+            if (tryOpenBible(url)) return true;
+          }
           view.loadUrl(url);
           return true;
         }
