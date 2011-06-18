@@ -81,7 +81,13 @@ public class Breviar extends Activity
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
           if (url.startsWith("mailto:")) {
-            return false;
+            String[] blah_email = url.split(":");
+            Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{blah_email[1]});
+            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Komentár k breviáru");
+            startActivity(emailIntent);
+            return true;
           }
           if (url.startsWith("http://dkc.kbs.sk")) {
             if (tryOpenBible(url)) return true;
