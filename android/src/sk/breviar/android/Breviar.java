@@ -95,6 +95,10 @@ public class Breviar extends Activity
           if (url.startsWith("svpismo:")) {
             if (tryOpenBible(url)) return true;
           }
+
+          int sc = (int)(view.getScale()*100);
+          view.setInitialScale(sc);
+
           view.loadUrl(url);
           return true;
         }
