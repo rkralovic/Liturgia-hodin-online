@@ -24,6 +24,7 @@ import android.content.Intent;
 public class Breviar extends Activity
 {
     WebView wv;
+    int scale;
     Server S = null;
     static String scriptname = "cgi-bin/l.cgi";
     String language;
@@ -59,6 +60,7 @@ public class Breviar extends Activity
       // Restore preferences
       SharedPreferences settings = getSharedPreferences(prefname, 0);
       language = settings.getString("language", "sk");
+      scale = settings.getInt("scale", 100);
       String opts = settings.getString("params", "");
 
       if (S==null) {
@@ -72,11 +74,13 @@ public class Breviar extends Activity
       setContentView(R.layout.breviar);
 
       wv = (WebView)findViewById(R.id.wv);
+      wv.setInitialScale(scale);
       if (wv.restoreState(savedInstanceState) == null) goHome();
 
       wv.getSettings().setBuiltInZoomControls(true);
       wv.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
 
+      final Breviar parent = this;
       wv.setWebViewClient(new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -96,11 +100,15 @@ public class Breviar extends Activity
             if (tryOpenBible(url)) return true;
           }
 
-          int sc = (int)(view.getScale()*100);
-          view.setInitialScale(sc);
-
           view.loadUrl(url);
           return true;
+        }
+
+        @Override
+        public void onScaleChanged(WebView view, float oldSc, float newSc) {
+          parent.scale = (int)(newSc*100);
+          Log.v("svpismo", "scale changed to " + parent.scale);
+          view.setInitialScale(parent.scale);
         }
       } );
 
@@ -142,6 +150,7 @@ public class Breviar extends Activity
       SharedPreferences settings = getSharedPreferences(prefname, 0);
       SharedPreferences.Editor editor = settings.edit();
       editor.putString("language", language);
+      editor.putInt("scale", scale);
       if (S != null) {
         editor.putString("params", S.getOpts());
       }
