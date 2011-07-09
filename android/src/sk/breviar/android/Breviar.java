@@ -20,6 +20,7 @@ import android.util.Log;
 import android.text.Html;
 import android.net.Uri;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 public class Breviar extends Activity
 {
@@ -74,11 +75,9 @@ public class Breviar extends Activity
       setContentView(R.layout.breviar);
 
       wv = (WebView)findViewById(R.id.wv);
+      wv.getSettings().setBuiltInZoomControls(true);
       wv.setInitialScale(scale);
       if (wv.restoreState(savedInstanceState) == null) goHome();
-
-      wv.getSettings().setBuiltInZoomControls(true);
-      wv.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
 
       final Breviar parent = this;
       wv.setWebViewClient(new WebViewClient() {
@@ -100,6 +99,7 @@ public class Breviar extends Activity
             if (tryOpenBible(url)) return true;
           }
 
+          parent.syncScale();
           view.loadUrl(url);
           return true;
         }
@@ -107,25 +107,33 @@ public class Breviar extends Activity
         @Override
         public void onScaleChanged(WebView view, float oldSc, float newSc) {
           parent.scale = (int)(newSc*100);
-          Log.v("svpismo", "scale changed to " + parent.scale);
           view.setInitialScale(parent.scale);
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//          Log.v("breviar", "onPageStarted");
+          parent.syncScale();
         }
       } );
 
       ((Button)findViewById(R.id.backBtn)).setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
+          parent.syncScale();
           wv.goBack();
         }
       });
  
       ((Button)findViewById(R.id.forwardBtn)).setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
+          parent.syncScale();
           wv.goForward();
         }
       });
  
       ((Button)findViewById(R.id.todayBtn)).setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
+          parent.syncScale();
           goHome();
         }
       });
@@ -139,12 +147,13 @@ public class Breviar extends Activity
     }
 
     protected void onSaveInstanceState(Bundle outState) {
+//      Log.v("breviar", "onSaveInstanceState");
+      syncScale();
       wv.saveState(outState);
+      syncPreferences();
     }
 
-    protected void onStop(){
-      super.onStop();
-
+    void syncPreferences() {
       // We need an Editor object to make preference changes.
       // All objects are from android.context.Context
       SharedPreferences settings = getSharedPreferences(prefname, 0);
@@ -157,6 +166,19 @@ public class Breviar extends Activity
 
       // Commit the edits!
       editor.commit();
+    }
+
+    protected void syncScale() {
+      scale = (int)(wv.getScale()*100);
+      wv.setInitialScale(scale);
+//      Log.v("breviar", "syncScale "+scale);
+    }
+
+    protected void onStop(){
+//      Log.v("breviar", "onStop");
+      syncScale();
+      super.onStop();
+      syncPreferences();
     }
 
     @Override
