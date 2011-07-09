@@ -471,6 +471,16 @@ extern short int query_type; /* premenna obsahujuca PRM_... */
 	#define STR_MODL_OPTF0_REF "of0r"
 #endif
 
+// liturgicke citania 
+#ifdef LITURGICKE_CITANIA
+#define MODL_OPTF0_CIT 63
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF0_CIT "MODL_OPTF0_CIT"
+#else
+	#define STR_MODL_OPTF0_CIT "of0cit"
+#endif
+#endif
+
 /* pre force option 1 jednotlivé bit-komponenty (parciálne vo¾by) */
 
 // evanjeliové chválospevy (benediktus, magnifikat, nunk dimittis)

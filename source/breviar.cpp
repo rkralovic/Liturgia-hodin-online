@@ -1080,6 +1080,9 @@ short int setForm(void){
 			switch(i){
 				case 0: strcat(local_str, STR_MODL_OPTF0_VERSE); break;
 				case 1: strcat(local_str, STR_MODL_OPTF0_REF); break;
+#ifdef LITURGICKE_CITANIA
+				case 2: strcat(local_str, STR_MODL_OPTF0_CIT); break;
+#endif
 			}// switch(i)
 			strcat(local_str, "=");
 			strcat(local_str, pom_MODL_OPTF_SPECIALNE[i]);
@@ -4900,25 +4903,27 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			strcat(_global_string, pom);
 		}
 #ifdef LITURGICKE_CITANIA
-		if (cit && aj_citanie) {
-                  if (typ == EXPORT_DNA_DNES || typ == EXPORT_DNA_JEDEN_DEN || typ == EXPORT_DNA_VIAC_DNI) {
-                    if (ma_nazov) strcat(_global_string, "<br>");
-                    sprintf(pom, "<a href=\"svpismo://svpismo.riso.ksp.sk/?d=%d&amp;m=%d&amp;y=%d&amp;c=", _local_den.den, _local_den.mesiac, _local_den.rok);
-                    strcat(_global_string, pom);
-                    strcat(_global_string, StringEncode(remove_diacritics(cit->citania)));
+                if((_global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_CITANIA) == BIT_OPT_0_CITANIA) {
+                  if (cit && aj_citanie) {
+                    if (typ == EXPORT_DNA_DNES || typ == EXPORT_DNA_JEDEN_DEN || typ == EXPORT_DNA_VIAC_DNI) {
+                      if (ma_nazov) strcat(_global_string, "<br>");
+                      sprintf(pom, "<a href=\"svpismo://svpismo.riso.ksp.sk/?d=%d&amp;m=%d&amp;y=%d&amp;c=", _local_den.den, _local_den.mesiac, _local_den.rok);
+                      strcat(_global_string, pom);
+                      strcat(_global_string, StringEncode(remove_diacritics(cit->citania)));
 
-                    sprintf(pom, "&amp;zalm=");
-                    strcat(_global_string, pom);
-                    strcat(_global_string, StringEncode(toUtf(cit->zalm)));
+                      sprintf(pom, "&amp;zalm=");
+                      strcat(_global_string, pom);
+                      strcat(_global_string, StringEncode(toUtf(cit->zalm)));
 
-                    sprintf(pom, "&amp;aleluja=");
-                    strcat(_global_string, pom);
-                    strcat(_global_string, StringEncode(toUtf(cit->aleluja)));
+                      sprintf(pom, "&amp;aleluja=");
+                      strcat(_global_string, pom);
+                      strcat(_global_string, StringEncode(toUtf(cit->aleluja)));
 
-                    sprintf(pom, "\">%s</a>", cit->citania);
-                    strcat(_global_string, pom);
+                      sprintf(pom, "\">%s</a>", cit->citania);
+                      strcat(_global_string, pom);
+                    }
                   }
-		}
+                }
 #endif
 	}/* lokaliz·cia sl·venia a kalend·r */
 
@@ -6694,6 +6699,13 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF0_REF, NIE);
 		Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF0_REF, ANO, html_text_option0_referencie_explain[_global_jazyk], ((_global_optf[OPT_0_SPECIALNE] & BIT_OPT_0_REFERENCIE) == BIT_OPT_0_REFERENCIE)? html_option_checked: STR_EMPTY);
 		Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option0_referencie_explain[_global_jazyk], html_text_option0_referencie[_global_jazyk]);
+#ifdef LITURGICKE_CITANIA
+		/* pole (checkbox) WWW_MODL_OPTF0_CIT */
+		Export("<br>");
+		Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF0_CIT, NIE);
+		Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF0_CIT, ANO, html_text_option0_citania_explain[_global_jazyk], ((_global_optf[OPT_0_SPECIALNE] & BIT_OPT_0_CITANIA) == BIT_OPT_0_CITANIA)? html_option_checked: STR_EMPTY);
+		Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option0_citania_explain[_global_jazyk], html_text_option0_citania[_global_jazyk]);
+#endif
 	}/* if(_global_jazyk == JAZYK_SK) */
 
 	Export("</td></tr>\n");
@@ -11881,6 +11893,9 @@ short int getForm(void){
 		switch(i){
 			case 0: strcat(local_str, STR_MODL_OPTF0_VERSE); break;
 			case 1: strcat(local_str, STR_MODL_OPTF0_REF); break;
+#ifdef LITURGICKE_CITANIA
+			case 2: strcat(local_str, STR_MODL_OPTF0_CIT); break;
+#endif
 		}/* switch(i) */
 		ptr = getenv(local_str);
 		/* ak nie je vytvorena, ak t.j. ptr == NULL, tak nas to netrapi,
@@ -12643,6 +12658,9 @@ short int parseQueryString(void){
 		switch(j){
 			case 0: strcat(local_str, STR_MODL_OPTF0_VERSE); break;
 			case 1: strcat(local_str, STR_MODL_OPTF0_REF); break;
+#ifdef LITURGICKE_CITANIA
+			case 2: strcat(local_str, STR_MODL_OPTF0_CIT); break;
+#endif
 		}/* switch(j) */
 		/* premenn· WWW_MODL_OPTF0_... (nepovinn·), j = 0 aû POCET_OPT_0_SPECIALNE */
 		i = 0; /* param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0 */
