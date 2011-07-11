@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <android/log.h>
-
 static struct citanie Citania[] = {
 #include "citania-gen.cpp"
   { NULL, NULL, NULL, NULL }
@@ -18,20 +16,12 @@ static int cmpcitanie(const void *a, const void *b) {
 
 struct citanie *najdiCitanie(const char *kod) {
   struct citanie *c;
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "called najdiCitanie");
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", kod);
   if (nc == -1) {
-    __android_log_print(ANDROID_LOG_INFO, "Breviar", "init");
     for (nc=0; Citania[nc].kod; nc++);
-    __android_log_print(ANDROID_LOG_INFO, "Breviar", "init done");
   }
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "bsearch");
   c = (citanie *)bsearch(kod, Citania, nc, sizeof(struct citanie), cmpcitanie);
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "bsearch done");
   if (!c) return NULL;
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "c not null");
   if (!c->citania[0]) return NULL;
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "known");
   return c;
 };
 
@@ -46,7 +36,6 @@ static char ferialnyCyklus(_struct_dm *d) {
 char *getCode(_struct_dm *d) {
   static char buf[100];
 
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "called getcode");
   if (d->smer == 1) { sprintf(buf, "%02d%02d%d", d->smer, d->litobd, d->denvt); // Velkonocne trojdnie
   } else if (d->smer == 2) { // niektore maju nedelny cyklus, niektore nie (Popolcova streda).
     if (d->meno[0]) {        // zatial dame pismeno cyklu vzdy; neublizi to.
@@ -71,7 +60,6 @@ char *getCode(_struct_dm *d) {
   } else {
     sprintf(buf, "%02d%c%02d%02d%02d", d->smer, ferialnyCyklus(d), d->litobd, d->tyzden, d->denvt);
   }
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", buf);
   return buf;
 }
 
@@ -81,7 +69,6 @@ char *StringEncode(const char *in) {
   const char *s;
   static char out[65536];
 
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "encode called");
   for (s=(const char *)in,i=0; i<sizeof(out)-5 && *s; s++) {
     if (
         ( (*s>='a')&&(*s<='z') ) ||
@@ -98,7 +85,6 @@ char *StringEncode(const char *in) {
     }
   }
   out[i]=0;
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "encode returns %s", out);
   return out;
 }
 
