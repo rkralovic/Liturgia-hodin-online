@@ -2,6 +2,9 @@
 #define __CITANIA_H_
 
 #include "breviar.h"
+#include "mysystem.h"
+
+#ifdef LITURGICKE_CITANIA
 
 struct citanie {
   const char *kod, *citania, *zalm, *aleluja;
@@ -12,5 +15,7 @@ char *getCode(_struct_dm *d);
 
 char *StringEncode(const char *in);
 char *toUtf(const char *in);
+
+#endif
 
 #endif

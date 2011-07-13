@@ -300,8 +300,13 @@
 #include "myhpage.h" /* hlavicka(); patka(); */
 #include "mybuild.h" // 2011-07-11: pridané, kvôli BUILD_DATE
 
+#ifdef IO_ANDROID
 #include "android.h"
+#endif
+
+#ifdef LITURGICKE_CITANIA
 #include "citania.h"
+#endif
 
 /* 2005-03-28: Pridane, pokusy nahradit uncgi */
 char *_global_buf; /* 2006-08-01: túto premennú tiež alokujeme */
@@ -4583,7 +4588,7 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok){
 #define CASE_MALE   4
 #define COLOR_RED   3
 #define COLOR_BLACK 2
-short int init_global_string(short int typ, short int poradie_svateho, short int modlitba, bool aj_citanie=true) {
+short int init_global_string(short int typ, short int poradie_svateho, short int modlitba, short int aj_citanie=TRUE) {
 	/* lokalna premenna, do ktorej sa ukladaju info o analyzovanom dni
 	 * pouziva ju void nove_rozbor_dna() funkcia */
 	/* 2003-07-07: obavam sa, ze nove_rozbor_dna() je alebo
@@ -5266,7 +5271,7 @@ short int _rozbor_dna_s_modlitbou(_struct_den_mesiac datum, short int rok, short
 	/* teraz nasleduje nieco, co nahradza export - avsak data uklada do stringu _global_string */
 	Log("spustam init_global_string(EXPORT_DNA_JEDEN_DEN, svaty == %d, modlitba == %s)...\n",
 		poradie_svateho, nazov_modlitby(modlitba));
-	ret = init_global_string(EXPORT_DNA_JEDEN_DEN, poradie_svateho, modlitba, false);
+	ret = init_global_string(EXPORT_DNA_JEDEN_DEN, poradie_svateho, modlitba, FALSE);
 
 	if(ret == FAILURE){
 		Log("init_global_string() returned FAILURE, so returning FAILURE...\n");
