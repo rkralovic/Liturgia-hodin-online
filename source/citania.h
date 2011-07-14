@@ -3,6 +3,7 @@
 
 #include "breviar.h"
 #include "mysystem.h"
+#include "mysysdef.h"
 
 #ifdef LITURGICKE_CITANIA
 
@@ -16,6 +17,6 @@ char *getCode(_struct_dm *d);
 char *StringEncode(const char *in);
 char *toUtf(const char *in);
 
-#endif
+#endif // LITURGICKE_CITANIA
 
-#endif
+#endif // __CITANIA_H_

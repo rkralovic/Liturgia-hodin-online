@@ -280,9 +280,10 @@
 #include <string.h>
 #include <math.h> /* kvôli funckii pow(); */
 
-#include "mystring.h" /* 31/03/2000A.D. */
-#include "myconf.h" /* 30/03/2000A.D. */
-#include "mysystem.h" /* hovori, ci som v systeme linux/DOS */
+#include "mystring.h"
+#include "myconf.h"
+#include "mysystem.h"
+#include "mysysdef.h"
 #include "hodin.h"
 #include "liturgia.h"                  
 #include "cgiutils.h" /* parsovanie query stringu */
@@ -302,11 +303,11 @@
 
 #ifdef IO_ANDROID
 #include "android.h"
-#endif
+#endif // IO_ANDROID
 
 #ifdef LITURGICKE_CITANIA
 #include "citania.h"
-#endif
+#endif // LITURGICKE_CITANIA
 
 /* 2005-03-28: Pridane, pokusy nahradit uncgi */
 char *_global_buf; /* 2006-08-01: túto premennú tiež alokujeme */
@@ -4588,7 +4589,7 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok){
 #define CASE_MALE   4
 #define COLOR_RED   3
 #define COLOR_BLACK 2
-short int init_global_string(short int typ, short int poradie_svateho, short int modlitba, short int aj_citanie=TRUE) {
+short int init_global_string(short int typ, short int poradie_svateho, short int modlitba, short int aj_citanie = TRUE) {
 	/* lokalna premenna, do ktorej sa ukladaju info o analyzovanom dni
 	 * pouziva ju void nove_rozbor_dna() funkcia */
 	/* 2003-07-07: obavam sa, ze nove_rozbor_dna() je alebo
@@ -4616,8 +4617,8 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	short int liturgicka_farba_alt = LIT_FARBA_NEURCENA; /* 2011-03-24: pridané */
         struct citanie *cit = NULL;
 
-	Log("-- init_global_string(EXPORT_DNA_%d, %d, %s) -- zaèiatok (inicializuje tri _global_string* premenné)\n",
-		typ, poradie_svateho, nazov_modlitby(modlitba));
+	Log("-- init_global_string(EXPORT_DNA_%d, %d, %s, %s) -- zaèiatok\n", typ, poradie_svateho, nazov_modlitby(modlitba), aj_citanie);
+	Log("   (inicializuje tri _global_string* premenné)\n");
 	/* -------------------------------------------------------------------- */
 	/* najprv priradime do _local_den to, co tam ma byt */
 
@@ -4642,14 +4643,18 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		case 1:
 			/* do _local_den priradim dane slavenie */
 			_local_den = _global_svaty1;
+#ifdef LITURGICKE_CITANIA
 			cit = najdiCitanie(getCode(&_global_svaty1));
+#endif // LITURGICKE_CITANIA
 			Log("priradujem _local_den = _global_svaty1;\n");
 			break; /* case 1: */
 		case 2:
 			if(_global_pocet_svatych > 1){
 				/* do _local_den priradim dane slavenie */
 				_local_den = _global_svaty2;
+#ifdef LITURGICKE_CITANIA
 				cit = najdiCitanie(getCode(&_global_svaty2));
+#endif // LITURGICKE_CITANIA
 				Log("priradujem _local_den = _global_svaty2;\n");
 			}
 			else{
@@ -4667,7 +4672,9 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			if(_global_pocet_svatych > 2){
 				/* teraz do _local_den priradim dane slavenie */
 				_local_den = _global_svaty3;
+#ifdef LITURGICKE_CITANIA
 				cit = najdiCitanie(getCode(&_global_svaty3));
+#endif // LITURGICKE_CITANIA
 				Log("priradujem _local_den = _global_svaty3;\n");
 			}
 			else{
@@ -4707,7 +4714,9 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 				)){
 				/* do _local_den priradim dane slavenie */
 				_local_den = _global_svaty1;
+#ifdef LITURGICKE_CITANIA
 				cit = najdiCitanie(getCode(&_global_svaty1));
+#endif // LITURGICKE_CITANIA
 				Log("priradujem _local_den = _global_svaty1;\n");
 			}
 			else{
@@ -4720,7 +4729,9 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	}/* switch(poradie_svateho) */
 
         int ma_nazov = 0;
+#ifdef LITURGICKE_CITANIA
 	if (!cit) cit = najdiCitanie(getCode(&_global_den));
+#endif // LITURGICKE_CITANIA
 	Log("1:_local_den.meno == %s\n", _local_den.meno); /* 08/03/2000A.D. */
 
 	/* 21/03/2000A.D.
@@ -5192,7 +5203,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 
 	Log("  -- _global_string_farba == %s\n", _global_string_farba);
 
-	Log("-- init_global_string(EXPORT_DNA_%d, %d, %s) -- returning SUCCESS\n", typ, poradie_svateho, nazov_modlitby(modlitba));
+	Log("-- init_global_string(EXPORT_DNA_%d, %d, %s, %s) -- returning SUCCESS\n", typ, poradie_svateho, nazov_modlitby(modlitba), aj_citanie);
 	return SUCCESS;
 }/* init_global_string(); -- 3 vstupy  */
 

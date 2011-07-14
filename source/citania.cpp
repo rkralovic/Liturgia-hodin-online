@@ -1,4 +1,5 @@
 #include "mysystem.h"
+#include "mysysdef.h"
 #include "citania.h"
 #include "liturgia.h"
 #include <string.h>
@@ -155,4 +156,4 @@ char *toUtf(const char *in) {
   return out;
 }
 
-#endif
+#endif // LITURGICKE_CITANIA
