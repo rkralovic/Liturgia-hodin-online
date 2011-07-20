@@ -84,7 +84,7 @@ short int closeLog(void){
 #elif defined(LOG_TO_STDOUT)
 		fprintf(stderr, "Log finished, I do not close log file (stdout)\n");
 #elif defined(LOG_TO_ANDROID)
-                // nothing to do
+		// nothing to do
 #else
 	#error Unsupported logging model (use _LOG_TO_STDOUT or _LOG_TO_FILE)
 #endif
