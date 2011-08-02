@@ -875,6 +875,12 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_PECSI_EGYH_PATRON        57
 #define LOKAL_SLAV_SZEGED_CSAN_EGYH         58
 #define LOKAL_SLAV_VESZPREMI_EGYH_PATRON    59
+#define LOKAL_SLAV_GYORI_SZEKESFEH_EGYH     60
+#define LOKAL_SLAV_KAPORSVAR_FELSZ          61
+#define LOKAL_SLAV_VACI_FELSZ               62
+#define LOKAL_SLAV_KAL_KECS_FOEGYH          63
+#define LOKAL_SLAV_ESZTERGOM_BUDA_FOEGYH    64
+#define LOKAL_SLAV_KAL_KECS_FELSZ           65
 
 /* 2010-08-03: pridan˝ kalend·r */
 #define KALENDAR_NEURCENY                   0
@@ -1197,16 +1203,12 @@ extern short int _global_pocet_svatych;
 /* glob·lna premenn· -- pole -- obsahuj˙ca options; pÙvodne to boli glob·lne premennÈ _global_opt 1..9 atÔ., obsahuj˙ pom_MODL_OPT... */
 extern short int _global_opt[POCET_GLOBAL_OPT];
 
-#ifdef LITURGICKE_CITANIA
 #define POCET_OPT_0_SPECIALNE               3 /* jednotlivÈ komponenty option 0 -- bity pre force option 0 */
-#define BIT_OPT_0_CITANIA                   4
-#else
-#define POCET_OPT_0_SPECIALNE               2 /* jednotlivÈ komponenty option 0 -- bity pre force option 0 */
-#endif
 extern short int _global_opt_specialne[POCET_OPT_0_SPECIALNE];
 /* 2011-04-08: ˙prava v˝znamu (a interpret·cie) option 0 ==  OPT_0_SPECIALNE (zobraziù/nezobraziù "pridan˙ hodnotu" oproti papierovej LH) */
 #define BIT_OPT_0_VERSE                     1
 #define BIT_OPT_0_REFERENCIE                2
+#define BIT_OPT_0_CITANIA                   4
 
 #define POCET_OPT_1_CASTI_MODLITBY         10 /* jednotlivÈ komponenty option 1 -- bity pre force option 1 */
 extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
