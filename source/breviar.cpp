@@ -1620,7 +1620,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 						strcpy(refrest, STR_EMPTY);
 					}// upraviù referencie na hyperlinky -- PARAM_REFERENCIA_END
 
-#if defined(BEHAVIOUR_WEB) && !defined(IO_ANDROID)
+#if defined(BEHAVIOUR_WEB)
 					// 2011-09-01: upraviù odkazy na katechÈzy (zatiaæ napojenÈ na BIT_OPT_0_REFERENCIE a EXPORT_REFERENCIA ako referencie)
 					if(equals(strbuff, PARAM_KATECHEZA_BEGIN) && (vnutri_inkludovaneho == 1)){
 						vnutri_katechezy = ANO;
