@@ -132,10 +132,9 @@ public class Breviar extends Activity
         }
       });
  
-      ((Button)findViewById(R.id.forwardBtn)).setOnClickListener(new View.OnClickListener() {
+      ((Button)findViewById(R.id.pgupBtn)).setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-          parent.syncScale();
-          wv.goForward();
+          wv.pageUp(false);
         }
       });
  
