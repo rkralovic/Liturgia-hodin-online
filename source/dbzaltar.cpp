@@ -22573,7 +22573,7 @@ label_25_MAR:
 					break;
 				case 8: /* MES_OCT -- 08OKT */
 					// _global_svaty1.spolcast = _encode_spol_cast(MODL_SPOL_CAST_PANNA_MARIA);
-					if(((poradie_svaty == UNKNOWN_PORADIE_SVATEHO)  || (poradie_svaty == 1)) && (_global_jazyk == JAZYK_HU)){
+					if(((poradie_svaty == UNKNOWN_PORADIE_SVATEHO)  || (poradie_svaty == 1)) && (_global_jazyk == JAZYK_HU)) {
 						/* definovanie parametrov pre modlitbu */
 						sc = _decode_spol_cast(_global_svaty1.spolcast);
 						Log("Szûz Mária, Magyarok nagyaszszonya, Magyarország fõpátronája: sc: {%s, %s, %s}, svaty == %d\n\n", nazov_spolc(sc.a1), nazov_spolc(sc.a2), nazov_spolc(sc.a3), poradie_svaty);
@@ -22622,12 +22622,12 @@ label_25_MAR:
 						_set_zalmy_sviatok_panien(modlitba);
 
 						if(poradie_svaty != UNKNOWN_PORADIE_SVATEHO) break;
+                                                _global_svaty1.typslav = SLAV_SLAVNOST;
+                                                _global_svaty1.smer = 3; /* slavnosti Pana, preblahoslavenej Panny Marie a svatych, uvedene vo vseobecnom kalendari */
+                                                mystrcpy(_global_svaty1.meno, text_OKT_08_HU[_global_jazyk], MENO_SVIATKU);
+                                                _global_svaty1.farba = LIT_FARBA_BIELA;
+                                                _global_svaty1.kalendar = KALENDAR_VSEOBECNY_HU;
 					}
-					_global_svaty1.typslav = SLAV_SLAVNOST;
-					_global_svaty1.smer = 3; /* slavnosti Pana, preblahoslavenej Panny Marie a svatych, uvedene vo vseobecnom kalendari */
-					mystrcpy(_global_svaty1.meno, text_OKT_08_HU[_global_jazyk], MENO_SVIATKU);
-					_global_svaty1.farba = LIT_FARBA_BIELA;
-					_global_svaty1.kalendar = KALENDAR_VSEOBECNY_HU;
 					break;
 				case 9: /* MES_OCT -- 09OKT */
 					/* 2009-03-24: pre Slovensko, Èesko atï. pod¾a všeobecného kalendára sv. Kozmu a Damiána, pre dominikánov z 28.9. muèedníkov... 
