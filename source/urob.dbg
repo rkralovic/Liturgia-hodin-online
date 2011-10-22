@@ -1,9 +1,0 @@
-date
-g++ -O0 -ggdb -DMODEL_SELECTED_IN_MAKEFILE -DMODEL_DEBUG_linux -Wall breviar.cpp dbzaltar.cpp liturgia.cpp mygetopt.cpp mylog.cpp myhpage.cpp myexpt.cpp cgiutils.cpp myconf.cpp mydefs.cpp mystring.cpp citania.cpp -L. -lmydmalloc
-mv a.out l.cgi
-chmod u=rw *.cpp
-chmod u=rw *.h
-chmod oa+x *.cgi
-gzip -c -v l.cgi > l.cgi.gz
-date
-
