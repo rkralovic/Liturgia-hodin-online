@@ -1,4 +1,4 @@
-/***************************************************************************
+/***************************************************************************/
 /*                                                                         */
 /* breviar.cpp                                                             */
 /* (c)1998-2011 | Juraj Videky | videky@breviar.sk                         */
@@ -709,7 +709,7 @@ short int postread(void){
 	}
 	
 	size = atoi(buf);
-	buf = (char *)mymalloc(size + 1);
+	buf = (char *)malloc(size + 1);
 	if (buf == NULL){
 		Log("uncgi::Error: postread\n");
 		return FAILURE;
@@ -813,7 +813,7 @@ static void stuffenv(char *var){
 	/*
 	 * Allocate enough memory for the variable name and its value.
 	 */
-	buf = (char *)mymalloc(strlen(var) + sizeof(WWW_PREFIX) + 2);
+	buf = (char *)malloc(strlen(var) + sizeof(WWW_PREFIX) + 2);
 	if (buf == NULL){
 		Log("  Not enough memory to allocate buffer for `buf'\n");
 		return;
@@ -889,7 +889,7 @@ static void stuffenv(char *var){
 #ifdef DEBUG
 		Log("  Variable %s exists with value %s\n", buf, oldval);
 #endif
-		newval = (char *)mymalloc(strlen(oldval) + strlen(buf) + strlen(c+1) + 3);
+		newval = (char *)malloc(strlen(oldval) + strlen(buf) + strlen(c+1) + 3);
 		if (newval == NULL){
 			Log("  Not enough memory to allocate buffer for `buf'\n");
 			return;
@@ -934,14 +934,14 @@ static void stuffenv(char *var){
 		 * Do the actual freeing of the old value after it's not
 		 * being referred to any more.
 		 */
-		/* 2011-04-13: neviem preËo, ale tieto myfree() spÙsobovali, ûe v logu nasledovn· premenn· neöla korektne nastaviù (putenv vr·tila chybu)
-		 *             preto som tieto myfree() zapozn·mkoval
+		/* 2011-04-13: neviem preËo, ale tieto free() spÙsobovali, ûe v logu nasledovn· premenn· neöla korektne nastaviù (putenv vr·tila chybu)
+		 *             preto som tieto free() zapozn·mkoval
 		 *             zrejme kvÙli tomu, ûe v query stringu sa nach·dzaj˙ aj hidden checkboxy
 		 */
 		// Log("free oldval (%s)...\n", oldval);
-		// myfree(oldval);
+		// free(oldval);
 		// Log("free buf (%s)...\n", buf);
-		// myfree(buf);
+		// free(buf);
 	}// if (oldval)
 }// stuffenv();
 
@@ -1243,7 +1243,7 @@ short int getSrciptParamFrom(int argc){
 	/* kedze na zaciatku main() alokujeme pre `query_string' miesto,
 	 * musime tu spravit nie
 	 *   query_string = getenv("QUERY_STRING");
-	 * (vtedy by na konci myfree(query_string) urobil blbost zrejme, lebo
+	 * (vtedy by na konci free(query_string) urobil blbost zrejme, lebo
 	 *  query_string uz neukazuje na alokovane miesto, ale na nieco, kde
 	 *  vratila funkcia getenv() hodnotu -- a mozno to ani neexistuje...)
 	 * ale
@@ -8572,7 +8572,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 	Log("Allocating memory...\n");
 /* _local_modl_prve_vespery_ptr */
-	if((_local_modl_prve_vespery_ptr = (_type_1vespery*) mymalloc(sizeof(_type_1vespery))) == NULL){
+	if((_local_modl_prve_vespery_ptr = (_type_1vespery*) malloc(sizeof(_type_1vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_prve_vespery_ptr'\n");
 		return;
 	}
@@ -8582,7 +8582,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 	}
 
 /* _local_modl_1kompletorium_ptr */
-	if((_local_modl_1kompletorium_ptr = (_type_1kompletorium*) mymalloc(sizeof(_type_1kompletorium))) == NULL){
+	if((_local_modl_1kompletorium_ptr = (_type_1kompletorium*) malloc(sizeof(_type_1kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_1kompletorium_ptr'\n");
 		return;
 	}
@@ -8591,7 +8591,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		_INIT_TMODLITBA3(_local_modl_prve_kompletorium); /* pridanÈ 2006-10-17 */
 	}
 /* _local_modl_vespery_ptr */
-	if((_local_modl_vespery_ptr = (_type_vespery*) mymalloc(sizeof(_type_vespery))) == NULL){
+	if((_local_modl_vespery_ptr = (_type_vespery*) malloc(sizeof(_type_vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_vespery_ptr'\n");
 		return;
 	}
@@ -8601,7 +8601,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 	}
 
 /* _local_modl_kompletorium_ptr */
-	if((_local_modl_kompletorium_ptr = (_type_kompletorium*) mymalloc(sizeof(_type_kompletorium))) == NULL){
+	if((_local_modl_kompletorium_ptr = (_type_kompletorium*) malloc(sizeof(_type_kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_kompletorium_ptr'\n");
 		return;
 	}
@@ -8987,10 +8987,10 @@ LABEL_NIE_INE_VESPERY: /* 08/03/2000A.D. */
 
 LABEL_s_modlitbou_DEALLOCATE:
 	Log("Deallocating memory...\n");
-	Log("_local_modl_prve_vespery_ptr\n"); myfree(_local_modl_prve_vespery_ptr);
-	Log("_local_modl_1kompletorium_ptr\n"); myfree(_local_modl_1kompletorium_ptr);
-	Log("_local_modl_vespery_ptr\n"); myfree(_local_modl_vespery_ptr);
-	Log("_local_modl_kompletorium_ptr\n"); myfree(_local_modl_kompletorium_ptr);
+	Log("_local_modl_prve_vespery_ptr\n"); free(_local_modl_prve_vespery_ptr);
+	Log("_local_modl_1kompletorium_ptr\n"); free(_local_modl_1kompletorium_ptr);
+	Log("_local_modl_vespery_ptr\n"); free(_local_modl_vespery_ptr);
+	Log("_local_modl_kompletorium_ptr\n"); free(_local_modl_kompletorium_ptr);
 	Log("...done.\n");
 	Log("-- rozbor_dna_s_modlitbou(int, int, int, int): ret == %d\n", ret);
 }// rozbor_dna_s_modlitbou()
@@ -11978,7 +11978,7 @@ short int getArgv(int argc, char **argv){
 
 	Log("allocating memory for option_string...\n");
 	/* allocate memory for string */
-	if((option_string = (char *) mymalloc(MAX_STR)) == NULL){
+	if((option_string = (char *) malloc(MAX_STR)) == NULL){
 		Log("Not enough memory to allocate buffer, so returning FAILURE\n");
 		//printf("Not enough memory to allocate buffer (getArgv(), char *option_string)\n");
 		/* exit(1); -- terminate program if out of memory */
@@ -12363,7 +12363,7 @@ short int getArgv(int argc, char **argv){
 	}
 
 	Log("deallocating memory for option_string...\n");
-	myfree(option_string);
+	free(option_string);
 
 	Log("-- getArgv(): end, query_type == %d, query_string == %s\n",
 		query_type, query_string);
@@ -14090,7 +14090,7 @@ int main(int argc, char **argv){
 	_main_LOG("now allocating memory...\n");
 
 	/* query_string */
-	if((query_string = (char*) mymalloc(MAX_QUERY_STR)) == NULL){
+	if((query_string = (char*) malloc(MAX_QUERY_STR)) == NULL){
 		_main_LOG("  Not enough memory to allocate buffer for `query_string'\n");
 		goto _main_end;
 	}
@@ -14102,7 +14102,7 @@ int main(int argc, char **argv){
 	/* pridanÈ 2005-08-01 */
 
 	/* _global_buf */
-	if((_global_buf = (char*) mymalloc(MAX_GLOBAL_STR)) == NULL){
+	if((_global_buf = (char*) malloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_buf'\n");
 		goto _main_end;
 	}
@@ -14112,7 +14112,7 @@ int main(int argc, char **argv){
 	}
 
 	/* _global_buf2 */
-	if((_global_buf2 = (char*) mymalloc(MAX_GLOBAL_STR)) == NULL){
+	if((_global_buf2 = (char*) malloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_buf2'\n");
 		goto _main_end;
 	}
@@ -14692,9 +14692,9 @@ _main_SIMULACIA_QS:
 	}
 
 	_main_LOG_to_Export("Deallocating memory...\n");
-	_main_LOG_to_Export("query_string\n"); myfree(query_string);
-	_main_LOG_to_Export("_global_buf\n"); myfree(_global_buf);
-	_main_LOG_to_Export("_global_buf2\n"); myfree(_global_buf2);
+	_main_LOG_to_Export("query_string\n"); free(query_string);
+	_main_LOG_to_Export("_global_buf\n"); free(_global_buf);
+	_main_LOG_to_Export("_global_buf2\n"); free(_global_buf2);
 	_main_LOG_to_Export("...done.\n");
 _main_end:
 	patka();

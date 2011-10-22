@@ -9,7 +9,7 @@ LOCAL_SRC_FILES := android.cpp breviar.cpp cgiutils.cpp dbzaltar.cpp \
                    citania.cpp
 
 LOCAL_LDLIBS    := -llog
-LOCAL_CFLAGS    := -DMODEL_SELECTED_IN_MAKEFILE -DMODEL_android_debug
+LOCAL_CFLAGS    := -DMODEL_SELECTED_IN_MAKEFILE -DMODEL_android
 
 #LOCAL_STATIC_LIBRARIES := android_native_app_glue
 
