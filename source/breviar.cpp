@@ -1261,7 +1261,6 @@ short int getSrciptParamFrom(int argc){
 		Log("query_string == %s\n", query_string);
 	else
 		Log("query_string is NULL\n");
-        mmcheck(query_string);
 	
 	// 2005-03-28: Pridane zistenie, odkial sa cita
 	method = getenv("REQUEST_METHOD");
@@ -1270,24 +1269,18 @@ short int getSrciptParamFrom(int argc){
 	else
 		Log("method is NULL\n");
 	if (method != NULL && !strcmp(method, "POST")){
-                mmcheck(query_string);
 		ret = postread();
-                mmcheck(query_string);
 		if(ret == SUCCESS){
 			Log("OK. Pokracujem skenovanim query...\n");
 			if ((_global_buf != NULL) && (_global_buf[0] != '\0')){
-                                mmcheck(query_string);
 				scanquery(_global_buf);
-                                mmcheck(query_string);
 				// 2006-08-01: _global_buf sa mení, my si budujeme kópiu v _global_buf2
 				Log("POST::Vysledok == %s\n", _global_buf2);
 				// 2006-08-01: prilepíme ku query stringu aj celý global buffer
 				if(query_string != NULL && !equals(query_string, STR_EMPTY)){
 					Log("2006-08-01: Experiment - prilepujem _global_buf2 na koniec query_stringu...\n");
-                                        mmcheck(query_string);
 					strcat(query_string, "&");
 					strcat(query_string, _global_buf2);
-                                        mmcheck(query_string);
 					Log("query_string == %s...\n", query_string);
 				}
 			}
@@ -1297,7 +1290,6 @@ short int getSrciptParamFrom(int argc){
 		}
 	}// POST
 
-        mmcheck(query_string);
 	Log("--- getSrciptParamFrom(): end...\n");
 	// systemova premenna QUERY_STRING existuje prave vtedy, ked query_string nie je prazdny retazec
 	if((query_string != NULL) && (strlen(query_string) > 0)){
@@ -1314,7 +1306,6 @@ short int getSrciptParamFrom(int argc){
 		Log("returning SCRIPT_PARAM_FROM_ARGV -- nothing else matched.\n");
 		return SCRIPT_PARAM_FROM_ARGV;
 	}
-        mmcheck(query_string);
 }// getSrciptParamFrom();
 
 /* 2003-07-16; zrusene nasledovne definy:
@@ -10210,7 +10201,6 @@ void _main_dnes(char *modlitba, char *poradie_svaty){
 
 	/* rozparsovanie parametra modlitba */
 	Log("volanie _parsuj_parameter_MODLITBA() z _main_dnes()...\n");
-        mmcheck(query_string);
 	_parsuj_parameter_MODLITBA(modlitba, p);
 
 	_global_modlitba = p;
@@ -10308,7 +10298,6 @@ void _main_dnes(char *modlitba, char *poradie_svaty){
 		rozbor_dna_s_modlitbou(datum.den, datum.mesiac, dnes.tm_year, p, s);
 	}
 
-        mmcheck(query_string);
 	Log("-- _main_dnes(char *, char *): end\n");
 
 }// _main_dnes();
@@ -14702,7 +14691,6 @@ _main_SIMULACIA_QS:
 		ALERT;
 	}
 
-        mmcheck(query_string);
 	_main_LOG_to_Export("Deallocating memory...\n");
 	_main_LOG_to_Export("query_string\n"); myfree(query_string);
 	_main_LOG_to_Export("_global_buf\n"); myfree(_global_buf);

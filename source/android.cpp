@@ -30,34 +30,25 @@ static JNIEnv* jenv;
 #define MAGIC_END 0xbeefc1de
 
 void *mymalloc(int n) {
-  void *ret = malloc(n+12);
+  void *ret = malloc(n+8);
   *((int *)ret) = MAGIC_START;
-  *((int *)(ret+4)) = n;
-  *((int *)(ret+n+8)) = MAGIC_END;
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "malloc %d = %x", n, ret+8);
-  return ret+8;
+  *((int *)(ret+n+4)) = MAGIC_END;
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "malloc %d = %x", n, ret+4);
+  return ret+4;
 }
-void mmcheck(void *p) {
-  __android_log_print(ANDROID_LOG_INFO, "Breviar", "checking %x", p);
+void myfree(void *p) {
+  __android_log_print(ANDROID_LOG_INFO, "Breviar", "free %x", p);
   if (p==0) {
     __android_log_print(ANDROID_LOG_INFO, "Breviar", "ugh?");
     return;
   }
-  int canary = *((int *)(p-8));
-  int len = *((int *)(p-4));
-  int canary2 = *((int *)(p+len));
+  int canary = *((int *)(p-4));
   if (canary == MAGIC_DEAD)
-    __android_log_print(ANDROID_LOG_INFO, "Breviar", "BUG: %x already freed!", p);
+    __android_log_print(ANDROID_LOG_INFO, "Breviar", "BUG: %x freed twice!", p);
   if (canary != MAGIC_START)
-    __android_log_print(ANDROID_LOG_INFO, "Breviar", "BUG: %x corrupted at start!", p);
-  if (canary2 != MAGIC_END)
-    __android_log_print(ANDROID_LOG_INFO, "Breviar", "BUG: %x corrupted at end!", p);
-}
-void myfree(void *p) {
-  mmcheck(p);
-  if (p==NULL) return;
-  *((int *)(p-8)) = MAGIC_DEAD;
-  free(p-8);
+    __android_log_print(ANDROID_LOG_INFO, "Breviar", "BUG: %x corrupted!", p);
+  *((int *)(p-4)) = MAGIC_DEAD;
+  free(p-4);
 }
 
 static void err(const char *msg) {
@@ -174,13 +165,13 @@ int putenv(const char *string) {
   //__android_log_print(ANDROID_LOG_INFO, "Breviar", string);
 
   envlen3 = len+1 + envlen2;
-  if (! (env3 = (char *)mymalloc(envlen3)) ) return 1;
+  if (! (env3 = (char *)mymalloc(envlen3)) ) return 0;
   strcpy(env3, string);
   if (envlen2) memcpy(env3+len+1, environment2, envlen2);
   myfree(environment2);
   environment2 = env3;
   envlen2 = envlen3;
-  return 0;
+  return 1;
 }
 
 int main(int argc, const char **argv);

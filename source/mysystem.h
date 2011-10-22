@@ -8,7 +8,6 @@
 /***************************************************************/
 void *mymalloc(int n);
 void myfree(void *p);
-void mmcheck(void *p);
 
 #include "vstudio.h"
 
