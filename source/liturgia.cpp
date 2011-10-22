@@ -48,7 +48,7 @@ short int _allocate_global_var(void){
 	Log("Allocating memory...\n");
 
 /* _global_den_ptr */
-	if((_global_den_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_den_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_den_ptr'\n");
 		ret = FAILURE;
 	}
@@ -58,7 +58,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_result_ptr */
-	if((_global_result_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_result_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_result_ptr'\n");
 		ret = FAILURE;
 	}
@@ -68,7 +68,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_pm_sobota_ptr */
-	if((_global_pm_sobota_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_pm_sobota_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_pm_sobota_ptr'\n");
 		ret = FAILURE;
 	}
@@ -78,7 +78,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_svaty1_ptr */
-	if((_global_svaty1_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_svaty1_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_svaty1_ptr'\n");
 		ret = FAILURE;
 	}
@@ -88,7 +88,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_svaty2_ptr */
-	if((_global_svaty2_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_svaty2_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_svaty2_ptr'\n");
 		ret = FAILURE;
 	}
@@ -98,7 +98,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_svaty3_ptr */
-	if((_global_svaty3_ptr = (_struct_dm*) malloc(sizeof(_struct_dm))) == NULL){
+	if((_global_svaty3_ptr = (_struct_dm*) mymalloc(sizeof(_struct_dm))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_svaty3_ptr'\n");
 		ret = FAILURE;
 	}
@@ -108,7 +108,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_prve_vespery_ptr */
-	if((_global_modl_prve_vespery_ptr = (_type_1vespery*) malloc(sizeof(_type_1vespery))) == NULL){
+	if((_global_modl_prve_vespery_ptr = (_type_1vespery*) mymalloc(sizeof(_type_1vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_prve_vespery_ptr'\n");
 		ret = FAILURE;
 	}
@@ -118,7 +118,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_1kompletorium_ptr */
-	if((_global_modl_1kompletorium_ptr = (_type_1kompletorium*) malloc(sizeof(_type_1kompletorium))) == NULL){
+	if((_global_modl_1kompletorium_ptr = (_type_1kompletorium*) mymalloc(sizeof(_type_1kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_1kompletorium_ptr'\n");
 		ret = FAILURE;
 	}
@@ -128,7 +128,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_invitatorium_ptr */
-	if((_global_modl_invitatorium_ptr = (_type_invitatorium*) malloc(sizeof(_type_invitatorium))) == NULL){
+	if((_global_modl_invitatorium_ptr = (_type_invitatorium*) mymalloc(sizeof(_type_invitatorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_invitatorium_ptr'\n");
 		ret = FAILURE;
 	}
@@ -138,7 +138,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_ranne_chvaly_ptr */
-	if((_global_modl_ranne_chvaly_ptr = (_type_ranne_chvaly*) malloc(sizeof(_type_ranne_chvaly))) == NULL){
+	if((_global_modl_ranne_chvaly_ptr = (_type_ranne_chvaly*) mymalloc(sizeof(_type_ranne_chvaly))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_ranne_chvaly_ptr'\n");
 		ret = FAILURE;
 	}
@@ -148,7 +148,7 @@ short int _allocate_global_var(void){
 	}
 /* pridane 2003-08-13 */
 /* _global_modl_posv_citanie_ptr */
-	if((_global_modl_posv_citanie_ptr = (_type_posv_citanie*) malloc(sizeof(_type_posv_citanie))) == NULL){
+	if((_global_modl_posv_citanie_ptr = (_type_posv_citanie*) mymalloc(sizeof(_type_posv_citanie))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_posv_citanie_ptr'\n");
 		ret = FAILURE;
 	}
@@ -158,7 +158,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_cez_den_9_ptr */
-	if((_global_modl_cez_den_9_ptr = (_type_cez_den_9*) malloc(sizeof(_type_cez_den_9))) == NULL){
+	if((_global_modl_cez_den_9_ptr = (_type_cez_den_9*) mymalloc(sizeof(_type_cez_den_9))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_cez_den_9_ptr'\n");
 		ret = FAILURE;
 	}
@@ -168,7 +168,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_cez_den_12_ptr */
-	if((_global_modl_cez_den_12_ptr = (_type_cez_den_12*) malloc(sizeof(_type_cez_den_12))) == NULL){
+	if((_global_modl_cez_den_12_ptr = (_type_cez_den_12*) mymalloc(sizeof(_type_cez_den_12))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_cez_den_12_ptr'\n");
 		ret = FAILURE;
 	}
@@ -178,7 +178,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_cez_den_3_ptr */
-	if((_global_modl_cez_den_3_ptr = (_type_cez_den_3*) malloc(sizeof(_type_cez_den_3))) == NULL){
+	if((_global_modl_cez_den_3_ptr = (_type_cez_den_3*) mymalloc(sizeof(_type_cez_den_3))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_cez_den_3_ptr'\n");
 		ret = FAILURE;
 	}
@@ -188,7 +188,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_vespery_ptr */
-	if((_global_modl_vespery_ptr = (_type_vespery*) malloc(sizeof(_type_vespery))) == NULL){
+	if((_global_modl_vespery_ptr = (_type_vespery*) mymalloc(sizeof(_type_vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_vespery_ptr'\n");
 		ret = FAILURE;
 	}
@@ -198,7 +198,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_modl_kompletorium_ptr */
-	if((_global_modl_kompletorium_ptr = (_type_kompletorium*) malloc(sizeof(_type_kompletorium))) == NULL){
+	if((_global_modl_kompletorium_ptr = (_type_kompletorium*) mymalloc(sizeof(_type_kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_modl_kompletorium_ptr'\n");
 		ret = FAILURE;
 	}
@@ -208,7 +208,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_r_ptr */
-	if((_global_r_ptr = (_struct_lrok*) malloc(sizeof(_struct_lrok))) == NULL){
+	if((_global_r_ptr = (_struct_lrok*) mymalloc(sizeof(_struct_lrok))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_r_ptr'\n");
 		ret = FAILURE;
 	}
@@ -217,7 +217,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_link_ptr */
-	if((_global_link_ptr = (char*) malloc(MAX_GLOBAL_LINK)) == NULL){
+	if((_global_link_ptr = (char*) mymalloc(MAX_GLOBAL_LINK)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_link_ptr'\n");
 		ret = FAILURE;
 	}
@@ -227,7 +227,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_pom_str */
-	if((_global_pom_str = (char*) malloc(MAX_STR)) == NULL){
+	if((_global_pom_str = (char*) mymalloc(MAX_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_pom_str'\n");
 		ret = FAILURE;
 	}
@@ -237,7 +237,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_string */
-	if((_global_string = (char*) malloc(MAX_GLOBAL_STR)) == NULL){
+	if((_global_string = (char*) mymalloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_string'\n");
 		ret = FAILURE;
 	}
@@ -247,7 +247,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_string2 */
-	if((_global_string2 = (char*) malloc(MAX_GLOBAL_STR2)) == NULL){
+	if((_global_string2 = (char*) mymalloc(MAX_GLOBAL_STR2)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_string2'\n");
 		ret = FAILURE;
 	}
@@ -257,7 +257,7 @@ short int _allocate_global_var(void){
 	}
 
 /* _global_string_farba */
-	if((_global_string_farba = (char*) malloc(MAX_GLOBAL_STR_FARBA)) == NULL){
+	if((_global_string_farba = (char*) mymalloc(MAX_GLOBAL_STR_FARBA)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_string_farba'\n");
 		ret = FAILURE;
 	}
@@ -273,29 +273,29 @@ short int _allocate_global_var(void){
 short int _deallocate_global_var(void){
 	Log("Deallocating memory...\n");
 
-	Log("_global_den_ptr\n"); free(_global_den_ptr);
-	Log("_global_result_ptr\n"); free(_global_result_ptr);
-	Log("_global_pm_sobota_ptr\n"); free(_global_pm_sobota_ptr);
-	Log("_global_svaty1_ptr\n"); free(_global_svaty1_ptr);
-	Log("_global_svaty2_ptr\n"); free(_global_svaty2_ptr);
-	Log("_global_svaty3_ptr\n"); free(_global_svaty3_ptr);
-	Log("_global_modl_prve_vespery_ptr\n"); free(_global_modl_prve_vespery_ptr);
-	Log("_global_modl_1kompletorium_ptr\n"); free(_global_modl_1kompletorium_ptr);
-	Log("_global_modl_invitatorium_ptr\n"); free(_global_modl_invitatorium_ptr);
-	Log("_global_modl_ranne_chvaly_ptr\n"); free(_global_modl_ranne_chvaly_ptr);
-	Log("_global_modl_posv_citanie_ptr\n"); free(_global_modl_posv_citanie_ptr); // 2011-03-29: doplnené
-	Log("_global_modl_cez_den_9_ptr\n"); free(_global_modl_cez_den_9_ptr);
-	Log("_global_modl_cez_den_12_ptr\n"); free(_global_modl_cez_den_12_ptr);
-	Log("_global_modl_cez_den_3_ptr\n"); free(_global_modl_cez_den_3_ptr);
-	Log("_global_modl_vespery_ptr\n"); free(_global_modl_vespery_ptr);
-	Log("_global_modl_kompletorium_ptr\n"); free(_global_modl_kompletorium_ptr);
-	Log("_global_r_ptr\n"); free(_global_r_ptr);
+	Log("_global_den_ptr\n"); myfree(_global_den_ptr);
+	Log("_global_result_ptr\n"); myfree(_global_result_ptr);
+	Log("_global_pm_sobota_ptr\n"); myfree(_global_pm_sobota_ptr);
+	Log("_global_svaty1_ptr\n"); myfree(_global_svaty1_ptr);
+	Log("_global_svaty2_ptr\n"); myfree(_global_svaty2_ptr);
+	Log("_global_svaty3_ptr\n"); myfree(_global_svaty3_ptr);
+	Log("_global_modl_prve_vespery_ptr\n"); myfree(_global_modl_prve_vespery_ptr);
+	Log("_global_modl_1kompletorium_ptr\n"); myfree(_global_modl_1kompletorium_ptr);
+	Log("_global_modl_invitatorium_ptr\n"); myfree(_global_modl_invitatorium_ptr);
+	Log("_global_modl_ranne_chvaly_ptr\n"); myfree(_global_modl_ranne_chvaly_ptr);
+	Log("_global_modl_posv_citanie_ptr\n"); myfree(_global_modl_posv_citanie_ptr); // 2011-03-29: doplnené
+	Log("_global_modl_cez_den_9_ptr\n"); myfree(_global_modl_cez_den_9_ptr);
+	Log("_global_modl_cez_den_12_ptr\n"); myfree(_global_modl_cez_den_12_ptr);
+	Log("_global_modl_cez_den_3_ptr\n"); myfree(_global_modl_cez_den_3_ptr);
+	Log("_global_modl_vespery_ptr\n"); myfree(_global_modl_vespery_ptr);
+	Log("_global_modl_kompletorium_ptr\n"); myfree(_global_modl_kompletorium_ptr);
+	Log("_global_r_ptr\n"); myfree(_global_r_ptr);
 
-	Log("_global_link_ptr\n"); free(_global_link_ptr);
-	Log("_global_pom_str\n"); free(_global_pom_str);
-	Log("_global_string\n"); free(_global_string);
-	Log("_global_string2\n"); free(_global_string2);
-	Log("_global_string_farba\n"); free(_global_string_farba); /* pridané 2006-08-19 */
+	Log("_global_link_ptr\n"); myfree(_global_link_ptr);
+	Log("_global_pom_str\n"); myfree(_global_pom_str);
+	Log("_global_string\n"); myfree(_global_string);
+	Log("_global_string2\n"); myfree(_global_string2);
+	Log("_global_string_farba\n"); myfree(_global_string_farba); /* pridané 2006-08-19 */
 
 	Log("...done.\n");
 	return SUCCESS;

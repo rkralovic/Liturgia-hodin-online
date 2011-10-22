@@ -6,6 +6,9 @@
 /* NOTE: popis nižšie -- for description see below             */
 /*                                                             */
 /***************************************************************/
+void *mymalloc(int n);
+void myfree(void *p);
+
 #include "vstudio.h"
 
 #ifndef __MYSYSTEM_H_
