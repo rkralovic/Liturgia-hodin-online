@@ -31,7 +31,7 @@ public class Breviar extends Activity
     static String scriptname = "cgi-bin/l.cgi";
     String language;
     static final String prefname = "BreviarPrefs";
-    boolean initialized;
+    boolean initialized, clearHistory;
 
     void goHome() {
       wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes" + Html.fromHtml(S.getOpts()));
@@ -40,7 +40,9 @@ public class Breviar extends Activity
     void resetLanguage() {
       S.setLanguage(language);
       // musime zahodit aj nastavenia, mozu byt ine. A zresetovalo by to aj jazyk spat.
-      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes" );
+      clearHistory = true;
+      wv.loadUrl("http://localhost:" + S.port + "/" + scriptname + "?qt=pdnes");
+      syncPreferences();
     }
 
     public boolean tryOpenBible(String url) {
@@ -123,6 +125,13 @@ public class Breviar extends Activity
           //Log.v("breviar", "onPageStarted");
           if (parent.initialized) parent.syncScale();
           parent.initialized = true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+          //Log.v("breviar", "onPageFinished");
+          if (parent.clearHistory) view.clearHistory();
+          parent.clearHistory = false;
         }
       } );
 

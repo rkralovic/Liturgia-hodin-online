@@ -1025,7 +1025,7 @@ const char *html_button_vespery_magnifikat[POCET_JAZYKOV + 1] = {"Vešpery + Magn
 
 // special button (today): Completory prayer with canticum of Simeon; is currently used only in Slovak
 // doplnené, 2008-12-20; nepouíva sa pre ostatné jazyky
-const char *html_button_kompletorium_nunkdim[POCET_JAZYKOV + 1] = {"Kompletórium + Nunk dimittis", "xxx", "xxx", "xxx", "", "xxx", "hu_xxx"};
+const char *html_button_kompletorium_nunkdim[POCET_JAZYKOV + 1] = {"Kompletórium + Nunk dimittis", "Kompletórium + Nunk dimittis", "xxx", "xxx", "", "xxx", "hu_xxx"};
 #ifndef HTML_BUTTON_KOMPLETORIUM_NUNKDIM
 #define HTML_BUTTON_KOMPLETORIUM_NUNKDIM	html_button_kompletorium_nunkdim[_global_jazyk]
 #endif
@@ -1805,7 +1805,7 @@ const char *html_text_option2_navigation_explain[POCET_JAZYKOV + 1] =
 
 const char *html_text_option2_textwrap[POCET_JAZYKOV + 1] = 
 {"zalamova dlhé riadky ako v tlaèenom vydaní (poetické èasti)",
- "xxx", 
+ "zalamova dlhé riadky ako v tlaèenom vydaní (poetické èasti)", 
  "xxx", 
  "",
  "",
@@ -1814,7 +1814,7 @@ const char *html_text_option2_textwrap[POCET_JAZYKOV + 1] =
 };
 const char *html_text_option2_textwrap_explain[POCET_JAZYKOV + 1] = 
 {"Èi sa majú v texte modlitby dlhé riadky almov, chválospevov a inıch poetickıch èastí zalamova ako v tlaèenom vydaní.", 
- "xxx", 
+ "Èi sa majú v texte modlitby dlhé riadky almov, chválospevov a inıch poetickıch èastí zalamova ako v tlaèenom vydaní.", 
  "xxx", 
  "",
  "", 
@@ -1824,7 +1824,7 @@ const char *html_text_option2_textwrap_explain[POCET_JAZYKOV + 1] =
 
 const char *html_text_option2_buttons_usporne[POCET_JAZYKOV + 1] = 
 {"tlaèidlá pre modlitby zobrazi úsporne",
- "xxx", 
+ "tlaèidlá pre modlitby zobrazi úsporne", 
  "xxx", 
  "",
  "",
@@ -1833,7 +1833,7 @@ const char *html_text_option2_buttons_usporne[POCET_JAZYKOV + 1] =
 };
 const char *html_text_option2_buttons_usporne_explain[POCET_JAZYKOV + 1] = 
 {"Èi sa majú tlaèidlá pre modlitby zobrazi úsporne, v tabu¾ke (menšia šírka) kvôli mobilnım zariadeniam.", 
- "xxx", 
+ "Èi sa majú tlaèidlá pre modlitby zobrazi úsporne, v tabu¾ke (menšia šírka) kvôli mobilnım zariadeniam.", 
  "xxx", 
  "",
  "", 
