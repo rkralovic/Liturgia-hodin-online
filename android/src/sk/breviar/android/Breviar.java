@@ -1,9 +1,13 @@
 package sk.breviar.android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.Uri;
@@ -23,14 +27,16 @@ import android.widget.Button;
 import java.io.IOException;
 import sk.breviar.android.Server;
 
-public class Breviar extends Activity
-{
+public class Breviar extends Activity {
+    static String scriptname = "cgi-bin/l.cgi";
+    static final String prefname = "BreviarPrefs";
+    static final int DIALOG_HU_BETA = 1;
+    static final int DIALOG_NEWS = 2;
+
     WebView wv;
     int scale;
     Server S = null;
-    static String scriptname = "cgi-bin/l.cgi";
     String language;
-    static final String prefname = "BreviarPrefs";
     boolean initialized, clearHistory;
 
     void goHome() {
@@ -160,7 +166,11 @@ public class Breviar extends Activity
           wv.pageDown(false);
         }
       });
- 
+
+      if (!getResources().getString(R.string.version).equals(settings.getString("version", ""))) {
+        showDialog(DIALOG_NEWS);
+        markVersion();
+      }
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -182,6 +192,13 @@ public class Breviar extends Activity
       }
 
       // Commit the edits!
+      editor.commit();
+    }
+
+    void markVersion() {
+      SharedPreferences settings = getSharedPreferences(prefname, 0);
+      SharedPreferences.Editor editor = settings.edit();
+      editor.putString("version", getResources().getString(R.string.version));
       editor.commit();
     }
 
@@ -213,6 +230,35 @@ public class Breviar extends Activity
     }
 
     @Override
+    protected Dialog onCreateDialog(int id) {
+      switch(id) {
+        case DIALOG_HU_BETA:
+          return new AlertDialog.Builder(this)
+                 .setMessage(R.string.hu_beta_warning)
+                 .setCancelable(false)
+                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                          dialog.cancel();
+                     }
+                 })
+                 .create();
+        case DIALOG_NEWS:
+          return new AlertDialog.Builder(this)
+                 .setMessage(R.string.news)
+                 .setCancelable(false)
+                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+                          dialog.cancel();
+                     }
+                 })
+                 .create();
+        default:
+          // fall through
+      }
+      return null;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
       // Handle item selection
       switch (item.getItemId()) {
@@ -223,6 +269,11 @@ public class Breviar extends Activity
         case R.id.lang_cz:
           language = "cz";
           resetLanguage();
+          return true;
+        case R.id.lang_hu:
+          language = "hu";
+          resetLanguage();
+          showDialog(DIALOG_HU_BETA);
           return true;
         default:
           return super.onOptionsItemSelected(item);
