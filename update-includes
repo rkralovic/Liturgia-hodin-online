@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TMPDIR=`mktemp`
+TMPDIR=`mktemp -d`
 pushd $TMPDIR
 wget -r www.breviar.sk/include
 wget -r www.breviar.sk/include_cz
