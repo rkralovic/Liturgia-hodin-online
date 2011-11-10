@@ -5,6 +5,11 @@
 #include "mysystem.h"
 #include "mysysdef.h"
 
+#ifdef IO_ANDROID
+char *StringEncode(const char *in, bool query_string = false);
+char *toUtf(const char *in);
+#endif
+
 #ifdef LITURGICKE_CITANIA_ANDROID
 
 struct citanie {
@@ -13,9 +18,6 @@ struct citanie {
 
 struct citanie *najdiCitanie(const char *kod);
 char *getCode(_struct_dm *d);
-
-char *StringEncode(const char *in);
-char *toUtf(const char *in);
 
 #endif // LITURGICKE_CITANIA_ANDROID
 

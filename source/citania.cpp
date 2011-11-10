@@ -69,7 +69,10 @@ char *getCode(_struct_dm *d) {
   return buf;
 }
 
-char *StringEncode(const char *in) {
+#endif // LITURGICKE_CITANIA_ANDROID
+
+#ifdef IO_ANDROID
+char *StringEncode(const char *in, bool query_string) {
   static unsigned char tab[17]="0123456789ABCDEF";
   int i;
   const char *s;
@@ -79,7 +82,10 @@ char *StringEncode(const char *in) {
     if (
         ( (*s>='a')&&(*s<='z') ) ||
         ( (*s>='A')&&(*s<='Z') ) ||
-        ( (*s>='0')&&(*s<='9') )
+        ( (*s>='0')&&(*s<='9') ) ||
+        ( query_string&&(*s=='&') ) ||
+        ( query_string&&(*s=='=') ) ||
+        ( query_string&&(*s==';') )
        ) {
       out[i]=*s;
       i+=1;
@@ -157,5 +163,4 @@ char *toUtf(const char *in) {
   }
   return out;
 }
-
-#endif // LITURGICKE_CITANIA_ANDROID
+#endif

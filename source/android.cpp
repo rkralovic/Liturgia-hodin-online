@@ -10,6 +10,7 @@
 #include <errno.h>
 #include "myexpt.h"
 #include "liturgia.h"
+#include "citania.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -178,7 +179,7 @@ JNIEXPORT jstring JNICALL Java_sk_breviar_android_Server_main(JNIEnv* env, jobje
   char pom2[MAX_STR], pom3[MAX_STR];
   strcpy(pom2, ""); strcpy(pom3, "");
   prilep_request_options(pom2, pom3, ANO);
-  jout = env->NewStringUTF(pom2);
+  jout = env->NewStringUTF(StringEncode(pom2, true));
 
   //__android_log_print(ANDROID_LOG_INFO, "Breviar", "main finished");
   env->ReleaseStringUTFChars(environ, environment);
