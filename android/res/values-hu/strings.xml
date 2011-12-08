@@ -22,13 +22,4 @@
     <string name="today">Ma</string>
     <string name="pgup">Fel</string>
     <string name="pgdn">Le</string>
-    <string name="news">
-     News in v1.7.3:\n
-     - Updates from www.breviar.sk\n
-     - Translations of buttons to Hungarian\n\n
-     News in v1.7.1:\n
-     - Updates from www.breviar.sk\n\n
-     News in v1.7.0:\n
-     - Hungarian version (beta)\n\n
-    </string>
 </resources>
