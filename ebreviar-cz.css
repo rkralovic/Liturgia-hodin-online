@@ -12,23 +12,19 @@
 .tt { font-family: Monospace; }
 .parameter { font-weight: bold; font-style: normal; font-family: Monospace; color: black; }
 .value { font-weight: bold; font-style: normal; font-family: Monospace; color: brown; }
-.brown { color: brown; }
-.brownsmall { font-size: 85%; color: brown; }
 .explain { font-size: 90%; color: #330000; }
 .small { font-size: 80%; }
 .verysmall { font-size: 60%; }
 .smallcaps { font-variant: small-caps; }
 .xsmallcaps { font-variant: small-caps; font-size: 70%; }
 
-/* 2003-07-09; 2004-03-23; 2008-02-27 */
 /* apply to all elements */ { font-family: inherit; font-size: 100%; }
 body, html { 
 	background-color: #FFFFCC;
 	color: #000000;
-	font-family: Cambria, Constantia, Georgia, Lido STF, DejaVu, Liberation, GentiumPlus, Gentium, Garamond, Serif;
+	font-family: Sans-Serif, Candara, Verdana, Tahoma, Helvetica, Arial;
 }
 p { font-family: inherit; color: #000000; font-style: normal; }
-
 
 .duoraz { 
 	font-weight: bold; }
