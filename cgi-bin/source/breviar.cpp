@@ -1,7 +1,7 @@
 /***************************************************************************/
 /*                                                                         */
 /* breviar.cpp                                                             */
-/* (c)1998-2011 | Juraj Videky | videky@breviar.sk                         */
+/* (c)1999-2012 | Juraj Videky | videky@breviar.sk                         */
 /*                                                                         */
 /*                http://www.breviar.sk                                    */
 /*                                                                         */
@@ -475,6 +475,11 @@ char *_global_string_farba; /* 2006-08-19: doplnenÈ */
 char _global_string_modlitba[SMALL];
 // 2012-04-03: pridanÈ, pre podnadpis modlitby (napr. pre MCD: doplnkov· psalmÛdia)
 char _global_string_podnadpis[SMALL];
+// 2012-08-16: pridanÈ, pre ÔalöÌ podnadpis modlitby (spoloËn· Ëasù)
+char _global_string_spol_cast[MAX_GLOBAL_STR2];
+
+// 2012-08-16: doplnenÈ kvÙli n·vratovej hodnote z funkcie init_global_string_spol_cast()
+short int ret_sc = MODL_SPOL_CAST_NULL;
 
 // pridane 13/04/2000A.D.; deklarovane v liturgia.h
 short int _global_linky;
@@ -564,11 +569,7 @@ char pom_DALSI_SVATY[SMALL] = STR_EMPTY;
 // tieto dalsie 3 pridane kvoli PRM_TABULKA, 15/03/2000A.D.
 char pom_ROK_FROM   [SMALL] = STR_EMPTY;
 char pom_ROK_TO     [SMALL] = STR_EMPTY;
-/* pom_LINKY sa povodne volala pom_TABULKA_LINKY, avsak 
- * pouzivame ju vo win32-release ako indikator, ci zobrazovat linky vseobecne,
- * alebo iba "akoze"-odkazy, ako mi poradil Miro M. a aj Matko Bk
- * 13/04/2000A.D. 
- */
+// pom_LINKY sa povodne volala pom_TABULKA_LINKY, avsak pouzivame ju vo win32-release ako indikator, ci zobrazovat linky vseobecne, alebo iba "akoze"-odkazy, ako mi poradil Miro M. a aj Matko Bk | 13/04/2000A.D. 
 char pom_LINKY		[SMALL] = STR_EMPTY;
 
 // 2006-07-11: PridanÈ kvÙli jazykov˝m mut·ci·m
@@ -626,17 +627,16 @@ char file_export[SMALL] = STR_EMPTY;
  * pre case SCRIPT_PARAM_FROM_ARGV, pridane 2003-07-08
  */
 
-/* nasledovna pasaz pridana 05/06/2000A.D., a to pre 
- * pridany parameter `i' (include directory) */
-/* deklarovane pre OS_Windows v mydefs.h */
-/* 2004-03-17 vyhodene #ifdef pre windows; pouziva sa to jednotne */
+// nasledovna pasaz pridana 05/06/2000A.D., a to pre pridany parameter `i' (include directory)
+// deklarovane pre OS_Windows v mydefs.h
+// 2004-03-17 vyhodene #ifdef pre windows; pouziva sa to jednotne
 //char FILE_PATH[MAX_STR] = "include\\";
 
 char include_dir[MAX_STR] = STR_EMPTY;
 
-/* nasledovna pasaz pridana 2003-07-04, a to pre batch mode;
- * pridany parameter `n' (name of binary executable),
- * pridany parameter `b' (name of batch mode file) */
+// nasledovna pasaz pridana 2003-07-04, a to pre batch mode;
+// pridany parameter `n' (name of binary executable),
+// pridany parameter `b' (name of batch mode file) */
 char name_binary_executable[MAX_STR] = STR_EMPTY;
 char name_batch_file[MAX_STR] = STR_EMPTY;
 FILE *batch_file = NULL;
@@ -658,10 +658,9 @@ char system_command[MAX_STR] = STR_EMPTY;
 // 2009-08-03: Ëi sa podarilo vytvoriù index.htm [_global_export_navig_hore/DEFAULT_MONTH_EXPORT] vn˙tri adres·ra jednotlivÈho mesiaca pre 'M' -- mesaËn˝ export v batch mÛde
 short int index_pre_mesiac_otvoreny = NIE;
 
-/* 2010-05-14: definy presunutÈ do breviar.h:
- * je_post | je_velka_noc | je_aleluja_aleluja | je_34_ocr | je_tedeum
- * vöetky testuj˙ premenn˙ "_global_den" a je_tedeum aj "type"
- */
+// 2010-05-14: definy presunutÈ do breviar.h:
+// je_post | je_velka_noc | je_aleluja_aleluja | je_34_ocr | je_tedeum
+// vöetky testuj˙ premenn˙ "_global_den" a je_tedeum aj "type"
 
 //---------------------------------------------------------------------
 /*
@@ -1119,6 +1118,7 @@ short int setForm(void){
 				case 9: strcat(local_str, STR_MODL_OPTF_1_ZALM95); break; // BIT_OPT_1_ZALM95
 				case 10: strcat(local_str, STR_MODL_OPTF_1_PROSBY_ZVOLANIE); break; // BIT_OPT_1_PROSBY_ZVOLANIE
 				case 11: strcat(local_str, STR_MODL_OPTF_1_SKRY_POPIS); break; // BIT_OPT_1_SKRY_POPIS
+				case 12: strcat(local_str, STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
 			}// switch(i)
 			strcat(local_str, "=");
 			strcat(local_str, pom_MODL_OPTF_CASTI_MODLITBY[i]);
@@ -2762,6 +2762,25 @@ void interpretParameter(short int type, char *paramname, short int aj_navigacia 
 		Export("<!--podnadpis:end");
 	}// PARAM_PODNADPIS
 
+	else if(equals(paramname, PARAM_SPOL_CAST)){
+		Log("  _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST == %d: ", _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST);
+		if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST) == BIT_OPT_1_ZOBRAZ_SPOL_CAST){
+			Log("including SPOL_CAST\n");
+			Export("spol_cast:begin-->");
+			if(!equals(_global_string_spol_cast, STR_EMPTY)){
+				Export("<"HTML_SPAN_RED_SMALL">%s %s %s.</span>\n", 
+					(ret_sc == MODL_SPOL_CAST_ZA_ZOSNULYCH)? nazov_spolc_oficiumza_jazyk[_global_jazyk]: nazov_spolc_zospolc_jazyk[_global_jazyk], 
+					(ret_sc != MODL_SPOL_CAST_ZA_ZOSNULYCH)? ((ret_sc == MODL_SPOL_CAST_POSVIACKA_CHRAMU)? nazov_spolc_vyrocie_jazyk[_global_jazyk]: nazov_spolc_sviatky_jazyk[_global_jazyk]): STR_EMPTY,
+					_global_string_spol_cast);
+			}
+			Export("<!--spol_cast:end");
+		}
+		else{
+			Export("skipping SPOL_CAST");
+			Log("skipping SPOL_CAST\n");
+		}
+	}// PARAM_SPOL_CAST
+
 	else if(equals(paramname, PARAM_NAVIGACIA)){
 		if(aj_navigacia == ANO){
 #ifdef BEHAVIOUR_WEB
@@ -4006,6 +4025,22 @@ short int atomes(char *mesiac){
 		}
 		i++;
 	}while(i < UNKNOWN_MESIAC);
+	// eöte jeden pokus pre ostatnÈ jazyky
+	int j = -1;
+	if(i == UNKNOWN_MESIAC){
+		do{
+			++j;
+			if((j != JAZYK_UNDEF) && (j != _global_jazyk)){
+				i = 0;
+				do{
+					if(equals(mesiac, nazov_mesiaca_jazyk[i][j])){
+						return i;
+					}
+					i++;
+				}while(i < UNKNOWN_MESIAC);
+			}
+		}while(j < POCET_JAZYKOV);
+	}
 	return UNKNOWN_MESIAC;
 }// atomes()
 
@@ -4691,15 +4726,13 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok, short int poradie
 	_global_pocet_svatych = sviatky_svatych(_global_den.den, _global_den.mesiac);
 	_rozbor_dna_LOG("_global_pocet_svatych = %d\n", _global_pocet_svatych);
 
-	/* 2003-06-30 */
-	/* 2003-10-07; prve nedelne vespery nemali prosby, chyba bola v dbzaltar.cpp::_SET_SPOLOCNE_VECI_NEDELA */
+	// 2003-06-30
+	// 2003-10-07; prve nedelne vespery nemali prosby, chyba bola v dbzaltar.cpp::_SET_SPOLOCNE_VECI_NEDELA
 	// _rozbor_dna_LOG("(1) _global_modl_prve_vespery:\n"); Log(_global_modl_prve_vespery);
-	/* 2009-03-19: debugovanie kvÙli kompletÛriu po prv˝ch veöper·ch 18. marca - sv. Jozefa */
+	// 2009-03-19: debugovanie kvÙli kompletÛriu po prv˝ch veöper·ch 18. marca - sv. Jozefa
 	// _rozbor_dna_LOG("(1) _global_modl_prve_kompletorium:\n"); Log(_global_modl_prve_kompletorium);
 
-	/* pridane 28/03/2000A.D.: ak chce vacsie cislo (poradie svateho) ako je v _global_pocet_svatych
-	 * resp. ked nie je sobota a chce poradie svateho 4 (spomienka p. marie v sobotu)
-	 */
+	// pridane 28/03/2000A.D.: ak chce vacsie cislo (poradie svateho) ako je v _global_pocet_svatych resp. ked nie je sobota a chce poradie svateho 4 (spomienka p. marie v sobotu)
 	if((_global_pocet_svatych == 0) && (_global_pocet_svatych < poradie_svaty) && (poradie_svaty != 4)){
 		hlavicka((char *)html_title[_global_jazyk]);
 		Export("V tento deÚ nie je sviatok ûiadneho sv‰tÈho, preto nemÙûete poûadovaù sv‰tÈho Ë. %d.", poradie_svaty);
@@ -4767,65 +4800,49 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok, short int poradie
 			_rozbor_dna_LOG("nie je pÙstne obdobie, nie je potrebnÈ meniù spomienku na æubovoæn˙ spomienku (_global_svaty3)...\n");
 		}
 
-		/* c. 12 v c. 59 vseob. smernic: "lubovolne spomienky, ktore sa mozu
-		 * slavit aj v dnoch uvedenych pod c. 9 [...] tak isto v omsi a oficiu
-		 * na sposob lubovolnych spomienok mozno slavit tie povinne spomienky,
-		 * ktore obcas pripadnu na vsedne dni v poste." ... */
+		// c. 12 v c. 59 vseob. smernic: "lubovolne spomienky, ktore sa mozu slavit aj v dnoch uvedenych pod c. 9 [...] tak isto v omsi a oficiu
+		// na sposob lubovolnych spomienok mozno slavit tie povinne spomienky, ktore obcas pripadnu na vsedne dni v poste." ...
 		if(((_global_den.smer == 9) &&
 			 (_global_svaty1.typslav == SLAV_LUB_SPOMIENKA)) ||
 
-		/* ... alebo c. 60: "ak na jeden den pripadnu viacere slavenia,
-		 * uprednostni sa to, ktore ma v tabulke liturgickych dni vyssi stupen
-		 * [t.j. .smer]. */
-		/* 2010-07-28: doplnenÈ alternatÌvne porovnanie aj s _global_svaty2.smer (kvÙli dominik·nskej sl·vnosti 8.8.) 
-		 * 2010-10-06: upravenÈ; nesmie Ìsù o lok·lnu sl·vnosù (smer == 4) lebo nem· prebÌjaù "glob·lnu" v danom kalend·ri [napr. czop pre 22.10.]
-		 * 2011-02-02: zadefinovanÈ MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3, aby sa zjednoduöila podmienka (platÌ len pre CZOP)
-		 * 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3 pouûitÈ aj pre inÈ lok·lne sl·venia ako MIESTNE_SLAVENIE_LOKAL_SVATY1 aû 3
-		 */
+		// ... alebo c. 60: "ak na jeden den pripadnu viacere slavenia, uprednostni sa to, ktore ma v tabulke liturgickych dni vyssi stupen [t.j. .smer].
+		// 2010-07-28: doplnenÈ alternatÌvne porovnanie aj s _global_svaty2.smer (kvÙli dominik·nskej sl·vnosti 8.8.) 
+		// 2010-10-06: upravenÈ; nesmie Ìsù o lok·lnu sl·vnosù (smer == 4) lebo nem· prebÌjaù "glob·lnu" v danom kalend·ri [napr. czop pre 22.10.]
+		// 2011-02-02: zadefinovanÈ MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3, aby sa zjednoduöila podmienka (platÌ len pre CZOP)
+		// 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3 pouûitÈ aj pre inÈ lok·lne sl·venia ako MIESTNE_SLAVENIE_LOKAL_SVATY1 aû 3
 			((_global_den.smer > _global_svaty1.smer) && !MIESTNE_SLAVENIE_LOKAL_SVATY1)
 			|| ((_global_den.smer > _global_svaty2.smer) && !MIESTNE_SLAVENIE_LOKAL_SVATY2)
 			|| ((_global_den.smer > _global_svaty3.smer) && !MIESTNE_SLAVENIE_LOKAL_SVATY3)
 		){
 
-			/* ked bola nasledovna pasaz zapoznamkovana,
-			 * tak vsetko (bez modlitby) slo v poriadku; neslo generovanie
-			 * modlitby ok;
-			 * naopak, ked som ju odpoznamkoval 16/02/2000A.D.,
-			 * prestalo to ist bez modlitby (iba generovalo ok)
-			 * preto som to dal podla toho, ci _global_modlitba != MODL_NEURCENA
-			 * (18/02/2000A.D.)
-			 */
-			/* 23/02/2000A.D. -- SVATY_VEDIE */
+			// ked bola nasledovna pasaz zapoznamkovana, tak vsetko (bez modlitby) slo v poriadku; neslo generovanie modlitby ok;
+			// naopak, ked som ju odpoznamkoval 16/02/2000A.D., prestalo to ist bez modlitby (iba generovalo ok)
+			// preto som to dal podla toho, ci _global_modlitba != MODL_NEURCENA (18/02/2000A.D.)
+			// 23/02/2000A.D. -- SVATY_VEDIE
 			_rozbor_dna_LOG("svaty ma prednost pred dnom (SVATY_VEDIE)\n");
 			_rozbor_dna_LOG("_global_den.smer == %d, _global_svaty1.smer == %d, _global_svaty1.prik == %d\n",
 				_global_den.smer, _global_svaty1.smer, _global_svaty1.prik);
 
-			/* cele to tu bolo asi kvoli tomu, ze niektore veci sa pri generovani modlitby
-			 * citali z _global_den explicitne; zda sa, ze to ide aj bez toho;
-			 * napr. v BUTTONS (teda v tom export...) sa cita z _global_svaty...
-			 * 08/03/2000A.D.
-			 * akvsak ked som to cele zrusil, tak prestali fungovat prve vespery slavnosti, ktore
-			 * mali definovane vecicky v _global_svaty1, pretoze sa nikde nepriradili do _global_den;
-			 * takze som to napokon dal sem a pridal podmienku "iba ak ide o slavnost"
-			 * 15/03/2000A.D.
-			 */
+			// cele to tu bolo asi kvoli tomu, ze niektore veci sa pri generovani modlitby citali z _global_den explicitne; zda sa, ze to ide aj bez toho;
+			// napr. v BUTTONS (teda v tom export...) sa cita z _global_svaty... | 08/03/2000A.D.
+			// akvsak ked som to cele zrusil, tak prestali fungovat prve vespery slavnosti, ktore mali definovane vecicky v _global_svaty1, pretoze sa nikde nepriradili do _global_den;
+			// takze som to napokon dal sem a pridal podmienku "iba ak ide o slavnost" | 15/03/2000A.D.
 			_rozbor_dna_LOG("modlitba == %d (%s)...\n", _global_modlitba, nazov_modlitby(_global_modlitba));
 			if((_global_modlitba != MODL_NEURCENA) && 
 				(
-					(poradie_svaty != UNKNOWN_PORADIE_SVATEHO) || /* 08/03/2000A.D. -- pridanÈ; 2009-03-27: zmenen· konötanta 0 na UNKNOWN_PORADIE_SVATEHO */
+					(poradie_svaty != UNKNOWN_PORADIE_SVATEHO) || // 08/03/2000A.D. -- pridanÈ; 2009-03-27: zmenen· konötanta 0 na UNKNOWN_PORADIE_SVATEHO
 					((poradie_svaty == UNKNOWN_PORADIE_SVATEHO) && (_global_svaty1.smer < 5)
-						/* a neplatÌ, ûe ide o lok·lnu sl·vnosù: t· nesmie prebiù vöedn˝ deÚ
-						 * 2010-10-06: upravenÈ; nesmie Ìsù o lok·lnu sl·vnosù (smer == 4) lebo nem· prebÌjaù "glob·lnu" v danom kalend·ri [napr. czop pre 22.10.]
-						 * 2011-02-02: zadefinovanÈ MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3, aby sa zjednoduöila podmienka (platÌ len pre CZOP)
-						 * 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3 pouûitÈ aj pre inÈ lok·lne sl·venia ako MIESTNE_SLAVENIE_LOKAL_SVATY1 aû 3
-						 */
+						// a neplatÌ, ûe ide o lok·lnu sl·vnosù: t· nesmie prebiù vöedn˝ deÚ
+						// 2010-10-06: upravenÈ; nesmie Ìsù o lok·lnu sl·vnosù (smer == 4) lebo nem· prebÌjaù "glob·lnu" v danom kalend·ri [napr. czop pre 22.10.]
+						// 2011-02-02: zadefinovanÈ MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3, aby sa zjednoduöila podmienka (platÌ len pre CZOP)
+						// 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY1 aû 3 pouûitÈ aj pre inÈ lok·lne sl·venia ako MIESTNE_SLAVENIE_LOKAL_SVATY1 aû 3
 						&& !MIESTNE_SLAVENIE_LOKAL_SVATY1
 					) // slavnosti
 				)
-				){ /* 15/03/2000A.D. -- modifikovane; POKUS 2006-12-08: vyÚat· podmienka (_global_modlitba != MODL_NEURCENA) &&  nepomohla, len pokazila */
-				/* tato pasaz je cela divna... */
-				/* menim, lebo svaty ma prednost */
-				/* 2006-02-06: pre viacero æubovoæn˝ch spomienok treba byù obozretnejöÌ */
+				){ // 15/03/2000A.D. -- modifikovane; POKUS 2006-12-08: vyÚat· podmienka (_global_modlitba != MODL_NEURCENA) &&  nepomohla, len pokazila
+				// tato pasaz je cela divna...
+				// menim, lebo svaty ma prednost
+				// 2006-02-06: pre viacero æubovoæn˝ch spomienok treba byù obozretnejöÌ
 				_rozbor_dna_LOG("\tporadie_svaty == %d\n", poradie_svaty);
 				_rozbor_dna_LOG("menim, lebo `%s' ma prednost...\n", 
 					poradie_svaty == 1 ? _global_svaty1.meno :
@@ -4840,10 +4857,8 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok, short int poradie
 				_global_den.spolcast = _global_svaty1.spolcast;
 				_global_den.prik = _global_svaty1.prik;
 				// Log(_global_den); // kvÙli p·traniu pridanÈ 2006-02-06
-				/* pridanÈ 2006-02-06; upravujeme premenn˙ _global_opt[OPT_3_SPOLOCNA_CAST] ak nebola nastaven· MODL_SPOL_CAST_NEBRAT
-				 * treba nastaviù podæa toho, ktor˝ sv‰t˝ je (mÙûe byù 1--3) 
-				 * a z·roveÚ braù do ˙vahy eventu·lne prednastavenie od pouûÌvateæa
-				 */
+				// pridanÈ 2006-02-06; upravujeme premenn˙ _global_opt[OPT_3_SPOLOCNA_CAST] ak nebola nastaven· MODL_SPOL_CAST_NEBRAT
+				// treba nastaviù podæa toho, ktor˝ sv‰t˝ je (mÙûe byù 1--3)  a z·roveÚ braù do ˙vahy eventu·lne prednastavenie od pouûÌvateæa
 				_rozbor_dna_LOG("\tPremenn· _global_opt[OPT_3_SPOLOCNA_CAST] pred ˙pravou == %d (%s)...\n", 
 					_global_opt[OPT_3_SPOLOCNA_CAST], 
 					_global_opt[OPT_3_SPOLOCNA_CAST] <= MODL_SPOL_CAST_NEBRAT ? nazov_spolc(_global_opt[OPT_3_SPOLOCNA_CAST]) : STR_EMPTY);
@@ -5670,6 +5685,64 @@ void init_global_string_podnadpis(short int modlitba){
 	Log("-- init_global_string_podnadpis(%d, %s) -- koniec\n", modlitba, nazov_modlitby(modlitba));
 }// init_global_string_podnadpis()
 
+short int init_global_string_spol_cast(short int sc_jedna, short int poradie_svateho){
+	// 2012-08-16: vytvorenÈ
+	short int ret_sc = sc_jedna; // obsahuje nejak˙ hodnotu MODL_SPOL_CAST_...: buÔ spol. Ëasù na vstupe alebo ak bol MODL_SPOL_CAST_NULL (-1), tak prv˙ zo zoznamu
+	Log("-- init_global_string_spol_cast(%d, %s) -- zaËiatok\n", sc_jedna, nazov_spolc(sc_jedna));
+	Log("pÙvodn· hodnota: %s\n", _global_string_spol_cast);
+	if(sc_jedna == MODL_SPOL_CAST_NULL){
+		mystrcpy(_global_string_spol_cast, STR_EMPTY, SMALL);
+
+		// najprv si rozkÛdujeme, Ëo je v "_global_den".spolcast podæa poradie_svateho
+		_struct_sc sc = _decode_spol_cast(MODL_SPOL_CAST_NEURCENA);
+		switch(poradie_svateho){
+			case 0: sc = _decode_spol_cast(_global_den.spolcast);
+				break;
+			case 1: sc = _decode_spol_cast(_global_svaty1.spolcast);
+				break;
+			case 2: sc = _decode_spol_cast(_global_svaty2.spolcast);
+				break;
+			case 3: sc = _decode_spol_cast(_global_svaty3.spolcast);
+				break;
+			case 4: sc = _decode_spol_cast(_global_pm_sobota.spolcast);
+				break;
+		}
+
+		if((sc.a1 != MODL_SPOL_CAST_NEURCENA) && (sc.a1 != MODL_SPOL_CAST_NEBRAT)){
+			ret_sc = sc.a1;
+			strcat(_global_string_spol_cast, nazov_spolc(sc.a1));
+			if(sc.a2 != MODL_SPOL_CAST_NEURCENA){
+				strcat(_global_string_spol_cast, ", ");
+				strcat(_global_string_spol_cast, nazov_spolc_alebo_jazyk[_global_jazyk]);
+				strcat(_global_string_spol_cast, " ");
+				strcat(_global_string_spol_cast, nazov_spolc(sc.a2));
+				if(sc.a3 != MODL_SPOL_CAST_NEURCENA){
+					strcat(_global_string_spol_cast, ", ");
+					strcat(_global_string_spol_cast, nazov_spolc_alebo_jazyk[_global_jazyk]);
+					strcat(_global_string_spol_cast, " ");
+					strcat(_global_string_spol_cast, nazov_spolc(sc.a3));
+				}
+			}
+		}
+	}
+	else if((sc_jedna != MODL_SPOL_CAST_NEURCENA) && (sc_jedna != MODL_SPOL_CAST_NEBRAT)){
+		sprintf(_global_string_spol_cast, "%s", nazov_spolc(sc_jedna));
+		if((_global_den.smer > 9) && ((_global_den.typslav == SLAV_SPOMIENKA) || (_global_den.typslav == SLAV_LUB_SPOMIENKA))){
+			if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_SPOMIENKA_SPOL_CAST) != BIT_OPT_1_SPOMIENKA_SPOL_CAST){
+				strcat(_global_string_spol_cast, " (");
+				strcat(_global_string_spol_cast, nazov_bit_opt_1_spomienka_spol_cast_jazyk[_global_jazyk]);
+				strcat(_global_string_spol_cast, ")");
+			}// nebraù Ëasti zo spol. Ëasti
+		}// ide nanajv˝ö o spomienku (ak je to sl·venie s vyööÌm stupÚom, nem· zmysel voæba BIT_OPT_1_SPOMIENKA_SPOL_CAST)
+	}
+	else{
+		mystrcpy(_global_string_spol_cast, STR_EMPTY, SMALL);
+	}
+	Log("nov· hodnota: %s\n", _global_string_spol_cast);
+	Log("-- init_global_string_spol_cast(%d, %s) -- koniec\n", sc_jedna, nazov_spolc(sc_jedna));
+	return ret_sc;
+}// init_global_string_spol_cast()
+
 //---------------------------------------------------------------------
 /* _rozbor_dna_s_modlitbou()
  *
@@ -5999,6 +6072,22 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 		Export("%s", _global_string);
 		if(typ == EXPORT_DNA_VIAC_DNI_TXT){
 			Export("\";");
+		}
+		if(typ != EXPORT_DNA_VIAC_DNI_TXT){
+			Log("  _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST == %d: ", _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST);
+			Export("<!-- BEGIN:_global_string_spol_cast -->");
+			if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST) == BIT_OPT_1_ZOBRAZ_SPOL_CAST){
+				ret_sc = init_global_string_spol_cast(MODL_SPOL_CAST_NULL, poradie_svateho);
+				Log("including SPOL_CAST\n");
+				if(!equals(_global_string_spol_cast, STR_EMPTY)){
+					Export("<br />");
+					Export("<"HTML_SPAN_RED_SMALL">%s %s %s.</span>\n", 
+						(ret_sc == MODL_SPOL_CAST_ZA_ZOSNULYCH)? nazov_spolc_oficiumza_jazyk[_global_jazyk]: nazov_spolc_zospolc_jazyk[_global_jazyk], 
+						(ret_sc != MODL_SPOL_CAST_ZA_ZOSNULYCH)? ((ret_sc == MODL_SPOL_CAST_POSVIACKA_CHRAMU)? nazov_spolc_vyrocie_jazyk[_global_jazyk]: nazov_spolc_sviatky_jazyk[_global_jazyk]): STR_EMPTY,
+						_global_string_spol_cast);
+				}
+			}
+			Export("<!-- END:_global_string_spol_cast -->");
 		}
 		Export("<!-- END:_global_string -->\n");
 	}
@@ -7140,12 +7229,50 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 	prilep_request_options(pom2, pom3); // prilep_request_options(pom2, pom3, prvy_ampersand)
 
+#ifdef OS_Windows_Ruby
+	Export("<table align=\"center\"><tr>\n<td>\n");
+	// 2012-07-23, doplnenÈ pre Ruby
+	// ak by sa malo pouûiù "dnes": Export("\n<form action=\"%s?%s=%s%s\" method=\"post\">\n", uncgi_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2);
+	Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+
+	Export("<!-- combobox pre v˝ber jazyka -->\n");
+
+	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_jazyk_explain[_global_jazyk], html_text_jazyk[_global_jazyk]);
+	Export(" ");
+	// drop-down list pre v˝ber jazyka
+	// pole WWW_JAZYK
+	Export("<select name=\"%s\" title=\"%s\">\n", STR_JAZYK, html_text_jazyk_explain[_global_jazyk]);
+
+	for(int i = 0; i <= POCET_JAZYKOV; i++){
+		if(i == JAZYK_EN)
+			continue;
+		if(i == JAZYK_LA)
+			continue;
+		if(i == JAZYK_UNDEF)
+			continue;
+		Export("<option%s>%s\n", (i != _global_jazyk)? STR_EMPTY: html_option_selected, nazov_jazyka[i]);
+	}
+	Export("</select>\n");
+
+	Export("<!-- button Nastaviù/Potvrdiù (jazyk)-->\n");
+	// button Nastaviù/Potvrdiù
+	Export("<"HTML_FORM_INPUT_SUBMIT" value=\"");
+	Export((char *)HTML_BUTTON_DNES_APPLY);
+	Export("\">");
+
+	Export("</form>\n\n");
+	Export("</td>\n</tr>\n</table>\n");
+#endif
+
 	// 2006-02-02: prevzat· Ëasù z _main_dnes
 
-	// pokracujem vypisanim formulara
-	Export("\n<form action=\"%s?%s\" method=\"post\">\n", uncgi_name, pom2);
+	// pokraËujem vypÌsanÌm formul·ra
+	// 2012-07-23: rozdelenie jednoho formu na dva; prv˝ pouûije PRM_DATUM podæa glob·lneho nastavenia
+	// pÙvodne tu bolo: Export("\n<form action=\"%s?%s\" method=\"post\">\n", uncgi_name, pom2);
+	Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
 
 	// 2003-07-09, zmenene <center><table> na <table align="center">
+	Export("<!--TABLE:BEGIN(options)-->\n");
 	Export("\n<table align=\"center\">\n");
 
 /* ------------------------------------------- */
@@ -7286,6 +7413,20 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_SPOMIENKA_SPOL_CAST, ANO, html_text_option1_spomienka_spolcast_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_SPOMIENKA_SPOL_CAST) == BIT_OPT_1_SPOMIENKA_SPOL_CAST)? html_option_checked: STR_EMPTY);
 	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_spomienka_spolcast_explain[_global_jazyk], html_text_option1_spomienka_spolcast[_global_jazyk]);
 
+if((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ)){
+	// pole (checkbox) WWW_MODL_OPTF_1_ZOBRAZ_SPOL_CAST
+	Export("<br>");
+	Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST, NIE);
+	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST, ANO, html_text_option1_spolc_svaty_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_ZOBRAZ_SPOL_CAST) == BIT_OPT_1_ZOBRAZ_SPOL_CAST)? html_option_checked: STR_EMPTY);
+	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_spolc_svaty_explain[_global_jazyk], html_text_option1_spolc_svaty[_global_jazyk]);
+}
+
+	// pole (checkbox) WWW_MODL_OPTF_1_SKRY_POPIS
+	Export("<br>");
+	Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_1_SKRY_POPIS, NIE);
+	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_SKRY_POPIS, ANO, html_text_option1_skryt_popis_svaty_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_SKRY_POPIS) == BIT_OPT_1_SKRY_POPIS)? html_option_checked: STR_EMPTY);
+	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_skryt_popis_svaty_explain[_global_jazyk], html_text_option1_skryt_popis_svaty[_global_jazyk]);
+
 	// pole (checkbox) WWW_MODL_OPTF_1_MCD_ZALMY_INE
 	Export("<br>");
 	Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_1_MCD_ZALMY_INE, NIE);
@@ -7304,19 +7445,11 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_PROSBY_ZVOLANIE, ANO, html_text_option1_prosby_zvolanie_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_PROSBY_ZVOLANIE) == BIT_OPT_1_PROSBY_ZVOLANIE)? html_option_checked: STR_EMPTY);
 	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_prosby_zvolanie_explain[_global_jazyk], html_text_option1_prosby_zvolanie[_global_jazyk]);
 
-// #ifdef OS_Windows_Ruby
-	// pole (checkbox) WWW_MODL_OPTF_1_SKRY_POPIS
-	Export("<br>");
-	Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_1_SKRY_POPIS, NIE);
-	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_SKRY_POPIS, ANO, html_text_option1_skryt_popis_svaty_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_SKRY_POPIS) == BIT_OPT_1_SKRY_POPIS)? html_option_checked: STR_EMPTY);
-	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_skryt_popis_svaty_explain[_global_jazyk], html_text_option1_skryt_popis_svaty[_global_jazyk]);
-
 	// pole (checkbox) WWW_MODL_OPTF_1_VIGILIA
 	Export("<br>");
 	Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_1_VIGILIA, NIE);
 	Export("<"HTML_FORM_INPUT_CHECKBOX" name=\"%s\" value=\"%d\" title=\"%s\"%s>\n", STR_MODL_OPTF_1_VIGILIA, ANO, html_text_option1_vigilia_explain[_global_jazyk], ((_global_optf[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_PC_VIGILIA) == BIT_OPT_1_PC_VIGILIA)? html_option_checked: STR_EMPTY);
 	Export("<"HTML_SPAN_TOOLTIP">%s</span>", html_text_option1_vigilia_explain[_global_jazyk], html_text_option1_vigilia[_global_jazyk]);
-// #endif
 
 	Export("</td></tr>\n");
 
@@ -7513,8 +7646,7 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	 * 2011-04-11: button "vyËisti" aj tak nefunguje korektne; zapozn·mkovanÈ (Igor Gal·d)
 	 */
 	Export("<tr>\n<td align=\"center\">\n");
-	Export("<!-- riadok pre button Nastaviù/Potvrdiù -->\n");
-
+	Export("<!-- riadok pre button Nastaviù/Potvrdiù (options)-->\n");
 	// button Nastaviù/Potvrdiù
 	Export("<"HTML_FORM_INPUT_SUBMIT" value=\"");
 	Export((char *)HTML_BUTTON_DNES_APPLY);
@@ -7527,6 +7659,18 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("\">");
 */
 	Export("</td></tr>\n\n");
+
+	// 2012-07-23: rozdelenie jednoho formu na dva; prv˝ pouûije PRM_DATUM podæa glob·lneho nastavenia
+	Export("</form>\n");
+
+	Export("<!--TABLE:END(options)-->\n");
+	Export("</table>");
+
+	Export("<!--TABLE:BEGIN(choices)-->\n");
+	Export("\n<table align=\"center\">\n");
+
+	// 2012-07-23: rozdelenie jednoho formu na dva; prv˝ pouûije PRM_DATUM podæa glob·lneho nastavenia
+	Export("\n<form action=\"%s?%s\" method=\"post\">\n", uncgi_name, pom2);
 
 /* ------------------------------------------- */
 	Export("<tr>\n<td>\n");
@@ -7545,6 +7689,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 /* ------------------------------------------- */
 	Export("<tr>\n<td>\n");
+
+	Export("<!--TABLE:BEGIN(PRM_DATUM)-->\n");
 	Export("<table align=\"left\">\n<tr><td>\n");
 	// formular pre PRM_DATUM
 	Export("<"HTML_FORM_INPUT_RADIO" name=\"%s\" value=\"%s\" checked>",
@@ -7618,16 +7764,17 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export(HTML_NONBREAKING_SPACE);
 	Export((char *)html_text_alebo_pre[_global_jazyk]);
 	Export(" ");
-	Export("<a href=\"%s?%s=%s"HTML_AMPERSAND"%s\">\n",
-		script_name,
-		STR_QUERY_TYPE, STR_PRM_DNES, pom2); // 2006-08-01: pridan˝ jazyk; 2011-05-12: bolo nastavenÈ funkciou prilep_request_options()
+	Export("<a href=\"%s?%s=%s"HTML_AMPERSAND"%s\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2); // 2006-08-01: pridan˝ jazyk; 2011-05-12: bolo nastavenÈ funkciou prilep_request_options()
 	Export((char *)html_text_dnesok[_global_jazyk]);
 	Export("</a></td>\n");
 
 	// 2011-01-31: chvÌæu tu bol v˝ber liturgickÈho kalend·ra (len pre SK), napr. SVD, SDB, SJ, CSsR; presunutÈ inde
 
-	Export("</tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</tr>\n");
+	Export("<!--TABLE:END(PRM_DATUM)-->\n");
+	Export("</table>\n");
+	Export("</td>\n");
+	Export("</tr>\n\n");
 
 #ifdef FORMULAR_PRE_PRM_SVIATOK
 /* ------------------------------------------- */
@@ -7639,7 +7786,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("</td><td>\n");
 	// sviatky --- [ToDo]
 	Export("</td></tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</td>\n");
+	Export("</tr>\n\n");
 #endif
 
 /* ------------------------------------------- */
@@ -7654,7 +7802,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	// pole WWW_ANALYZA_ROKU
 	Export("<"HTML_FORM_INPUT_TEXT_ROK" name=\"%s\" value=\"%d\" />\n", STR_ANALYZA_ROKU, dnes.tm_year);
 	Export("</td></tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</td>\n");
+	Export("</tr>\n\n");
 
 /* ------------------------------------------- */
 	Export("<tr>\n<td>\n");
@@ -7678,7 +7827,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	// pole WWW_ROK_ROKA
 	Export("<"HTML_FORM_INPUT_TEXT_ROK" name=\"%s\" value=\"%d\" />\n", STR_ROK_ROKA, dnes.tm_year);
 	Export("</td></tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</td>\n");
+	Export("</tr>\n\n");
 
 /* ------------------------------------------- */
 	Export("<tr>\n<td>\n");
@@ -7710,7 +7860,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 	Export("\n");
 	Export("</td></tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</td>\n");
+	Export("</tr>\n\n");
 
 #define formular_PRM_LIT_OBD
 #ifdef formular_PRM_LIT_OBD
@@ -7727,8 +7878,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("<option>%s\n", nazov_modlitby(MODL_PRVE_VESPERY));
 	Export("<option>%s\n", nazov_modlitby(MODL_PRVE_KOMPLETORIUM));
 	Export("<option>%s\n", nazov_modlitby(MODL_INVITATORIUM));
-	Export("<option>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
-	Export("<option selected>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
+	Export("<option selected>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
+	Export("<option>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
 	Export("<option>%s\n", nazov_modlitby(MODL_PREDPOLUDNIM));
 	Export("<option>%s\n", nazov_modlitby(MODL_NAPOLUDNIE));
 	Export("<option>%s\n", nazov_modlitby(MODL_POPOLUDNI));
@@ -7782,6 +7933,7 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("\n</select>\n");
 
 	Export("</td></tr></table>\n");
+	Export("</td>\n");
 	Export("</tr>\n\n");
 #else
 /* ------------------------------------------- */
@@ -7799,8 +7951,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("<option>%s\n", nazov_modlitby(MODL_PRVE_VESPERY));
 	Export("<option>%s\n", nazov_modlitby(MODL_PRVE_KOMPLETORIUM));
 	Export("<option>%s\n", nazov_modlitby(MODL_INVITATORIUM));
-	Export("<option selected>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
-	Export("<option>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
+	Export("<option selected>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
+	Export("<option>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
 	Export("<option>%s\n", nazov_modlitby(MODL_PREDPOLUDNIM));
 	Export("<option>%s\n", nazov_modlitby(MODL_NAPOLUDNIE));
 	Export("<option>%s\n", nazov_modlitby(MODL_POPOLUDNI));
@@ -7828,27 +7980,33 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export((char *)html_text_v_tyzdni_zaltara[_global_jazyk]);
 
 	Export("</td></tr></table>\n");
-	Export("</tr>\n\n"); // 2003-07-09, podozrivo tam bolo aj </td>
+	Export("</td>\n");
+	Export("</tr>\n\n");
 #endif
 /* ------------------------------------------- */
-	Export("</table>\n");
 
-	/* predtym tu bolo <br>, ale kedze hore som dal <table align="center">, 
-	 * tak tu musi byt <center> kvoli buttonom; 2003-07-09
-	 */
-	Export("\n<center>\n");
+	// predtym tu bolo <br>, ale kedze hore som dal <table align="center">,  tak tu musi byt <center> kvoli buttonom; 2003-07-09
+	// 2012-07-23: upravenÈ, aby sa stalo s˙Ëasùou tabuæky s moûnosùami voæby
+	Export("<!-- riadok pre button Zobraziù/VyËistiù (choices)-->\n");
+	Export("<tr align=\"center\">\n<td>\n");
 	// button Zobraziù (GO!)
 	Export("<"HTML_FORM_INPUT_SUBMIT" value=\"");
 	Export((char *)HTML_BUTTON_DNES_SHOW);
 	Export("\">");
-
+/*
 	// button PÙvodnÈ hodnoty (CLEAR!)
 	Export(HTML_NONBREAKING_SPACE""HTML_NONBREAKING_SPACE""HTML_NONBREAKING_SPACE"\n");
 	Export("<"HTML_FORM_INPUT_RESET2" value=\"");
 	Export((char *)HTML_BUTTON_DNES_DEFAULTS);
 	Export("\">");
+*/
+	Export("</td>\n");
+	Export("</tr>\n\n");
 
-	Export("</center>\n</form>\n\n");
+	Export("</form>\n\n");
+
+	Export("<!--TABLE:END(choices)-->\n");
+	Export("</table>\n");
 
 }// _export_main_formular()
 
@@ -8759,8 +8917,8 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 	// ToDo: zv·ûiù pre sl·vnosti zobraziù aj prvÈ veöpery s kompletÛriom...
 	Export("<select name=\"%s\">\n", STR_MODLITBA);
 	Export("<option>%s\n", nazov_modlitby(MODL_INVITATORIUM));
-	Export("<option>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
-	Export("<option selected>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
+	Export("<option selected>%s\n", nazov_modlitby(MODL_POSV_CITANIE));
+	Export("<option>%s\n", nazov_modlitby(MODL_RANNE_CHVALY));
 	Export("<option>%s\n", nazov_modlitby(MODL_PREDPOLUDNIM));
 	Export("<option>%s\n", nazov_modlitby(MODL_NAPOLUDNIE));
 	Export("<option>%s\n", nazov_modlitby(MODL_POPOLUDNI));
@@ -8814,6 +8972,7 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 	Export((char *)html_text_detaily_explain[_global_jazyk]);
 	Export("</p>\n");
 
+	Export("<!-- button Zobraziù -->\n");
 	Export("<center>\n");
 	// button "Zobraz modlitbu"
 	Export("<"HTML_FORM_INPUT_SUBMIT" value=\"");
@@ -8869,14 +9028,12 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, short int modlitba, short int poradie_svaty, short int aj_navigacia = ANO){
 	short int ret = SUCCESS;
 
-	/* lokalne premenne, v ktorych sa pamata to, co vrati _rozbor_dna() */
-	/* lokalna premenna, do ktorej sa ukladaju info o analyzovanom dni
-	 * pouziva ju void nove_rozbor_dna() funkcia */
+	// lokalne premenne, v ktorych sa pamata to, co vrati _rozbor_dna()
+	// lokalna premenna, do ktorej sa ukladaju info o analyzovanom dni pouziva ju void nove_rozbor_dna() funkcia
 	_struct_dm _local_den;
-	_INIT_DM(_local_den); /* 2003-08-07 pridana */
+	_INIT_DM(_local_den); // 2003-08-07 pridana
 
-	/* lokalne premenne obsahujuce data modlitbach -- 23/02/2000A.D.
-	 * prerobene, aby sa alokovali dynamicky */
+	// lokalne premenne obsahujuce data modlitbach -- 23/02/2000A.D. | prerobene, aby sa alokovali dynamicky
 
 /*
  * 2003-08-13: tu bolo kedysi toto (pre #ifdef POKUS_24_02_2000):
@@ -8893,7 +9050,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 #define _local_modl_kompletorium (*_local_modl_kompletorium_ptr)
 
 	Log("Allocating memory...\n");
-/* _local_modl_prve_vespery_ptr */
+// _local_modl_prve_vespery_ptr
 	if((_local_modl_prve_vespery_ptr = (_type_1vespery*) malloc(sizeof(_type_1vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_prve_vespery_ptr'\n");
 		return;
@@ -8903,16 +9060,16 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		_INIT_TMODLITBA1(_local_modl_prve_vespery); // pridana 2003-08-13
 	}
 
-/* _local_modl_1kompletorium_ptr */
+// _local_modl_1kompletorium_ptr
 	if((_local_modl_1kompletorium_ptr = (_type_1kompletorium*) malloc(sizeof(_type_1kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_1kompletorium_ptr'\n");
 		return;
 	}
 	else{
 		Log("  %d bytes for `_local_modl_1kompletorium_ptr'\n", sizeof(_type_1kompletorium));
-		_INIT_TMODLITBA3(_local_modl_prve_kompletorium); /* pridanÈ 2006-10-17 */
+		_INIT_TMODLITBA3(_local_modl_prve_kompletorium); // pridanÈ 2006-10-17
 	}
-/* _local_modl_vespery_ptr */
+// _local_modl_vespery_ptr
 	if((_local_modl_vespery_ptr = (_type_vespery*) malloc(sizeof(_type_vespery))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_vespery_ptr'\n");
 		return;
@@ -8922,20 +9079,20 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		_INIT_TMODLITBA1(_local_modl_vespery); // pridana 2003-08-13
 	}
 
-/* _local_modl_kompletorium_ptr */
+// _local_modl_kompletorium_ptr
 	if((_local_modl_kompletorium_ptr = (_type_kompletorium*) malloc(sizeof(_type_kompletorium))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_local_modl_kompletorium_ptr'\n");
 		return;
 	}
 	else{
 		Log("  %d bytes for `_local_modl_kompletorium_ptr'\n", sizeof(_type_kompletorium));
-		_INIT_TMODLITBA3(_local_modl_kompletorium); /* pridanÈ 2006-10-17 */
+		_INIT_TMODLITBA3(_local_modl_kompletorium); // pridanÈ 2006-10-17
 	}
 
 	Log("...done.\n");
 
-	/* lokalna kopia roka; ak treba analyzovat dalsi rok */
-	short int _local_rok = -1; /* inicializacia dorobena 01/03/2000A.D. */
+	// lokalna kopia roka; ak treba analyzovat dalsi rok
+	short int _local_rok = -1;
 
 	// lok·lna premenn·, Ëo obsahuje string vypÌsan˝ na obrazovku -- je to kÛpia _global_string (preto veækosù 2011-09-27 opraven·)
 	char _local_string[MAX_GLOBAL_STR];
@@ -8944,8 +9101,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 	_global_modlitba = modlitba;
 
-	Log("-- rozbor_dna_s_modlitbou(int, int, int, int, int): begin (%d.%d %d, %d; %d)\n",
-		den, mesiac, rok, modlitba, poradie_svaty);
+	Log("-- rozbor_dna_s_modlitbou(int, int, int, int, int): begin (%d.%d %d, %d; %d)\n", den, mesiac, rok, modlitba, poradie_svaty);
 	_struct_den_mesiac datum;
 
 	if((modlitba == MODL_VESPERY) || (modlitba == MODL_KOMPLETORIUM)){
@@ -8991,13 +9147,10 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 		_local_den = _global_den;
 
-		/* neviem, ci tam ma byt _global_modl_[prve_]vespery ... */
-		/* 23/02/2000A.D. -- prirobil som aj bez _prve_ */
 		_local_modl_prve_vespery = _global_modl_prve_vespery;
 		_local_modl_prve_kompletorium = _global_modl_prve_kompletorium;
 		_local_modl_vespery = _global_modl_vespery;
 		_local_modl_kompletorium = _global_modl_kompletorium;
-		/* logy pridane 2003-06-30 */
 		// Log("_local_modl_vespery obsahuje:\n"); Log(_local_modl_vespery);
 		// pridane 2003-10-07 kvoli debugovaniu, co prve vespery nediel ocr nemali prosby
 			Log("_local_modl_prve_vespery obsahuje:\n"); Log(_local_modl_prve_vespery);
@@ -9053,6 +9206,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 	}// if((modlitba == MODL_PRVE_VESPERY) || (modlitba == MODL_PRVE_KOMPLETORIUM))
 	init_global_string_modlitba(modlitba);
 	init_global_string_podnadpis(modlitba);
+	ret_sc = init_global_string_spol_cast(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], poradie_svaty);
 
 	// ak ma nasledujuci den prioritu pred dnesnym dnom
 	if((modlitba == MODL_VESPERY) || (modlitba == MODL_KOMPLETORIUM)){
@@ -9071,25 +9225,22 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 			Log("netyka sa to velkonocneho trojdnia\n");
 			goto LABEL_NIE_INE_VESPERY;
 		}
-		/* ...a tiez sa to netyka popolcovej stredy, 09/03/2000A.D. */
+		// ...a tiez sa to netyka popolcovej stredy, 09/03/2000A.D.
 		if((_global_den.denvr == _global_r._POPOLCOVA_STREDA.denvr) || ((_global_den.denvr == (_global_r._POPOLCOVA_STREDA.denvr - 1)))){
-			/* preto aj POPOLCOVA_STREDA aj POPOLCOVA_STREDA - 1, lebo prve aj druhe vespery */
+			// preto aj POPOLCOVA_STREDA aj POPOLCOVA_STREDA - 1, lebo prve aj druhe vespery
 			Log("netyka sa to popolcovej stredy\n");
 			goto LABEL_NIE_INE_VESPERY;
 		}
 		// ...a tiez sa to netyka dni velkonocnej oktavy okrem nedele
 		if((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) && (_global_den.denvt != DEN_SOBOTA) && (_global_den.denvt != DEN_NEDELA)){
-			/* sobota kvoli prvym vesperam */
+			// sobota kvoli prvym vesperam
 			Log("netyka sa to vsednych dni velkonocnej oktavy\n");
 			goto LABEL_NIE_INE_VESPERY;
 		}
 
-		/* 23/02/2000A.D.: kedze nefungovali prave sviatky Pana a slavnosti,
-		 * co pripadli na nedelu, tak to bolo treba preskumat */
 		Log("ÔalöÌ deÚ (%d.%d.): _local_den.smer == %d, _local_den.denvt == %s, _local_den.litobd == %s (%d)\n",
 			_local_den.den, _local_den.mesiac,
 			_local_den.smer, nazov_dna(_local_den.denvt), nazov_obdobia_ext(_local_den.litobd), _local_den.smer);
-		// 2003-06-30
 		// Log(_local_den);
 		Log("_local_modl_prve_vespery obsahuje:\n"); Log(_local_modl_prve_vespery);
 		// Log("_local_modl_prve_kompletorium obsahuje:\n"); Log(_local_modl_prve_kompletorium);
@@ -9102,7 +9253,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		// Log("(3) _global_modl_prve_vespery obsahuje:\n"); Log(_global_modl_prve_vespery);
 		Log("(3) _global_modl_prve_kompletorium obsahuje:\n"); Log(_global_modl_prve_kompletorium);
 
-		/* if VYNIMKY: porov. nizsie. 14/03/2000A.D. */
+		// if VYNIMKY: porov. nizsie. 14/03/2000A.D.
 		if((_global_den.smer > _local_den.smer) ||
 			((_global_den.smer == _local_den.smer) && 
 				(
@@ -9116,23 +9267,18 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		}
 
 		if((_global_den.smer < 5) ||
-			/* cl. 11: slavnosti su zvlast vyznacnymi dnami. ich slavenie
-			 * sa zacina prvymi vesperami v predchadzajuci den. */
+			// cl. 11: slavnosti su zvlast vyznacnymi dnami. ich slavenie sa zacina prvymi vesperami v predchadzajuci den.
 			((_global_den.smer == 5) && (_global_den.denvt == DEN_NEDELA) &&
 					((_global_den.litobd == OBD_CEZ_ROK) ||
 					 (_global_den.litobd == OBD_VIANOCNE_I) ||
 					 (_global_den.litobd == OBD_VIANOCNE_II))) ||
-			/* cl. 13: sviatky sa slavia v rozsahu jedneho dna, a preto nemaju
-			 * prve vespery, ak len nejde o sviatky pana, ktore pripadaju na
-			 * nedelu v obdobi ,,cez rok" a na nedelu vo vianocnom obdobi
-			 * a nahradzuju nedelnajsiu liturgiu hodin. */
+			// cl. 13: sviatky sa slavia v rozsahu jedneho dna, a preto nemaju prve vespery, ak len nejde o sviatky pana, ktore pripadaju na nedelu v obdobi ,,cez rok" a na nedelu vo vianocnom obdobi
+			// a nahradzuju nedelnajsiu liturgiu hodin.
 			(_global_den.denvt == DEN_NEDELA)
 			// nedeæa
 		){
-			/* cl. 61: ak na ten isty den pripadnu vespery bezneho dna
-			 * a prve vespery nasledujuceho dna, maju prednost vespery slavenia,
-			 * ktore ma v tabulke liturgickych dni vyssi stupen. v pripade
-			 * rovnosti sa beru vespery bezneho dna. */
+			// cl. 61: ak na ten isty den pripadnu vespery bezneho dna a prve vespery nasledujuceho dna, maju prednost vespery slavenia,
+			// ktore ma v tabulke liturgickych dni vyssi stupen. v pripade rovnosti sa beru vespery bezneho dna.
 
 			if(modlitba == MODL_VESPERY){
 				_global_modlitba = MODL_DRUHE_VESPERY;
@@ -9150,34 +9296,30 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 			*/
 			init_global_string_modlitba(modlitba);
 			init_global_string_podnadpis(modlitba);
-		}/* _global_den ma dvoje vespery/kompletorium, teda musime brat DRUHE */
+			ret_sc = init_global_string_spol_cast(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], poradie_svaty);
+		}// _global_den ma dvoje vespery/kompletorium, teda musime brat DRUHE
 
 		else
 LABEL_ZMENA:
 			if((_local_den.smer < 5) ||
-			/* cl. 11: slavnosti su zvlast vyznacnymi dnami. ich slavenie
-			 * sa zacina prvymi vesperami v predchadzajuci den. */
+			// cl. 11: slavnosti su zvlast vyznacnymi dnami. ich slavenie sa zacina prvymi vesperami v predchadzajuci den.
 			((_local_den.smer == 5) && (_local_den.denvt == DEN_NEDELA) &&
 					((_local_den.litobd == OBD_CEZ_ROK) ||
 					 (_local_den.litobd == OBD_VIANOCNE_I) ||
 					 (_local_den.litobd == OBD_VIANOCNE_II))) ||
-			/* cl. 13: sviatky sa slavia v rozsahu jedneho dna, a preto nemaju
-			 * prve vespery, ak len nejde o sviatky Pana, ktore pripadaju na
-			 * nedelu v obdobi ,,cez rok" a na nedelu vo vianocnom obdobi
-			 * a nahradzuju nedelnajsiu liturgiu hodin. */
+			// cl. 13: sviatky sa slavia v rozsahu jedneho dna, a preto nemaju prve vespery, ak len nejde o sviatky Pana, ktore pripadaju na nedelu v obdobi ,,cez rok" a na nedelu vo vianocnom obdobi
+			// a nahradzuju nedelnajsiu liturgiu hodin.
 			(_local_den.denvt == DEN_NEDELA)
 			// nedeæa
 		){
 			Log("LABEL_ZMENA:...\n");
-			/* cl. 61: ak na ten isty den pripadnu vespery bezneho dna
-			 * a prve vespery nasledujuceho dna, maju prednost vespery slavenia,
-			 * ktore ma v tabulke liturgickych dni vyssi stupen. v pripade
-			 * rovnosti sa beru vespery bezneho dna. */
-			/* tento if je kopirovany z vyssieho, VYNIMKY */
+			// cl. 61: ak na ten isty den pripadnu vespery bezneho dna a prve vespery nasledujuceho dna, maju prednost vespery slavenia,
+			// ktore ma v tabulke liturgickych dni vyssi stupen. v pripade rovnosti sa beru vespery bezneho dna.
+			// tento if je kopirovany z vyssieho, VYNIMKY
 			if((_global_den.smer > _local_den.smer) ||
 				((_global_den.smer == _local_den.smer) && 
 					(
-						((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) && (_global_den.denvt == DEN_SOBOTA)) ||/* 2. velkonocna nedela, pridane 09/03/2000A.D. */
+						((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) && (_global_den.denvt == DEN_SOBOTA)) ||// 2. velkonocna nedela, pridane 09/03/2000A.D.
 						((_local_den.mesiac - 1 == MES_DEC) && (_local_den.den == 25)) /* ked narodenie pana pripadne na pondelok, tak prve vespery maju prednost pred 4. adventnou nedelou; napr. rok 2000, pridane 14/03/2000A.D. */
 					)
 				)
@@ -9208,7 +9350,7 @@ LABEL_ZMENA:
 				else if(modlitba == MODL_KOMPLETORIUM){
 					_global_modlitba = MODL_PRVE_KOMPLETORIUM;
 					Log("-- MODL_PRVE_KOMPLETORIUM\n");
-					/* pridane 16/02/2000A.D. */
+					// pridane 16/02/2000A.D.
 					_global_modl_vespery = _global_modl_prve_vespery;
 					_global_modl_kompletorium = _global_modl_prve_kompletorium;
 				}
@@ -9221,15 +9363,14 @@ LABEL_ZMENA:
 				*/
 				init_global_string_modlitba(modlitba);
 				init_global_string_podnadpis(modlitba);
+				ret_sc = init_global_string_spol_cast(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], poradie_svaty);
 			}
-		}/* _local_den ma dvoje vespery/kompletorium, teda musime brat PRVE */
-	}/* vespery alebo kompletorium, zistovanie priority */
+		}// _local_den ma dvoje vespery/kompletorium, teda musime brat PRVE
+	}// vespery alebo kompletorium, zistovanie priority
 
-	 /* predosla pasaz, kedy sa kontroluje priorita nasledujuceho dna, preskakujeme
-	 * pre ostatne modlitby okrem vespier a kompletoria; poznamka pridana 2003-08-13 
-	 */
+	// predosla pasaz, kedy sa kontroluje priorita nasledujuceho dna, preskakujeme pre ostatne modlitby okrem vespier a kompletoria; poznamka pridana 2003-08-13
 
-LABEL_NIE_INE_VESPERY: /* 08/03/2000A.D. */
+LABEL_NIE_INE_VESPERY: // 08/03/2000A.D.
 
 	LOG_ciara;
 	Log("/* vypisanie udajov, podla ktorych vlastne budem generovat modlitbu */\n");
@@ -9238,7 +9379,7 @@ LABEL_NIE_INE_VESPERY: /* 08/03/2000A.D. */
 	Log("_global_string: %s\n", _global_string);
 	Log("modlitba = `%s' (%d)\n", nazov_modlitby(modlitba), modlitba);
 	switch(modlitba){
-		/* dalsie case pridane 2003-08-13 */
+		// dalsie case pridane 2003-08-13
 		case MODL_RANNE_CHVALY:
 			Log(_global_modl_ranne_chvaly);
 			break;
@@ -9257,24 +9398,22 @@ LABEL_NIE_INE_VESPERY: /* 08/03/2000A.D. */
 		case MODL_VESPERY:
 			Log(_global_modl_vespery);
 			break;
-		case MODL_PRVE_VESPERY: /* 2011-03-22: doplnenÈ */
+		case MODL_PRVE_VESPERY: // 2011-03-22: doplnenÈ
 			Log(_global_modl_prve_vespery);
 			break;
-		case MODL_INVITATORIUM: /* invitatÛrium a kompletÛrium pridanÈ 2006-10-13 */
+		case MODL_INVITATORIUM: // invitatÛrium a kompletÛrium pridanÈ 2006-10-13
 			Log(_global_modl_invitatorium);
 			break;
-		case MODL_KOMPLETORIUM: /* invitatÛrium a kompletÛrium pridanÈ 2006-10-13 */
+		case MODL_KOMPLETORIUM: // invitatÛrium a kompletÛrium pridanÈ 2006-10-13
 			Log(_global_modl_kompletorium);
 			break;
 		case MODL_PRVE_KOMPLETORIUM: // 2011-07-09: doplnenÈ
 			Log(_global_modl_prve_kompletorium);
 			break;
 	}
-/*	Log("_global_den:\n");	Log(_global_den); */
+//	Log("_global_den:\n");	Log(_global_den);
 
-	/* 2006-10-18: pridanÈ 
-	 * 2011-07-09: rozöÌrenÈ
-	 */
+	// 2006-10-18: pridanÈ | 2011-07-09: rozöÌrenÈ
 	if((modlitba == MODL_KOMPLETORIUM) || (modlitba == MODL_DRUHE_KOMPLETORIUM))
 		_global_pocet_zalmov_kompletorium = _global_modl_kompletorium.pocet_zalmov;
 	else if(modlitba == MODL_PRVE_KOMPLETORIUM)
@@ -10906,6 +11045,7 @@ short int _main_liturgicke_obdobie(char *den, char *tyzden, char *modlitba, char
 	}
 	init_global_string_modlitba(_global_modlitba);
 	init_global_string_podnadpis(_global_modlitba);
+	ret_sc = init_global_string_spol_cast(((_global_modlitba == MODL_DETAILY) || (_global_modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], poradie_svateho);
 
 	_export_heading_center(_global_string);
 
@@ -11565,6 +11705,7 @@ void _main_batch_mode(
 						mystrcpy(_global_string, STR_EMPTY, MAX_GLOBAL_STR); // inicializacia
 						mystrcpy(_global_string_modlitba, STR_EMPTY, SMALL);
 						mystrcpy(_global_string_podnadpis, STR_EMPTY, SMALL);
+						mystrcpy(_global_string_spol_cast, STR_EMPTY, SMALL);
 						// 2008-11-29: rozliËn˝ export
 						if(_global_opt_export_date_format == EXPORT_DATE_SIMPLE)
 							sprintf(_global_string, FILENAME_EXPORT_DATE_SIMPLE"_"FILENAME_EXPORT_DATE_SIMPLE, r_from % 100, m_from + 1, d_from, r_to % 100, m_to + 1, d_to);
@@ -12751,6 +12892,7 @@ short int getForm(void){
 			case 9: strcat(local_str, STR_MODL_OPTF_1_ZALM95); break; // BIT_OPT_1_ZALM95
 			case 10: strcat(local_str, STR_MODL_OPTF_1_PROSBY_ZVOLANIE); break; // BIT_OPT_1_PROSBY_ZVOLANIE
 			case 11: strcat(local_str, STR_MODL_OPTF_1_SKRY_POPIS); break; // BIT_OPT_1_SKRY_POPIS
+			case 12: strcat(local_str, STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
 		}// switch(i)
 		ptr = getenv(local_str);
 		if(ptr != NULL){
@@ -13224,9 +13366,9 @@ short int parseQueryString(void){
 	else
 		Log("query_string is NULL, something is wrong...\n");
 
-	/* get parameters */
+	// get parameters
 	i = 0;
-	while((strlen(query_string) > 0) && (i < MAX_VARIABLES)){ /* 2006-08-01: doplnen· podmienka, aby nepretieklo napÂÚanie premenn˝ch, ak je ich viac */
+	while((strlen(query_string) > 0) && (i < MAX_VARIABLES)){ // 2006-08-01: doplnen· podmienka, aby nepretieklo napÂÚanie premenn˝ch, ak je ich viac
 		mystrcpy(param[i].name, STR_EMPTY, MAX_NAME_CGI_UTILS);
 		mystrcpy(param[i].val, STR_EMPTY, MAX_VAL_CGI_UTILS);
 		splitword(param[i].val, query_string, '&');
@@ -13235,31 +13377,34 @@ short int parseQueryString(void){
 		Log("--- param[%d].name == %s, .val == %s\n", i, param[i].name, param[i].val);
 		i++;
 	}
-	pocet = i; /* od 0 po i - 1 */
+	pocet = i; // od 0 po i - 1
 	Log("pocet == %d\n", pocet);
 
-	/* 2006-08-01: doplnen· podmienka, aby nepretieklo napÂÚanie premenn˝ch, ak je ich viac */
+	// 2006-08-01: doplnen· podmienka, aby nepretieklo napÂÚanie premenn˝ch, ak je ich viac
 	if((strlen(query_string) > 0) && (pocet >= MAX_VARIABLES)){
 		hlavicka((char *)html_title[_global_jazyk]);
 		Export("Program nedok·ûe obsl˙ûiù viac parametrov (maximum: %d). OstatnÈ bud˙ ignorovanÈ.\n", MAX_VARIABLES);
 		ALERT;
 	}
 
-	/* 2006-07-12: pridanÈ kvÙli jazykov˝m mut·ci·m */
-	i = 0; /* param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme od 0 */
-	Log("pok˙öam sa zistiù jazyk...\n");
-	while((equalsi(pom_JAZYK, STR_EMPTY)) && (i < pocet)){
+	// 2006-07-12: pridanÈ kvÙli jazykov˝m mut·ci·m
+	// 2012-07-23: Pre POST query sa tam jazyk priliepa aj na zaËiatok (Ruby), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), preto ËÌtam "odzadu", "zozadu"
+	//             ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
+	//             pÙvodn· pozn·mka pre while cyklus resp. inicializ·ciu i: param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme aj 0
+	i = pocet;
+	Log("pok˙öam sa zistiù jazyk (od poslednÈho parametra k prvÈmu, t. j. odzadu)...\n");
+	while((equalsi(pom_JAZYK, STR_EMPTY)) && (i > 0)){
+		--i;
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 		if(equals(param[i].name, STR_JAZYK)){
-			/* ide o parameter STR_JAZYK */
+			// ide o parameter STR_JAZYK
 			mystrcpy(pom_JAZYK, param[i].val, SMALL);
 			Log("jazyk zisten˝ (%s).\n", pom_JAZYK);
 		}
-		i++;
 	}
 
 	// 2010-08-04: pridanÈ kvÙli jazykov˝m mut·ci·m -- kalend·r 
-	//             pÙdodn· pozn·mka pre while cyklus resp. inicializ·ciu i: param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme aj 0
+	//             pÙvodn· pozn·mka pre while cyklus resp. inicializ·ciu i: param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme aj 0
 	// 2010-10-11: Pre POST query sa tam kalend·r priliepa aj na zaËiatok, aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), preto ËÌtam "odzadu", "zozadu"
 	//             ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	// 2011-04-07: keÔûe poËet parametrov je "pocet", indexovanÈ s˙ 0 aû pocet - 1, a preto opravenÈ: najprv znÌûime --i;
@@ -13269,66 +13414,67 @@ short int parseQueryString(void){
 		--i;
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 		if(equals(param[i].name, STR_KALENDAR)){
-			/* ide o parameter STR_KALENDAR */
+			// ide o parameter STR_KALENDAR
 			mystrcpy(pom_KALENDAR, param[i].val, SMALL);
 			Log("kalend·r zisten˝ (%s).\n", pom_KALENDAR);
 		}
 	}
 
 	// 2008-08-08: pridanÈ kvÙli rÙznym css
-	i = 0; /* param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme od 0 */
+	i = 0; // param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme od 0
 	Log("pok˙öam sa zistiù css...\n");
 	while((equalsi(pom_CSS, STR_EMPTY)) && (i < pocet)){
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 		if(equals(param[i].name, STR_CSS)){
-			/* ide o parameter STR_CSS */
+			// ide o parameter STR_CSS
 			mystrcpy(pom_CSS, param[i].val, SMALL);
 			Log("css zistenÈ (%s).\n", pom_CSS);
 		}
 		i++;
 	}
+	// 2012-07-23: doplnenÈ (sn·Ô nebude robiù problÈmy)
+	if((i >= pocet) && (equalsi(pom_CSS, STR_EMPTY))){
+		mystrcpy(pom_CSS, nazov_css[CSS_breviar_sk], SMALL);
+		Log("css zistenÈ (%s) (i >= pocet).\n", pom_CSS);
+	}
 
-	/* 2011-05-05: pridanÈ kvÙli rÙznym fontom 
-	 * 2011-05-06: Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
-	 *             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
-	 *             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
-	 */
+	// 2011-05-05: pridanÈ kvÙli rÙznym fontom 
+	// 2011-05-06: Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	i = pocet;
 	Log("pok˙öam sa zistiù font (od poslednÈho parametra k prvÈmu, t. j. odzadu)...\n");
 	while((equalsi(pom_FONT, STR_EMPTY)) && (i > 0)){
 		--i;
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 		if(equals(param[i].name, STR_FONT_NAME)){
-			/* ide o parameter STR_FONT_NAME */
+			// ide o parameter STR_FONT_NAME
 			mystrcpy(pom_FONT, param[i].val, SMALL);
 			Log("font zisten˝ (%s).\n", pom_FONT);
 		}
 	}
 
-	/* 2011-05-13: pridanÈ kvÙli rÙznym veækostiam fontom 
-	 *             Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
-	 *             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
-	 *             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
-	 */
+	// 2011-05-13: pridanÈ kvÙli rÙznym veækostiam fontom 
+	//             Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	i = pocet;
 	Log("pok˙öam sa zistiù font size (od poslednÈho parametra k prvÈmu, t. j. odzadu)...\n");
 	while((equalsi(pom_FONT_SIZE, STR_EMPTY)) && (i > 0)){
 		--i;
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 		if(equals(param[i].name, STR_FONT_SIZE)){
-			/* ide o parameter STR_FONT_SIZE */
+			// ide o parameter STR_FONT_SIZE
 			mystrcpy(pom_FONT_SIZE, param[i].val, SMALL);
 			Log("font size zisten· (%s).\n", pom_FONT_SIZE);
 		}
 	}
 
-	/* 2006-08-01: pÙvodne sme predpokladali, ûe param[0] by mal obsahovaù typ akcie; 
-	 * odteraz ho hæad·me v celom zozname parametrov
-	 * 2011-01-25: doplnenÈ PRM_LIT_OBD
-	 */
+	// 2006-08-01: pÙvodne sme predpokladali, ûe param[0] by mal obsahovaù typ akcie; odteraz ho hæad·me v celom zozname parametrov
+	// 2011-01-25: doplnenÈ PRM_LIT_OBD
 	ok = NIE;
 	query_type = PRM_UNKNOWN;
-	i = 0; /* od param[0] */
+	i = 0; // od param[0]
 	Log("pok˙öam sa zistiù query type...\n");
 	while((ok != ANO) && (i < pocet)){
 		Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
@@ -13397,11 +13543,10 @@ short int parseQueryString(void){
 		return FAILURE;
 	}
 
-	/* 2011-01-26: premennÈ opt_1 aû opt7 sa ËÌtaj˙ vûdy; ak nie s˙ zadanÈ, nevadÌ
-	 *             doteraz sa ËÌtali len pre niektorÈ query_type: PRM_DNES, PRM_DETAILY, PRM_DATUM
-	 * 2011-01-26: doplnenÈ tieû force opt_0 aû opt_4
-	 * 2011-04-07: prerobenÈ na dve polia premenn˝ch
-	 */
+	// 2011-01-26: premennÈ opt_1 aû opt7 sa ËÌtaj˙ vûdy; ak nie s˙ zadanÈ, nevadÌ
+	//             doteraz sa ËÌtali len pre niektorÈ query_type: PRM_DNES, PRM_DETAILY, PRM_DATUM
+	// 2011-01-26: doplnenÈ tieû force opt_0 aû opt_4
+	// 2011-04-07: prerobenÈ na dve polia premenn˝ch
 	for(j = 0; j < POCET_GLOBAL_OPT; j++){
 		Log("j == %d...\n", j);
 		mystrcpy(local_str, STR_EMPTY, SMALL);
@@ -13506,6 +13651,7 @@ short int parseQueryString(void){
 			case 9: strcat(local_str, STR_MODL_OPTF_1_ZALM95); break; // BIT_OPT_1_ZALM95
 			case 10: strcat(local_str, STR_MODL_OPTF_1_PROSBY_ZVOLANIE); break; // BIT_OPT_1_PROSBY_ZVOLANIE
 			case 11: strcat(local_str, STR_MODL_OPTF_1_SKRY_POPIS); break; // BIT_OPT_1_SKRY_POPIS
+			case 12: strcat(local_str, STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
 		}// switch(j)
 		// premenn· WWW_MODL_OPTF_1_... (nepovinn·), j = 0 aû POCET_OPT_1_CASTI_MODLITBY
 		i = 0; // param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0
@@ -13606,9 +13752,9 @@ short int parseQueryString(void){
 			 * nieco dostane...
 			 */
 		case PRM_TXT: 
-			/* 2011-02-02: doplnenÈ */
+			// 2011-02-02: doplnenÈ
 		case PRM_DATUM:{
-		/* pripad, ze ide o datum */
+		// pripad, ze ide o datum
 
 		/* treba dodrzat presne poradie v query stringu;
 		 *   '()' znaci optional,
@@ -14349,9 +14495,9 @@ int main(int argc, char **argv){
 	}
 	_main_LOG("...done.\n");
 
-	/* pridanÈ 2005-08-01 */
+	// pridanÈ 2005-08-01
 
-	/* _global_buf */
+	// _global_buf
 	if((_global_buf = (char*) malloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_buf'\n");
 		goto _main_end;
@@ -14361,7 +14507,7 @@ int main(int argc, char **argv){
 		mystrcpy(_global_buf, STR_EMPTY, MAX_GLOBAL_STR);
 	}
 
-	/* _global_buf2 */
+	// _global_buf2
 	if((_global_buf2 = (char*) malloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_buf2'\n");
 		goto _main_end;
@@ -14395,16 +14541,15 @@ int main(int argc, char **argv){
 
 	ret = NO_RESULT;
 	switch(params){
-	/* v tomto switch() naplnime premennu query_type
-	 * a naviac (ak su) premenne pom_... */
+	// v tomto switch() naplnime premennu query_type a naviac (ak su) premenne pom_...
 		case SCRIPT_PARAM_FROM_FORM:{
 			_main_LOG_to_Export("params == SCRIPT_PARAM_FROM_FORM\n");
-			/* neboli zadane ziadne parametre, teda citam z formularu */
+			// neboli zadane ziadne parametre, teda citam z formulara
 			
 			query_type = getQueryTypeFrom_WWW();
-			/* zistili sme, aky je typ dotazu */
+			// zistili sme, aky je typ dotazu
 			if(query_type == PRM_NONE){
-				/* spusteny bez parametrov */
+				// spusteny bez parametrov
 				_main_LOG_to_Export("query_type == PRM_NONE\n");
 				_main_LOG_to_Export("spustam _main_prazdny_formular();\n");
 				_main_prazdny_formular();
@@ -14421,12 +14566,11 @@ int main(int argc, char **argv){
 		case SCRIPT_PARAM_FROM_ARGV:{
 			_main_LOG("params == SCRIPT_PARAM_FROM_ARGV\n");
 			_main_LOG("spustam getArgv();\n");
-			/* query_type sa nastavi priamo vovnutri */
+			// query_type sa nastavi priamo vovnutri
 			ret = getArgv(argc, argv);
-			if(ret == SUCCESS){ /* 13/03/2000A.D. -- aby mohlo exportovat do file_export */
-				/* 2006-07-12: pridanÈ parsovanie jazyka kvÙli jazykov˝m mut·ci·m 
-				 * 2009-08-05: predsunutÈ aj sem vyööie
-				 */
+			if(ret == SUCCESS){ // 13/03/2000A.D. -- aby mohlo exportovat do file_export
+				// 2006-07-12: pridanÈ parsovanie jazyka kvÙli jazykov˝m mut·ci·m 
+				// 2009-08-05: predsunutÈ aj sem vyööie
 				_main_LOG_to_Export("zisùujem jazyk (pom_JAZYK == %s)...\n", pom_JAZYK);
 				_global_jazyk = atojazyk(pom_JAZYK);
 				if(_global_jazyk == JAZYK_UNDEF){
@@ -14497,16 +14641,14 @@ int main(int argc, char **argv){
 			_main_LOG("spat po skonceni getArgv(); exporting to file `%s'...\n",
 				FILE_EXPORT);
 
-			/* 24/02/2000A.D. pridana simulacia QS */
+			// 24/02/2000A.D. pridana simulacia QS
 			if(query_type == PRM_SIMULACIA_QS){
 				Log("jumping to _main_SIMULACIA_QS (query_string == %s)...\n", query_string);
 				goto _main_SIMULACIA_QS;
 			}
 
-			/* initExport(); bola kedysi na zaciatku, avsak kvoli tomu, aby
-			 * bolo mozne menit (switch -e) nazov suboru, dalo sa to sem
-			 * 24/02/2000A.D. -- urobil som to presne tak, ako bolo kedysi
-			 */
+			// initExport(); bola kedysi na zaciatku, avsak kvoli tomu, aby bolo mozne menit (switch -e) nazov suboru, dalo sa to sem
+			// 24/02/2000A.D. -- urobil som to presne tak, ako bolo kedysi
 			/*
 			initExport();
 			hlavicka((char *)html_title[_global_jazyk]);
@@ -14514,15 +14656,10 @@ int main(int argc, char **argv){
 			break;
 		}
 		case SCRIPT_PARAM_FROM_QS:{
-			/* initExport(); bola kedysi na zaciatku, avsak kvoli tomu, aby
-			 * bolo mozne menit (switch -e) nazov suboru, dalo sa to sem
-			 * 24/02/2000A.D. -- urobil som to presne tak, ako bolo kedysi
-			 */
+			// initExport(); bola kedysi na zaciatku, avsak kvoli tomu, aby bolo mozne menit (switch -e) nazov suboru, dalo sa to sem
+			// 24/02/2000A.D. -- urobil som to presne tak, ako bolo kedysi
 			_main_LOG_to_Export("params == SCRIPT_PARAM_FROM_QS\n");
-			/* nasledujuca pasaz je tu preto, ze mozno bolo pouzite kombinovane
-			 * aj query string, aj formular (teda treba citat aj systemove
-			 * premenne WWW_...
-			 */
+			// nasledujuca pasaz je tu preto, ze mozno bolo pouzite kombinovane aj query string, aj formular (teda treba citat aj systemove premenne WWW_...)
 
 _main_SIMULACIA_QS:
 			_main_LOG_to_Export("---getting query type from query string (query_string == %s):\n", query_string);
@@ -14536,34 +14673,34 @@ _main_SIMULACIA_QS:
 			Log("2005-08-15, pomocn˝ v˝pis: query_type == %d\n", query_type);
 
 			_main_LOG_to_Export("---scanning for system variables WWW_...: started...\n");
-			/* historicka poznamka:                          (01/02/2000A.D.)
-			 * kedysi tu tato pasaz (podla casti `case SCRIPT_PARAM_FROM_FORM')
-			 * nebola, avsak pretoze to neumoznovalo `mixovane' dotazy
-			 * (ked je nieco v QS a navyse, uncgi.c vlozi (aj QS aj) ostatne veci
-			 *  z formulara do systemovych premennych WWW_...),
-			 * zmenili sme to tak, ze sa tu precitaju WWW_... a potom parsuje qs
-			 */
+			// historicka poznamka:                          (01/02/2000A.D.)
+			// kedysi tu tato pasaz (podla casti `case SCRIPT_PARAM_FROM_FORM') nebola, avsak pretoze to neumoznovalo `mixovane' dotazy
+			// (ked je nieco v QS a navyse, uncgi.c vlozi (aj QS aj) ostatne veci z formulara do systemovych premennych WWW_...),
+			// zmenili sme to tak, ze sa tu precitaju WWW_... a potom parsuje qs
 
-			/* 2005-03-28: Zmenene poradie. POST dotazy handlovane vyssie sposobom uncgi. */
+			// 2005-03-28: Zmenene poradie. POST dotazy handlovane vyssie sposobom uncgi.
 			_main_LOG_to_Export("spustam setForm();\n");
 			ret = setForm();
 			_main_LOG_to_Export("spat po skonceni setForm()\n");
 
 			// query_type = getQueryTypeFrom_WWW();
-			/* zistili sme, aky je typ dotazu podla formulara */
+			// zistili sme, aky je typ dotazu podla formulara
 			if((ret == SUCCESS) && (query_type != PRM_NONE) && (query_type != PRM_UNKNOWN)){
-				/* znamena to teda, ze existuje systemova premenna,
-				 * oznacujuca typ dotazu ==> treba nacitat z formulara resp.
-				 * systemovych premennych WWW_...
-				 */
+				// znamena to teda, ze existuje systemova premenna, oznacujuca typ dotazu ==> treba nacitat z formulara resp. systemovych premennych WWW_...
 				_main_LOG_to_Export("spustam getForm();\n");
 				ret = getForm();
 				_main_LOG_to_Export("params from system variables WWW_...:\n");
-				_main_LOG_to_Export_PARAMS; /* 2003-08-13, dane do #define */
+				_main_LOG_to_Export_PARAMS; // 2003-08-13, dane do #define
 				_main_LOG_to_Export("spat po skonceni getForm()\n");
 				_main_LOG_to_Export("2006-12-14: pom_MODLITBA == `%s'\n", pom_MODLITBA);
 			}
 			_main_LOG_to_Export("---scanning for system variables WWW_...:finished.\n");
+
+			// 2012-07-23: doplnenÈ; 2012-08-06(riso): Default jazyk chceme nastavit az po volani getForm, WWW_j sa pouziva na prepinanie jazyka v Androide.
+			if(equalsi(pom_JAZYK, STR_EMPTY)){
+				mystrcpy(pom_JAZYK, nazov_jazyka[JAZYK_SK], SMALL);
+				Log("default jazyk (%s).\n", pom_JAZYK);
+			}
 
 			break;
 		}
@@ -14583,12 +14720,12 @@ _main_SIMULACIA_QS:
 		case PRM_SVIATOK:		_main_LOG_to_Export("PRM_SVIATOK\n"); break;
 		case PRM_MESIAC_ROKA:	_main_LOG_to_Export("PRM_MESIAC_ROKA\n"); break;
 		case PRM_DNES:			_main_LOG_to_Export("PRM_DNES\n"); break;
-		/* pridane 2003-07-04, batch mode */
+		// pridane 2003-07-04, batch mode
 		case PRM_BATCH_MODE:	_main_LOG_to_Export("PRM_BATCH_MODE\n"); break;
 		default:				_main_LOG_to_Export("(sem by sa to nemalo dostaù)\n"); break;
 	}
 
-	_main_LOG_to_Export_PARAMS; /* 2003-08-13, dane do #define */
+	_main_LOG_to_Export_PARAMS; // 2003-08-13, dane do #define
 
 	if(query_type == PRM_MESIAC_ROKA){
 		mystrcpy(pom_DEN, STR_VSETKY_DNI, SMALL);
@@ -14608,7 +14745,7 @@ _main_SIMULACIA_QS:
 
 			// 2006-07-12: pridanÈ parsovanie jazyka kvÙli jazykov˝m mut·ci·m 
 			// 2009-08-05: predsunutÈ vyööie (aj tu sme to pre istotu ponechali)
-			_main_LOG_to_Export("zisùujem jazyk...\n");
+			_main_LOG_to_Export("zisùujem jazyk (pom_JAZYK == %s)...\n", pom_JAZYK);
 			_global_jazyk = atojazyk(pom_JAZYK);
 			if(_global_jazyk == JAZYK_UNDEF){
 				_global_jazyk = JAZYK_SK;
@@ -14940,4 +15077,4 @@ _main_end:
 	return 0; // 2003-07-14, kvoli gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5) christ-net.sk
 }
 
-#endif /* __BREVIAR_CPP_ */
+#endif // __BREVIAR_CPP_
