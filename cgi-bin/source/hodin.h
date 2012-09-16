@@ -154,7 +154,7 @@ const char *nazov_spolc_vyrocie_jazyk[POCET_JAZYKOV + 1] =
 
 // the --OR-- (alternative) for common parts of celebration
 const char *nazov_spolc_alebo_jazyk[POCET_JAZYKOV + 1] =
-{"alebo", "nebo", "or", "", "", "nebo", ""};
+{"<br />alebo", "<br />nebo", "<br />or", "", "", "<br />nebo", ""};
 
 // the names of the common texts (e.g.: for bishops, for saint men, for apostles...)
 const char *nazov_spolc_jazyk[POCET_SPOL_CASTI + 1][POCET_JAZYKOV + 1] =
@@ -1748,14 +1748,23 @@ const char *html_text_option1_plne_resp_explain[POCET_JAZYKOV + 1] =
  "Az Imaórák Liturgiája az olvasmányos imaórák válaszos énekeinek teljes szövegét nem mutatja (a második ismétlõdõ rész nyomtatott kiadásban rövidített)."
 };
 
+const char *html_text_option1_mcd_zalmy_nie_ine[POCET_JAZYKOV + 1] = 
+{"pre modlitbu cez deò poui psalmódiu zo dòa", 
+ "pro modlitbu bìhem dne pouít almy z bìného dne", 
+ "xxx", 
+ "psalmodia from ordinary day",
+ "",
+ "pro modlitbu bìhem dne pouít psalmodii z bìného dne", 
+ "a Napközi imaórában az adott napi zsoltározást venni"
+};
 const char *html_text_option1_mcd_zalmy_ine[POCET_JAZYKOV + 1] = 
 {"pre modlitbu cez deò poui doplnkovú psalmódiu", 
  "pro modlitbu bìhem dne pouít almy z doplòovacího cyklu", 
  "xxx", 
- "supplementaris psalmodia",
+ "psalmodia from ordinary day",
  "",
- "pro modlitbu bìhem dne pouít almy z doplòovacího cyklu", 
- "a Napközi imaórában a kiegészítõ zsoltárokat vegyék"
+ "pro modlitbu bìhem dne pouít doplòkovou psalmodii", 
+ "a Napközi imaórában a kiegészítõ zsoltárokat venni"
 };
 const char *html_text_option1_mcd_zalmy_ine_explain[POCET_JAZYKOV + 1] = 
 {"Pokia¾ sa niekto modlí viac modlitieb cez deò, v prvej vezme benú psalmódiu; v ostatnıch sa pouije doplnková psalmódia. Zahàòa 3 série tzv. graduálnych almov ( 120 – 129).", 
@@ -1827,22 +1836,22 @@ const char *html_text_option1_skryt_popis_svaty_explain[POCET_JAZYKOV + 1] =
 
 const char *html_text_option1_spolc_svaty[POCET_JAZYKOV + 1] = 
 {"zobrazi, odkia¾ sa berú èasti zo spoloènej èasti k modlitbe svätého", 
- "", 
+ "zobrazit, odkud se berou spoleèné texty", 
  "display communia info", 
  "", 
  "", 
- "",
- ""
+ "zobrazit, odkud se berou spoleèné texty",
+ "megmutatni, honnan lettek véve a közös részek a szentek zsolozsmájához"
 };
 
 const char *html_text_option1_spolc_svaty_explain[POCET_JAZYKOV + 1] = 
-{"Rubrika obsahujúca informáciu, z akej spoloènej èasti sa berú èasti zo spoloènej èasti k modlitbe svätého", 
- "", 
+{"Rubrika obsahujúca informáciu, z akej spoloènej èasti sa berú èasti zo spoloènej èasti k modlitbe svätého.", 
+ "Rubrika, která pro modlitby svatıch informuje, které spoleèné texty jsou uity.", 
  "Displays communia info.", 
  "", 
  "", 
- "",
- ""
+ "Rubrika, která pro modlitby svatıch informuje, které spoleèné texty jsou uity.",
+ "Rubrika, amely azt az információt tartalmazza, hogy melyik közös részbõl vannak véve a szentek zsolozsmájához tartozó közös részek."
 };
 
 const char *html_text_option1_vigilia[POCET_JAZYKOV + 1] = 
@@ -1964,7 +1973,7 @@ const char *html_text_option2_font_family_explain[POCET_JAZYKOV + 1] =
 const char *html_text_option2_navigation[POCET_JAZYKOV + 1] = 
 {"zobrazi navigáciu v textoch modlitieb",
  "zobrazit navigaci v textech modliteb", 
- "xxx", 
+ "display navigation buttons in prayer", 
  "",
  "",
  "zobrazit navigaci v textech modliteb", 
@@ -1973,11 +1982,30 @@ const char *html_text_option2_navigation[POCET_JAZYKOV + 1] =
 const char *html_text_option2_navigation_explain[POCET_JAZYKOV + 1] = 
 {"Èi sa majú zobrazova hypertextové odkazy na ostatné modlitby daného dòa, príp. predošlı/nasledovnı deò priamo v texte modlitby.", 
  "Zda zobrazit hypertextové odkazy na ostatní modlitby daného dne, resp. pøedešlı/následující den pøímo v textu modlitby.", 
- "xxx", 
+ "Whether hypertext links (as buttons) to other prayers of the selected celebration should be displayed.", 
  "",
  "", 
  "Zda zobrazit hypertextové odkazy na ostatní modlitby daného dne, resp. pøedešlı/následující den pøímo v textu modlitby.", 
  "Legyen-e hiperhivatkozás a nap többi imaórájára is,  illetve mutassa-e az elõzõ és következõ nap imaóráit is közvetlenül a szövegben.", 
+};
+
+const char *html_text_option2_moznosti[POCET_JAZYKOV + 1] = 
+{"zobrazi rozlièné monosti priamo v textoch modlitieb",
+ "zobrazit rozlièné volby v textech modliteb", 
+ "display various options in prayers", 
+ "",
+ "",
+ "zobrazit rozlièné volby v textech modliteb", 
+ "az imák szövegében megmutatni a különbözõ lehetõségeket", 
+};
+const char *html_text_option2_moznosti_explain[POCET_JAZYKOV + 1] = 
+{"Èi sa majú zobrazova hypertextové odkazy na iné zobrazenie tej istej modlitby priamo v texte modlitby (napr. pre modlitbu cez deò na verziu s doplnkovou psalmódiou).", // Vtedy nie je potrebné, aby boli zobrazené prepínaèe na titulnej stránke.
+ "Zda zobrazit hypertextové odkazy na jiné zobrazení modlitby daného dne pøímo v textu modlitby (napø. pro modlitbu uprostrìd dne verzi se almy z doplòujícího cyklu).", 
+ "Whether various options should be displayed directly in the prayer's texts.", 
+ "",
+ "", 
+ "Zda zobrazit hypertextové odkazy na jiné zobrazení modlitby daného dne pøímo v textu modlitby (napø. pro modlitbu uprostrìd dne verzi se almy z doplòujícího cyklu).", 
+ "Hogy mutatkozzanak-e a hipertextus utalások a jelenlegi ima másabb ábrázolására közvetlenül az ima szövegében (pld. a napközi imához a kiegészítõ zsoltárral való verzióra is.", 
 };
 
 const char *html_text_option2_textwrap[POCET_JAZYKOV + 1] = 
@@ -2115,13 +2143,13 @@ const char *html_text_detaily_explain[POCET_JAZYKOV + 1] =
 
 // 2010-06-04: doplnenı text pre popis do invitatória
 const char *html_text_inv_slavaotcu[POCET_JAZYKOV + 1] = 
-{"<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Nasleduje </font>Sláva Otcu<font color=\"#ff0000\"> a opakuje sa antifóna.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Následuje </font>Sláva Otci<font color=\"#ff0000\"> a opakuje se antifona.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Follows </font>Glory...<font color=\"#ff0000\"> a opakuje sa antifóna.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Nasleduje </font>Gloria Patri<font color=\"#ff0000\"> a opakuje sa antifóna.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Nasleduje </font>Sláva Otcu<font color=\"#ff0000\"> a opakuje sa antifóna.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Následuje </font>Sláva Otci<font color=\"#ff0000\"> a opakuje se antifona.</font></font>", 
- "<p>&nbsp;&nbsp;&nbsp; <font size=\"-1\"><font color=\"#ff0000\">Következik a </font>Dicsõség az Atyának<font color=\"#ff0000\"> és megismételjük az antifónát.</font></font>", 
+{"<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Nasleduje</span> <span class=\"small\">Sláva Otcu</span> <span class=\"redsmall\">a opakuje sa antifóna.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Následuje</span> <span class=\"small\">Sláva Otci</span> <span class=\"redsmall\">a opakuje se antifona.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Follows</span> <span class=\"small\">Glory...</span> <span class=\"redsmall\">a opakuje sa antifóna.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Nasleduje</span> <span class=\"small\">Gloria Patri</span> <span class=\"redsmall\">a opakuje sa antifóna.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Nasleduje</span> <span class=\"small\">Sláva Otcu</span> <span class=\"redsmall\">a opakuje sa antifóna.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Následuje</span> <span class=\"small\">Sláva Otci</span> <span class=\"redsmall\">a opakuje se antifona.</span>", 
+ "<p>&nbsp;&nbsp;&nbsp; <span class=\"redsmall\">Következik a</span> <span class=\"small\">Dicsõség az Atyának</span> <span class=\"redsmall\">és megismételjük az antifónát.</span>", 
 };
 
 // 2009-08-04, doplnené: pre batch mód
@@ -4308,7 +4336,7 @@ const char *text_JUN_03[POCET_JAZYKOV + 1] =
  "Sv. Karla Lwangy a druhù, muèedníkù",
  "Lwanga Szent Károly és társai, vértanúk",
  };
-const char *text_JUN_04_CZ[POCET_JAZYKOV + 1] = 
+const char *text_JUN_04_OP[POCET_JAZYKOV + 1] = 
 {"Sv. Petra Veronského, kòaza a muèeníka",
  "",
  "",
