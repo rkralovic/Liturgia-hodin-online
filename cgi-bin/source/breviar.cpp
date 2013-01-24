@@ -1,7 +1,7 @@
 /***************************************************************************/
 /*                                                                         */
 /* breviar.cpp                                                             */
-/* (c)1999-2012 | Juraj Videky | videky@breviar.sk                         */
+/* (c)1999-2013 | Juraj VidÈky | videky@breviar.sk                         */
 /*                                                                         */
 /*                http://www.breviar.sk                                    */
 /*                                                                         */
@@ -213,7 +213,7 @@
 /*                  - tlaËidlo "Detaily" netreba, ZOBRAZ_BUTTON_DETAILY    */
 /*   2011-04-13a.D. | ˙prava konfiguraËnÈho s˙boru, dokonËenie zl˙Ëenia    */
 /*                    options, rozdelenie force options na bit-komponenty  */
-/*                  - v exporte zruöenÈ \n v sekvencii <br>\n (kvÙli IE)   */
+/*                  - v exporte zruöenÈ \n v sekvencii <br/>\n (kvÙli IE) */
 /*                  - ˙prava vo funkcii stuffenv()                         */
 /*   2011-04-20a.D. | zobrazenie _global_opt 2 vo formul·ri, naËÌtanie     */
 /*   2011-04-29a.D. | doplnenÈ Sl·va Otcu "öpeci·lne" kvÙli chv·lospevu    */
@@ -2089,7 +2089,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 							Export("zvolanie(stop)");
 #endif
 							if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_PROSBY_ZVOLANIE) == BIT_OPT_1_PROSBY_ZVOLANIE){
-								Export("--><br /><!--"); // 2012-09-07: doplnenÈ, aby sa to podobalo na tie prosby, kde v LH je zvolanie opakovanÈ (napr. SCAP_rPROSBY) | 2012-09-28: presunutÈ vypisovanie len ak sa zvolania opakuj˙
+								Export("--><br/><!--"); // 2012-09-07: doplnenÈ, aby sa to podobalo na tie prosby, kde v LH je zvolanie opakovanÈ (napr. SCAP_rPROSBY) | 2012-09-28: presunutÈ vypisovanie len ak sa zvolania opakuj˙
 							}
 							else{
 								write = ANO;
@@ -5805,9 +5805,9 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		if(typ != EXPORT_DNA_VIAC_DNI_TXT){
 #define TYPSLAV_NOVY_RIADOK
 #if defined(TYPSLAV_NOVY_RIADOK_CIARKA)
-			sprintf(pom, ", <br />");
+			sprintf(pom, ", <br/>");
 #elif defined(TYPSLAV_NOVY_RIADOK)
-			sprintf(pom, " <br />");
+			sprintf(pom, " <br/>");
 #else
 			sprintf(pom, ", ");
 #endif
@@ -6399,10 +6399,31 @@ short int _rozbor_dna_s_modlitbou(_struct_den_mesiac datum, short int rok, short
 	return SUCCESS;
 }// _rozbor_dna_s_modlitbou()
 
+void Export_HtmlFormGET(char* action){
+	char action_changed[MAX_STR];
+	// 1. replace HTML_AMPERSAND "&amp;" to simple "&" char
+	mystrcpy(action_changed, mystr_replace(action, HTML_AMPERSAND, "&"), MAX_STR);
+	// 2. export
+	Export(HTML_FORM_METHOD_GET, action_changed);
+}// Export_HtmlFormGET()
+
+void Export_HtmlFormPOST(char* action){
+	// 1. not necessary to replace HTML_AMPERSAND "&amp;" to simple "&" char
+	// 2. export
+	Export(HTML_FORM_METHOD_POST, action);
+}// Export_HtmlFormPOST()
+
+#ifdef BEHAVIOUR_CMDLINE
+#define Export_HtmlForm Export_HtmlFormGET
+#else
+#define Export_HtmlForm Export_HtmlFormPOST
+#endif
+
 // #define prilep_request_options(pom2, pom3) v breviar.h
 
 void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho, short int modl, char pom[MAX_STR], short int doplnkova_psalmodia, short int som_v_tabulke){
-	
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
 	short int orig_doplnkova_psalmodia = doplnkova_psalmodia;
 	if(orig_doplnkova_psalmodia == MODL_CEZ_DEN_DOPLNKOVA_PSALMODIA){
 		doplnkova_psalmodia = MODL_CEZ_DEN_ZALMY_ZO_DNA;
@@ -6411,7 +6432,8 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 	if(query_type == PRM_LIT_OBD){
 		Log("pre query_type == PRM_LIT_OBD sa buttony pre modlitby tlaËia in·Ë (nem·m nastaven˝ d·tum)...\n");
 		// predpoklad·me, ûe m·me _global_linky == ANO
-		Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s",
+		// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
 			script_name,
 			STR_QUERY_TYPE, STR_PRM_LIT_OBD,
 			STR_DEN_V_TYZDNI, _global_den.denvt,
@@ -6420,11 +6442,13 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 			STR_LIT_ROK, _global_den.litrok,
 			STR_MODLITBA, str_modlitby[modl],
 			pom);
+		Export_HtmlForm(action);
 	}// query_type == PRM_LIT_OBD
 	else{
 		// 2011-10-03: vytlaËenie buttona pre jednotliv˙ modlitbu; bolo nakopÌrovanÈ pre jednotlivÈ modlitby; zjednoduöenie a zapracovanie pÙvodnej INIT_POM()
 		if(_global_linky == ANO){
-			Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
+			sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s",
+			// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
 				script_name,
 				STR_QUERY_TYPE, STR_PRM_DATUM,
 				STR_DEN, _global_den.den,
@@ -6432,6 +6456,7 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 				STR_ROK, _global_den.rok,
 				STR_MODLITBA, str_modlitby[modl],
 				pom);
+			Export_HtmlForm(action);
 		}
 		else{
 			// BEGIN: pÙvodnÈ INIT_POM()
@@ -6447,7 +6472,7 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 			Log("\treùazec pom == %s; doplnkova_psalmodia == %d\n", pom, doplnkova_psalmodia);
 			if((doplnkova_psalmodia != MODL_CEZ_DEN_DOPLNKOVA_PSALMODIA)){
 				if((som_v_tabulke == ANO) && (typ != EXPORT_DNA_JEDEN_DEN_LOCAL)){
-					Export("<form action=\"%s\" method=\"post\">\n", pom);
+					Export_HtmlForm(pom);
 				}
 				else{
 					Export(HTML_LINE_BREAK"<a href=\"%s\" "HTML_CLASS_BUTTON">\n", pom);
@@ -6491,7 +6516,7 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 			Log("\treùazec pom == %s; doplnkova_psalmodia == %d\n", pom, doplnkova_psalmodia);
 			// 2011-12-01: pÙvodne tu bola copy-paste podmienka if((doplnkova_psalmodia != MODL_CEZ_DEN_DOPLNKOVA_PSALMODIA)), avöak nesmie tu byù
 			if((som_v_tabulke == ANO) && (typ != EXPORT_DNA_JEDEN_DEN_LOCAL)){
-				Export("<form action=\"%s\" method=\"post\">\n", pom);
+				Export_HtmlForm(pom);
 			}
 			else{
 				Export(HTML_LINE_BREAK"<a href=\"%s\" "HTML_CLASS_BUTTON">\n", pom);
@@ -6513,6 +6538,8 @@ void _export_rozbor_dna_button_modlitba(short int typ, short int poradie_svateho
 }// _export_rozbor_dna_button_modlitba();
 
 void _export_rozbor_dna_button_modlitba2(short int modl, char pom[MAX_STR], short int som_v_tabulke){
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
 	if((query_type == PRM_LIT_OBD) && (modl == MODL_VSETKY)){
 		Log("pre query_type == PRM_LIT_OBD button pre vöetky modlitby eöte nie je dorieöen˝...\n");
 		// ToDo
@@ -6522,7 +6549,8 @@ void _export_rozbor_dna_button_modlitba2(short int modl, char pom[MAX_STR], shor
 	if(query_type == PRM_LIT_OBD){
 		Log("pre query_type == PRM_LIT_OBD sa buttony pre modlitby tlaËia in·Ë (nem·m nastaven˝ d·tum)...\n");
 		// predpoklad·me, ûe m·me _global_linky == ANO
-		Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s",
+		// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%c"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
 			script_name,
 			STR_QUERY_TYPE, STR_PRM_LIT_OBD,
 			STR_DEN_V_TYZDNI, _global_den.denvt,
@@ -6533,7 +6561,9 @@ void _export_rozbor_dna_button_modlitba2(short int modl, char pom[MAX_STR], shor
 			pom);
 	}// query_type == PRM_LIT_OBD
 	else{
-		Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
+		Log("query_type != PRM_LIT_OBD, buttony sa teda pre modlitby tlaËia klasicky (STR_PRM_DETAILY alebo STR_PRM_DATUM)...\n");
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s",
+		// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
 			script_name,
 			STR_QUERY_TYPE, (modl == MODL_DETAILY)? STR_PRM_DETAILY : STR_PRM_DATUM,
 			STR_DEN, _global_den.den,
@@ -6542,6 +6572,7 @@ void _export_rozbor_dna_button_modlitba2(short int modl, char pom[MAX_STR], shor
 			STR_MODLITBA, str_modlitby[modl],
 			pom);
 	}// !(query_type == PRM_LIT_OBD)
+	Export_HtmlForm(action);
 	Export("<"HTML_FORM_INPUT_SUBMIT2" title=\"%s\" value=\"", nazov_modlitby(modl));
 	Export("%s", html_button_nazov_modlitby(modl));
 	Export("\">\n");
@@ -7062,20 +7093,6 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 		i = MODL_VSETKY;
 		if(_global_linky == ANO){
 			_export_rozbor_dna_button_modlitba2(i, pom, som_v_tabulke);
-		/*
-			Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
-				script_name,
-				STR_QUERY_TYPE, STR_PRM_DETAILY,
-				STR_DEN, _global_den.den,
-				STR_MESIAC, _global_den.mesiac,
-				STR_ROK, _global_den.rok,
-				STR_MODLITBA, STR_MODL_VSETKY,
-				pom);
-			Export("<"HTML_FORM_INPUT_SUBMIT2" title=\"%s\" value=\"", nazov_modlitby(i));
-			Export("%s", html_button_nazov_modlitby(i));
-			Export("\">\n");
-			Export("</form>\n");
-		*/
 		}
 #endif
 
@@ -7100,20 +7117,6 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 			i = MODL_DETAILY;
 			if(_global_linky == ANO){
 				_export_rozbor_dna_button_modlitba2(i, pom, som_v_tabulke);
-			/*
-				Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%s%s\" method=\"post\">\n",
-					script_name,
-					STR_QUERY_TYPE, STR_PRM_DETAILY,
-					STR_DEN, _global_den.den,
-					STR_MESIAC, _global_den.mesiac,
-					STR_ROK, _global_den.rok,
-					STR_MODLITBA, STR_MODL_DETAILY,
-					pom);
-				Export("<"HTML_FORM_INPUT_SUBMIT2" title=\"%s\" value=\"", nazov_modlitby(i));
-				Export("%s", html_button_nazov_modlitby(i));
-				Export("\">\n");
-				Export("</form>\n");
-			*/
 			}// ak nie zobrazovat linky na internet (2009-08-11: teda napr. pre batch mÛd), tlacidlo `Detaily...' je zbytocne
 		}// ma_na_vyber_spolocne_casti(poradie_svateho)
 		else{
@@ -7165,7 +7168,9 @@ void _export_rozbor_dna_buttons_dni_dnes(short int typ, short int dnes_dnes, sho
 #ifdef OS_Windows_Ruby
 	Export("\n<!--buttons/dni/dnes:begin-->\n");
 #endif
-	char pom[MAX_STR] = STR_EMPTY;
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
+
 	// 2009-08-12: tlaËidlo pre dneöok sa pre 'M' (batch mÛdov˝ export) nezobrazuje
 	if(_global_opt_batch_monthly == NIE){
 		if(som_v_tabulke == ANO){
@@ -7175,12 +7180,14 @@ void _export_rozbor_dna_buttons_dni_dnes(short int typ, short int dnes_dnes, sho
 			Export("<center>\n");
 		}
 		if(dnes_dnes == ANO){
-			Export("<form action=\"%s?%s=%s%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2);
+			sprintf(action, "%s?%s=%s%s", script_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2);
+			// Export("<form action=\"%s?%s=%s%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2);
+			Export_HtmlForm(action);
 			Export("<"HTML_FORM_INPUT_SUBMIT1" title=\"%s\" value=\"", html_button_dnes[_global_jazyk]);
 		}
 		else{
-			sprintf(pom, HTML_LINK_CALL1, script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
-			Export("<form action=\"%s\" method=\"post\">\n", pom);
+			sprintf(action, HTML_LINK_CALL1, script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+			Export_HtmlForm(action);
 			Export("<"HTML_FORM_INPUT_SUBMIT1" title=\"%s\" value=\"", /* html_button_tento_den[_global_jazyk] */ _vytvor_string_z_datumu(_global_den.den, _global_den.mesiac, _global_den.rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 		}
 		if(dnes_dnes == ANO){
@@ -7349,7 +7356,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_RIGHT">");
+					Export_HtmlForm(pom);
 					// 2003-07-16; << zmenene na &lt;&lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW; 2011-01-26: zmenenÈ na HTML_LEFT_ARROW_HUGE
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %d\" value=\""HTML_LEFT_ARROW_HUGE" ", html_button_predchadzajuci_[_global_jazyk], html_text_rok[_global_jazyk], _local_rok);
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
@@ -7390,7 +7398,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_RIGHT">");
+					Export_HtmlForm(pom);
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\""HTML_LEFT_ARROW" ", html_button_predchadzajuci_[_global_jazyk], html_text_mesiac[_global_jazyk], _vytvor_string_z_datumu(VSETKY_DNI, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
 					Export((char *)html_button_predchadzajuci_[_global_jazyk]);
@@ -7450,7 +7459,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 		}
 		Log("\treùazec pom == %s\n", pom);
 		if(som_v_tabulke == ANO){
-			Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+			Export("<td "HTML_ALIGN_RIGHT">");
+			Export_HtmlForm(pom);
 			// 2003-07-16; < zmenene na &lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW; 2011-01-26: zmenenÈ na HTML_LEFT_ARROW_SINGLE
 			Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\""HTML_LEFT_ARROW_SINGLE" ", html_button_predchadzajuci_[_global_jazyk], html_text_den[_global_jazyk], _vytvor_string_z_datumu(datum.den, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 			if(dnes_dnes == ANO){
@@ -7518,7 +7528,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 		}
 		Log("\treùazec pom == %s\n", pom);
 		if(som_v_tabulke == ANO){
-			Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+			Export("<td "HTML_ALIGN_LEFT">");
+			Export_HtmlForm(pom);
 			// 2003-07-16; > zmenene na &gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW; 2011-01-26: zmenenÈ na HTML_RIGHT_ARROW_SINGLE
 			Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_den[_global_jazyk], _vytvor_string_z_datumu(datum.den, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 
@@ -7565,7 +7576,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_LEFT">");
+					Export_HtmlForm(pom);
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_mesiac[_global_jazyk], _vytvor_string_z_datumu(VSETKY_DNI, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
 					Export((char *)html_button_nasledujuci_[_global_jazyk]);
@@ -7600,7 +7612,8 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_LEFT">");
+					Export_HtmlForm(pom);
 					// 2003-07-16; >> zmenene na &gt;&gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW; 2011-01-26: zmenenÈ na HTML_RIGHT_ARROW_HUGE
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %d\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_rok[_global_jazyk], _local_rok);
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
@@ -7772,7 +7785,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 		}
 		Log("\treùazec pom == %s\n", pom);
 		if(som_v_tabulke == ANO){
-			Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+			Export("<td "HTML_ALIGN_RIGHT">");
+			Export_HtmlForm(pom);
 			// 2003-07-16; < zmenene na &lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW; 2011-01-26: zmenenÈ na HTML_LEFT_ARROW_SINGLE
 			Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\""HTML_LEFT_ARROW_SINGLE" ", html_button_predchadzajuci_[_global_jazyk], html_text_den[_global_jazyk], _vytvor_string_z_datumu(datum.den, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 			// pouûijeme vûdy, nielen keÔ if(dnes_dnes == ANO)
@@ -7839,7 +7853,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 		}
 		Log("\treùazec pom == %s\n", pom);
 		if(som_v_tabulke == ANO){
-			Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+			Export("<td "HTML_ALIGN_LEFT">");
+			Export_HtmlForm(pom);
 			// 2003-07-16; > zmenene na &gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW; 2011-01-26: zmenenÈ na HTML_RIGHT_ARROW_SINGLE
 			Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_den[_global_jazyk], _vytvor_string_z_datumu(datum.den, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 			// if(dnes_dnes == ANO){
@@ -7885,7 +7900,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
 					Export("<tr>\n");
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_RIGHT">");
+					Export_HtmlForm(pom);
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\""HTML_LEFT_ARROW" ", html_button_predchadzajuci_[_global_jazyk], html_text_mesiac[_global_jazyk], _vytvor_string_z_datumu(VSETKY_DNI, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
 					Export((char *)html_button_predchadzajuci_[_global_jazyk]);
@@ -7970,7 +7986,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_LEFT">");
+					Export_HtmlForm(pom);
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %s\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_mesiac[_global_jazyk], _vytvor_string_z_datumu(VSETKY_DNI, datum.mesiac, _local_rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN))? CASE_Case : CASE_case, LINK_DEN_MESIAC_ROK, NIE));
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
 					Export((char *)html_button_nasledujuci_[_global_jazyk]);
@@ -8011,7 +8028,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
 					Export("<tr>\n");
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_RIGHT">");
+					Export_HtmlForm(pom);
 					// 2003-07-16; << zmenene na &lt;&lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW; 2011-01-26: zmenenÈ na HTML_LEFT_ARROW_HUGE
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %d\" value=\""HTML_LEFT_ARROW_HUGE" ", html_button_predchadzajuci_[_global_jazyk], html_text_rok[_global_jazyk], _local_rok);
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
@@ -8050,7 +8068,8 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 			}
 			if(_global_opt_batch_monthly == NIE){
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_LEFT">");
+					Export_HtmlForm(pom);
 					// 2003-07-16; >> zmenene na &gt;&gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW; 2011-01-26: zmenenÈ na HTML_RIGHT_ARROW_HUGE
 					Export("<"HTML_FORM_INPUT_SUBMIT0" title=\"%s %s %d\" value=\"", html_button_nasledujuci_[_global_jazyk], html_text_rok[_global_jazyk], _local_rok);
 #ifdef VYPISOVAT_PREDCHADZAJUCI_NASLEDUJUCI_BUTTON
@@ -8136,11 +8155,14 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 		Log("--- _export_rozbor_dna_kalendar_orig(): idem tlacit kalendar...\n");
 		short int i, j, k;
 
-		char before[SMALL] = STR_EMPTY;
-		sprintf(before, "<p "HTML_ALIGN_CENTER" "HTML_CLASS_SMALL">");
-		char after[SMALL] = STR_EMPTY;
-		mystrcpy(after, "</p>", SMALL);
-		_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_HIDE_KALENDAR, (char *)html_text_option_zobrazit[_global_jazyk], (char *)html_text_option_skryt[_global_jazyk], STR_EMPTY, HTML_CLASS_QUIET, before, after, STR_EMPTY);
+		// 2013-01-08: hypertextov˝ odkaz "(skryù)" sa neexportuje pre batch mÛd; nestaËÌ porovnanie query_type != PRM_BATCH_MODE, pretoûe sa vol· napr. "..\breviar.exe -i..\..\..\breviar.sk\include\ -qpdt -d6 -m1 -r2013 -u0 -e130106.htm -00 -15184 -2224 -30 -40 -jsk -M2 -I1301.htm"
+		if(_global_opt_batch_monthly != ANO && query_type != PRM_BATCH_MODE){
+			char before[SMALL] = STR_EMPTY;
+			sprintf(before, "<p "HTML_ALIGN_CENTER" "HTML_CLASS_SMALL">");
+			char after[SMALL] = STR_EMPTY;
+			mystrcpy(after, "</p>", SMALL);
+			_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_HIDE_KALENDAR, (char *)html_text_option_zobrazit[_global_jazyk], (char *)html_text_option_skryt[_global_jazyk], STR_EMPTY, HTML_CLASS_QUIET, before, after, STR_EMPTY);
+		}
 
 		char pom2[MAX_STR];
 		mystrcpy(pom2, STR_EMPTY, MAX_STR);
@@ -8356,6 +8378,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 	prilep_request_options(pom2, pom3); // prilep_request_options(pom2, pom3, prvy_ampersand)
 
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
+
 	// 2012-10-03: before, after -- kvÙli (skryù), (zobraziù)
 	char before[SMALL] = STR_EMPTY;
 	sprintf(before, "<"HTML_SPAN_SMALL">");
@@ -8369,7 +8394,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	Export("<table "HTML_ALIGN_CENTER"><tr>\n<td>\n");
 	// 2012-07-23, doplnenÈ pre Ruby
 	// ak by sa malo pouûiù "dnes": Export("\n<form action=\"%s?%s=%s%s\" method=\"post\">\n", uncgi_name, STR_QUERY_TYPE, STR_PRM_DNES, pom2);
-	Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+	sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+	// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+	Export_HtmlFormPOST(action);
 
 	Export("<!-- combobox pre v˝ber jazyka -->\n");
 
@@ -8418,7 +8445,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	// 2012-07-23: rozdelenie jednoho formu na dva; prv˝ pouûije PRM_DATUM podæa glob·lneho nastavenia
 	// 2012-10-03: export <form> len ak platÌ: zobrazit_moznosti1
 	if(zobrazit_moznosti1){
-		Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+		// Export("<form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n", script_name, STR_QUERY_TYPE, STR_PRM_DATUM, STR_DEN, _global_den.den, STR_MESIAC, _global_den.mesiac, STR_ROK, _global_den.rok, pom2);
+		Export_HtmlFormPOST(action);
 	}
 
 /* ------------------------------------------- */
@@ -8864,7 +8893,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	// 2012-10-03: export <form> len ak platÌ: zobrazit_moznosti1
 	if(zobrazit_moznosti2){
 		// 2012-07-23: rozdelenie jednoho formu na dva; prv˝ pouûije PRM_DATUM podæa glob·lneho nastavenia
-		Export("\n<form action=\"%s?%s\" method=\"post\">\n", uncgi_name, pom2);
+		sprintf(action, "%s?%s", uncgi_name, pom2);
+		// Export("\n<form action=\"%s?%s\" method=\"post\">\n", uncgi_name, pom2);
+		Export_HtmlFormPOST(action);
 	}
 /*
 	// -------------------------------------------
@@ -9206,7 +9237,7 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 #endif
 	// -------------------------------------------
 
-		// predtym tu bolo <br>, ale kedze hore som dal <table align="center">,  tak tu musi byt <center> kvoli buttonom; 2003-07-09
+		// predtym tu bolo <br/>, ale kedze hore som dal <table align="center">,  tak tu musi byt <center> kvoli buttonom; 2003-07-09
 		// 2012-07-23: upravenÈ, aby sa stalo s˙Ëasùou tabuæky s moûnosùami voæby
 		Export("<!-- riadok pre button Zobraziù/VyËistiù (choices)-->\n");
 		Export("<tr "HTML_ALIGN_CENTER">\n<td>\n");
@@ -9296,37 +9327,39 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem kalend·r: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem kalend·r: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// 2011-11-30: exportovanie parametra F (_global_font)
 	if(PODMIENKA_EXPORTOVAT_FONT){
 		sprintf(pom, " -F%s", nazov_fontu[_global_font]);
 	}
 	else{
-		Log("\tNetreba prilepiù font (kalend·r == %s)\n", nazov_fontu[_global_font]);
+		Log("\tNetreba prilepiù font (font == %s)\n", nazov_fontu[_global_font]);
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem font: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem font: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// 2011-11-30: exportovanie parametra S (_global_font_size)
 	if(PODMIENKA_EXPORTOVAT_FONTSIZE){
 		sprintf(pom, " -S%s", nazov_font_size_css[_global_font_size]);
 	}
 	else{
-		Log("\tNetreba prilepiù font size (kalend·r == %s)\n", nazov_font_size_css[_global_font_size]);
+		Log("\tNetreba prilepiù font size (font size == %s)\n", nazov_font_size_css[_global_font_size]);
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem font size: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem font size: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// 2009-08-03: exportovanie do adres·rov po mesiacoch
 	if(_global_opt_batch_monthly == ANO){
+		Log("_global_opt_batch_monthly == ANO\n");
 		if(export_monthly_druh >= 2)
 			mystrcpy(_local_export_navig_hore,_global_export_navig_hore_day, SMALL);
 		else
 			mystrcpy(_local_export_navig_hore,_global_export_navig_hore, SMALL);
 		if(index_pre_mesiac_otvoreny == ANO){
+			Log("index_pre_mesiac_otvoreny == ANO\n");
 			// najskÙr do zoznamu mesiacov vyprintujeme odkaz na index.htm danÈho mesiaca (ak bolo prvÈho resp. zaËiatok exportu)...
 			if((_global_den.den == 1 && ((export_monthly_druh >= 1 && modlitba == MODL_INVITATORIUM) || export_monthly_druh != 1)) || export_month_zaciatok == ANO){
 				// sem sa uû name_batch_month_file dostane s upraven˝m oddeæovaËom STR_PATH_SEPARATOR_HTML; upravenÈ v _main_batch_mode()
@@ -9338,14 +9371,20 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 		}// if(index_pre_mesiac_otvoreny == ANO)
 		else{
 			// 2009-08-05: netreba; pretoûe DEFAULT_MONTH_EXPORT sa zatiaæ ned· meniù
-			// 2009-08-12: doplnen· premenn· _global_export_navig_hore; pÙvodne bolo: // mystrcpy(parameter_M, " -M", SMALL);
-			sprintf(parameter_M, " -M%d", export_monthly_druh);
-			if(!(equals(_local_export_navig_hore, STR_EMPTY) || equals(_local_export_navig_hore, DEFAULT_MONTH_EXPORT))){
-				sprintf(parameter_I, " -I%s", _local_export_navig_hore);
-				strcat(parameter_M, parameter_I);
-			}
 			batch_export_file = batch_html_file;
 		}// else if(index_pre_mesiac_otvoreny == ANO)
+
+		// 2009-08-12: doplnen· premenn· _global_export_navig_hore; pÙvodne bolo: // mystrcpy(parameter_M, " -M", SMALL);
+		// 2013-01-07: t·to Ëasù bola v predoölom "else"; nefungovalo to spr·vne (napr. pri command-line prÌkaze: breviar.exe -qpbm -d1 -m1 -r2013 -f31 -g12 -p2013 -brobSK.bat -jsk -nbreviar.exe -i..\..\breviar.sk\include\ -usimple -M2 -00 -15184 -2224)
+		Log("2:parameter_M...\n");
+		sprintf(parameter_M, " -M%d", export_monthly_druh);
+		Log("parameter_M == `%s'...\n", parameter_M);
+		if(!(equals(_local_export_navig_hore, STR_EMPTY) || equals(_local_export_navig_hore, DEFAULT_MONTH_EXPORT))){
+			sprintf(parameter_I, " -I%s", _local_export_navig_hore);
+			Log("parameter_I == `%s'...\n", parameter_I);
+			strcat(parameter_M, parameter_I);
+			Log("parameter_M == `%s'...\n", parameter_M);
+		}
 	}// if(_global_opt_batch_monthly == ANO)
 	else{
 		batch_export_file = batch_html_file;
@@ -9384,6 +9423,7 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 					else{
 						sprintf(export_fname_pattern, "%s%d%cd.htm", batch_command, a, char_modlitby[i]);
 					}
+					Log("1:parameter_M == `%s'...\n", parameter_M);
 					fprintf(batch_file, "%s -0%d -1%d -2%d -3%d -4%d -x%d -p%s -j%s%s%s\n", export_fname_pattern, 
 						_global_opt[OPT_0_SPECIALNE], _global_opt_casti_modlitby_orig /* _global_opt[OPT_1_CASTI_MODLITBY] */, _global_opt[OPT_2_HTML_EXPORT], _global_opt[OPT_3_SPOLOCNA_CAST], _global_opt[OPT_4_OFFLINE_EXPORT], 
 						a, str_modlitby[i], skratka_jazyka[_global_jazyk], parameter_M, export_dalsie_parametre); // modlitba `i'
@@ -9401,6 +9441,7 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 				else{
 					sprintf(export_fname_pattern, "%s%d%c.htm", batch_command, a, char_modlitby[i]);
 				}
+				Log("2:parameter_M == `%s'...\n", parameter_M);
 				fprintf(batch_file, "%s -0%d -1%d -2%d -3%d -4%d -x%d -p%s -j%s%s%s\n", export_fname_pattern, 
 					_global_opt[OPT_0_SPECIALNE], _global_opt[OPT_1_CASTI_MODLITBY], _global_opt[OPT_2_HTML_EXPORT], _global_opt[OPT_3_SPOLOCNA_CAST], _global_opt[OPT_4_OFFLINE_EXPORT], 
 					a, str_modlitby[i], skratka_jazyka[_global_jazyk], parameter_M, export_dalsie_parametre); // modlitba `i'
@@ -9442,6 +9483,7 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 					// 2011-04-12: pouûÌva sa option 1 (jej upraven· hodnota _global_opt_casti_modlitby_orig)
 					// 2011-04-13: nemÙûeme porovn·vaù s _global_opt[1] (bola oËisten·), ale s _global_opt_casti_modlitby_orig (obsahuje pÙvodn˙ hodnotu)
 					if(((_global_opt_casti_modlitby_orig & BIT_OPT_1_MCD_ZALMY_INE) == BIT_OPT_1_MCD_ZALMY_INE) && ((i == MODL_PREDPOLUDNIM) || (i == MODL_NAPOLUDNIE) || (i == MODL_POPOLUDNI))){
+						Log("3:parameter_M == `%s'...\n", parameter_M);
 						fprintf(batch_file, "%s%d%cd.htm -0%d -1%d -2%d -3%d -4%d -x%d -p%s -j%s%s%s\n", batch_command, a, char_modlitby[i], 
 							_global_opt[OPT_0_SPECIALNE], _global_opt_casti_modlitby_orig /* _global_opt[OPT_1_CASTI_MODLITBY] */, _global_opt[OPT_2_HTML_EXPORT], _global_opt[OPT_3_SPOLOCNA_CAST], _global_opt[OPT_4_OFFLINE_EXPORT], 
 							a, str_modlitby[i], skratka_jazyka[_global_jazyk], parameter_M, export_dalsie_parametre); // modlitba `i'
@@ -9454,6 +9496,7 @@ void execute_batch_command(short int a, char batch_command[MAX_STR], short int z
 						strcpy(export_doplnkova_psalmodia, STR_EMPTY);
 					}
 					// 2009-08-03: doplnen· moûnosù exportovaù parameter -M ak exportuje batch mÛd pre jednotlivÈ mesiace kvÙli hlaviËke jednotlivej modlitby
+					Log("4:parameter_M == `%s'...\n", parameter_M);
 					fprintf(batch_file, "%s%d%c.htm -0%d -1%d -2%d -3%d -4%d -x%d -p%s -j%s%s%s\n", batch_command, a, char_modlitby[i], 
 						_global_opt[OPT_0_SPECIALNE], _global_opt[OPT_1_CASTI_MODLITBY], _global_opt[OPT_2_HTML_EXPORT], _global_opt[OPT_3_SPOLOCNA_CAST], _global_opt[OPT_4_OFFLINE_EXPORT], 
 						a, str_modlitby[i], skratka_jazyka[_global_jazyk], parameter_M, export_dalsie_parametre); // modlitba `i'
@@ -9513,7 +9556,7 @@ void init_zoznam(void){
 void Log_zoznam(void){
 	for(int i = 0; i < POCET_ZOZNAM; i++){
 		Log("zoznam[%d] == %d\n", i, zoznam[i]);
-		// Export("zoznam[%d] == %d<br />\n", i, zoznam[i]);
+		// Export("zoznam[%d] == %d<br/>\n", i, zoznam[i]);
 	}
 }// Log_zoznam()
 
@@ -9950,7 +9993,7 @@ void _export_rozbor_dna(short int typ){
 
 			if(_global_linky == ANO){
 				// Export("\n<!-- pr·zdny riadok ako oddelenie -->\n");
-				// Export("<br />\n");
+				// Export("<br/>\n");
 				Export("<!--nasleduje formul·r-->\n");
 				_export_main_formular(_global_den.den, _global_den.mesiac, _global_den.rok, _global_den.denvt);
 			}// if(_global_linky == ANO)
@@ -10038,32 +10081,33 @@ void _export_rozbor_dna_mesiaca_batch(short int d, short int m, short int r){
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem kalend·r: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem kalend·r: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// 2011-11-30: exportovanie parametra F (_global_font)
 	if(PODMIENKA_EXPORTOVAT_FONT){
 		sprintf(pom, " -F%s", nazov_fontu[_global_font]);
 	}
 	else{
-		Log("\tNetreba prilepiù font (kalend·r == %s)\n", nazov_fontu[_global_font]);
+		Log("\tNetreba prilepiù font (font == %s)\n", nazov_fontu[_global_font]);
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem font: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem font: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// 2011-11-30: exportovanie parametra S (_global_font_size)
 	if(PODMIENKA_EXPORTOVAT_FONTSIZE){
 		sprintf(pom, " -S%s", nazov_font_size_css[_global_font_size]);
 	}
 	else{
-		Log("\tNetreba prilepiù font size (kalend·r == %s)\n", nazov_font_size_css[_global_font_size]);
+		Log("\tNetreba prilepiù font size (size == %s)\n", nazov_font_size_css[_global_font_size]);
 		strcpy(pom, STR_EMPTY);
 	}
 	strcat(export_dalsie_parametre, pom);
-	Log("Exportujem font size: `%s'\n", export_dalsie_parametre);
+	Log("Exportujem font size: export_dalsie_parametre == `%s'\n", export_dalsie_parametre);
 
 	// reùazec pre deÚ a pre n·zov s˙boru
 	if(d != VSETKY_DNI){
+		Log("deÚ d == %d...\n", d);
 		sprintf(str_den, "%d", d);
 		if(_global_opt_export_date_format == EXPORT_DATE_SIMPLE)
 			sprintf(str_subor, FILENAME_EXPORT_DATE_SIMPLE, r % 100, m, d);
@@ -10073,6 +10117,7 @@ void _export_rozbor_dna_mesiaca_batch(short int d, short int m, short int r){
 	}
 	else{
 		// d == VSETKY_DNI
+		Log("deÚ d == VSETKY_DNI...\n");
 		mystrcpy(str_den, STR_VSETKY_DNI, SMALL);
 		if(_global_opt_export_date_format == EXPORT_DATE_SIMPLE)
 			sprintf(str_subor, FILENAME_EXPORT_MONTH_SIMPLE, r % 100, m);
@@ -10089,9 +10134,10 @@ void _export_rozbor_dna_mesiaca_batch(short int d, short int m, short int r){
 		fprintf(batch_html_file, "<li><a href=\"%s%s.htm\">%s %d</a></li>\n", str_month, str_subor, nazov_mesiaca(m - 1), r);
 	}
 	if(_global_opt_append != YES){
-		// pripravime si command line string pre dan˝ mesiac
-		sprintf(batch_command, "%s -i%s -qpdt -d%s -m%d -r%d -u%d -e%s.htm", 
-			name_binary_executable, include_dir, str_den, m, r, _global_opt_export_date_format, str_subor);
+		Log("pripravÌme si command-line string pre dan˝ mesiac...\n");
+		// pripravÌme si command-line string pre dan˝ mesiac
+		sprintf(batch_command, "%s -i%s -qpdt -d%s -m%d -r%d -u%d -e%s.htm", name_binary_executable, include_dir, str_den, m, r, _global_opt_export_date_format, str_subor);
+		Log("batch_command == `%s'...\n", batch_command);
 	}
 
 	// Ëasù podæa execute_batch_command() 
@@ -10099,10 +10145,15 @@ void _export_rozbor_dna_mesiaca_batch(short int d, short int m, short int r){
 	char parameter_M[SMALL] = STR_EMPTY; // parametre pre v˝slednÈ HTML (parameter 'M' a parametre pre odkazy na s˙bory, napr. 'I')
 	char parameter_I[SMALL] = STR_EMPTY;
 	if(_global_opt_batch_monthly == ANO){
+		Log("1:parameter_M...\n");
 		sprintf(parameter_M, " -M%d", export_monthly_druh);
+		Log("parameter_M == `%s'...\n", parameter_M);
 		if(!(equals(_local_export_navig_hore, STR_EMPTY) || equals(_local_export_navig_hore, DEFAULT_MONTH_EXPORT))){
+			Log("parameter_I...\n");
 			sprintf(parameter_I, " -I%s", _local_export_navig_hore);
+			Log("parameter_I == `%s'...\n", parameter_I);
 			strcat(parameter_M, parameter_I);
+			Log("parameter_M == `%s'...\n", parameter_M);
 		}
 		batch_export_file = batch_html_file;
 	}// if(_global_opt_batch_monthly == ANO)
@@ -10115,6 +10166,8 @@ void _export_rozbor_dna_mesiaca_batch(short int d, short int m, short int r){
 	// 2011-04-13: doplnenÈ exportovanie ch˝baj˙cich option 0 aû 4
 	// 2012-12-12: nie pre append (mohla by tam byù cel· Ëasù kÛdu od prÌpravy batch_command)
 	if(_global_opt_append != YES){
+		Log("zapisujem do batch_file...\n");
+		Log("5:parameter_M == `%s'...\n", parameter_M);
 		fprintf(batch_file, "%s -0%d -1%d -2%d -3%d -4%d -j%s%s%s\n", batch_command, 
 			_global_opt[OPT_0_SPECIALNE], _global_opt[OPT_1_CASTI_MODLITBY], _global_opt[OPT_2_HTML_EXPORT], _global_opt[OPT_3_SPOLOCNA_CAST], _global_opt[OPT_4_OFFLINE_EXPORT], 
 			skratka_jazyka[_global_jazyk], parameter_M, export_dalsie_parametre);
@@ -10173,6 +10226,9 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 
 	prilep_request_options(pom2, pom3);
 
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
+
 	// ˙vodn· navig·cia
 	if((_global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_NAVIGATION) == BIT_OPT_2_NAVIGATION){
 		Export("<!-- navig·cia zaËiatok -->\n");
@@ -10187,7 +10243,8 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 	Export(HTML_NEW_PARAGRAPH);
 	Export((char *)html_text_detaily_uvod[_global_jazyk]);
 	Export("</p>\n");
-	Export("<form action=\"%s?%s=%s&%s=%d&%s=%d&%s=%d&%s=%d%s\" method=\"post\">\n",
+	sprintf(action, "%s?%s=%s&%s=%d&%s=%d&%s=%d&%s=%d%s",
+	// Export("<form action=\"%s?%s=%s&%s=%d&%s=%d&%s=%d&%s=%d%s\" method=\"post\">\n",
 		uncgi_name,
 		STR_QUERY_TYPE, STR_PRM_DATUM, // chvilu tu bolo PRM_DETAILY
 		STR_DEN, den,
@@ -10195,6 +10252,7 @@ void showDetails(short int den, short int mesiac, short int rok, short int porad
 		STR_ROK, rok,
 		STR_DALSI_SVATY, poradie_svaty,
 		pom2);
+	Export_HtmlFormPOST(action);
 
 	Export("<ul>\n");
 
@@ -11283,6 +11341,9 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 	mystrcpy(pom3, STR_EMPTY, MAX_STR);
 	char str_month[SMALL] = STR_EMPTY; // 2009-08-12: pridanÈ
 
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
+
 	short int som_v_tabulke = ANO; // 2009-08-26: Ëi sa pouûÌva tabuæka; beûne pre web ·no, pre export pre mobilnÈ zariadenia [export_monthly_druh >= 3] netreba tabuæku
 
 	if(_global_opt_batch_monthly == ANO && export_monthly_druh > 2){
@@ -11400,14 +11461,17 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 			Export("\n");
 			Export(HTML_LINE_BREAK"\n");
 			Export("<center><table>\n");
-			// predosly rok -- button
-			Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
+			// predoöl˝ rok -- button
+			Export("<td "HTML_ALIGN_RIGHT">");
+			sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s",
+			// Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
 				script_name,
 				STR_QUERY_TYPE, STR_PRM_DATUM,
 				STR_DEN, STR_VSETKY_DNI,
 				STR_MESIAC, STR_VSETKY_MESIACE,
 				STR_ROK, r - 1,
 				pom2);
+			Export_HtmlForm(action);
 			// 2003-07-16; << zmenene na &lt;&lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW
 			Export("<"HTML_FORM_INPUT_SUBMIT0" value=\""HTML_LEFT_ARROW" %d (", r - 1);
 			Export((char *)html_button_predchadzajuci_[_global_jazyk]);
@@ -11416,14 +11480,17 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 			Export(" )\">\n");
 			Export("</form></td>\n");
 
-			// nasledujuci rok -- button
-			Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
+			// nasleduj˙ci rok -- button
+			Export("<td "HTML_ALIGN_LEFT">");
+			sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s",
+			// Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
 				script_name,
 				STR_QUERY_TYPE, STR_PRM_DATUM,
 				STR_DEN, STR_VSETKY_DNI,
 				STR_MESIAC, STR_VSETKY_MESIACE,
 				STR_ROK, r + 1,
 				pom2);
+			Export_HtmlForm(action);
 			// 2003-07-16; >> zmenene na &gt;&gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW
 			Export("<"HTML_FORM_INPUT_SUBMIT0" value=\"(");
 			Export((char *)html_button_nasledujuci_[_global_jazyk]);
@@ -11521,7 +11588,8 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 				}
 				Log("\treùazec pom == %s\n", pom);
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_RIGHT">");
+					Export_HtmlForm(pom);
 					// 2007-03-19: << zmenenÈ na HTML_LEFT_ARROW
 					Export("<"HTML_FORM_INPUT_SUBMIT0" value=\""HTML_LEFT_ARROW" %s %d\">\n", nazov_Mesiaca(pm - 1), pr);
 					Export("</form></td>\n");
@@ -11563,7 +11631,8 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 				}
 				Log("\treùazec pom == %s\n", pom);
 				if(som_v_tabulke == ANO){
-					Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+					Export("<td "HTML_ALIGN_LEFT">");
+					Export_HtmlForm(pom);
 					// 2007-03-19: >> zmenenÈ na HTML_RIGHT_ARROW
 					Export("<"HTML_FORM_INPUT_SUBMIT0" value=\"%s %d "HTML_RIGHT_ARROW"\">\n", nazov_Mesiaca(pm - 1), pr);
 					Export("</form></td>\n");
@@ -11601,7 +11670,8 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 					if(som_v_tabulke == ANO){
 						Export("<tr>\n");
 						// ...sem
-						Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s\" method=\"post\">\n", pom);
+						Export("<td "HTML_ALIGN_RIGHT">");
+						Export_HtmlForm(pom);
 						Export("<"HTML_FORM_INPUT_SUBMIT0" value=\""HTML_LEFT_ARROW" %s %d\">\n", nazov_Mesiaca(pm - 1), pr);
 						Export("</form></td>\n");
 					}
@@ -11631,7 +11701,8 @@ void _main_rozbor_dna(char *den, char *mesiac, char *rok, char *modlitba, char *
 				}
 				if(_global_opt_batch_monthly == NIE){
 					if(som_v_tabulke == ANO){
-						Export("<td "HTML_ALIGN_LEFT"><form action=\"%s\" method=\"post\">\n", pom);
+						Export("<td "HTML_ALIGN_LEFT">");
+						Export_HtmlForm(pom);
 						Export("<"HTML_FORM_INPUT_SUBMIT0" value=\"%s %d "HTML_RIGHT_ARROW"\">\n", nazov_Mesiaca(pm - 1), pr);
 						Export("</form></td>\n");
 					}
@@ -12098,7 +12169,7 @@ short int _main_liturgicke_obdobie(char *den, char *tyzden, char *modlitba, char
 
 	if(lr > 'C' || lr < 'A'){
 		ALERT;
-		Export("NevhodnÈ ˙daje:"HTML_LINE_BREAK"<br>\n<ul>");
+		Export("NevhodnÈ ˙daje:"HTML_LINE_BREAK"<br/>\n<ul>");
 		// tyzden
 		if(equals(tyzden, STR_EMPTY)){
 			Export("<li>tak˝ liturgick˝ rok nemoûno ûiadaù</li>\n");
@@ -12340,6 +12411,9 @@ void _main_analyza_roku(char *rok){
 	char pom3[MAX_STR]; // 2008-08-08: pridanÈ kvÙli css
 	mystrcpy(pom3, STR_EMPTY, MAX_STR);
 
+	char action[MAX_STR];
+	mystrcpy(action, STR_EMPTY, MAX_STR);
+
 #define LOG  Log("analyza_roku(): "); Log
 	Log("-- _main_analyza_roku(): zaciatok\n");
 
@@ -12523,12 +12597,15 @@ void _main_analyza_roku(char *rok){
 		// 2011-04-13: podmienka sa riadi jedn˝m z bitov option 4
 		ExportROK("<table "HTML_ALIGN_CENTER">\n");
 		
-		// predosly rok -- button
-		Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
+		// predoöl˝ rok -- button
+		Export("<td "HTML_ALIGN_RIGHT">");
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d%s",
+		// Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
 			script_name,
 			STR_QUERY_TYPE, STR_PRM_ANALYZA_ROKU,
 			STR_ANALYZA_ROKU, year - 1,
 			pom2);
+		Export_HtmlForm(action);
 		// 2003-07-16; << zmenene na &lt;&lt; 2007-03-19: zmenenÈ na HTML_LEFT_ARROW
 		Export("<"HTML_FORM_INPUT_SUBMIT0" value=\""HTML_LEFT_ARROW" %d (", year - 1);
 		Export((char *)html_button_predchadzajuci_[_global_jazyk]);
@@ -12537,12 +12614,15 @@ void _main_analyza_roku(char *rok){
 		Export(")\">\n");
 		Export("</form></td>\n");
 
-		// nasledujuci rok -- button
-		Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
+		// nasleduj˙ci rok -- button
+		Export("<td "HTML_ALIGN_LEFT">");
+		sprintf(action, "%s?%s=%s"HTML_AMPERSAND"%s=%d%s",
+		// Export("<td "HTML_ALIGN_RIGHT"><form action=\"%s?%s=%s"HTML_AMPERSAND"%s=%d%s\" method=\"post\">\n",
 			script_name,
 			STR_QUERY_TYPE, STR_PRM_ANALYZA_ROKU,
 			STR_ANALYZA_ROKU, year + 1,
 			pom2);
+		Export_HtmlForm(action);
 		// 2003-07-16; >> zmenene na &gt;&gt; 2007-03-19: zmenenÈ na HTML_RIGHT_ARROW
 		Export("<"HTML_FORM_INPUT_SUBMIT0" value=\"(");
 		Export((char *)html_button_nasledujuci_[_global_jazyk]);
@@ -15537,10 +15617,13 @@ short int parseQueryString(void){
 	}\
 }
 
+short int counter_setConfigDefaults = 0;
+
 // 2011-04-13: vytvorenÈ kvÙli tomu, ûe config s˙bor nemusÌ obsahovaù hodnoty pre vöetky options
 void setConfigDefaults(short int jazyk){
 	short int sk_default, o;
-	Log("setConfigDefaults(%d) -- zaËiatok...\n", jazyk);
+	counter_setConfigDefaults++;
+	Log("setConfigDefaults(%d) -- zaËiatok (%d. volanie)...\n", jazyk, counter_setConfigDefaults);
 	// 2011-04-13: ak s˙ niektorÈ options GLOBAL_OPTION_NULL, je potrebnÈ ich na nieËo nastaviù
 	for(o = 0; o < POCET_GLOBAL_OPT; o++){
 		if(jazyk != JAZYK_SK)
@@ -15552,7 +15635,7 @@ void setConfigDefaults(short int jazyk){
 			Log("keÔûe cfg_option_default[%d][%d] bolo GLOBAL_OPTION_NULL, nastavujem podæa program defaults na %d...\n", o, jazyk, cfg_option_default[o][jazyk]);
 		}
 	}// for o
-	Log("setConfigDefaults(%d) -- koniec.\n", jazyk);
+	Log("setConfigDefaults(%d) -- koniec (%d. volanie).\n", jazyk, counter_setConfigDefaults);
 }// setConfigDefaults()
 
 int breviar_main(int argc, char **argv){
@@ -15575,6 +15658,7 @@ int breviar_main(int argc, char **argv){
 	_global_opt[OPT_3_SPOLOCNA_CAST] = MODL_SPOL_CAST_NEURCENA;
 	_global_opt[OPT_4_OFFLINE_EXPORT] = NIE;
 	_global_opt[OPT_2_HTML_EXPORT] = GLOBAL_OPTION_NULL;
+	counter_setConfigDefaults = 0;
 
 	_global_opt_append = NIE;
 	_global_opt_tedeum = NIE;
@@ -15805,7 +15889,7 @@ int breviar_main(int argc, char **argv){
 				_main_LOG_to_Export("spat po skonceni getForm()\n");
 			}
 			break;
-		}
+		}// SCRIPT_PARAM_FROM_FORM
 		case SCRIPT_PARAM_FROM_ARGV:{
 			_main_LOG("params == SCRIPT_PARAM_FROM_ARGV\n");
 			_main_LOG("spustam getArgv();\n");
@@ -15824,6 +15908,10 @@ int breviar_main(int argc, char **argv){
 
 				_main_LOG_to_Export("sp˙öùam setConfigDefaults()...\n");
 				setConfigDefaults(_global_jazyk); // 2011-04-13: doplnenÈ
+
+				// 2013-01-08: sem presunutÈ volanie _rozparsuj_parametre_OPT(); kvÙli tomu, ûe volanie hlaviËky potrebuje uû nastavenÈ napr. o2 (batch mÛd, Ëi pouûiù noËn˝ reûim)
+				Log("vol·m _rozparsuj_parametre_OPT()...\n");
+				_rozparsuj_parametre_OPT();
 
 				// 2010-08-04: pridanÈ parsovanie jazyka kvÙli jazykov˝m mut·ci·m -- kalend·r, napr. rehoæn˝ (danÈ aj niûöe, ako jazyk)
 				_main_LOG_to_Export("zisùujem kalend·r (pom_KALENDAR == %s)...\n", pom_KALENDAR);
@@ -15889,7 +15977,7 @@ int breviar_main(int argc, char **argv){
 			}
 
 			break;
-		}
+		}// SCRIPT_PARAM_FROM_ARGV
 		case SCRIPT_PARAM_FROM_QS:{
 
 			_main_LOG_to_Export("params == SCRIPT_PARAM_FROM_QS\n");
@@ -15937,7 +16025,7 @@ _main_SIMULACIA_QS:
 			}
 
 			break;
-		}
+		}// SCRIPT_PARAM_FROM_QS
 	}// switch(params)
 
 	_main_LOG_to_Export("query_type == ");
@@ -15988,6 +16076,9 @@ _main_SIMULACIA_QS:
 
 			_main_LOG_to_Export("sp˙öùam setConfigDefaults()...\n");
 			setConfigDefaults(_global_jazyk); // 2011-04-13: doplnenÈ
+			// 2013-01-08: sem presunutÈ volanie _rozparsuj_parametre_OPT(); kvÙli tomu, ûe volanie hlaviËky potrebuje uû nastavenÈ napr. o2 (batch mÛd, Ëi pouûiù noËn˝ reûim)
+			Log("vol·m _rozparsuj_parametre_OPT()...\n");
+			_rozparsuj_parametre_OPT();
 
 			// 2010-08-04: pridanÈ parsovanie jazyka kvÙli jazykov˝m mut·ci·m -- kalend·r, napr. rehoæn˝ (danÈ aj vyööie, ako jazyk)
 			_main_LOG_to_Export("zisùujem kalend·r (pom_KALENDAR == %s)...\n", pom_KALENDAR);
@@ -16172,6 +16263,7 @@ _main_SIMULACIA_QS:
 			// rozparsovanie parametrov opt...
 			// 2007-06-01: upravenÈ tak, aby sa v prÌpade nenastavenia dala hodnota GLOBAL_OPTION_NULL
 			// 2011-05-05: presunutÈ sem z jednotliv˝ch proced˙r: _main_rozbor_dna(), _main_dnes(), _main_liturgicke_obdobie(), _main_analyza_roku(), _main_tabulka(), _main_batch_mode()
+			// 2013-01-08: tu sa nach·dzalo volanie _rozparsuj_parametre_OPT(); ktorÈ som presunul vyööie kvÙli tomu, ûe volanie hlaviËky potrebuje uû nastavenÈ napr. o2 (batch mÛd, Ëi pouûiù noËn˝ reûim)
 			Log("vol·m _rozparsuj_parametre_OPT z main()...\n");
 			_rozparsuj_parametre_OPT();
 

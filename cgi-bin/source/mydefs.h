@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* mydefs.h                                                    */
-/* (c)1999-2012 | Juraj Videky | videky@breviar.sk             */
+/* (c)1999-2013 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | obsahuje zakladne define'y                    */
 /* document history                                            */
@@ -50,7 +50,7 @@
 /***************************************************************/
 /*                                                             */
 /* mybase.h                                                    */
-/* (c)1999-2012 | Juraj Videky | videky@breviar.sk             */
+/* (c)1999-2013 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | obsahuje zakladne vecicky                     */
 /* document history                                            */
@@ -797,13 +797,17 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_FORM_INPUT_RESET2   "input type=\"reset\" class=\"reset2\""
 #define HTML_FORM_INPUT_HIDDEN   "input type=\"hidden\""
 
+// #define HTML_FORM_METHOD_GET  "<form action=\"%s\">\n"
+#define HTML_FORM_METHOD_GET     "<form action=\"%s\" method=\"get\">\n"
+#define HTML_FORM_METHOD_POST    "<form action=\"%s\" method=\"post\">\n"
+
 #define HTML_LINK_RED    "a class=\"red\""
 #define HTML_LINK_NORMAL "a"
 
 #define HTML_NONBREAKING_SPACE "&nbsp;"
 #define HTML_SPACE " "
 #define HTML_VERTICAL_BAR "|"
-#define HTML_LINE_BREAK "<br />"
+#define HTML_LINE_BREAK "<br/>"
 #define HTML_NEW_PARAGRAPH "<p>"
 
 #define HTML_SPAN_NORMAL    "span class=\"normal\""
@@ -894,7 +898,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 
 #define HTML_ISO_FORMAT      "%04d-%02d-%02d"
 
-#define TEXT_COPYRIGHT       "(c) 1999-2012 Juraj Vidéky"
+#define TEXT_COPYRIGHT       "(c) 1999-2013 Juraj Vidéky"
 #define TEXT_EMAIL           "videky@breviar.sk"
 
 // main XML element
