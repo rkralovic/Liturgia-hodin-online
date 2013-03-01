@@ -2283,6 +2283,66 @@ const char *html_text_option5_MCDPoHymnus2[POCET_JAZYKOV + 1] =
  "himnusz Háromszor három óra már",
 };
 
+const char *html_text_option5_DPsalmZ122_129[POCET_JAZYKOV + 1] = 
+{"namiesto žalmu 122 bra žalm 129",
+ "místo žalmu 122 vzít žalm 129",
+ "",
+ "",
+ "",
+ "místo žalmu 122 vzít žalm 129",
+ "a 121. helyett vehetõ a 128. zsoltár",
+};
+
+const char *html_text_option5_DPsalmZ127_131[POCET_JAZYKOV + 1] = 
+{"namiesto žalmu 127 bra žalm 131",
+ "místo žalmu 127 vzít žalm 131",
+ "",
+ "",
+ "",
+ "místo žalmu 127 vzít žalm 131",
+ "a 126. helyett vehetõ a 130. zsoltár",
+};
+
+const char *html_text_option5_DPsalmZ122_NORMAL[POCET_JAZYKOV + 1] = 
+{"bra žalm 122 z doplnkovej psalmódie",
+ "vzít žalm 122 z doplòovacího cyklu",
+ "",
+ "",
+ "",
+ "vzít žalm 122 z doplòovacího cyklu",
+ "hu_take 121. zsoltár from kiegészítõ zsoltároknál",
+};
+
+const char *html_text_option5_DPsalmZ127_NORMAL[POCET_JAZYKOV + 1] = 
+{"bra žalm 127 z doplnkovej psalmódie",
+ "vzít žalm 127 z doplòovacího cyklu",
+ "",
+ "",
+ "",
+ "vzít žalm 127 z doplòovacího cyklu",
+ "hu_take 126. zsoltár from kiegészítõ zsoltároknál",
+};
+
+const char *html_text_option5_DPsalmZ122_129_explain[POCET_JAZYKOV + 1] = 
+{"V doplnkovej psalmódii namiesto žalmu 122 možno bra žalm 129.",
+ "Pro doplòovací cyklus žalmù místo žalmu 122 (121) vzít žalm 129 (128).",
+ "",
+ "",
+ "",
+ "Pro doplòovací cyklus žalmù místo žalmu 122 (121) vzít žalm 129 (128).",
+ "A kiegészítõ zsoltároknál a 121. helyett vehetõ a 128. zsoltár.",
+};
+
+const char *html_text_option5_DPsalmZ127_131_explain[POCET_JAZYKOV + 1] = 
+{"V doplnkovej psalmódii namiesto žalmu 127 možno bra žalm 131.",
+ "Pro doplòovací cyklus žalmù místo žalmu 127 (126) vzít žalm 131 (130).",
+ "",
+ "",
+ "",
+ "Pro doplòovací cyklus žalmù místo žalmu 127 (126) vzít žalm 131 (130).",
+ "A kiegészítõ zsoltároknál a 126. helyett vehetõ a 130. zsoltár.",
+};
+
 
 // 2011-05-06
 const char *html_text_font_name[POCET_JAZYKOV + 1] = 
@@ -2381,8 +2441,8 @@ const char *html_text_inv_slavaotcu[POCET_JAZYKOV + 1] =
 };
 
 // 2013-02-22: page navigation (top, bottom)
-const char *html_text_top[POCET_JAZYKOV + 1] = {"&uarr; navrch", "&uarr; nahoru", "&uarr; top", "", "", "&uarr; nahoru", "&uarr; fent"}; // HU: felfelé
-const char *html_text_bottom[POCET_JAZYKOV + 1] = {"&darr; naspodok", "&darr; dolù", "&darr; bottom", "", "", "&darr; dolù", "&darr; lent"}; // HU: lefelé
+const char *html_text_top[POCET_JAZYKOV + 1] = {"&uarr; navrch", "&uarr; nahoru", "&uarr; top", "", "", "&uarr; nahoru", "&uarr; fel"}; // HU: to up -> felfelé | up -> fel | Andy: fent | top -> eleje | to top -> elejére
+const char *html_text_bottom[POCET_JAZYKOV + 1] = {"&darr; naspodok", "&darr; dolù", "&darr; bottom", "", "", "&darr; dolù", "&darr; le"}; // HU: to down -> lefelé | down -> le | Andy: lent | bottom -> vége | to bottom -> végére
 
 // 2009-08-04: pre batch mód
 const char *html_text_batch_Zoznam1[POCET_JAZYKOV + 1] = {"Zoznam modlitieb", "Seznam modliteb", "List of prayers", "", "", "Seznam modliteb", "Az imák jegyzéke"};

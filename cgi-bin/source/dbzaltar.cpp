@@ -581,6 +581,40 @@ void _set_mcd_doplnkova_psalmodia_alternativy(short int modlitba){
 	}// switch(modlitba)
 }// _set_mcd_doplnkova_psalmodia_alternativy()
 
+// nastav bitov˝ prÌznak "je moûnÈ braù ûalm 129 namiesto ûalmu 122 v doplnkovej psalmÛdii"
+void _set_mcd_doplnkova_psalmodia_z122_129(short int modlitba){
+	Log("_set_mcd_doplnkova_psalmodia_z122_129(%d): nastavujem moûnosù braù ûalm 129 namiesto û 122...\n", modlitba);
+	// staËilo by len pre modlitbu predpoludnÌm
+	switch(modlitba){
+		case MODL_CEZ_DEN_9:
+			_global_modl_cez_den_9.alternativy += ((_global_modl_cez_den_9.alternativy & BIT_ALT_DOPLNK_PSALM_122_129) != BIT_ALT_DOPLNK_PSALM_122_129)? BIT_ALT_DOPLNK_PSALM_122_129 : 0;
+			break;
+		case MODL_CEZ_DEN_12:
+			_global_modl_cez_den_12.alternativy += ((_global_modl_cez_den_12.alternativy & BIT_ALT_DOPLNK_PSALM_122_129) != BIT_ALT_DOPLNK_PSALM_122_129)? BIT_ALT_DOPLNK_PSALM_122_129 : 0;
+			break;
+		case MODL_CEZ_DEN_3:
+			_global_modl_cez_den_3.alternativy += ((_global_modl_cez_den_3.alternativy & BIT_ALT_DOPLNK_PSALM_122_129) != BIT_ALT_DOPLNK_PSALM_122_129)? BIT_ALT_DOPLNK_PSALM_122_129 : 0;
+			break;
+	}// switch(modlitba)
+}// _set_mcd_doplnkova_psalmodia_z122_129()
+
+// nastav bitov˝ prÌznak "je moûnÈ braù ûalm 131 namiesto ûalmu 127 v doplnkovej psalmÛdii"
+void _set_mcd_doplnkova_psalmodia_z127_131(short int modlitba){
+	Log("_set_mcd_doplnkova_psalmodia_z127_131(%d): nastavujem moûnosù braù ûalm 131 namiesto û 127...\n", modlitba);
+	// staËilo by len pre modlitbu popoludnÌ
+	switch(modlitba){
+		case MODL_CEZ_DEN_9:
+			_global_modl_cez_den_9.alternativy += ((_global_modl_cez_den_9.alternativy & BIT_ALT_DOPLNK_PSALM_127_131) != BIT_ALT_DOPLNK_PSALM_127_131)? BIT_ALT_DOPLNK_PSALM_127_131 : 0;
+			break;
+		case MODL_CEZ_DEN_12:
+			_global_modl_cez_den_12.alternativy += ((_global_modl_cez_den_12.alternativy & BIT_ALT_DOPLNK_PSALM_127_131) != BIT_ALT_DOPLNK_PSALM_127_131)? BIT_ALT_DOPLNK_PSALM_127_131 : 0;
+			break;
+		case MODL_CEZ_DEN_3:
+			_global_modl_cez_den_3.alternativy += ((_global_modl_cez_den_3.alternativy & BIT_ALT_DOPLNK_PSALM_127_131) != BIT_ALT_DOPLNK_PSALM_127_131)? BIT_ALT_DOPLNK_PSALM_127_131 : 0;
+			break;
+	}// switch(modlitba)
+}// _set_mcd_doplnkova_psalmodia_z122_129()
+
 void _set_hymnus_alternativy(short int modlitba){
 	switch(modlitba){
 		case MODL_PRVE_KOMPLETORIUM:
@@ -1217,22 +1251,34 @@ void _set_evanjelium(short int modlitba, const char *file, const char *anchor){
 // chv·lospevy pre predÂûenÈ sl·venie vigÌliÌ
 
 void _set_chvalospev_vig_adv(short int modlitba){
-	_set_chvalospev1(modlitba, "ch_iz40.htm", "CHVAL_IZ40V");
-	_set_chvalospev2(modlitba, "ch_iz42.htm", "CHVAL_IZ42V");
-	_set_chvalospev3(modlitba, "ch_iz49.htm", "CHVAL_IZ49");
+	_set_chvalospev1(modlitba, "ch_iz40.htm", "CHVAL_IZ40VG");
+	_set_chvalospev2(modlitba, "ch_iz42.htm", "CHVAL_IZ42VG");
+	_set_chvalospev3(modlitba, "ch_iz49.htm", "CHVAL_IZ49VG");
 }// _set_chvalospev_vig_adv()
 
 void _set_chvalospev_vig_vian(short int modlitba){
-	_set_chvalospev1(modlitba, "ch_iz26.htm", "CHVAL_IZ26V");
-	_set_chvalospev2(modlitba, "ch_iz40.htm", "CHVAL_IZ40V1");
-	_set_chvalospev3(modlitba, "ch_iz66.htm", "CHVAL_IZ66V");
+	_set_chvalospev1(modlitba, "ch_iz26.htm", "CHVAL_IZ26VG");
+	_set_chvalospev2(modlitba, "ch_iz40.htm", "CHVAL_IZ40VG2");
+	_set_chvalospev3(modlitba, "ch_iz66.htm", "CHVAL_IZ66VG");
 }// _set_chvalospev_vig_vian()
 
 void _set_chvalospev_vig_ocr(short int modlitba){
-	_set_chvalospev1(modlitba, "ch_iz33.htm", "CHVAL_IZ33V1");
-	_set_chvalospev2(modlitba, "ch_iz33.htm", "CHVAL_IZ33V");
-	_set_chvalospev3(modlitba, "ch_sir36.htm", "CHVAL_SIR36V");
+	_set_chvalospev1(modlitba, "ch_iz33.htm", "CHVAL_IZ33VG2");
+	_set_chvalospev2(modlitba, "ch_iz33.htm", "CHVAL_IZ33VG");
+	_set_chvalospev3(modlitba, "ch_sir36.htm", "CHVAL_SIR36VG");
 }// _set_chvalospev_vig_ocr()
+
+void _set_chvalospev_vig_post(short int modlitba){
+	_set_chvalospev1(modlitba, "ch_jer14.htm", "CHVAL_JER14VG");
+	_set_chvalospev2(modlitba, "ch_ez36.htm", "CHVAL_EZ36VG");
+	_set_chvalospev3(modlitba, "ch_nar5.htm", "CHVAL_NAR5VG");
+}// _set_chvalospev_vig_post()
+
+void _set_chvalospev_vig_vn(short int modlitba){
+	_set_chvalospev1(modlitba, "ch_iz63.htm", "CHVAL_IZ63VG");
+	_set_chvalospev2(modlitba, "ch_oz6.htm", "CHVAL_OZ6VG");
+	_set_chvalospev3(modlitba, "ch_sof3.htm", "CHVAL_SOF3VG");
+}// _set_chvalospev_vig_vn()
 
 //---------------------------------------------------------------------
 
@@ -1897,6 +1943,12 @@ void _set_zalmy_mcd_doplnkova_psalmodia(short int je_predpisana_povinne = ANO){
 	set_zalm(1, modlitba, "z120.htm", "ZALM120");
 	set_zalm(2, modlitba, "z121.htm", "ZALM121");
 	set_zalm(3, modlitba, "z122.htm", "ZALM122");
+	// nastaviù: ak je moûnosù v doplnkovej psalmÛdii nahradiù ûalm 122 ûalmom 129
+	Log("je_alternativa_doplnkova_psalmodia_z122_129 == %d...\n", je_alternativa_doplnkova_psalmodia_z122_129(modlitba));
+	Log("(_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_DOPLNK_PSALM_122_129) == %d (BIT_OPT_5_DOPLNK_PSALM_122_129 == %d)...\n", (_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_DOPLNK_PSALM_122_129), BIT_OPT_5_DOPLNK_PSALM_122_129);
+	if((je_alternativa_doplnkova_psalmodia_z122_129(modlitba)) && ((_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_DOPLNK_PSALM_122_129) == BIT_OPT_5_DOPLNK_PSALM_122_129)){
+		set_zalm(3, modlitba, "z129.htm", "ZALM129");
+	}
 
 	modlitba = MODL_NAPOLUDNIE;
 	// ak sa berie len doplnkov· psalmÛdia (t. j. ak je predpÌsan·), nem· zmysel daù moûnosù vziaù ûalmy z doplnkovej psalmÛdie
@@ -1917,6 +1969,11 @@ void _set_zalmy_mcd_doplnkova_psalmodia(short int je_predpisana_povinne = ANO){
 	set_zalm(1, modlitba, "z126.htm", "ZALM126");
 	set_zalm(2, modlitba, "z127.htm", "ZALM127");
 	set_zalm(3, modlitba, "z128.htm", "ZALM128");
+	// nastaviù: ak je moûnosù v doplnkovej psalmÛdii nahradiù ûalm 127 ûalmom 131
+	if((je_alternativa_doplnkova_psalmodia_z127_131(modlitba)) && ((_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_DOPLNK_PSALM_127_131) == BIT_OPT_5_DOPLNK_PSALM_127_131)){
+		set_zalm(2, modlitba, "z131.htm", "ZALM131");
+	}
+
 	Log("_set_zalmy_mcd_doplnkova_psalmodia() -- end\n");
 	// antifÛny nastavuje funkcia _set_antifony_mcd_doplnkova_psalmodia() -- ale len pre cezroËnÈ obdobie; pre vlastnÈ sa pouûÌva define _vlastna_cast_mcd_ant_kcitresp_modl;
 }// _set_zalmy_mcd_doplnkova_psalmodia()
@@ -3240,6 +3297,8 @@ void _set_zalmy_posviacka_chramu(short int modlitba){
 			_set_zalmy_mcd_doplnkova_psalmodia();
 		}
 	}
+	_set_mcd_doplnkova_psalmodia_z122_129(MODL_PREDPOLUDNIM);
+	_set_zalmy_mcd_doplnkova_psalmodia(!je_len_doplnkova_psalmodia(modlitba)); // toto je potrebnÈ z technickÈho dÙvodu, pretoûe doplnkov· psalmÛdia bola nastaven· eöte pri nastavovanÌ ûalt·ra (pred vlastn˝mi Ëasùami sv‰t˝ch)
 	Log("_set_zalmy_posviacka_chramu(%s) -- end\n", nazov_modlitby(modlitba));
 }
 
@@ -3583,6 +3642,9 @@ void _set_zalmy_sviatok_panien(short int modlitba){
 		set_zalm(2, modlitba, "z45.htm", "ZALM45_I");
 		set_zalm(3, modlitba, "z45.htm", "ZALM45_II");
 	}
+	_set_mcd_doplnkova_psalmodia_z122_129(MODL_PREDPOLUDNIM);
+	_set_mcd_doplnkova_psalmodia_z127_131(MODL_POPOLUDNI);
+	_set_zalmy_mcd_doplnkova_psalmodia(!je_len_doplnkova_psalmodia(modlitba)); // toto je potrebnÈ z technickÈho dÙvodu, pretoûe doplnkov· psalmÛdia bola nastaven· eöte pri nastavovanÌ ûalt·ra (pred vlastn˝mi Ëasùami sv‰t˝ch)
 	Log("_set_zalmy_sviatok_panien(%s) -- end [pouûÌva sa aj pre sviatky sv‰t˝ch ûien]\n", nazov_modlitby(modlitba));
 }
 
@@ -4365,11 +4427,11 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 
 			if(den == DEN_NEDELA){ // nedeæa: 1.-3. adventn· nedeæa
 				// 2012-05-24: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_adv(modlitba);
-				sprintf(_anchor, "%s%d%c_%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -4761,11 +4823,11 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			if(den == DEN_NEDELA){
 
 				// 2012-05-24: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_adv(modlitba);
-				sprintf(_anchor, "%s%d%c_%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -5396,11 +5458,11 @@ label_24_DEC:
 					Log("narodenie P·na...\n");
 					// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
 					modlitba = MODL_POSV_CITANIE;
-					sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+					sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 					_set_antifona_vig(modlitba, _file_pc, _anchor);
 					set_LOG_litobd_pc;
 					_set_chvalospev_vig_vian(modlitba);
-					sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+					sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 					_set_evanjelium(modlitba, _file_pc, _anchor);
 					set_LOG_litobd_pc;
 
@@ -5500,11 +5562,11 @@ label_24_DEC:
 				_vlastne_slavenie_ine_2citanie(_anchor_vlastne_slavenie);
 				_bohorod_modlitba;
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_vian(modlitba);
-				sprintf(_anchor, "%s%c_%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -5560,11 +5622,11 @@ label_24_DEC:
 
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
 				modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_vian(modlitba);
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -5621,11 +5683,11 @@ label_24_DEC:
 				_vlastne_slavenie_ine_2citanie(_anchor_vlastne_slavenie);
 				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_vian(modlitba);
-				sprintf(_anchor, "%s%c_%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -5874,11 +5936,11 @@ label_24_DEC:
 				_set_zalmy_zjv(modlitba);
 				_zjv_antifony;
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_vian(modlitba);
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -6020,11 +6082,11 @@ label_24_DEC:
 				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_ocr(modlitba);
-				sprintf(_anchor, "%s%d%c_%s", nazov_OBD[litobd], ((tyzden MOD 8) == 0)? 8: (tyzden MOD 8), pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], ((tyzden MOD 8) == 0)? 8: (tyzden MOD 8), pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -6106,6 +6168,14 @@ label_24_DEC:
 				_vlastne_slavenie_1citanie(_anchor_vlastne_slavenie);
 				_vlastne_slavenie_2citanie(_anchor_vlastne_slavenie);
 				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				// predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_ocr(modlitba);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
 
 				modlitba = MODL_PREDPOLUDNIM;
 				_set_zalmy_telakrvi(modlitba);
@@ -6204,11 +6274,11 @@ label_24_DEC:
 				// Log(_global_modl_posv_citanie);
 
 				// 2012-12-10: doplnenÈ -- predÂûenÈ sl·venie vigÌliÌ v r·mci posv‰tn˝ch ËÌtanÌ | modlitba = MODL_POSV_CITANIE;
-				sprintf(_anchor, "%s%c_%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
 				_set_antifona_vig(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 				_set_chvalospev_vig_ocr(modlitba);
-				sprintf(_anchor, "%s%d%c_%s", nazov_OBD[litobd], ((tyzden MOD 8) == 0)? 8: (tyzden MOD 8), pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], ((tyzden MOD 8) == 0)? 8: (tyzden MOD 8), pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
 				_set_evanjelium(modlitba, _file_pc, _anchor);
 				set_LOG_litobd_pc;
 
@@ -6759,6 +6829,16 @@ label_24_DEC:
 				// druhÈ veöpery
 				modlitba = MODL_VESPERY;
 				_post1_ne_antifony;
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_post(modlitba);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+
 			}// nedeæa
 			else{
 			}// nie nedeæa
@@ -7013,6 +7093,15 @@ label_24_DEC:
 				// 2006-01-25: posv‰tnÈ ËÌtanie
 				modlitba = MODL_POSV_CITANIE;
 				_post2_antifony;
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_post(modlitba);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+
 			}// nedeæa
 			else if(den == DEN_STVRTOK){
 				// 2012-04-10: LH m· pre rannÈ chv·ly odliön˝ ˙vod k prosb·m
@@ -7225,6 +7314,17 @@ label_24_DEC:
 				_set_zalmy_biela_sobota(modlitba);
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_biela_sobota(modlitba);
+
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), nazov_DN_asci[den], ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_post(modlitba);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+
 				if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_MCD_ZALMY_INE) != BIT_OPT_1_MCD_ZALMY_INE){
 					// 2011-03-14: opravenÈ; na ostatnÈ hodiny sa berie doplnkov· psalmÛdia (realizovanÈ aj v _set_zalmy_biela_sobota()...)
 					modlitba = MODL_PREDPOLUDNIM;
@@ -7241,6 +7341,17 @@ label_24_DEC:
 			else if(den == DEN_PIATOK){
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_velky_piatok(modlitba);
+
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), nazov_DN_asci[den], ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_post(modlitba);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+
 				if((_global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_MCD_ZALMY_INE) != BIT_OPT_1_MCD_ZALMY_INE){
 					// 2011-03-14: opravenÈ; na ostatnÈ hodiny sa berie doplnkov· psalmÛdia (realizovanÈ aj v _set_zalmy_velky_piatok()...)
 					modlitba = MODL_PREDPOLUDNIM;
@@ -7457,7 +7568,7 @@ label_24_DEC:
 				Log("  ide o nanebovstupenie Pana: _file = `%s', den = %s...\n", _file, nazov_dna(den));
 				Log("_anchor_vlastne_slavenie == %s...\n", _anchor_vlastne_slavenie);
 
-				// 2008-05-08: pridanÈ kompletÛrium po prv˝ch aj druh˝ch veöper·ch (copy+paste kÛdu pre nedeæu, z 2007-12-06)
+				// kompletÛrium po prv˝ch aj druh˝ch veöper·ch (copy+paste kÛdu pre nedeæu, z 2007-12-06)
 				modlitba = MODL_PRVE_KOMPLETORIUM;
 				_set_kompletorium_slavnost(modlitba, litobd);
 				set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd);
@@ -7501,7 +7612,7 @@ label_24_DEC:
 				_velk1_prosby;
 				_velk1_modlitba;
 
-				// 2006-01-27: pridanÈ posv. ËÌtania a modlitba cez deÚ
+				// pridanÈ posv‰tnÈ ËÌtanie
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_nanebovstupenie(modlitba);
 				modlitba = MODL_PREDPOLUDNIM;
@@ -7510,6 +7621,15 @@ label_24_DEC:
 				_set_zalmy_nanebovstupenie(modlitba);
 				modlitba = MODL_POPOLUDNI;
 				_set_zalmy_nanebovstupenie(modlitba);
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_vn(modlitba);
+				sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
 
 				modlitba = MODL_PRVE_VESPERY;
 				_velk1_hymnus;
@@ -7519,6 +7639,7 @@ label_24_DEC:
 				_velk1_prosby;
 				_velk1_modlitba;
 				_velk1_ne_antifony;
+
 				modlitba = MODL_RANNE_CHVALY;
 				_velk1_ne_antifony;
 				modlitba = MODL_VESPERY;
@@ -7534,6 +7655,7 @@ label_24_DEC:
 				_velk1_kresponz;
 				_velk1_modlitba;
 
+				// modlitba cez deÚ
 				modlitba = MODL_PREDPOLUDNIM;
 				_velk1_hymnus;
 				_velk1_mcd_antifony;
@@ -7605,11 +7727,22 @@ label_24_DEC:
 				_velk1_modlitba;
 
 				if(den == DEN_NEDELA){
-					// 2007-12-06: pridanÈ kompletÛrium po prv˝ch veöper·ch
+					// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+					modlitba = MODL_POSV_CITANIE;
+					sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+					_set_antifona_vig(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
+					_set_chvalospev_vig_vn(modlitba);
+					sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+					_set_evanjelium(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
+
+					// kompletÛrium po prv˝ch veöper·ch
 					modlitba = MODL_PRVE_KOMPLETORIUM;
 					set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd); // 2008-04-21: doplnenÈ
 					set_kresponz_kompletorium_obd(den, tyzzal, modlitba, litobd);
 					set_antifony_kompletorium_obd(den, tyzzal, modlitba, litobd);
+
 					// prvÈ veöpery
 					modlitba = MODL_PRVE_VESPERY;
 					_velk1_hymnus;
@@ -7619,16 +7752,18 @@ label_24_DEC:
 					_velk1_prosby;
 					_velk1_modlitba;
 					_velk1_ne_antifony;
+
 					// antifÛny pre rannÈ chv·ly
 					modlitba = MODL_RANNE_CHVALY;
 					_velk1_ne_antifony;
+
 					// antifÛny pre veöpery
 					modlitba = MODL_VESPERY;
 					_velk1_ne_antifony;
-					// 2006-02-09: doplnenÈ posv‰tnÈ ËÌtanie
+
+					// posv‰tnÈ ËÌtanie
 					modlitba = MODL_POSV_CITANIE;
-					_set_antifony_velk_pc(den, tyzden, modlitba);
-					// toto sa musÌ urobiù nakoniec, lebo sa tam menÌ s˙bor _file_pc
+					_set_antifony_velk_pc(den, tyzden, modlitba); // toto sa musÌ urobiù nakoniec, lebo sa tam menÌ s˙bor _file_pc
 				}// nedeæa
 			}// nie je nanebovst˙penie
 			break;
@@ -7832,8 +7967,7 @@ label_24_DEC:
 					_zds_modlitba;
 					_vlastne_slavenie_ne_antifony(_anchor_vlastne_slavenie);
 
-					// 2006-01-27: pridanÈ posv. ËÌtania a modlitba cez deÚ, len ûalmy
-					// 2006-02-11: dokonËenÈ posv‰tnÈ ËÌtania a modlitba cez deÚ
+					// posv‰tnÈ ËÌtanie
 					modlitba = MODL_POSV_CITANIE;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_ne_antifony(_anchor_vlastne_slavenie);
@@ -7842,7 +7976,17 @@ label_24_DEC:
 					_vlastne_slavenie_ine_2citanie(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_zds_modlitba;
+					// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+					modlitba = MODL_POSV_CITANIE;
+					sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+					_set_antifona_vig(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
+					_set_chvalospev_vig_vn(modlitba);
+					sprintf(_anchor, "%s_%c%s", _anchor_vlastne_slavenie, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+					_set_evanjelium(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
 
+					// modlitba cez deÚ
 					modlitba = MODL_PREDPOLUDNIM;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_ne_antifony(_anchor_vlastne_slavenie);
@@ -7865,13 +8009,24 @@ label_24_DEC:
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_zds_modlitba;
 
-				}// nie zoslanie ducha sv.
-				else{
+				}// Zoslanie Ducha Sv‰tÈho
+				else{ // nedeæa vo veækonoËnom obdobÌ II.
+					// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+					modlitba = MODL_POSV_CITANIE;
+					sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+					_set_antifona_vig(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
+					_set_chvalospev_vig_vn(modlitba);
+					sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+					_set_evanjelium(modlitba, _file_pc, _anchor);
+					set_LOG_litobd_pc;
+
 					// kompletÛrium po prv˝ch veöper·ch
 					modlitba = MODL_PRVE_KOMPLETORIUM;
 					set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd);
 					set_kresponz_kompletorium_obd(den, tyzzal, modlitba, litobd);
 					set_antifony_kompletorium_obd(den, tyzzal, modlitba, litobd);
+
 					// prvÈ veöpery
 					modlitba = MODL_PRVE_VESPERY;
 					_velk2_hymnus;
@@ -7881,18 +8036,19 @@ label_24_DEC:
 					_velk2_prosby;
 					_velk2_modlitba;
 					_velk2_ne_antifony;
+
 					// antifÛny pre rannÈ chv·ly
 					modlitba = MODL_RANNE_CHVALY;
 					_velk2_ne_antifony;
+
 					// antifÛny pre veöpery
 					modlitba = MODL_VESPERY;
 					_velk2_ne_antifony;
+
 					// posv‰tnÈ ËÌtanie
 					modlitba = MODL_POSV_CITANIE;
-					_set_antifony_velk_pc(den, tyzden, modlitba);
-					// toto sa musÌ urobiù nakoniec, lebo sa tam menÌ s˙bor _file_pc
-
-				}// nie je zoslanie ds
+					_set_antifony_velk_pc(den, tyzden, modlitba); // toto sa musÌ urobiù nakoniec, lebo sa tam menÌ s˙bor _file_pc
+				}// nedeæa; nie Zoslanie Ducha Sv‰tÈho
 			}// nedeæa
 			break;
 // switch(litobd), case OBD_VELKONOCNE_II -- end ----------------------------------------------
@@ -7963,16 +8119,28 @@ label_24_DEC:
 
 			// a veci pre prve vespery
 			if(den == DEN_NEDELA){ // v skutoËnosti platÌ aj: (_global_den.denvr == DRUHA_VELKONOCNA_NEDELA)
-				// 2007-12-06: pridanÈ kompletÛrium po prv˝ch veöper·ch
+				// kompletÛrium po prv˝ch veöper·ch
 				modlitba = MODL_PRVE_KOMPLETORIUM;
 				set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd);
 				set_kresponz_kompletorium_obd(den, tyzzal, modlitba, litobd);
 				set_antifony_kompletorium_obd(den, tyzzal, modlitba, litobd);
+				
 				// prvÈ veöpery
 				modlitba = MODL_PRVE_VESPERY;
 				_vnokt_magnifikat;
 				_vnokt_modlitba;
 				_set_zalmy_velkonocna_nedela(modlitba);
+			
+				// posv‰tnÈ ËÌtanie -- predÂûenÈ sl·venie vigÌlie
+				modlitba = MODL_POSV_CITANIE;
+				sprintf(_anchor, "%s_%c%s", nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG);
+				_set_antifona_vig(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+				_set_chvalospev_vig_vn(modlitba);
+				sprintf(_anchor, "%s%d_%c%s", nazov_OBD[litobd], tyzden, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM);
+				_set_evanjelium(modlitba, _file_pc, _anchor);
+				set_LOG_litobd_pc;
+
 			}// nedeæa
 
 			// 2006-01-27: ûalmy pre modlitbu cez deÚ a posv‰tnÈ ËÌtania (pË-antifÛny)
@@ -11967,6 +12135,8 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 							set_zalm(2, modlitba, "z111.htm", "ZALM111");
 							set_zalm(3, modlitba, "ch_kol1.htm", "CHVAL_KOL1");
 							_vlastna_cast_full(modlitba);
+							_set_mcd_doplnkova_psalmodia_z127_131(MODL_POPOLUDNI);
+							_set_zalmy_mcd_doplnkova_psalmodia(!je_len_doplnkova_psalmodia(modlitba)); // toto je potrebnÈ z technickÈho dÙvodu, pretoûe doplnkov· psalmÛdia bola nastaven· eöte pri nastavovanÌ ûalt·ra (pred vlastn˝mi Ëasùami sv‰t˝ch)
 
 							break;
 						}
