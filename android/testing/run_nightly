@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /etc/profile
+
 start_emulator() {
   avd=$1
   pidfile=/tmp/$avd.pid
@@ -76,4 +78,4 @@ ROOT=/home/build/testing/nightlies
 ) 9>$LOCK
 
 rm -f $LOCK
-) | mail -s "Breviar nightly" android@breviar.sk
+) | mail -s "Breviar nightly" android@breviar.sk videky@breviar.sk
