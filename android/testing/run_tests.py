@@ -10,10 +10,9 @@ def stable_snapshot(file):
   stableImage = False 
   while not stableImage: 
       result = device.takeSnapshot() 
-      MonkeyRunner.sleep(1) 
+      MonkeyRunner.sleep(5)
       result2 = device.takeSnapshot() 
       stableImage = result2.sameAs(result, 0.5) 
-  #MonkeyRunner.sleep(shortSleepInterval) 
   result2.writeToFile(file,'png') 
 
 if len(sys.argv) < 5:
@@ -58,9 +57,20 @@ orangutan_click(128, 1122)
 
 stable_snapshot(root_dir + '/menu.png')
 
-# Test language switch (Czech)
+# Turn on switches
 orangutan_click(40, 500)
 orangutan_click(40, 600)
+
+# Test language switch (Hungarian)
+orangutan_click(300, 300)
+
+stable_snapshot(root_dir + '/start-hu.png')
+
+# Switch to Czech
+device.press('KEYCODE_MENU', MonkeyDevice.DOWN_AND_UP)
+time.sleep(1)
+orangutan_click(128, 1122)
+time.sleep(1)
 orangutan_click(300, 200)
 
 stable_snapshot(root_dir + '/start-cz.png')
@@ -69,6 +79,27 @@ orangutan_click(186, 408)
 
 stable_snapshot(root_dir + '/vespers-cz.png')
 
+# Test volume button scrolling
+device.press('KEYCODE_VOLUME_DOWN', MonkeyDevice.DOWN_AND_UP)
+time.sleep(1)
+stable_snapshot(root_dir + '/vespers-cz-vol-scroll.png')
+
+# Go back home
+orangutan_click(300, 1150)
+time.sleep(1)
+stable_snapshot(root_dir + '/start-cz-2.png')
+
+# Show settings
+orangutan_click(268, 727)
+
+# Day mode
+device.press('KEYCODE_VOLUME_DOWN', MonkeyDevice.DOWN_AND_UP)
+device.press('KEYCODE_VOLUME_DOWN', MonkeyDevice.DOWN_AND_UP)
+orangutan_click(43, 262)
+stable_snapshot(root_dir + '/start-cz-3.png')
+
+orangutan_click(406, 540)
+stable_snapshot(root_dir + '/start-cz-day.png')
 
 device.removePackage('sk.breviar.android')
 
@@ -89,6 +120,7 @@ out.write("""
 <tr> <td>Commit id:</td><td>%s</td> </tr>
 <tr> <td>Version:</td><td>%s</td> </tr>
 <tr> <td>Ran on:</td><td>%s</td> </tr>
+<tr> <td>Apk:</td><td><a href="../breviar.apk">breviar.apk</a></td> </tr>
 </table>
 
 <p>
@@ -101,12 +133,20 @@ Links: <a href="../..">all nightlies</a>, <a href="../../../releases">all releas
 <p> Main screen: <img valign=center height=600 src="start.png">
 <p> Vespers: <img valign=center height=600 src="vespers.png">
 <p> Menu: <img valign=center height=600 src="menu.png">
-<p> Main screen, CZ: <img valign=center height=600 src="start-cz.png">
+<p> Main screen, CZ: 
+  <img valign=center height=600 src="start-cz.png">,
+  <img valign=center height=600 src="start-cz-2.png">,
+  <img valign=center height=600 src="start-cz-3.png">,
+  <img valign=center height=600 src="start-cz-day.png">
 <p> Vespers, CZ: <img valign=center height=600 src="vespers-cz.png">
+<p> Vespers, CZ, scorll: <img valign=center height=600 src="vespers-cz-vol-scroll.png">
+<p> Main screen, HU: <img valign=center height=600 src="start-hu.png">
 
 <h2>Make release</h2>
 <p>
-<a href="release.php">Release this nightly!</a>
+<form action="release.php" method="post">
+  <input type="submit" value="Release this nightly!">
+</form>
 
 </body>
 </html>""" % (date_str, date_str, commit_id, version,
