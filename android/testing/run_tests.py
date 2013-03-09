@@ -66,6 +66,10 @@ orangutan_click(300, 300)
 
 stable_snapshot(root_dir + '/start-hu.png')
 
+#acknowledge warning - not any more
+#orangutan_click(325, 830)
+#stable_snapshot(root_dir + '/start-hu-2.png')
+
 # Switch to Czech
 device.press('KEYCODE_MENU', MonkeyDevice.DOWN_AND_UP)
 time.sleep(1)
@@ -93,15 +97,20 @@ stable_snapshot(root_dir + '/start-cz-2.png')
 orangutan_click(268, 727)
 
 # Day mode
+time.sleep(5)
 device.press('KEYCODE_VOLUME_DOWN', MonkeyDevice.DOWN_AND_UP)
+time.sleep(1)
 device.press('KEYCODE_VOLUME_DOWN', MonkeyDevice.DOWN_AND_UP)
-orangutan_click(43, 262)
+time.sleep(1)
+orangutan_click(55, 682)
 stable_snapshot(root_dir + '/start-cz-3.png')
 
-orangutan_click(406, 540)
+orangutan_click(406, 960)
 stable_snapshot(root_dir + '/start-cz-day.png')
 
 device.removePackage('sk.breviar.android')
+
+os.system("adb logcat -d >\"%s\"" % (root_dir + '/android_log.txt'));
 
 date_str = sys.argv[2]
 commit_id = sys.argv[3]
@@ -121,6 +130,7 @@ out.write("""
 <tr> <td>Version:</td><td>%s</td> </tr>
 <tr> <td>Ran on:</td><td>%s</td> </tr>
 <tr> <td>Apk:</td><td><a href="../breviar.apk">breviar.apk</a></td> </tr>
+<tr> <td>Android log:</td><td><a href="android_log.txt">android_log.txt</a></td> </tr>
 </table>
 
 <p>
@@ -140,7 +150,8 @@ Links: <a href="../..">all nightlies</a>, <a href="../../../releases">all releas
   <img valign=center height=600 src="start-cz-day.png">
 <p> Vespers, CZ: <img valign=center height=600 src="vespers-cz.png">
 <p> Vespers, CZ, scorll: <img valign=center height=600 src="vespers-cz-vol-scroll.png">
-<p> Main screen, HU: <img valign=center height=600 src="start-hu.png">
+<p> Main screen, HU: 
+  <img valign=center height=600 src="start-hu.png">
 
 <h2>Make release</h2>
 <p>
@@ -166,7 +177,7 @@ if (is_dir($dir)) {
   echo "This version already exists in releases!";
   die(0);
 } else {
-  exec("rm -rf $dir; mkdir -p $dir; cp -R %s/.. $dir; chmod -R go+rX $dir");
+  exec("rm -rf $dir; mkdir -p $dir; cp -R %s/.. $dir; chmod -R go+rX $dir; chmod -R g+w $dir");
 }
 ?>
 Released, check 
