@@ -78,8 +78,9 @@ short int su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(short int m);
 #define ANCHOR_ANTIFONA3V   "ANT3V"
 #define ANCHOR_KCITANIE     "CIT"
 #define ANCHOR_KRESPONZ     "RESP"
-#define ANCHOR_MAGNIFIKAT   "MAGNIFIKAT" // antifona na magnifikat
-#define ANCHOR_BENEDIKTUS   "BENEDIKTUS" // antifona na benediktus
+#define ANCHOR_MAGNIFIKAT   "MAGNIFIKAT" // antifóna na Magnifikat
+#define ANCHOR_BENEDIKTUS   "BENEDIKTUS" // antifóna na Benediktus
+#define ANCHOR_NUNC_DIMITTIS "NUNCDIMITTIS" // antifóna na Nunc dimittis
 #define ANCHOR_PROSBY       "PROSBY"
 #define ANCHOR_MODLITBA     "MODLITBA"
 #define ANCHOR_CITANIE1     "CIT1"
@@ -724,5 +725,29 @@ extern const char *text_DEC_22_OP[POCET_JAZYKOV + 1];
 
 // --------------- OPraem propriá ---------------
 extern const char *text_JAN_14_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_FEB_04_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_FEB_10_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_FEB_17_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_APR_24_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_APR_26_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_MAJ_02_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_MAJ_24_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_JUN_06_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_JUN_16_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_JUL_09_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_JUL_14_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_AUG_13_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_AUG_27_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_AUG_28_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_AUG_30_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_SEP_11_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_SEP_12_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_07_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_10_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_13_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_20_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_26_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_NOV_08_OPRAEM[POCET_JAZYKOV + 1];
+extern const char *text_NOV_14_OPRAEM[POCET_JAZYKOV + 1];
 
 #endif // __DBZALTAR_H_

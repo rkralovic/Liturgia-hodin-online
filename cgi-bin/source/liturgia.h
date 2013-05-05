@@ -193,9 +193,9 @@ struct tmodlitba1{
 	_struct_anchor_and_file zalm2     ;
 	_struct_anchor_and_file antifona3 ;
 	_struct_anchor_and_file zalm3     ;
-	_struct_anchor_and_file kcitanie  ; // 1. citanie pre posvatne citanie
+	_struct_anchor_and_file kcitanie  ;
 	_struct_anchor_and_file kresponz  ; 
-	_struct_anchor_and_file benediktus; // antifona na benediktus/magnifikat/nunc dimittis; 2. citanie pre posvatne citanie
+	_struct_anchor_and_file benediktus; // antifona na benediktus/magnifikat
 	_struct_anchor_and_file prosby    ; // pre posvatne citanie nedefinovane; 2011-03-16: "zneuûitÈ" (pouûitÈ) pre hagiografickÈ ËÌtanie (æubovoænej) spomienky sv‰tca v pÙste
 	_struct_anchor_and_file modlitba  ;
 	_struct_anchor_and_file ant_spomprivileg; // 2010-05-21: pridanÈ kvÙli spomienkam a æubovoæn˝m spomienkam v pÙstnom obdobÌ (zobrazenie po modlitbe dÚa pÙstnej fÈrie) // 2012-02-09: zovöeobecnenÈ v zmysle VSLH Ë. 238 (Spomienky pripadaj˙ce na privilegovanÈ dni)
@@ -239,6 +239,7 @@ struct tmodlitba3{
 	_struct_anchor_and_file zalm2     ;
 	_struct_anchor_and_file kcitanie  ;
 	_struct_anchor_and_file kresponz  ;
+	_struct_anchor_and_file nunc_dimittis; // antifÛna na nunc dimittis; pridanÈ 2013-04-03 (kvÙli OPRAEM, 08dec)
 	_struct_anchor_and_file modlitba  ;
 };
 typedef struct tmodlitba3 _type_kompletorium;
@@ -423,8 +424,9 @@ extern const char *TEMPLAT[POCET_MODLITIEB + 1];
 #define PARAM_VCHVALOSPEV   "VCHVALOSPEV" // vlastne ZALM3
 #define PARAM_KCITANIE      "KCITANIE"
 #define PARAM_KRESPONZ      "KRESPONZ"
-#define PARAM_MAGNIFIKAT    "MAGNIFIKAT" // antifona na magnifikat
-#define PARAM_BENEDIKTUS    "BENEDIKTUS" // antifona na benediktus
+#define PARAM_MAGNIFIKAT    "MAGNIFIKAT" // antifÛna na Magnifikat
+#define PARAM_BENEDIKTUS    "BENEDIKTUS" // antifÛna na Benediktus
+#define PARAM_NUNC_DIMITTIS "NUNCDIMITTIS" // antifÛna na Nunc dimittis
 #define PARAM_PROSBY        "PROSBY"
 #define PARAM_MODLITBA      "MODLITBA"
 // pridane 2003-08-06, upravene 2003-08-21
@@ -949,6 +951,12 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_CESKO_BRNO               82
 #define LOKAL_SLAV_SVIATOK_OP_ZENY          83
 #define LOKAL_SLAV_ZILINA                   84
+#define LOKAL_SLAV_OPRAEM_SVIATOK_STRAHOV   85
+#define LOKAL_SLAV_OPRAEM_SLAVNOST_TEPLA    86
+#define LOKAL_SLAV_OPRAEM_NOVA_RISE         87
+#define LOKAL_SLAV_OPRAEM_STRAHOV_NOVA_RISE 88
+#define LOKAL_SLAV_OPRAEM_ZELIV             89
+#define LOKAL_SLAV_OPRAEM_STRAHOV           90
 
 // 2010-08-03: pridan˝ kalend·r
 #define KALENDAR_NEURCENY                   0
@@ -1283,38 +1291,38 @@ extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
 #define BIT_OPT_1_PC_VIGILIA               64
 #define BIT_OPT_1_SPOMIENKA_SPOL_CAST     128 // pri sl·venÌ spomienky moûno podæa vöeobecn˝ch smernÌc, Ë. 235 b), vziaù niektorÈ Ëasti alebo zo spoloËnej Ëasti (1), alebo zo dÚa (0)
 #define BIT_OPT_1_PLNE_RESP               256
-#define BIT_OPT_1_ZALM95                  512 // pouûÌva sa pre rannÈ chv·ly a veöpery -- 1 = vziaù namiesto ûalmov 24, 67, 100 ûalm 95
-#define BIT_OPT_1_PROSBY_ZVOLANIE        1024 // 1 = zvolanie v prosb·ch zobraziù (opakovaù) po kaûdej prosbe
+#define BIT_OPT_1_ZALM95                  512 // pouûÌva sa pre rannÈ chv·ly a veöpery -- 1 = vziaù namiesto ûalmov 24, 67, 100 ûalm 95 (0 = braù prÌsluön˝ ûalm 24, 67 resp. 100)
+#define BIT_OPT_1_PROSBY_ZVOLANIE        1024 // zvolanie v prosb·ch zobraziù (opakovaù) po kaûdej prosbe
 #define BIT_OPT_1_SKRY_POPIS             2048
 #define BIT_OPT_1_ZOBRAZ_SPOL_CAST       4096
-#define BIT_OPT_1_VESP_KRATSIE_PROSBY    8192 // 1 = pouûiù (pre ktor˝koævek deÚ v roku) kratöie prosby k veöper·m
+#define BIT_OPT_1_VESP_KRATSIE_PROSBY    8192 // pouûiù (pre ktor˝koævek deÚ v roku) kratöie prosby k veöper·m z dodatku (0 = default, zo dÚa)
 
 #define POCET_OPT_2_HTML_EXPORT            15 // jednotlivÈ komponenty option 2 -- bity pre force option 2
 extern short int _global_opt_html_export[POCET_OPT_2_HTML_EXPORT];
 // 2011-04-12: ˙prava v˝znamu (a interpret·cie) option 2 (rozliËnÈ prepÌnaËe pre [online aj offline] export, napr. tlaËidl·, zobrazenie d·tumov a podobne)
 // 2012-10-01: doplnenÈ Ôalöie komponenty najm‰ pre vzhæad ˙vodnej obrazovky
-#define BIT_OPT_2_ISO_DATUM                 1
-#define BIT_OPT_2_BUTTON_PRVE_VESPERY       2
+#define BIT_OPT_2_ISO_DATUM                 1 // zobrazovaù d·tum v ISO form·te YYYY-MM-DD (0 = iba ËÌslo dÚa)
+#define BIT_OPT_2_BUTTON_PRVE_VESPERY       2 // zobrazovaù prvÈ veöpery (a kompletÛrium po nich) pre ten deÚ, pre ktor˝ patria (teda pre nedeæu/sl·vnosù)
 #define BIT_OPT_2_FONT_FAMILY               4 // 0 = Serif, 1 = Sans Serif
-#define BIT_OPT_2_FONT_NAME_CHOOSER         8 // 1 = zobraziù drop-down list s moûnosùou voæby font (family) name
-#define BIT_OPT_2_FONT_SIZE_CHOOSER        16 // 1 = zobraziù drop-down list s moûnosùou voæby veækosti fontu
-#define BIT_OPT_2_NAVIGATION               32 // 1 = zobraziù navig·ciu v modlitbe (predoöl·, nasledovn· modlitba a pod.)
-#define BIT_OPT_2_TEXT_WRAP                64 // 1 = zobraziù zalomenie v textoch modlitby podæa tlaËenej LH
-#define BIT_OPT_2_BUTTONY_USPORNE         128 // 1 = zobraziù buttony pre modlitby v ˙spornej podobe (tabuæka) kvÙli mobiln˝m zariadeniam
-#define BIT_OPT_2_NOCNY_REZIM             256 // 1 = zobraziù invertovane farby (biele na ciernom)
-#define BIT_OPT_2_ROZNE_MOZNOSTI          512 // 1 = zobraziù rozliËnÈ "hypertextovÈ odkazy" v modlitbe (napr. pre modlitbu cez deÚ moûnosù doplnkovej psalmÛdie)
-#define BIT_OPT_2_HIDE_NAVIG_BUTTONS     1024 // 1 = moûnosù zobraziù/skryù navig·ciu (tlaËidl·) v modlitbe a pre "dnes", ak je zvolen˝ 6. bit (BIT_OPT_2_NAVIGATION)
-#define BIT_OPT_2_HIDE_KALENDAR          2048 // 1 = skryù kalend·rik pre "dnes"
-#define BIT_OPT_2_HIDE_OPTIONS1          4096 // 1 = skryù html_text_dalsie_moznosti_1[] pre "dnes"
-#define BIT_OPT_2_HIDE_OPTIONS2          8192 // 1 = skryù html_text_dalsie_moznosti_2[] pre "dnes"
-#define BIT_OPT_2_ALTERNATIVES          16384 // 1 = uk·zaù iba jednu alternatÌvu (0 = ako doteraz; buÔ systÈm vyberie, alebo uk·ûe vöetky moûnosti)
+#define BIT_OPT_2_FONT_NAME_CHOOSER         8 // zobraziù drop-down list s moûnosùou voæby font (family) name
+#define BIT_OPT_2_FONT_SIZE_CHOOSER        16 // zobraziù drop-down list s moûnosùou voæby veækosti fontu
+#define BIT_OPT_2_NAVIGATION               32 // zobraziù navig·ciu v modlitbe (predoöl·, nasledovn· modlitba a pod.)
+#define BIT_OPT_2_TEXT_WRAP                64 // zobraziù zalomenie v textoch modlitby podæa tlaËenej LH
+#define BIT_OPT_2_BUTTONY_USPORNE         128 // zobraziù buttony pre modlitby v ˙spornej podobe (tabuæka) kvÙli mobiln˝m zariadeniam
+#define BIT_OPT_2_NOCNY_REZIM             256 // zobraziù invertovane farby (biele na ciernom)
+#define BIT_OPT_2_ROZNE_MOZNOSTI          512 // zobraziù rozliËnÈ "hypertextovÈ odkazy" v modlitbe (napr. pre modlitbu cez deÚ moûnosù doplnkovej psalmÛdie)
+#define BIT_OPT_2_HIDE_NAVIG_BUTTONS     1024 // moûnosù zobraziù/skryù navig·ciu (tlaËidl·) v modlitbe a pre "dnes", ak je zvolen˝ 6. bit (BIT_OPT_2_NAVIGATION)
+#define BIT_OPT_2_HIDE_KALENDAR          2048 // skryù kalend·rik pre "dnes" (0 = zobraziù)
+#define BIT_OPT_2_HIDE_OPTIONS1          4096 // skryù html_text_dalsie_moznosti_1[] pre "dnes" (0 = zobraziù)
+#define BIT_OPT_2_HIDE_OPTIONS2          8192 // skryù html_text_dalsie_moznosti_2[] pre "dnes" (0 = zobraziù)
+#define BIT_OPT_2_ALTERNATIVES          16384 // uk·zaù iba jednu alternatÌvu (0 = ako doteraz; buÔ systÈm vyberie, alebo uk·ûe vöetky moûnosti)
 
 #define POCET_OPT_4_OFFLINE_EXPORT          1 // jednotlivÈ komponenty option 4 -- bity pre force option 4
 extern short int _global_opt_offline_export[POCET_OPT_4_OFFLINE_EXPORT];
 // 2011-04-08: ˙prava v˝znamu (a interpret·cie) option 4 (rozliËnÈ prepÌnaËe pre offline export, napr. aj batch mÛd)
 #define BIT_OPT_4_MESIAC_RIADOK             1
 
-#define POCET_OPT_5_ALTERNATIVES            7 // jednotlivÈ komponenty option 5 -- bity pre force option 5
+#define POCET_OPT_5_ALTERNATIVES           10 // jednotlivÈ komponenty option 5 -- bity pre force option 5
 extern short int _global_opt_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_HYMNUS_KOMPL              1 // hymnus na kompletÛrium (CezroËnÈ obdobie, A/B)
 #define BIT_OPT_5_HYMNUS_PC                 2 // hymnus pre posv‰tnÈ ËÌtanie (CezroËnÈ obdobie, I./II.)
@@ -1323,6 +1331,9 @@ extern short int _global_opt_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_HYMNUS_MCD_POPOL         16 // hymnus pre modlitbu cez deÚ, popoludnÌ (CezroËnÈ obdobie)
 #define BIT_OPT_5_DOPLNK_PSALM_122_129     32 // pre modlitbu cez deÚ v doplnkovej psalmÛdii namiesto ûalmu 122 moûno braù ûalm 129
 #define BIT_OPT_5_DOPLNK_PSALM_127_131     64 // pre modlitbu cez deÚ v doplnkovej psalmÛdii namiesto ûalmu 127 moûno braù ûalm 131
+#define BIT_OPT_5_HYMNUS_VN_PC            128 // hymnus pre posv‰tnÈ ËÌtanie (VeækonoËnÈ obdobie I. po Okt·ve: nedeæn˝ alebo z fÈrie)
+#define BIT_OPT_5_HYMNUS_VN_RCH           256 // hymnus pre rannÈ chv·ly (VeækonoËnÈ obdobie I. po Okt·ve: nedeæn˝ alebo z fÈrie)
+#define BIT_OPT_5_HYMNUS_VN_VESP          512 // hymnus pre veöpery (VeækonoËnÈ obdobie I. po Okt·ve: nedeæn˝ alebo z fÈrie)
 
 #define MAX_POCET_OPT                      16 // malo by to byù aspoÚ maximum z POCET_OPT_0_... aû POCET_OPT_5_...
 
@@ -1529,6 +1540,7 @@ void analyzuj_rok(short int year);
 	_INIT_ANCHOR_AND_FILE(a.zalm2); \
 	_INIT_ANCHOR_AND_FILE(a.kcitanie); \
 	_INIT_ANCHOR_AND_FILE(a.kresponz); \
+	_INIT_ANCHOR_AND_FILE(a.nunc_dimittis); \
 	_INIT_ANCHOR_AND_FILE(a.modlitba); \
 };
 
