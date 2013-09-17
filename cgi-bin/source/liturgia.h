@@ -463,6 +463,8 @@ extern const char *TEMPLAT[POCET_MODLITIEB + 1];
 #define PARAM_EVANJELIUM    "EVANJELIUM"
 // 2012-09-05: moûnosù zobraziù pre doplnkov˙ psalmÛdiu priamy URL odkaz (na prepnutie)
 #define PARAM_DOPLNKOVA_PSALMODIA      "DOPLNKOVA-PSALMODIA" // 2012-10-01: _ sa menilo na &nbsp; preto som zmenil na -
+// 2013-08-22: moûnosù zobraziù priamy URL odkaz (na prepnutie) pre ûalmy z troch t˝ûdÚov ûalt·ra
+#define PARAM_PSALMODIA_TRI_TYZDNE     "PSALMODIA-TRI-TYZDNE"
 // 2012-09-27: moûnosù zobraziù chv·lospev, hymnus Te Deum, OtËen·ö (na prepnutie), opakovanÈ zvolania v prosb·ach, Sl·va Otcu, plnÈ znenie responzÛriÌ pre posv‰tnÈ ËÌtania...
 #define PARAM_CHVALOSPEV               "CHVALOSPEV"
 #define PARAM_TEDEUM		           "TEDEUM"
@@ -907,7 +909,7 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_HRADEC_KRALOVE			34
 #define LOKAL_SLAV_KONSEKR_KOSTOLY_CZ 		35
 #define LOKAL_SLAV_PLZEN 					36
-#define LOKAL_SLAV_SLEZSKO_SVATEK			37
+#define LOKAL_SLAV_OSTRAVA_OPAVA_SLAVNOST	37
 #define LOKAL_SLAV_CESKE_BUDEJOVICE_PAMATKA	38
 #define LOKAL_SLAV_SPIS_BA_PATRON			39 // pre 11. novembra, patrÛna BA-arcidiecÈzy; 2008-06-24; nahr·dza LOKAL_SLAV_SPIS_PATRON
 #define LOKAL_SLAV_BRATISLAVA				40 // doplnenÈ 2010-03-16
@@ -961,6 +963,12 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_OPRAEM_STRAHOV_NOVA_RISE 88
 #define LOKAL_SLAV_OPRAEM_ZELIV             89
 #define LOKAL_SLAV_OPRAEM_STRAHOV           90
+#define LOKAL_SLAV_SZ_LASZLO                91
+#define LOKAL_SLAV_SLAVNOST_OSC             92
+#define LOKAL_SLAV_SVIATOK_OFMCONV          93
+#define LOKAL_SLAV_SVIATOK_OFS              94
+#define LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP 95
+#define LOKAL_SLAV_SPOMIENKA_OSC            96
 
 // 2010-08-03: pridan˝ kalend·r
 #define KALENDAR_NEURCENY                   0
@@ -1168,28 +1176,21 @@ typedef struct lrok _struct_lrok;
 
 // globalna premenna, do ktorej sa ukladaju info o analyzovanom dni
 extern _struct_dm *_global_den_ptr;
-// extern _struct_dm _global_den;
 #define _global_den (*_global_den_ptr)
 
 // globalna premenna, ktora obsahuje data o spomienke panny marie v sobotu
 
 extern _struct_dm *_global_pm_sobota_ptr;
-// extern _struct_dm _global_pm_sobota;
 #define _global_pm_sobota (*_global_pm_sobota_ptr)
 
 // globalne premenne, do ktorych sa ukladaju info o analyzovanom dni o sviatkoch svatych
-
-extern _struct_dm *_global_svaty1_ptr;
-// extern _struct_dm _global_svaty1;
-#define _global_svaty1 (*_global_svaty1_ptr)
-
-extern _struct_dm *_global_svaty2_ptr;
-// extern _struct_dm _global_svaty2; // v pripade, ze je viac lubovolnych spomienok
-#define _global_svaty2 (*_global_svaty2_ptr)
-
-extern _struct_dm *_global_svaty3_ptr;
-// extern _struct_dm _global_svaty3; // v pripade, ze je viac lubovolnych spomienok
-#define _global_svaty3 (*_global_svaty3_ptr)
+extern _struct_dm *(_global_svaty_ptr[MAX_POCET_SVATY]); // an array of '_struct_dm' pointers
+#define _global_svaty(i) (*(_global_svaty_ptr[i - 1]))
+#define _global_svaty1 (*_global_svaty_ptr[0])
+#define _global_svaty2 (*_global_svaty_ptr[1])
+#define _global_svaty3 (*_global_svaty_ptr[2])
+#define _global_svaty4 (*_global_svaty_ptr[3])
+#define _global_svaty5 (*_global_svaty_ptr[4])
 
 // globalne premenne obsahujuce data modlitbach
 
@@ -1282,7 +1283,7 @@ extern short int _global_opt_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA  16 // Ëi sa Nanebovst˙penie P·na sl·vi v nedeæu (1) alebo nie (teda vo ötvrtok, na 40.-ty deÚ po VeækonoËnej nedeli; hodnota 0 == default)
 #define BIT_OPT_0_TELAKRVI_NEDELA          32 // Ëi sa Najsv. Kristovho tela a krvi sl·vi v nedeæu (1) alebo nie (teda vo ötvrtok, 11.-ty deÚ po ZoslanÌ Ducha Sv.; hodnota 0 == default)
 
-#define POCET_OPT_1_CASTI_MODLITBY         14 // jednotlivÈ komponenty option 1 -- bity pre force option 1
+#define POCET_OPT_1_CASTI_MODLITBY         15 // jednotlivÈ komponenty option 1 -- bity pre force option 1
 extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
 // 2011-04-11: ˙prava v˝znamu (a interpret·cie) option 1 == OPT_1_CASTI_MODLITBY (zobraziù/nezobraziù najm‰ pevnÈ/nemennÈ s˙Ëasti modlitieb, ale aj inÈ, Ëo s˙/nie s˙ v LH)
 // 2011-10-10: ˙prava niektor˝ch bitov, posunutie popisu na koniec
@@ -1291,7 +1292,7 @@ extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
 #define BIT_OPT_1_CHVALOSPEVY               4
 #define BIT_OPT_1_SLAVA_OTCU                8
 #define BIT_OPT_1_OTCENAS                  16
-#define BIT_OPT_1_MCD_ZALMY_INE            32 // pouûÌva sa pre modlitbu cez deÚ -- 1 = alternatÌvna, doplnkov· psalmÛdia
+#define BIT_OPT_1_MCD_DOPLNKOVA            32 // pouûÌva sa pre modlitbu cez deÚ -- 1 = alternatÌvna, doplnkov· psalmÛdia
 #define BIT_OPT_1_PC_VIGILIA               64
 #define BIT_OPT_1_SPOMIENKA_SPOL_CAST     128 // pri sl·venÌ spomienky moûno podæa vöeobecn˝ch smernÌc, Ë. 235 b), vziaù niektorÈ Ëasti alebo zo spoloËnej Ëasti (1), alebo zo dÚa (0)
 #define BIT_OPT_1_PLNE_RESP               256
@@ -1300,6 +1301,7 @@ extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
 #define BIT_OPT_1_SKRY_POPIS             2048
 #define BIT_OPT_1_ZOBRAZ_SPOL_CAST       4096
 #define BIT_OPT_1_VESP_KRATSIE_PROSBY    8192 // pouûiù (pre ktor˝koævek deÚ v roku) kratöie prosby k veöper·m z dodatku (0 = default, zo dÚa)
+#define BIT_OPT_1_MCD_ZALTAR_TRI        16384 // pouûÌva sa pre modlitbu cez deÚ -- 1 = psalmÛdia sa pouûÌva z troch t˝ûdÚov ûalt·ra (aktu·lny, predch·dzaj˙ci, nasleduj˙ci)
 
 #define POCET_OPT_2_HTML_EXPORT            15 // jednotlivÈ komponenty option 2 -- bity pre force option 2
 extern short int _global_opt_html_export[POCET_OPT_2_HTML_EXPORT];
@@ -1321,10 +1323,11 @@ extern short int _global_opt_html_export[POCET_OPT_2_HTML_EXPORT];
 #define BIT_OPT_2_HIDE_OPTIONS2          8192 // skryù html_text_dalsie_moznosti_2[] pre "dnes" (0 = zobraziù)
 #define BIT_OPT_2_ALTERNATIVES          16384 // uk·zaù iba jednu alternatÌvu (0 = ako doteraz; buÔ systÈm vyberie, alebo uk·ûe vöetky moûnosti)
 
-#define POCET_OPT_4_OFFLINE_EXPORT          1 // jednotlivÈ komponenty option 4 -- bity pre force option 4
+#define POCET_OPT_4_OFFLINE_EXPORT          2 // jednotlivÈ komponenty option 4 -- bity pre force option 4
 extern short int _global_opt_offline_export[POCET_OPT_4_OFFLINE_EXPORT];
 // 2011-04-08: ˙prava v˝znamu (a interpret·cie) option 4 (rozliËnÈ prepÌnaËe pre offline export, napr. aj batch mÛd)
 #define BIT_OPT_4_MESIAC_RIADOK             1
+#define BIT_OPT_4_FNAME_MODL_ID             2 // Ëi pre n·zov s˙boru pouûiù (ËÌselnÈ) ID modlitby alebo pÌsmenko modlitby (default)
 
 #define POCET_OPT_5_ALTERNATIVES           11 // jednotlivÈ komponenty option 5 -- bity pre force option 5
 extern short int _global_opt_alternatives[POCET_OPT_5_ALTERNATIVES];

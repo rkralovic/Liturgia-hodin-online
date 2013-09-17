@@ -92,6 +92,9 @@
 //* EOF of former file mybase.h                                 *
 //***************************************************************
 
+#define MAX_POCET_SVATY 5
+#define PORADIE_PM_SOBOTA  (MAX_POCET_SVATY + 1)
+
 // Nazvy programov, suborov, skriptov...
 #define SCRIPT_NAME          "l.cgi"
 #define SCRIPT_PATH(a)       "cgi-bin/"a
@@ -555,11 +558,11 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #endif
 
 // doplnkov· psalmÛdia pre modlitbu cez deÚ
-#define MODL_OPTF_1_MCD_ZALMY_INE 76
+#define MODL_OPTF_1_MCD_DOPLNKOVA 76
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_1_MCD_ZALMY_INE "MODL_OPTF_1_MCD_ZALMY_INE"
+	#define STR_MODL_OPTF_1_MCD_DOPLNKOVA "MODL_OPTF_1_MCD_DOPLNKOVA"
 #else
-	#define STR_MODL_OPTF_1_MCD_ZALMY_INE "of1dps"
+	#define STR_MODL_OPTF_1_MCD_DOPLNKOVA "of1dps"
 #endif
 
 // vigÌlia v posv‰tnom ËÌtanÌ
@@ -593,6 +596,15 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #else
 	#define STR_MODL_OPTF_1_VESP_KRATSIE_PROSBY "of1vkp"
 #endif
+
+// psalmÛdia pre modlitbu cez deÚ z troch t˝ûdÚov ûalt·ra (aktu·lny, predch·dzaj˙ci, nasleduj˙ci)
+#define MODL_OPTF_1_MCD_ZALTAR_TRI 112
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF_1_MCD_ZALTAR_TRI "MODL_OPTF_1_MCD_ZALTAR_TRI"
+#else
+	#define STR_MODL_OPTF_1_MCD_ZALTAR_TRI "of1ps3"
+#endif
+
 
 // ûalmy zo sviatku
 #define MODL_OPTF_1_SPOMIENKA_SPOL_CAST 79
@@ -877,9 +889,16 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #endif
 
 // 2012-10-16: upraven˝ tento define tak, ûe vûdy musÌ byù pred volanÌm funkcie Export(); doÚho dovn˙tra som dal volanie hlaviËky
+// Export("<p>Ak probl&eacute;my pretrv&aacute;vaj&uacute;, kontaktujte pros&iacute;m <a href=\"mailto:%s\">autora str&aacute;nky</a>.</p>\n", cfg_mail_address_default[_global_jazyk]);
 #define ALERT	{\
+	Log("ALERT\n");\
 	hlavicka((char *)html_title[_global_jazyk]);\
-	Export("<p>Ak probl&eacute;my pretrv&aacute;vaj&uacute;, kontaktujte pros&iacute;m <a href=\"mailto:%s\">autora str&aacute;nky</a>.</p>\n", cfg_mail_address_default[_global_jazyk]);\
+	char pom2[MAX_STR];\
+	mystrcpy(pom2, STR_EMPTY, MAX_STR);\
+	char pom3[MAX_STR];\
+	mystrcpy(pom3, STR_EMPTY, MAX_STR);\
+	prilep_request_options(pom2, pom3);\
+	_export_rozbor_dna_buttons_dni_dnes(EXPORT_DNA_DNES, 2 /* dnes_dnes */, NIE /* som_v_tabulke */, pom2, NIE /* zobraz_odkaz_na_skrytie */);\
 	}
 
 // HTML stringy - casti stringov sustredene na tomto mieste; pridane 2003-07-02; rozöÌrenÈ 2011-01-27
@@ -1068,7 +1087,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define XML_BIT_OPT_1_CHVALOSPEVY               "BitOpt1Canticles"
 #define XML_BIT_OPT_1_SLAVA_OTCU                "BitOpt1GloryPrayer"
 #define XML_BIT_OPT_1_OTCENAS                   "BitOpt1OurFatherPrayer"
-#define XML_BIT_OPT_1_MCD_ZALMY_INE             "BitOpt1SupplPsalmodyDuringDay"
+#define XML_BIT_OPT_1_MCD_DOPLNKOVA             "BitOpt1SupplPsalmodyDuringDay"
 #define XML_BIT_OPT_1_PC_VIGILIA                "BitOpt1VigilAfterReadings"
 #define XML_BIT_OPT_1_SPOMIENKA_SPOL_CAST       "BitOpt1MemoriesTakeFromCommunia"
 #define XML_BIT_OPT_1_PLNE_RESP                 "BitOpt1FullResponses"
@@ -1077,6 +1096,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define XML_BIT_OPT_1_SKRY_POPIS                "BitOpt1HideDescription"
 #define XML_BIT_OPT_1_ZOBRAZ_SPOL_CAST          "BitOpt1ShowCommuniaDescription"
 #define XML_BIT_OPT_1_VESP_KRATSIE_PROSBY       "BitOpt1UseVespShortenPrayers"
+#define XML_BIT_OPT_1_MCD_ZALTAR_TRI            "BitOpt1PsalmsDuringDayPsalt3Weeks"
 
 // POCET_OPT_2_HTML_EXPORT
 #define XML_BIT_OPT_2_ISO_DATUM                 "BitOpt2ISOFormat"
@@ -1113,8 +1133,9 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define ELEM_END(elem)       "</"elem">"
 
 #define ELEMID_BEGIN(elem)   "<"elem" Id=\"%d\">"
-#define ELEMVAL_BEGIN(elem)  "<"elem" Value=\"%d\" Name=\"%s\" ForceName=\"%s\">"
-#define ELEMOPT_BEGIN(elem)  "<"elem" Id=\"%d\" ForceName=\"%s\">" // Id napr. BIT_OPT_0_VERSE; Name napr. STR_MODL_OPTF_0_VERSE
+#define ELEMVAL_BEGIN(elem)  "<"elem" Value=\"%d\" Name=\"%s\" ForceName=\"%s\" Text=\"%s\">"
+#define ELEMOPT_BEGIN(elem)  "<"elem" Id=\"%d\" ForceName=\"%s\" Text=\"%s\">" // Id napr. BIT_OPT_0_VERSE; Name napr. STR_MODL_OPTF_0_VERSE
+#define ELEMOPT_SLASH_BEGIN(elem)  "<"elem" Id=\"%d\" ForceName=\"%s\" Text=\"%s/%s\">"
 
 #endif // __MYDEFS_H_
 
