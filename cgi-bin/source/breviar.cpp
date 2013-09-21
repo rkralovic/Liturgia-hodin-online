@@ -4997,7 +4997,7 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok, short int poradie
 						else if(_global_jazyk == JAZYK_HU){
 							if(_global_den.denvt == DEN_PONDELOK){
 								// ve¾konoèný pondelok ináè
-								sprintf(_global_den.meno, text_HU_VELKONOCNY_PONDELOK);
+								mystrcpy(_global_den.meno, (char *)text_HU_VELKONOCNY_PONDELOK, MENO_SVIATKU);
 							}
 							else{
 								sprintf(_global_den.meno, text_DEN_VO_VELKONOCNEJ_OKTAVE[_global_jazyk], nazov_dna(_global_den.denvt));
@@ -5785,9 +5785,9 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 						// ...potom dátum + genitív mesiaca...
 						// 2013-05-17: ale iba v takom prípade, že mesiac je december (pre použitie "liturgické obdobie" je dátum neinicializovaný, teda 1. januára
 						if((_local_den.mesiac == MES_DEC) && (_local_den.den >= 16) && (_local_den.den <= 24)){
-							sprintf(pom2, _vytvor_string_z_datumu(_local_den.den, _local_den.mesiac, _local_den.rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN) || (_global_jazyk == JAZYK_HU))? CASE_Case : CASE_case, LINK_DEN_MESIAC_GEN, NIE));
+							mystrcpy(pom2, _vytvor_string_z_datumu(_local_den.den, _local_den.mesiac, _local_den.rok, ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_EN) || (_global_jazyk == JAZYK_HU))? CASE_Case : CASE_case, LINK_DEN_MESIAC_GEN, NIE), MAX_STR);
 							strcat(pom, pom2);
-							sprintf(pom2, ", ");
+							mystrcpy(pom2, ", ", MAX_STR);
 							strcat(pom, pom2);
 						}
 
@@ -5934,11 +5934,11 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	// 2010-10-11: pôvodne tu bola len lokalizácia slavenia; pridali sme k tomu aj prípadnú poznámku o lokálnom kalendári 
 	// 2011-02-02: odvetvené len pre exporty iné ako EXPORT_DNA_VIAC_DNI_TXT
 	if(typ != EXPORT_DNA_VIAC_DNI_TXT){
-		sprintf(popisok_kalendar, nazov_kalendara_long[_local_den.kalendar]);
+		mystrcpy(popisok_kalendar, nazov_kalendara_long[_local_den.kalendar], MAX_STR);
 		mystrcpy(popisok_lokal, STR_EMPTY, MAX_STR);
 		// teraz lokalizácia slavenia resp. poznámku o lokálnom kalendári, 2005-07-27: pridané; 2010-10-11: rozšírené
 		if(_local_den.typslav_lokal != LOKAL_SLAV_NEURCENE) {
-			sprintf(popisok_lokal, nazov_slavenia_lokal[_local_den.typslav_lokal]);
+			mystrcpy(popisok_lokal, nazov_slavenia_lokal[_local_den.typslav_lokal], MAX_STR);
 		}
 		short int strlen_popisok_kalendar = 0, strlen_popisok_lokal = 0;
 		strlen_popisok_kalendar = strlen(popisok_kalendar);
@@ -8302,49 +8302,7 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 		// teraz vytvoríme reazec s options
 		prilep_request_options(pom2, pom3);
 
-		// 2007-08-15: pokus o krajšie zobrazenie formou kalendára
-#undef ZOZNAM_DNI_MESIACOV_OLD
-#ifdef ZOZNAM_DNI_MESIACOV_OLD
-		// zoznam èísel dní
-		Export("<"HTML_SPAN_SMALL">\n");
-
-		Vytvor_global_link(VSETKY_DNI, _global_den.mesiac, _global_den.rok, LINK_DEN_MESIAC, NIE);
-		Export("<"HTML_SPAN_BOLD">%s:</span> ", _global_link);
-		for(i = 1; i <= pocet_dni[_global_den.mesiac - 1]; i++){
-			if(i == _global_den.den){
-				if(((i + _global_den.denvt - _global_den.den) MOD 7) == 0)
-					// nede¾a
-					Export("<"HTML_SPAN_BLUE_BOLD">%d</span> ", i);
-				else
-					Export("<"HTML_SPAN_BLUE">%d</span> ", i);
-			}
-			else{
-				vytvor_global_link(i, _global_den.mesiac, _global_den.rok, LINK_DEN, NIE);
-				if(((i + _global_den.denvt - _global_den.den) MOD 7) == 0)
-					// nede¾a
-					Export("<"HTML_SPAN_BOLD">%s</span> ", _global_link);
-				else
-					Export("%s ", _global_link);
-			}
-		}
-		Export(HTML_LINE_BREAK);
-
-		// teraz zoznam mesiacov
-		Vytvor_global_link(VSETKY_DNI, VSETKY_MESIACE, _global_den.rok, LINK_DEN_MESIAC, NIE);
-		Export("<"HTML_SPAN_BOLD">%s:</span> ", _global_link);
-		for(i = 1; i <= 12; i++){
-			if(i == _global_den.mesiac){
-				Export("<"HTML_SPAN_BLUE">%s</span> ", nazov_Mesiaca(i - 1));
-			}
-			else{
-				Vytvor_global_link(VSETKY_DNI, i, _global_den.rok, LINK_DEN_MESIAC, NIE);
-				Export("%s ", _global_link);
-			}
-		}
-		
-		Export("\n</span>\n"); // náprotivok span small
-#else
-
+		Export("\n<div class=\"kalendar\">\n");
 		// zoznam dní vo forme kalendárika
 		Export("\n<table "HTML_ALIGN_CENTER">\n");
 
@@ -8365,13 +8323,13 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 		else
 			i = _global_den.den;
 		Vytvor_global_link(i, j, k, LINK_DEN_MESIAC_PREDOSLY, NIE);
-		Export("<"HTML_SPAN_BOLD">%s</span>", _global_link);
+		Export("<"HTML_CALENDAR_HEADING">%s</span>", _global_link);
 
 		Export(HTML_NONBREAKING_SPACE); // oddelenie << a mesiaca
 
 		// názov mesiaca
 		Vytvor_global_link(VSETKY_DNI, _global_den.mesiac, _global_den.rok, LINK_DEN_MESIAC, NIE);
-		Export("<"HTML_SPAN_BOLD">%s</span>", _global_link);
+		Export("<"HTML_CALENDAR_HEADING">%s</span>", _global_link);
 
 		Export(HTML_NONBREAKING_SPACE); // oddelenie mesiaca a roka
 
@@ -8383,7 +8341,7 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 			// 2009-08-12: pre batch mód export vytlaèíme len rok bez linku
 			sprintf(_global_link, "%d", _global_den.rok);
 		}// else if(_global_opt_batch_monthly == NIE)
-		Export("<"HTML_SPAN_BOLD">%s</span>", _global_link);
+		Export("<"HTML_CALENDAR_HEADING">%s</span>", _global_link);
 
 		Export(HTML_NONBREAKING_SPACE); // oddelenie roka a >>
 
@@ -8401,14 +8359,14 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 		else
 			i = _global_den.den;
 		Vytvor_global_link(i, j, k, LINK_DEN_MESIAC_NASLEDOVNY, NIE);
-		Export("<"HTML_SPAN_BOLD">%s</span>", _global_link);
+		Export("<"HTML_CALENDAR_HEADING">%s</span>", _global_link);
 
 		Export("</th>\n</tr>\n");
 
 		// prvý riadok tabu¾ky "hlavièka" so skratkami dní v týždni
 		Export("<tr><!--(hlavièka)-->\n");
 		for(k = DEN_NEDELA; k <= DEN_SOBOTA; k++){
-			Export("<td "HTML_ALIGN_RIGHT">%s</td>", (char *)nazov_Dn(k));
+			Export("<td "HTML_ALIGN_RIGHT"><"HTML_CALENDAR_DAYS">%s</span></td>", (char *)nazov_Dn(k));
 		}
 		Export("</tr>\n");
 
@@ -8431,21 +8389,24 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 					Export("</tr>\n");
 					Export("<tr><!--(ïalší riadok)-->\n");
 					// nede¾a
-					Export("<td "HTML_ALIGN_RIGHT" bgcolor=\"%s\"><font color=\"%s\"><b>%d</b></font></td> ", (char *)html_farba_pozadie_cal, (char *)html_farba_popredie_cal, i);
+					Export("<td "HTML_ALIGN_RIGHT"><"HTML_CALENDAR_TODAY_SUNDAY">%d</span></td> ", i);
 				}
-				else
-					Export("<td "HTML_ALIGN_RIGHT" bgcolor=\"%s\"><font color=\"%s\">%d</font></td> ", (char *)html_farba_pozadie_cal, (char *)html_farba_popredie_cal, i);
+				else{
+					Export("<td "HTML_ALIGN_RIGHT"><"HTML_CALENDAR_TODAY">%d</span></td> ", i);
+				}
 			}
 			else{
-				vytvor_global_link(i, _global_den.mesiac, _global_den.rok, LINK_DEN, NIE);
 				if(((i + _global_den.denvt - _global_den.den) MOD 7) == 0){
+					vytvor_global_link_class(i, _global_den.mesiac, _global_den.rok, LINK_DEN, NIE, (char *)HTML_CLASS_NAME_CALENDAR_SUNDAY);
 					Export("</tr>\n");
 					Export("<tr><!--(ïalší riadok)-->\n");
 					// nede¾a
-					Export("<td "HTML_ALIGN_RIGHT"><"HTML_SPAN_BOLD">%s</span></td> ", _global_link);
-				}
-				else
 					Export("<td "HTML_ALIGN_RIGHT">%s</td> ", _global_link);
+				}
+				else{
+					vytvor_global_link_class(i, _global_den.mesiac, _global_den.rok, LINK_DEN, NIE, (char *)HTML_CLASS_NAME_CALENDAR_DAY);
+					Export("<td "HTML_ALIGN_RIGHT">%s</td> ", _global_link);
+				}
 			}
 		}
 
@@ -8461,8 +8422,7 @@ void _export_rozbor_dna_kalendar_orig(short int typ){
 
 		Export("</tr>\n");
 		Export("</table>\n");
-#endif
-
+		Export("</div>\n");
 	}// if(typ)
 	else{
 		// inak kalendar nedavam
@@ -13326,15 +13286,17 @@ void _main_batch_mode(
 
 					fprintf(batch_html_file, "\n");
 					fprintf(batch_html_file, "<center><h2>");
-					if(_global_opt_batch_monthly == ANO)
-						fprintf(batch_html_file, (char *)html_text_batch_Zoznam1m[_global_jazyk]);
-					else
-						fprintf(batch_html_file, (char *)html_text_batch_Zoznam1[_global_jazyk]);
+					if(_global_opt_batch_monthly == ANO){
+						fprintf(batch_html_file, "%s", (char *)html_text_batch_Zoznam1m[_global_jazyk]);
+					}
+					else{
+						fprintf(batch_html_file, "%s", (char *)html_text_batch_Zoznam1[_global_jazyk]);
+					}
 					fprintf(batch_html_file, "</h2></center>\n");
 
 					if(_global_opt_batch_monthly == ANO){
 						fprintf(batch_html_file, "<center><h4>");
-						fprintf(batch_html_file, (char *)html_text_batch_obdobie1m[_global_jazyk], d_from, nazov_mesiaca_gen(m_from), r_from, d_to, nazov_mesiaca_gen(m_to), r_to);
+						fprintf(batch_html_file, (const char *)html_text_batch_obdobie1m[_global_jazyk], d_from, nazov_mesiaca_gen(m_from), r_from, d_to, nazov_mesiaca_gen(m_to), r_to);
 						fprintf(batch_html_file, "</h4></center>\n");
 					}
 					fprintf(batch_html_file, "<ul>\n");
@@ -13462,7 +13424,7 @@ void _main_batch_mode(
 										fprintf(batch_month_file, "</h2>");
 										// ^ hore
 										fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-										fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+										fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 										fprintf(batch_month_file, "</a></p>");
 										// koniec hlavièky
 										fprintf(batch_month_file, "</center>\n");
@@ -13559,7 +13521,7 @@ void _main_batch_mode(
 								fprintf(batch_month_file, "</h2>");
 								// ^ hore
 								fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-								fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+								fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 								fprintf(batch_month_file, "</a></p>");
 								// koniec hlavièky
 								fprintf(batch_month_file, "</center>\n");
@@ -13630,7 +13592,7 @@ void _main_batch_mode(
 										fprintf(batch_month_file, "</h2>");
 										// ^ hore
 										fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-										fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+										fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 										fprintf(batch_month_file, "</a></p>");
 										// koniec hlavièky
 										fprintf(batch_month_file, "</center>\n");
@@ -13706,7 +13668,7 @@ void _main_batch_mode(
 											fprintf(batch_month_file, "</h2>");
 											// ^ hore
 											fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-											fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+											fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 											fprintf(batch_month_file, "</a></p>");
 											// koniec hlavièky
 											fprintf(batch_month_file, "</center>\n");
@@ -13781,7 +13743,7 @@ void _main_batch_mode(
 										fprintf(batch_month_file, "</h2>");
 										// ^ hore
 										fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-										fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+										fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 										fprintf(batch_month_file, "</a></p>");
 										// koniec hlavièky
 										fprintf(batch_month_file, "</center>\n");
@@ -13855,7 +13817,7 @@ void _main_batch_mode(
 										fprintf(batch_month_file, "</h2>");
 										// ^ hore
 										fprintf(batch_month_file, "<p><a href=\"..%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, name_batch_html_file);
-										fprintf(batch_month_file, (char *)html_text_batch_Back[_global_jazyk]);
+										fprintf(batch_month_file, "%s", (char *)html_text_batch_Back[_global_jazyk]);
 										fprintf(batch_month_file, "</a></p>");
 										// koniec hlavièky
 										fprintf(batch_month_file, "</center>\n");
