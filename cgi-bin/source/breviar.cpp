@@ -4326,7 +4326,7 @@ void showPrayer(short int type, short int aj_navigacia = ANO){
 
 	// log force options parametrov
 	for(i = 0; i < POCET_GLOBAL_OPT; i++){
-		Log("showPrayer: opt %d == `%s' (%d)\n", i, pom_MODL_OPTF[i], _global_optf[i]);
+		Log("showPrayer: optF %d == `%s' (%d)\n", i, pom_MODL_OPTF[i], _global_optf[i]);
 	}// Log pom_MODL_OPTF[i]
 
 	// force options parametre
@@ -4341,6 +4341,11 @@ void showPrayer(short int type, short int aj_navigacia = ANO){
 	Log("option 0 == %d, Ëo znamen·: \n", _global_opt[OPT_0_SPECIALNE]);
 	Log("\t BIT_OPT_0_VERSE == %d (·no == %d)\n", _global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_VERSE, BIT_OPT_0_VERSE);
 	Log("\t BIT_OPT_0_REFERENCIE == %d (·no == %d)\n", _global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_REFERENCIE, BIT_OPT_0_REFERENCIE);
+
+	// 2013-11-26: log option 1
+	Log("option 1 == %d, Ëo znamen·: \n", _global_opt[OPT_1_CASTI_MODLITBY]);
+	Log("\t BIT_OPT_1_PROSBY_ZVOLANIE == %d (·no == %d)\n", _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_PROSBY_ZVOLANIE, BIT_OPT_1_PROSBY_ZVOLANIE);
+	Log("\t BIT_OPT_1_SLAVA_OTCU == %d (·no == %d)\n", _global_opt[OPT_1_CASTI_MODLITBY] & BIT_OPT_1_SLAVA_OTCU, BIT_OPT_1_SLAVA_OTCU);
 
 	// samotne vypisanie, o aku modlitbu ide
 	Log("showPrayer(type %i, %s), _global_modlitba == %s\n", type, nazov_modlitby(type), nazov_modlitby(_global_modlitba));
@@ -7522,7 +7527,7 @@ void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes /* =
 		short int _local_rok;
 
 		if(dnes_dnes == ANO){
-			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ rok/mesiac/deÚ presunut· pred rozbor danÈho dÚa (teda navrh str·nky) -->\n");
+			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ rok/mesiac/deÚ presunut· pred rozbor danÈho dÚa (teda navrch str·nky) -->\n");
 		}
 		else{
 			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ deÚ -->\n");
@@ -7925,7 +7930,7 @@ void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes /
 		short int _local_rok;
 
 		if(dnes_dnes == ANO){
-			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ rok/mesiac/deÚ presunut· pred rozbor danÈho dÚa (teda navrh str·nky) -->\n");
+			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ rok/mesiac/deÚ presunut· pred rozbor danÈho dÚa (teda navrch str·nky) -->\n");
 		}
 		else{
 			Export("<!-- tabuæka s buttonmi predoöl˝, nasledovn˝ deÚ -->\n");
@@ -10247,7 +10252,7 @@ void _export_rozbor_dna(short int typ){
 		mystrcpy(_global_link, STR_EMPTY, MAX_STR);
 	}
 	else{
-		vytvor_global_link(_global_den.den, _global_den.mesiac, _global_den.rok, i, NIE);
+		vytvor_global_link_class(_global_den.den, _global_den.mesiac, _global_den.rok, i, NIE, HTML_CLASS_NAME_CALENDAR_DAY);
 		// 2006-08-19: okrem premennej _global_string t·to funkcia eöte naplnÌ aj _global_string2 a _global_string_farba
 	}
 
@@ -15118,7 +15123,8 @@ short int parseQueryString(void){
 	}
 
 	// 2006-07-12: pridanÈ kvÙli jazykov˝m mut·ci·m
-	// 2012-07-23: Pre POST query sa tam jazyk priliepa aj na zaËiatok (Ruby), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), preto ËÌtam "odzadu", "zozadu"
+	// 2012-07-23: Pre POST query sa tam jazyk priliepa aj na zaËiatok (Ruby), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards)
 	//             ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	//             pÙvodn· pozn·mka pre while cyklus resp. inicializ·ciu i: param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme aj 0
 	i = pocet;
@@ -15135,7 +15141,8 @@ short int parseQueryString(void){
 
 	// 2010-08-04: pridanÈ kvÙli jazykov˝m mut·ci·m -- kalend·r 
 	//             pÙvodn· pozn·mka pre while cyklus resp. inicializ·ciu i: param[0] by mal sÌce obsahovaù typ akcie, ale radöej kontrolujeme aj 0
-	// 2010-10-11: Pre POST query sa tam kalend·r priliepa aj na zaËiatok, aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), preto ËÌtam "odzadu", "zozadu"
+	// 2010-10-11: Pre POST query sa tam kalend·r priliepa aj na zaËiatok, aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards)
 	//             ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	// 2011-04-07: keÔûe poËet parametrov je "pocet", indexovanÈ s˙ 0 aû pocet - 1, a preto opravenÈ: najprv znÌûime --i;
 	i = pocet;
@@ -15170,7 +15177,7 @@ short int parseQueryString(void){
 
 	// 2011-05-05: pridanÈ kvÙli rÙznym fontom 
 	// 2011-05-06: Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
-	//             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
 	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	i = pocet;
 	Log("pok˙öam sa zistiù font (od poslednÈho parametra k prvÈmu, t. j. odzadu)...\n");
@@ -15186,7 +15193,7 @@ short int parseQueryString(void){
 
 	// 2011-05-13: pridanÈ kvÙli rÙznym veækostiam fontom 
 	//             Pre POST query sa tam font priliepa aj na zaËiatok (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
-	//             preto ËÌtam "odzadu", "zozadu" (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
 	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	i = pocet;
 	Log("pok˙öam sa zistiù font size (od poslednÈho parametra k prvÈmu, t. j. odzadu)...\n");
@@ -15300,12 +15307,9 @@ short int parseQueryString(void){
 		}
 	}// for j
 
-	// 2012-08-27: aj pre hodnotu 3 sa vykon·va
+	// FORCE options
 	for(j = 0; j < POCET_GLOBAL_OPT; j++){
 		Log("j == %d...\n", j);
-/*		if(j == 3)
-			continue;
-*/
 		mystrcpy(local_str, STR_EMPTY, SMALL);
 		switch(j){
 			case OPT_0_SPECIALNE:		strcat(local_str, STR_MODL_OPTF_0); break;
@@ -15333,6 +15337,9 @@ short int parseQueryString(void){
 	}// for j
 
 	// 2011-04-13: force option 0 premennÈ -- jednotlivÈ bit-komponenty
+	// 2013-11-26: Pre POST query sa tam hodnota priliepa pre jednotliv˝ check-box zo zaËiatku (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	Log("force option %d, jednotlivÈ bit-komponenty...(parseQuery)\n", OPT_0_SPECIALNE);
 	for(j = 0; j < POCET_OPT_0_SPECIALNE; j++){
 		Log("j == %d...\n", j);
@@ -15346,16 +15353,16 @@ short int parseQueryString(void){
 			case 5: strcat(local_str, STR_MODL_OPTF_0_TK_NED); break; // BIT_OPT_0_TELAKRVI_NEDELA
 		}// switch(j)
 		// premenn· WWW_MODL_OPTF_0_... (nepovinn·), j = 0 aû POCET_OPT_0_SPECIALNE
-		i = 0; // param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0
-		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 0\n", local_str);
-		while((equalsi(pom_MODL_OPTF[j], STR_EMPTY)) && (i < pocet)){
+		i = pocet; // backwards; param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme aû po 0
+		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 0 / pom_MODL_OPTF_SPECIALNE[%d] = %s\n", local_str, j, pom_MODL_OPTF_SPECIALNE[j]);
+		while((equalsi(pom_MODL_OPTF_SPECIALNE[j], STR_EMPTY)) && (i > 0)){
+			--i;
 			// Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 			if(equals(param[i].name, local_str)){
 				// ide o parameter STR_MODL_OPTFj
 				mystrcpy(pom_MODL_OPTF_SPECIALNE[j], param[i].val, SMALL);
 				Log("hodnota parametra %s je %s.\n", local_str, pom_MODL_OPTF_SPECIALNE[j]);
 			}
-			i++;
 		}
 		if(equalsi(pom_MODL_OPTF_SPECIALNE[j], STR_EMPTY)){
 			Log("Nebola zadan· premenn· %s (nevadÌ).\n", local_str);
@@ -15363,6 +15370,9 @@ short int parseQueryString(void){
 	}// for j
 
 	// 2011-04-11: force option 1 premennÈ -- jednotlivÈ bit-komponenty
+	// 2013-11-26: Pre POST query sa tam hodnota priliepa pre jednotliv˝ check-box zo zaËiatku (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	Log("force option %d, jednotlivÈ bit-komponenty...(parseQuery)\n", OPT_1_CASTI_MODLITBY);
 	for(j = 0; j < POCET_OPT_1_CASTI_MODLITBY; j++){
 		Log("j == %d...\n", j);
@@ -15385,16 +15395,16 @@ short int parseQueryString(void){
 			case 14: strcat(local_str, STR_MODL_OPTF_1_MCD_ZALTAR_TRI); break; // BIT_OPT_1_MCD_ZALTAR_TRI
 		}// switch(j)
 		// premenn· WWW_MODL_OPTF_1_... (nepovinn·), j = 0 aû POCET_OPT_1_CASTI_MODLITBY
-		i = 0; // param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0
-		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 1\n", local_str);
-		while((equalsi(pom_MODL_OPTF[j], STR_EMPTY)) && (i < pocet)){
+		i = pocet; // backwards; param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme aû po 0
+		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 1 / pom_MODL_OPTF_CASTI_MODLITBY[%d] == %s\n", local_str, j, pom_MODL_OPTF_CASTI_MODLITBY[j]);
+		while((equalsi(pom_MODL_OPTF_CASTI_MODLITBY[j], STR_EMPTY)) && (i > 0)){
+			--i;
 			// Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 			if(equals(param[i].name, local_str)){
 				// ide o parameter STR_MODL_OPTFj
 				mystrcpy(pom_MODL_OPTF_CASTI_MODLITBY[j], param[i].val, SMALL);
 				Log("hodnota parametra %s je %s.\n", local_str, pom_MODL_OPTF_CASTI_MODLITBY[j]);
 			}
-			i++;
 		}
 		if(equalsi(pom_MODL_OPTF_CASTI_MODLITBY[j], STR_EMPTY)){
 			Log("Nebola zadan· premenn· %s (nevadÌ).\n", local_str);
@@ -15402,6 +15412,9 @@ short int parseQueryString(void){
 	}// for j
 
 	// 2011-04-20: force option 2 premennÈ -- jednotlivÈ bit-komponenty
+	// 2013-11-26: Pre POST query sa tam hodnota priliepa pre jednotliv˝ check-box zo zaËiatku (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	Log("force option %d, jednotlivÈ bit-komponenty...(parseQuery)\n", OPT_2_HTML_EXPORT);
 	for(j = 0; j < POCET_OPT_2_HTML_EXPORT; j++){
 		Log("j == %d...\n", j);
@@ -15424,16 +15437,16 @@ short int parseQueryString(void){
 			case 14: strcat(local_str, STR_MODL_OPTF_2_ALTERNATIVES); break; // BIT_OPT_2_ALTERNATIVES
 		}// switch(j)
 		// premenn· WWW_MODL_OPT_2_... (nepovinn·), j = 0 aû POCET_OPT_2_HTML_EXPORT
-		i = 0; // param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0
-		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 2\n", local_str);
-		while((equalsi(pom_MODL_OPTF[j], STR_EMPTY)) && (i < pocet)){
+		i = pocet; // backwards; param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme aû po 0
+		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 2 / pom_MODL_OPTF_HTML_EXPORT[%d] = %s\n", local_str, j, pom_MODL_OPTF_HTML_EXPORT[j]);
+		while((equalsi(pom_MODL_OPTF_HTML_EXPORT[j], STR_EMPTY)) && (i > 0)){
+			--i;
 			// Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 			if(equals(param[i].name, local_str)){
 				// ide o parameter STR_MODL_OPTFj
 				mystrcpy(pom_MODL_OPTF_HTML_EXPORT[j], param[i].val, SMALL);
 				Log("hodnota parametra %s je %s.\n", local_str, pom_MODL_OPTF_HTML_EXPORT[j]);
 			}
-			i++;
 		}
 		if(equalsi(pom_MODL_OPTF_HTML_EXPORT[j], STR_EMPTY)){
 			Log("Nebola zadan· premenn· %s (nevadÌ).\n", local_str);
@@ -15441,6 +15454,9 @@ short int parseQueryString(void){
 	}// for j
 
 	// 2013-01-29: force option 5 premennÈ -- jednotlivÈ bit-komponenty
+	// 2013-11-26: Pre POST query sa tam hodnota priliepa pre jednotliv˝ check-box zo zaËiatku (rovnako ako kalend·r), aj sa ËÌta z form-ul·ra (t. j. pri v˝bere z qt=pdnes), 
+	//             preto ËÌtam "odzadu", "zozadu" (backwards) (rovnako ako kalend·r), ak by sa neölo smerom "dolu" (t. j. k prvÈmu parametru od konca), 
+	//             nefungovalo by "override" z tabuæky "Voæby vybran˝ch detailov", ak uû v query stringu nejak· hodnota je
 	Log("force option %d, jednotlivÈ bit-komponenty...(parseQuery)\n", OPT_5_ALTERNATIVES);
 	for(j = 0; j < POCET_OPT_5_ALTERNATIVES; j++){
 		Log("j == %d...\n", j);
@@ -15459,16 +15475,16 @@ short int parseQueryString(void){
 			case 10: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_VESP); break; // BIT_OPT_5_HYMNUS_VN_VESP
 		}// switch(j)
 		// premenn· WWW_MODL_OPTF_5_... (nepovinn·), j = 0 aû POCET_OPT_5_ALTERNATIVES
-		i = 0; // param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme od 0
-		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 5\n", local_str);
-		while((equalsi(pom_MODL_OPTF[j], STR_EMPTY)) && (i < pocet)){
+		i = pocet; // backwards; param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme aû po 0
+		Log("pok˙öam sa zistiù hodnotu parametra %s... parseQueryString(), force, bit-komponenty 5 / pom_MODL_OPTF_ALTERNATIVES[%d] = %s\n", local_str, j, pom_MODL_OPTF_ALTERNATIVES[j]);
+		while((equalsi(pom_MODL_OPTF_ALTERNATIVES[j], STR_EMPTY)) && (i > 0)){
+			--i;
 			// Log("...parameter %i (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
 			if(equals(param[i].name, local_str)){
 				// ide o parameter STR_MODL_OPTFj
 				mystrcpy(pom_MODL_OPTF_ALTERNATIVES[j], param[i].val, SMALL);
 				Log("hodnota parametra %s je %s.\n", local_str, pom_MODL_OPTF_ALTERNATIVES[j]);
 			}
-			i++;
 		}
 		if(equalsi(pom_MODL_OPTF_ALTERNATIVES[j], STR_EMPTY)){
 			Log("Nebola zadan· premenn· %s (nevadÌ).\n", local_str);

@@ -1,3 +1,45 @@
+/* 2013-11-03 class .respons for responsories */
+.respons p { 
+	font-weight: normal; 
+}
+
+.respons p.respR, p.respV, p.respO, p.respF { 
+	font-weight: bold; 
+	margin: 0; 
+	-webkit-margin-after: 0em; 
+	-webkit-margin-before: 0em; 
+}
+
+/* for SK & LA, R/V is used; for CZ, O/V is used; for HU, V/F is used */
+.respons p.respR:before { 
+	color: #FF3333; 
+	content: 'R. '; 
+	font-weight: bold; 
+}
+
+.respons p.respV:before { 
+	color: #FF3333; 
+	content: 'V. '; 
+	font-weight: bold; 
+}
+
+.respons p.respO:before { 
+	color: #FF3333; 
+	content: 'O. '; 
+	font-weight: bold; 
+}
+
+.respons p.respF:before { 
+	color: #FF3333; 
+	content: 'F. '; 
+	font-weight: bold; 
+}
+
+/* 2013-10-21 */
+div.hymn, div.responsory, div.readings {
+    font-weight: bold;
+}
+
 /* 2013-09-19 class for calendar */
 .calendar { 
 	padding: 4px 4px 4px 0; 
@@ -10,8 +52,8 @@
 	border-top: 0px; 
 	display: inline; 
 	font-weight: bold; 
+	min-width: 22px; 
 	padding: 4px 4px 0px 0; 
-	width: 22px; 
 }
 
 .calendar.day_name { 
@@ -21,8 +63,8 @@
 	border-top: 0px; 
 	display: block; 
 	font-style: italic; 
+	min-width: 22px; 
 	padding: 4px 4px 0px 0; 
-	width: 22px; 
 }
 
 .calendar.day { 
@@ -31,7 +73,7 @@
 	border-right: 1px dotted; 
 	border-top: 1px dotted; 
 	display: block; 
-	width: 22px; 
+	min-width: 22px; 
 }
 
 .calendar.today { 
@@ -42,7 +84,7 @@
 	border-top: 1px dotted; 
 	color: #333333; 
 	display: block; 
-	width: 22px; 
+	min-width: 22px; 
 }
 
 /* 2013-09-09 class .preces for prayers and intercessions */
@@ -333,6 +375,7 @@ body, html {
 	color: #CCCCCC;
 	font-family: Cambria, Constantia, Georgia, Lido STF, DejaVu, Liberation, GentiumPlus, Gentium, Garamond, Serif;
 	font-weight: normal; 
+	-webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
 }
 
 p { 
@@ -346,9 +389,8 @@ p {
 }
 
 p.patka { 
-	font-size: 80%; 
+	font-size: 70%; 
 	letter-spacing: 0mm; 
-	margin-top: -1mm; 
 	text-align: center; 
 	text-indent: 0em; 
 }
@@ -417,7 +459,6 @@ a.button {
 	color: #333333; 
 	cursor: pointer;
 	font-family: inherit; 
-	font-size : 90%; 
 	font-style: normal;
 	margin-left: 0px!important;
 	text-decoration: none; 
@@ -449,14 +490,12 @@ select {
 	background: #333333; 
 	color: #CCCCCC; 
 	font-family: inherit; 
-	font-size : 95%; 
 }
 
 input { 
 	border: 1px; 
 	color: #CCCCCC; 
 	font-family: inherit; 
-	font-size : 95%; 
 }
 
 /* modlitby */
@@ -466,9 +505,11 @@ input.button, input.reset {
 	color: #333333; 
 	cursor: pointer;
 	font-family: inherit; 
-	font-size : 90%; 
 	font-style: normal;
+	min-height: 20px;
+	min-width: 70px;
 	margin-left: 0px !important;
+	padding: 4px 4px;
 	text-decoration: none; 
 }
 
@@ -479,9 +520,11 @@ input.button0, input.reset0 {
 	color: #404040;
 	cursor: pointer;
 	font-family: inherit; 
-	font-size : 85%; 
 	font-style: normal;
+	min-height: 20px;
+	min-width: 70px;
 	margin-left: 0px !important;
+	padding: 4px 4px;
 	text-decoration: none; 
 }
 
@@ -492,11 +535,13 @@ input.button1, input.reset1 {
 	color: #404040;
 	cursor: pointer;
 	font-family: inherit; 
-	font-size : 85%; 
 	font-style: normal;
 	font-variant: none;
 	font-weight: bold;
+	min-height: 20px;
+	min-width: 70px;
 	margin-left: 0px !important;
+	padding: 4px 4px;
 	text-decoration: none; 
 }
 
@@ -507,9 +552,11 @@ input.button2, input.reset2 {
 	color: #333333;
 	cursor: pointer;
 	font-family: inherit; 
-	font-size : 90%; 
 	font-style: italic;
+	min-height: 20px;
+	min-width: 70px;
 	margin-left: 0px !important;
+	padding: 4px 4px;
 	text-decoration: none; 
 }
 

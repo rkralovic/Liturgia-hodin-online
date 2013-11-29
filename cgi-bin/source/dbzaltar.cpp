@@ -1010,7 +1010,7 @@ void set_zalm(short int ktory, short int modlitba, const char *file, const char 
 			_set_zalm3(modlitba, file, anchor);
 			break;
 	}// switch(ktory)
-	Log("_set_zalm%d: %s: súbor `%s', kotva `%s' [volanie set_zalm()]\n", ktory, (modlitba == MODL_CEZ_DEN_VSETKY)? "MCD-all": nazov_modlitby(modlitba), file, anchor);
+	Log("_set_zalm%d: %s: súbor `%s', kotva `%s' [volanie set_zalm()]\n", ktory, (modlitba == MODL_CEZ_DEN_VSETKY)? "MCD-all": ((modlitba <= POCET_MODLITIEB)? nazov_modlitby(modlitba) : STR_EMPTY), file, anchor);
 }// set_zalm()
 
 // pri posvatnom citani plati pre 1. citanie
@@ -2367,7 +2367,7 @@ void _set_zalmy_pc_145(short int modlitba){
 
 // 2013-08-22: vytvorené, prevzaté èasti z zaltar_zvazok() pre MCD
 void _set_zalmy_mcd_zaltar(short int den, short int tyzzal, short int modlitba){
-	Log("_set_zalmy_mcd_zaltar(%d [%s], %d. týždeò žaltára, %d [%s]) -- begin\n", den, nazov_dna(den), tyzzal, modlitba, nazov_modlitby(modlitba));
+	Log("_set_zalmy_mcd_zaltar(%d [%s], %d. týždeò žaltára, %d [%s]) -- begin\n", den, nazov_dna(den), tyzzal, modlitba, (modlitba == MODL_CEZ_DEN_VSETKY)? "MCD-all": ((modlitba <= POCET_MODLITIEB)? nazov_modlitby(modlitba) : STR_EMPTY));
 
 	Log("nastavujem žalmy pre MCD (pre jednotlivý týždeò žaltára a konkrétnu modlitbu (hodinku) z modlitby cez deò)...\n");
 	switch(tyzzal){
@@ -31499,6 +31499,9 @@ label_25_MAR:
 							}
 
 							modlitba = MODL_POSV_CITANIE;
+							if(_global_jazyk == JAZYK_CZ){
+								_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+							}
 							_vlastna_cast_modlitba;
 							_vlastna_cast_1citanie;
 							_vlastna_cast_2citanie;
@@ -31576,7 +31579,7 @@ label_25_MAR:
 						_global_svaty1.typslav = SLAV_SPOMIENKA;
 						_global_svaty1.smer = 11; // miestne povinné spomienky
 						mystrcpy(_global_svaty1.meno, text_NOV_13_HU[_global_jazyk], MENO_SVIATKU);
-						_global_svaty1.spolcast = _encode_spol_cast(MODL_SPOL_CAST_SV_MUZ);
+						_global_svaty1.spolcast = _encode_spol_cast(MODL_SPOL_CAST_SV_MUZ_VIACERI);
 						_global_svaty1.farba = LIT_FARBA_BIELA;
 						_global_svaty1.kalendar = KALENDAR_VSEOBECNY_HU;
 					}// HU only
