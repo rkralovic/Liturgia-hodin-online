@@ -30,6 +30,7 @@
     [super viewDidLoad];
 	
 	UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showHideNavbar:)];
+	tapGesture.delegate = self;
 	[self.view addGestureRecognizer:tapGesture];
 }
 
@@ -49,6 +50,14 @@
 	
 	BRSettings *settings = [BRSettings instance];
 	
+	NSMutableString *extraStylesheets = [[NSMutableString alloc] init];
+	if ([settings boolForOption:@"of0fn"]) {
+		[extraStylesheets appendString:@"<link rel='stylesheet' type='text/css' href='html/breviar-normal-font.css'>"];
+	}
+	if ([settings boolForOption:@"of2nr"]) {
+		[extraStylesheets appendString:@"<link rel='stylesheet' type='text/css' href='html/breviar-invert-colors.css'>"];
+	}
+	
 	NSString *body =
 		[NSString stringWithFormat:
 		 @"<!DOCTYPE html>\n"
@@ -56,9 +65,11 @@
 		 "	<meta http-equiv='Content-Type' content='text/html; charset=windows-1250'>\n"
 		 "	<link rel='stylesheet' type='text/css' href='html/breviar.css'>\n"
 		 "	<link rel='stylesheet' type='text/css' href='breviar-ios.css'>\n"
+		 "  %@\n"
 		 "</head>\n"
-		 "<body style='font: %dpx %@'>%@</body>\n"
+		 "<body style='padding-top: 64px; font: %dpx %@'>%@</body>\n"
 		 "</html>",
+		 extraStylesheets,
 		 settings.prayerFontSize,
 		 settings.prayerFontFamily,
 		 self.prayer.body];
@@ -69,8 +80,29 @@
 
 - (void)showHideNavbar:(id)sender
 {
-	BOOL navbarHidden = self.navigationController.navigationBarHidden;
-	[self.navigationController setNavigationBarHidden:!navbarHidden animated:YES];
+	BOOL navbarHidden = [UIApplication sharedApplication].isStatusBarHidden;
+	
+	if (navbarHidden) {
+		self.navigationController.navigationBarHidden = NO;
+		self.navigationController.navigationBar.alpha = 0;
+	}
+	
+	[UIView animateWithDuration:UINavigationControllerHideShowBarDuration
+					 animations:^{
+						 [[UIApplication sharedApplication] setStatusBarHidden:!navbarHidden withAnimation:UIStatusBarAnimationFade];
+						 self.navigationController.navigationBar.alpha = navbarHidden ? 1.0 : 0.0;
+					 }
+					 completion:^(BOOL finished) {
+						 if (finished && !navbarHidden) {
+							 self.navigationController.navigationBarHidden = YES;
+						 }
+					 }
+	 ];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+	return YES;
 }
 
 @end

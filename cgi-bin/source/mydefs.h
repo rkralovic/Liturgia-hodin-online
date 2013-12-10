@@ -517,6 +517,22 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_MODL_OPTF_0_TK_NED "of0tkne"
 #endif
 
+// force usage of normal font (no bold)
+#define MODL_OPTF_0_FONT_NORMAL 67
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF_0_FONT_NORMAL "MODL_OPTF_0_FONT_NORMAL"
+#else
+	#define STR_MODL_OPTF_0_FONT_NORMAL "of0fn"
+#endif
+
+// buttons order: 0 = date navigation BEFORE info on day (default for web); 1 = day details first (with prayer buttons) (default for mobile apps)
+#define MODL_OPTF_0_BUTTONS_ORDER
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF_0_BUTTONS_ORDER "MODL_OPTF_0_BUTTONS_ORDER"
+#else
+	#define STR_MODL_OPTF_0_BUTTONS_ORDER "of0bo"
+#endif
+
 // pre force option 1 jednotlivé bit-komponenty (parciálne vo¾by)
 
 // evanjeliové chválospevy (benediktus, magnifikat, nunk dimittis)
@@ -931,6 +947,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_NONBREAKING_SPACE "&nbsp;"
 #define HTML_SPACE " "
 #define HTML_VERTICAL_BAR "|"
+#define HTML_CROSS "†"
 #define HTML_LINE_BREAK "<br/>"
 #define HTML_CRLF_LINE_BREAK "\n<br/>"
 #define HTML_NEW_PARAGRAPH "<p>"
@@ -1097,6 +1114,8 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define XML_BIT_OPT_0_ZJAVENIE_PANA_NEDELA      "BitOpt0EpiphanyOnSunday"
 #define XML_BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA   "BitOpt0AssumptionOnSunday"
 #define XML_BIT_OPT_0_TELAKRVI_NEDELA           "BitOpt0CorpusChristiOnSunday"
+#define XML_BIT_OPT_0_FONT_NORMAL               "BitOpt0ForceNormalFontWeight"
+#define XML_BIT_OPT_0_BUTTONS_ORDER             "BitOpt0ButtonsOrder"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"
