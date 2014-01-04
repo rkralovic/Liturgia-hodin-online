@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Imaórák liturgiája</string>
+    <string name="back">Vissza</string>
+    <string name="forward">Előre</string>
+    <string name="today">Ma</string>
+    <string name="pgup">Fel</string>
+    <string name="pgdn">Le</string>
+
     <string name="lang_select">Beállítás</string>
     <string name="lang_select_title">Nyelvválasztás:</string>
     <string name="lang_cz">Cseh</string>
@@ -33,21 +40,36 @@
     <string name="h12_notify">Itt az idő a déli napközi imaórára!</string>
     <string name="h15_notify">Itt az idő a délután napközi imaórára!</string>
 
-    <string name="app_name">Imaórák liturgiája</string>
-    <string name="back">Vissza</string>
-    <string name="forward">Előre</string>
-    <string name="today">Ma</string>
-    <string name="pgup">Fel</string>
-    <string name="pgdn">Le</string>
-    
-    <string name="news">
-Újdonságok a v1.9.4 verzióban:\n
-- Új beállítások: közönséges (nem kövér) betűk alkalmazása\n
-- Javítások az Android 4.4 Kit-Kat részére\n\n
-Változások a v1.9.3-ban:\n
-- Zsoltárok jobb tördelése\n
-- Gépelési hibák javítása\n
-- Frissítések a honlapról\n\n
-    </string>
-	
+    <string name="about">Névjegy</string>
+
+    <string name="news"><![CDATA[
+<html>
+<head>
+<style type="text/css">
+body { background-color: #000000; color: #cccccc; }
+</style>
+</head>
+<body>
+<p>
+<b>Újdonságok a v1.9.5 verzióban:</b>
+<ul>
+<li> Új ikon
+<li> Az alkalmazásról (névjegy)
+</ul>
+
+<p><b>Újdonságok a v1.9.4 verzióban:</b>
+<ul>
+<li> Új beállítások: közönséges (nem kövér) betűk alkalmazása
+<li> Javítások az Android 4.4 Kit-Kat részére
+</ul>
+
+<p><b>Változások a v1.9.3-ban:</b>
+<ul>
+<li> Zsoltárok jobb tördelése
+<li> Gépelési hibák javítása
+<li> Frissítések a honlapról
+</ul>
+</body></html>
+    ]]></string>
+
 </resources>

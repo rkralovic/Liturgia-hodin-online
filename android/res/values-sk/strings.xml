@@ -41,22 +41,38 @@
     <string name="h15_notify">Je čas na popoludňajšiu modlitbu!</string>
 
     <string name="about">O aplikácii</string>
-    <string name="about_text">
-    Info o aplikácii.\n
-    ...
-    </string>
 
-    <string name="news">
-Nové vo verzii v1.9.4:\n
-- Nové nastavenie: použiť len obyčajné písmo (nie tučné)\n
-- Opravy pre Android 4.4 Kit-Kat\n\n
-Nové vo verzii v1.9.3:\n
-- CSS úpravy: formátovanie žalmov, \n
-   chválospevov, prosieb; kalendár\n\n
-Nové vo verzii v1.9.1:\n
-- Texty LH sú publikované s vedomím\n
-   KBS ako pracovná verzia.\n\n
-Nové vo verzii v1.9.0:\n
-- Upravené nové ikonky\n
-    </string>
+    <string name="news"><![CDATA[
+<html>
+<head>
+<style type="text/css">
+body { background-color: #000000; color: #cccccc; }
+</style>
+</head>
+<body>
+<p>
+<b>Nové vo verzii v1.9.5:</b>
+<ul>
+<li> Liturgické čítania: úpravy a doplnenia
+<li> Informácie o aplikácii
+<li> Nová ikona
+</ul>
+
+<p><b>Nové vo verzii v1.9.4:</b>
+<ul>
+<li> Nové nastavenie: použiť len obyčajné písmo (nie tučné)
+<li> Opravy pre Android 4.4 Kit-Kat
+</ul>
+
+<p><b>Nové vo verzii v1.9.3:</b>
+<ul>
+<li> CSS úpravy: formátovanie žalmov, chválospevov, prosieb; kalendár
+</ul>
+
+<p><b>Nové vo verzii v1.9.1:</b>
+<ul>
+<li> Texty LH sú publikované s vedomím KBS ako pracovná verzia.
+</ul>
+</body></html>
+    ]]></string>
 </resources>
