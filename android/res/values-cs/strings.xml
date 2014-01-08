@@ -40,10 +40,13 @@
     <string name="h12_notify">Je čas na polední modlitbu!</string>
     <string name="h15_notify">Je čas na popolední modlitbu!</string>
 
+    <string name="btn_news">Co je nové</string>
+    <string name="menu_about">O app</string>
     <string name="about">O aplikacii</string>
     <string name="about_text"><![CDATA[
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
 body { background-color: #000000; color: #cccccc; }
 </style>
@@ -89,6 +92,7 @@ OAMDG
     <string name="news"><![CDATA[
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
 body { background-color: #000000; color: #cccccc; }
 </style>

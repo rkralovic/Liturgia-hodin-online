@@ -43,9 +43,12 @@
     <string name="h15_notify">Time for None!</string>
 
     <string name="about">About</string>
+    <string name="menu_about">About</string>
+    <string name="btn_news">What\'s new</string>
     <string name="about_text"><![CDATA[
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
 body { background-color: #000000; color: #cccccc; }
 </style>
@@ -94,6 +97,7 @@ OAMDG
     <string name="news"><![CDATA[
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
 body { background-color: #000000; color: #cccccc; }
 </style>
