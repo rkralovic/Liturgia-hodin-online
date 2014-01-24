@@ -340,6 +340,37 @@ char *_global_buf2; // 2006-08-01: vytvorené; túto premennú tiež alokujeme
 #define STDIN_FILE stdin
 #endif
 
+#if defined(__APPLE__) || defined(__linux) || defined(__unix) || defined(__posix)
+#ifndef LIBC_BIONIC
+// Overwrite putenv() because it causes crashes if breviar_main() is called multiple times:
+// unlike setenv(), the argument of putenv() is not copied (at least not on BSD), so
+// getenv() is likely to crash after the buffers are freed / reused.
+//
+// Android libc (bionic) has no such problems, putenv copies the values as
+// well. On the other hand, setenv seems to be not working properly there, so
+// we disable this logic for android.
+static int my_putenv(char *s) {
+	char *key = strdup(s);
+	if (!key) {
+		return 0;
+	}
+
+	char *val = strchr(key, '=');
+	if (!val) {
+		free(key);
+		return 0;
+	}
+
+	*(val++) = 0;
+	int res = setenv(key, val, 1);
+
+	free(key);
+	return res;
+}
+#define putenv my_putenv
+#endif /* LIBC_BIONIC */
+#endif /* unix */
+
 //---------------------------------------------------------------------
 // globalne premenne -- deklarovane v liturgia.h, definovane tu
 
@@ -5182,6 +5213,14 @@ short int _rozbor_dna(_struct_den_mesiac datum, short int rok, short int poradie
 						_global_den.typslav = SLAV_SLAVNOST;
 						mystrcpy(_global_den.meno, text_NAJSV_SRDCA_JEZISOVHO[_global_jazyk], MENO_SVIATKU);
 					}
+					else if(_global_den.denvr == KRISTA_KNAZA){
+						// KRISTA_KNAZA (ZOSLANIE_DUCHA_SV + 4)
+						_global_den.farba = LIT_FARBA_BIELA;
+						_rozbor_dna_LOG("/* Krista kòaza */\n");
+						_global_den.smer = 5; // sviatky Pána uvedené vo všeobecnom kalendári
+						_global_den.typslav = SLAV_SVIATOK;
+						mystrcpy(_global_den.meno, text_NPJK_NAJ_KNAZA[_global_jazyk], MENO_SVIATKU);
+					}
 					else if(_global_den.denvr == SRDPM){
 						// srdca prebl. panny marie == ZOSLANIE_DUCHA_SV + 20
 						_global_den.farba = LIT_FARBA_BIELA;
@@ -8625,7 +8664,7 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 			continue;
 		if(i == JAZYK_UNDEF)
 			continue;
-#if defined(IO_ANDROID)
+#if !defined(OS_Windows_Ruby)
 		if(i == JAZYK_CZ_OP)
 			continue;
 #endif
@@ -8732,6 +8771,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 				Export("<option%s>%s\n", 
 					(_global_kalendar == KALENDAR_CZ_OPRAEM)? html_option_selected: STR_EMPTY,
 					nazov_kalendara_long[KALENDAR_CZ_OPRAEM]);
+				Export("<option%s>%s\n", 
+					(_global_kalendar == KALENDAR_CZ_OFMCAP)? html_option_selected: STR_EMPTY,
+					nazov_kalendara_long[KALENDAR_CZ_OFMCAP]);
 			}// CZ
 			Export("</select>\n");
 

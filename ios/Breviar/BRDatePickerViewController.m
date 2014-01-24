@@ -10,16 +10,15 @@
 
 @interface BRDatePickerViewController ()
 
+@property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (strong, nonatomic) IBOutlet UIView *datePickerPlaceholder;
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *toolbarCenteringItem;
+@property (strong, nonatomic) IBOutlet UIButton *todayButton;
 
 @end
 
 @implementation BRDatePickerViewController
-
-@synthesize datePicker;
-@synthesize datePickerDelegate;
-@synthesize initialDate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,7 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	self.screenName = @"DataPicker";
 }
 
 - (void)viewDidUnload
@@ -45,6 +44,26 @@
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+    
+    if (!self.datePicker) {
+        self.datePicker = [[UIDatePicker alloc] init];
+        self.datePicker.datePickerMode = UIDatePickerModeDate;
+        
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            self.datePicker.frame = self.datePickerPlaceholder.bounds;
+            [self.datePickerPlaceholder addSubview:self.datePicker];
+        }
+        
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            CGRect rect = self.datePicker.frame;
+            rect.size.width = self.view.frame.size.width;
+            rect.origin.y = self.toolbar.frame.size.height;
+            self.datePicker.frame = rect;
+            [self.view addSubview:self.datePicker];
+        }
+    }
+
 	self.datePicker.date = self.initialDate;
 
     // Center the toolbar content in iPad popover (Yesterday/Today/Tomorrow)
@@ -54,11 +73,6 @@
             self.toolbarCenteringItem.width = doneButtonView.frame.size.width;
         }
     }
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark -

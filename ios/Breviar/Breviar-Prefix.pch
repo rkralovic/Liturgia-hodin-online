@@ -11,4 +11,14 @@
 #ifdef __OBJC__
 	#import <UIKit/UIKit.h>
 	#import <Foundation/Foundation.h>
+
+    #import "BRUI.h"
+    #import "UIColor+HexColor.h"
+
+    #import "GAI.h"
+#endif
+
+#ifdef __cplusplus
+    #pragma GCC diagnostic ignored "-Winvalid-source-encoding"
+	#pragma GCC diagnostic ignored "-Wparentheses-equality"
 #endif

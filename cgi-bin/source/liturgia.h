@@ -985,8 +985,9 @@ extern const char *nazov_slavenia_lokal[];
 #define KALENDAR_SK_OP                     11
 #define KALENDAR_SK_CM                     12
 #define KALENDAR_CZ_OPRAEM                 13
+#define KALENDAR_CZ_OFMCAP                 14
 
-#define POCET_KALENDAROV                   13
+#define POCET_KALENDAROV                   14
 
 // filenames for special calendars / názov súbora pre kalendáre
 extern const char *nazov_htm_kalendar[POCET_KALENDAROV + 1];
@@ -1006,6 +1007,7 @@ extern const char *nazov_kalendara_long[POCET_KALENDAROV + 1];
 #define	ZALTAR_VSETKO                0
 #define ZALTAR_IBA_ZALMY             1
 #define ZALTAR_IBA_ZALMY_HYMNUS_MCD  2
+#define ZALTAR_ANT_ZALMY_HYMNUS_MCD  3
 
 // 2006-08-19: pridané liturgické farby
 #define LIT_FARBA_NEURCENA			0
@@ -1147,6 +1149,8 @@ extern const char *poradie_SLOVOM_jazyk[POCET_TYZDNOV + 1][POCET_JAZYKOV + 1];
 #define _ZOSLANIE_DUCHA_SV        _den[idx_ZOSLANIE_DUCHA_SV]
 #define _SVATEJ_RODINY            _den[idx_SVATEJ_RODINY]
 
+#undef YES
+#undef NO
 #define YES 1
 #define NO  0
 

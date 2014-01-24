@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BRViewController.h"
 
 @class BRFontPickerViewController;
 
@@ -14,15 +15,10 @@
 - (void)fontPicker:(BRFontPickerViewController *)fontPicker didPickFont:(UIFont *)font;
 @end
 
-@interface BRFontPickerViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
-
-@property(strong) IBOutlet UIWebView *webView;
-@property(strong) IBOutlet UIPickerView *pickerView;
+@interface BRFontPickerViewController : BRViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property(strong) NSString *fontFamily;
 @property NSInteger fontSize;
 @property(weak) NSObject<BRFontPickerDelegate> *delegate;
-
-- (IBAction)donePressed:(id)sender;
 
 @end

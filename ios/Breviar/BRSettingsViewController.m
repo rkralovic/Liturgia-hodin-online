@@ -13,6 +13,10 @@
 #import "BRStringOptionPickerViewController.h"
 #import "BRSettings.h"
 #import "BRUtil.h"
+#import "BRPrayerListViewController.h"
+#import "GAI.h"
+#import "GAIFields.h"
+#import "GAIDictionaryBuilder.h"
 
 #define CELL_NORMAL_HEIGHT			44
 #define CELL_LABEL_WIDTH			192
@@ -24,6 +28,10 @@
 #define SECT_OTHER					3
 
 @interface BRSettingsViewController ()
+
+@property(strong) NSString *currentOptionId;
+@property(strong) NSDictionary *visibleOptionIndexPaths;
+@property(strong) NSArray *visibleOptionsPerSection;
 
 @end
 
@@ -52,11 +60,24 @@
 	[super viewWillAppear:animated];
 	[self calculateVisibleOptions];
 	[self.tableView reloadData];
+	
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker set:kGAIScreenName value:@"Settings"];
+	[tracker send:[[GAIDictionaryBuilder createAppView] build]];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)viewWillDisappear:(BOOL)animated {
+    // Going back to BRPrayerListViewController? Reload the whole table because
+    if ([self.navigationController.topViewController isKindOfClass:[BRPrayerListViewController class]]) {
+        BRPrayerListViewController *parent = (BRPrayerListViewController *)self.navigationController.topViewController;
+        [parent loadSelectedDateAndReloadTable:YES resetCelebrationIndex:NO forcePrayerRegeneration:YES];
+    }
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.tableView reloadData];
 }
 
 #pragma mark -
@@ -91,16 +112,21 @@
 	return sectionItems.count;
 }
 
+- (NSString *)boolCellType
+{
+	return UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"BoolCellPortrait" : @"BoolCellLandscape";
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *option = [self optionForIndexPath:indexPath];
 	NSString *optionType = [option objectForKey:@"type"];
 	
-	if ([optionType isEqualToString:@"bool"] && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+	if ([optionType isEqualToString:@"bool"]) {
 		// Boolean option for iPhone
 		NSString *optId = [option objectForKey:@"id"];
 		NSString *optTitle = BREVIAR_STR(optId);
 		
-		BRBoolSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BoolCell"];
+		BRBoolSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:[self boolCellType]];
 		cell.label.text = optTitle;
 		[cell.contentView setNeedsLayout];
 		[cell.contentView layoutIfNeeded];
@@ -136,7 +162,7 @@
 	}
 	else if ([optionType isEqualToString:@"bool"]) {
 		// Boolean option
-		BRBoolSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BoolCell"];
+		BRBoolSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:[self boolCellType]];
 		cell.optionId = optionId;
 		cell.label.text = BREVIAR_STR(optionId);
 		cell.switcher.on = [settings boolForOption:optionId];
@@ -176,7 +202,9 @@
 			NSString *visibility = [item objectForKey:@"visibility"];
 			BOOL visible;
 			
-			if (visibility) {
+            if ([visibility isEqualToString:@"iPhoneOnly"]) {
+                visible = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+            } else if (visibility) {
 				NSPredicate *predicate = [NSPredicate predicateWithFormat:visibility];
 				visible = [predicate evaluateWithObject:settings];
 			} else {
@@ -230,6 +258,13 @@
 		[self.tableView insertRowsAtIndexPaths:rowsToAdd withRowAnimation:UITableViewRowAnimationBottom];
 		[self.tableView endUpdates];
 	}
+	
+	// Track changes in GA
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Settings"
+														  action:@"SetBoolOption"
+														   label:optionId
+														   value:[NSNumber numberWithBool:newValue]] build]];
 }
 
 #pragma mark -
@@ -264,12 +299,26 @@
 {
 	[[BRSettings instance] setFont:font forOption:self.currentOptionId];
 	[self.tableView reloadData];
+
+	// Track changes in GA
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Settings"
+														  action:@"SetFont"
+														   label:[font description]
+														   value:nil] build]];
 }
 
 - (void)stringOptionPicker:(BRStringOptionPickerViewController *)picker didPickOption:(NSString *)value
 {
 	[[BRSettings instance] setString:value forOption:self.currentOptionId];
 	[self.tableView reloadData];
+
+	// Track changes in GA
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Settings"
+														  action:@"SetStringOption"
+														   label:self.currentOptionId
+														   value:nil] build]];
 }
 
 @end

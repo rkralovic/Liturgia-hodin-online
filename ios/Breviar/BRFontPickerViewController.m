@@ -21,10 +21,12 @@ static CGFloat componentSizes[] = {
 
 @interface BRFontPickerViewController ()
 
+@property(strong) IBOutlet UIWebView *webView;
+@property(strong) IBOutlet UIPickerView *pickerView;
+
 @end
 
 @implementation BRFontPickerViewController
-@synthesize webView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,18 +40,13 @@ static CGFloat componentSizes[] = {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	self.screenName = @"FontPicker";
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)viewWillAppear:(BOOL)animated

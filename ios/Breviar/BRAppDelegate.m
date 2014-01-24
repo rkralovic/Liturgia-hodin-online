@@ -8,19 +8,38 @@
 
 #import "BRAppDelegate.h"
 #import "BRDataSource.h"
+#import "BRPrayerListViewController.h"
+#import "BRSettings.h"
+#import "TestFlight.h"
 
 @implementation BRAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Initialize Google Analytics
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    [GAI sharedInstance].dispatchInterval = 20;
+    // [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+	__unused id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-47206216-1"];
+	
+	// Initialize TestFlight
+	[TestFlight takeOff:@"73264b41-5b39-4179-bf3d-b58a5e4f1185"];
+    
 	// Initialize UI
-	[UINavigationBar appearance].barTintColor = [UIColor colorWithRed:131.0/255 green:58.0/255 blue:57.0/255 alpha:1.0]; // #833a39
+    if ([UINavigationBar instancesRespondToSelector:@selector(barTintColor)]) {
+        [UINavigationBar appearance].barTintColor = [UIColor colorWithHex:0x833a39];
+    }
 	[UINavigationBar appearance].tintColor = [UIColor whiteColor];
 	[UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     
 	// Initialize data source
 	BRDataSource *dataSource = [BRDataSource instance];
 	dataSource.language = @"hu"; // TODO: get from build flags
+    
+    // Initialize WebKit
+    UIWebView *webView = [[UIWebView alloc] init];
+    [webView loadHTMLString:@"(empty)" baseURL:nil];
+    
     return YES;
 }
 							

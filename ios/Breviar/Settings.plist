@@ -30,12 +30,19 @@
 					<string>font</string>
 					<key>inPrayerQuery</key>
 					<false/>
-					<key>default</key>
+					<key>default-iPhone</key>
 					<dict>
 						<key>family</key>
-						<string>HelveticaNeue</string>
+						<string>Palatino-Roman</string>
 						<key>size</key>
-						<integer>14</integer>
+						<integer>16</integer>
+					</dict>
+					<key>default-iPad</key>
+					<dict>
+						<key>family</key>
+						<string>Palatino-Roman</string>
+						<key>size</key>
+						<integer>18</integer>
 					</dict>
 				</dict>
 				<dict>
@@ -91,6 +98,16 @@
 					<false/>
 					<key>visibility</key>
 					<string>FALSEPREDICATE</string>
+				</dict>
+				<dict>
+					<key>id</key>
+					<string>prayersAsCells</string>
+					<key>type</key>
+					<string>bool</string>
+					<key>default</key>
+					<false/>
+					<key>visibility</key>
+					<string>iPhoneOnly</string>
 				</dict>
 			</array>
 		</dict>
@@ -345,7 +362,7 @@
 					<key>type</key>
 					<string>bool</string>
 					<key>default</key>
-					<false/>
+					<true/>
 					<key>visibility</key>
 					<string>of2a == TRUE &amp;&amp; j != &quot;cz&quot;</string>
 				</dict>

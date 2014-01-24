@@ -8,9 +8,15 @@
 
 #import "BRPrayerListViewController.h"
 #import "BRPrayerViewController.h"
+#import "BRAboutViewController.h"
 #import "BRDataSource.h"
 #import "BRCelebrationCell.h"
 #import "BRUtil.h"
+#import "BRSettings.h"
+
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIFields.h"
 
 static NSString *liturgicalColorImages[] = {
 	[BRColorUnknown]       = @"",
@@ -27,6 +33,20 @@ static NSString *liturgicalColorImages[] = {
 
 @interface BRPrayerListViewController ()
 
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UIButton *showDatePickerButton; // Unused?
+@property (nonatomic, strong) UIPopoverController *datePickerPopover;
+
+@property (nonatomic, strong) UIWebView *sharedWebView;
+@property (nonatomic, strong) BRCelebrationCell *celebrationCellPortrait;
+@property (nonatomic, strong) BRCelebrationCell *celebrationCellLanscape;
+
+@property (strong) NSDate *date;
+@property (strong) BRDay *day;
+@property NSInteger celebrationIndex;
+
+@property (strong) dispatch_queue_t preloadQueue;
+
 @end
 
 @implementation BRPrayerListViewController
@@ -34,14 +54,22 @@ static NSString *liturgicalColorImages[] = {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+	self.screenName = @"MainScreen";
+	self.preloadQueue = dispatch_queue_create("Prayer Generator Queue", DISPATCH_QUEUE_SERIAL);
+
 	self.date = [NSDate date];
-	
-	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-		self.sections = @[@"Date", @"PrayerListCell", @"Settings"];
-	}
-	else {
-		self.sections = @[@"Date", @"PrayerList"];
-	}
+    
+    // Prepare reusable web view
+    self.sharedWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.sharedWebView.backgroundColor = [UIColor clearColor];
+    self.sharedWebView.opaque = NO;
+    [self.view addSubview:self.sharedWebView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)viewDidUnload
@@ -53,68 +81,93 @@ static NSString *liturgicalColorImages[] = {
 {
 	[super viewWillAppear:animated];
 	
-	// Load celebrations for date
-	self.day = [[BRDataSource instance] dayForDate:self.date];
-	if (self.celebrationIndex > self.day.celebrations.count - 1) {
-		self.celebrationIndex = 0;
-	}
-	
-	// Show date in title
-	[self updateTitleView];
-	
-	// Update data
+	// Load celebrations for date (if not already loaded for the very same date, e.g. when going back from prayer VC)
+    if (!self.day) {
+        [self loadSelectedDateAndReloadTable:YES resetCelebrationIndex:YES forcePrayerRegeneration:NO];
+    } else {
+        [self updateTitleView];
+        
+        // Deselect row when returning from subcontroller to give the user a sense of context
+        if (self.tableView.indexPathForSelectedRow) {
+            [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
+        }
+    }
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification {
+    if (self.day && self.navigationController.topViewController == self) {
+        [self updateTitleView];
+    }
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	[self.tableView reloadData];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+#pragma mark - Data Source, Loader, etc.
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return self.sections.count;
-}
-
-#pragma mark -
-#pragma mark Title view
-
-- (void)updateTitleView
-{
-	self.navigationItem.title = [self getDateLabel];
-	self.navigationItem.titleView = [self getTitleView];
-}
-
-- (UIView *)getTitleView
-{
-	UIButton *btn = [[UIButton alloc] init];
-	[btn setTitle:[self getDateLabel] forState:UIControlStateNormal];
-	btn.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-	[btn addTarget:self action:@selector(showDatePicker:) forControlEvents:UIControlEventTouchUpInside];
-	return btn;
-}
-
-- (NSString *)getDateLabel
-{
-	NSCalendar *calendar = [NSCalendar currentCalendar];
-	NSInteger currentDay = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:[NSDate date]];
-	NSInteger selectedDay = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:self.date];
+- (NSArray *)sections {
+    BRSettings *settings = [BRSettings instance];
+    BOOL prayersAsCells = [settings boolForOption:@"prayersAsCells"];
     
-    int dayDiff = ABS(currentDay - selectedDay);
-	
-	if (dayDiff < 3) {
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		dateFormatter.dateFormat = @"EEEE";
-		return [[dateFormatter stringFromDate:self.date] capitalizedString];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && !prayersAsCells) {
+		return @[@"Date", @"PrayerListCell", @"Settings"];
 	}
 	else {
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setDateStyle:NSDateFormatterLongStyle];
-		return [dateFormatter stringFromDate:self.date];
+		return @[@"Date", @"PrayerList", @"Settings"];
 	}
+}
+
+- (void)loadSelectedDateAndReloadTable:(BOOL)reload resetCelebrationIndex:(BOOL)resetCelebration forcePrayerRegeneration:(BOOL)regenerate {
+    
+	if (regenerate || !self.day || ![[self dayComponentsForDate:self.day.date] isEqual:[self dayComponentsForDate:self.date]]) {
+		self.day = [[BRDataSource instance] dayForDate:self.date];
+		
+        if (self.celebrationIndex > self.day.celebrations.count - 1) {
+            self.celebrationIndex = 0;
+        }
+		
+		[self preloadPrayers];
+    }
+
+    if (resetCelebration) {
+        self.celebrationIndex = 0;
+    }
+    
+    // Show date in title
+    [self updateTitleView];
+    
+    // Update data
+    if (reload) {
+        [self.tableView reloadData];
+    }
+}
+
+- (NSDateComponents *)dayComponentsForDate:(NSDate *)date {
+	NSCalendarUnit dayUnit = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
+	return [[NSCalendar currentCalendar] components:dayUnit fromDate:date];
+}
+
+- (void)preloadPrayers {
+	BRDay *day = self.day;
+	dispatch_async(self.preloadQueue, ^{
+		for (BRCelebration *celebration in day.celebrations) {
+			for (BRPrayer *prayer in celebration.prayers) {
+				if (day == self.day) {
+					[prayer body];
+				}
+			}
+		}
+	});
 }
 
 #pragma mark -
 #pragma mark UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return self.sections.count;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	NSString *sectionType = [self.sections objectAtIndex:section];
@@ -130,12 +183,16 @@ static NSString *liturgicalColorImages[] = {
 	}
 }
 
+- (NSString *)celebrationCellType {
+	return UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"CelebrationCellPortrait" : @"CelebrationCellLandscape";
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString *sectionType = [self.sections objectAtIndex:indexPath.section];
 	
 	if ([sectionType isEqualToString:@"Date"]) {
 		// Celebration cell
-		BRCelebrationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CelebrationCell"];
+		BRCelebrationCell *cell = [tableView dequeueReusableCellWithIdentifier:[self celebrationCellType]];
 		
 		BRCelebration *celebration = [self.day.celebrations objectAtIndex:indexPath.row];
 		cell.celebrationNameLabel.text = celebration.title;
@@ -159,7 +216,8 @@ static NSString *liturgicalColorImages[] = {
 	}
 	else if ([sectionType isEqualToString:@"Settings"]) {
 		// Settings cell
-		return [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingsCell"];
+		return cell;
 	}
 	
 	return nil;
@@ -170,6 +228,21 @@ static NSString *liturgicalColorImages[] = {
 	
 	if ([sectionType isEqualToString:@"PrayerListCell"]) {
 		return 125;
+	}
+	else if ([sectionType isEqualToString:@"Date"]) {
+		BRCelebrationCell *cell = [tableView dequeueReusableCellWithIdentifier:[self celebrationCellType]];
+		cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+		
+		BRCelebration *celebration = [self.day.celebrations objectAtIndex:indexPath.row];
+		cell.celebrationNameLabel.text = celebration.title;
+		cell.celebrationDescriptionLabel.text = celebration.subtitle;
+		cell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+		[cell.contentView setNeedsLayout];
+		[cell.contentView layoutIfNeeded];
+		
+		CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+		return height + 2;
 	}
 	else {
 		return 44;
@@ -194,10 +267,62 @@ static NSString *liturgicalColorImages[] = {
 }
 
 #pragma mark -
+#pragma mark Title view
+
+- (void)updateTitleView
+{
+    if (![self.navigationItem.title isEqualToString:[self getDateLabel]]) {
+        self.navigationItem.title = [self getDateLabel];
+        self.navigationItem.titleView = [self getTitleView];
+    }
+}
+
+- (UIView *)getTitleView
+{
+	UIButton *btn = [[UIButton alloc] init];
+	[btn setTitle:[self getDateLabel] forState:UIControlStateNormal];
+	btn.titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
+	[btn addTarget:self action:@selector(showDatePicker:) forControlEvents:UIControlEventTouchUpInside];
+	return btn;
+}
+
+- (NSString *)getDateLabel
+{
+	NSCalendar *calendar = [NSCalendar currentCalendar];
+	NSInteger currentDay = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:[NSDate date]];
+	NSInteger selectedDay = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSEraCalendarUnit forDate:self.date];
+    
+    int dayDiff = ABS(currentDay - selectedDay);
+	
+    if (dayDiff < 3) {
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		dateFormatter.dateFormat = @"EEEE";
+        NSString *day = [[dateFormatter stringFromDate:self.date] capitalizedString];
+        
+        if (dayDiff == 0) {
+            return [NSString stringWithFormat:@"%@ (%@)", day, BREVIAR_STR(@"today")];
+        } else {
+            return day;
+        }
+	}
+	else {
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateStyle:NSDateFormatterLongStyle];
+		return [dateFormatter stringFromDate:self.date];
+	}
+}
+
+#pragma mark -
 #pragma mark Date selection
 
 - (void)showDatePicker:(id)sender
 {
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"MainScreen"
+														  action:@"PickDate"
+														   label:nil
+														   value:nil] build]];
+	
 	[self performSegueWithIdentifier:@"ShowDatePicker" sender:self];
 }
 
@@ -207,22 +332,32 @@ static NSString *liturgicalColorImages[] = {
 	[components setDay:dayDiff];
 	
 	self.date = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:self.date options:0];
-	self.day = [[BRDataSource instance] dayForDate:self.date];
-	self.celebrationIndex = 0;
+    [self loadSelectedDateAndReloadTable:NO resetCelebrationIndex:YES forcePrayerRegeneration:NO];
 	
-	[self updateTitleView];
-	
-	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.sections.count)];
+    // Animate only the celebrations section
+	NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
 	[self.tableView reloadSections:indexSet withRowAnimation:(dayDiff > 0 ? UITableViewRowAnimationLeft : UITableViewRowAnimationRight)];
 }
 
 - (IBAction)prevDayPressed:(id)sender
 {
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"MainScreen"
+														  action:@"JumpDate"
+														   label:@"Yesterday"
+														   value:nil] build]];
+	
 	[self jumpDate:-1];
 }
 
 - (IBAction)nextDayPressed:(id)sender
 {
+	id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+	[tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"MainScreen"
+														  action:@"JumpDate"
+														   label:@"Tomorrow"
+														   value:nil] build]];
+	
 	[self jumpDate:1];
 }
 
@@ -250,37 +385,42 @@ static NSString *liturgicalColorImages[] = {
 			self.datePickerPopover = [(UIStoryboardPopoverSegue *)segue popoverController];
 		}
 	}
-	else if ([segueId isEqualToString:@"ShowPrayer"]) {
+    else if ([segueId isEqualToString:@"ShowPrayer"] || (segueId.length > 11 && [[segueId substringToIndex:11] isEqualToString:@"ShowPrayer."])) {
 		BRPrayerViewController *destController = segue.destinationViewController;
-		NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-		BRPrayerType prayerType = (BRPrayerType)indexPath.row;
+		BRPrayerType prayerType;
+		
+		if ([segueId isEqualToString:@"ShowPrayer"]) {
+			NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+			prayerType = (BRPrayerType)indexPath.row;
+		} else { // ShowPrayer.*
+			NSString *prayerQueryId = [segueId substringFromIndex:11];
+			prayerType = [BRPrayer prayerTypeFromQueryId:prayerQueryId];
+		}
+		
 		BRCelebration *celebration = [self.day.celebrations objectAtIndex:self.celebrationIndex];
-		destController.prayer = [celebration.prayers objectAtIndex:prayerType];
-	}
-	else if ([[segueId substringToIndex:11] isEqualToString:@"ShowPrayer."]) {
-		BRPrayerViewController *destController = segue.destinationViewController;
-		NSString *prayerQueryId = [segueId substringFromIndex:11];
-		BRPrayerType prayerType = [BRPrayer prayerTypeFromQueryId:prayerQueryId];
-		BRCelebration *celebration = [self.day.celebrations objectAtIndex:self.celebrationIndex];
-		destController.prayer = [celebration.prayers objectAtIndex:prayerType];
+		destController.prayer = celebration.prayers[prayerType];
+		
+		destController.webView = self.sharedWebView;
+    }
+	else if ([segueId isEqualToString:@"ShowAbout"]) {
+		BRAboutViewController *destController = segue.destinationViewController;
+		destController.webView = self.sharedWebView;
 	}
 }
 
 - (void)datePicker:(BRDatePickerViewController *)datePicker pickedDate:(NSDate *)date
 {
 	self.date = date;
-	self.day = [[BRDataSource instance] dayForDate:self.date];
-	self.celebrationIndex = 0;
-	
+
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 		[self.datePickerPopover dismissPopoverAnimated:YES];
-		[self updateTitleView];
-		[self.tableView reloadData];
 		self.datePickerPopover = nil;
 	}
+    
+    [self loadSelectedDateAndReloadTable:YES resetCelebrationIndex:YES forcePrayerRegeneration:NO];
 }
 
 @end

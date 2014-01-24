@@ -391,7 +391,7 @@ extern short int _global_opt_export_date_format;
 
 // 2011-02-02: presunuté do #define -- kontrola, ktorá zabezpeèuje, že normálne správanie sa slávení nie je prebité pre "CZOP miestne slávenia"
 // 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY(i) aj pre slovenské, ktoré majú nastavené "lokálne" verzie
-#define MIESTNE_SLAVENIE_LOKAL_SVATY(i) (((_global_svaty(i).kalendar == KALENDAR_CZ_OPRAEM) || (_global_svaty(i).kalendar == KALENDAR_SK_OP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OP) || (_global_svaty(i).kalendar == KALENDAR_SK_CSSR) || (_global_svaty(i).kalendar == KALENDAR_SK_SVD) || (_global_svaty(i).kalendar == KALENDAR_SK_SJ) || (_global_svaty(i).kalendar == KALENDAR_SK_SDB) || (_global_svaty(i).kalendar == KALENDAR_SK_OFM) || (_global_svaty(i).typslav_lokal != LOKAL_SLAV_NEURCENE)) && ((_global_svaty(i).smer == 4) || (_global_svaty(i).smer == 8) || (_global_svaty(i).smer == 11)))
+#define MIESTNE_SLAVENIE_LOKAL_SVATY(i) (((_global_svaty(i).kalendar == KALENDAR_CZ_OFMCAP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OPRAEM) || (_global_svaty(i).kalendar == KALENDAR_SK_OP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OP) || (_global_svaty(i).kalendar == KALENDAR_SK_CSSR) || (_global_svaty(i).kalendar == KALENDAR_SK_SVD) || (_global_svaty(i).kalendar == KALENDAR_SK_SJ) || (_global_svaty(i).kalendar == KALENDAR_SK_SDB) || (_global_svaty(i).kalendar == KALENDAR_SK_OFM) || (_global_svaty(i).typslav_lokal != LOKAL_SLAV_NEURCENE)) && ((_global_svaty(i).smer == 4) || (_global_svaty(i).smer == 8) || (_global_svaty(i).smer == 11)))
 
 // 2011-03-18: presunuté samostatne na jedno jediné miesto
 #define PODMIENKA_EXPORTOVAT_KALENDAR ( \
@@ -430,6 +430,7 @@ extern short int _global_opt_export_date_format;
 #define PRVA_ADVENTNA_NEDELA  _global_r._PRVA_ADVENTNA_NEDELA.denvr     // prvá adventná nede¾a
 #define ZOSLANIE_DUCHA_SV  _global_r._ZOSLANIE_DUCHA_SV.denvr           // zoslanie Ducha Svätého
 #define SV_RODINY  _global_r._SVATEJ_RODINY.denvr                       // sviatok svätej rodiny
+#define KRISTA_KNAZA (ZOSLANIE_DUCHA_SV + 4)                            // štvrtok po Zoslaní Ducha Svätého (ZOSLANIE_DUCHA_SV): sviatok Nášho Pána Ježiša Krista, najvyššieho a veèného kòaza (http://www.tkkbs.sk/view.php?cisloclanku=20140115028)
 #define TROJICA (ZOSLANIE_DUCHA_SV + 7)                                 // prvá nede¾a po ZOSLANIE_DUCHA_SV: najsv. Trojice
 // #define TELAKRVI (ZOSLANIE_DUCHA_SV + 11)                               // štvrtok po Trojici: Kristovho tela a krvi (alebo: v krajinách, kde sa presúva na nede¾u)
 #define SRDCA (ZOSLANIE_DUCHA_SV + 19)                                  // piatok po druhej nedeli po ZOSLANIE_DUCHA_SV: najsv. srdca Ježišovho
