@@ -202,7 +202,7 @@ public class Breviar extends Activity {
             view.postDelayed(new Runnable() {
               @Override
               public void run() {
-                final_view.evaluateJavascript("document.getElementById('contentRoot').style.width = window.innerWidth;", null);
+                final_view.evaluateJavascript("document.getElementById('contentRoot').style.width = window.innerWidth - 8;", null);
                 scaleChangedRunning = false;
               }
             }, 100);
