@@ -15,6 +15,7 @@
     <string name="override_locale">Použít tento jazyk také v ovládacích prvcích</string>
     <string name="vol_buttons">Použít tlačítka hlasitosti na listování</string>
     <string name="dimlock">Nezhasínat obrazovku</string>
+    <string name="mute">Vypnúť zvonenie</string>
 
     <string name="alarms">Notifikace</string>
     <string name="alarms_title">Nastavení notifikací:</string>
@@ -72,14 +73,15 @@ největší zásluhu na českém projektu má p. Jan Franta.
 Děkuji za všechny podněty, upozornění na chyby, připomínky a náměty na zlepšení.
 
 <p>
-Děkuji za souhlas na publikování textů Arcibiskupství pražskému a za podporu Arcibiskupství olomouckému.
+Děkuji za souhlas na publikování textů Arcibiskupství pražskému, za podporu Arcibiskupství olomouckému 
+a pomoc p. Koronthálymu z Arcibiskupství pražského při úpravě textů žalmů a kantik.
 
 <h3>Credits</h3>
 <p>
 <b>HTML texts</b><br/>
 SK: Juraj Vidéky et al.<br/>
-CZ: Jan Franta, Juraj Vidéky.<br/>
-HU: Julianna Blahó, Izing Gabriel, László Elek SJ, Juraj Vidéky.<br/>
+CZ: Jan Franta, Vladimír Koronthály, Juraj Vidéky.<br/>
+HU: Julianna Blahó, Izing Gabriel, László Dvornik, László Elek SJ, Juraj Vidéky.<br/>
 <p>
 <b>Android app:</b> 2011-2014 ©&nbsp;Richard Královič.<br/>
 <b>iOS app:</b> 2013-2014 ©&nbsp;Ákos Gyimesi, Oto Komiňák.<br/>
@@ -108,10 +110,17 @@ body { background-color: #000000; color: #cccccc; }
 </style>
 </head>
 <body>
-<p><b>Nové vo verzii v1.9.8:</b>
+<p><b>Nové ve verzi v1.9.9:</b>
 <ul>
-<li> Dlhé stlačenie skryje navigačnú lištu.
-<li> Pridaná možnosť nezhasínať obrazovku.
+<li> Drobné opravy chyb v generování modliteb a překlepů v textech.
+</ul>
+
+<p><b>Nové ve verzi v1.9.8:</b>
+<ul>
+<li> CSS změny: Zalamování žalmů a kantik přepracováno.
+<li> Doplněno číslování veršů žalmů a kantik.
+<li> Dlouhé stlačení skryje spodní navigační lištu.
+<li> Přidaná možnost nezhasínat obrazovku.
 </ul>
 
 <p><b>Nové ve verzi v1.9.7:</b>

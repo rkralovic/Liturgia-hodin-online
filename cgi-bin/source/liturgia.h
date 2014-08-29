@@ -83,6 +83,7 @@
 #include <stdlib.h>
 
 #define MENO_SVIATKU 250
+#define MAX_LC_STR_ID 50
 
 // 2006-07-11: Pridané kvôli jazykovým mutáciám 
 // 2006-12-12: Pridaná latinèina, kódy sú pod¾a ISO 639-1 (až na èeštinu)
@@ -741,6 +742,7 @@ struct dm{
 	char meno[MENO_SVIATKU]; // nazov prip. sviatku
 	short int farba;      // liturgická farba pre slávenie
 	short int kalendar;   // špecifikácia, o aký kalendár ide: všeobecný danej cirkevnej provincie alebo nejaký reho¾ný a pod.
+	char lc_str_id[MAX_LC_STR_ID]; // liturgické èítania: identifikátor pod¾a lc.kbs.sk
 };
 typedef struct dm _struct_dm;
 
@@ -920,7 +922,7 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SVIATOK_SCSC				51
 #define LOKAL_SLAV_DRUHA_VELK_NEDELA_HU		52
 #define LOKAL_SLAV_SZOMBATHELYI_EGYH        53
-#define LOKAL_SLAV_POZS_NAGYSZ_PATRON       54
+#define LOKAL_SLAV_NAGYSZ_PATRON       54
 #define LOKAL_SLAV_SZEGED_CSAN_PATRON       55
 #define LOKAL_SLAV_PECSI_EGYH               56
 #define LOKAL_SLAV_PECSI_EGYH_PATRON        57
@@ -970,6 +972,10 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_OPRAEM_DOKSANY_ZELIV    101
 #define LOKAL_SLAV_OPRAEM_TEPLA            102
 #define LOKAL_SLAV_KONGREGACIA_SMBM        103
+#define LOKAL_SLAV_SPOMIENKA_FMA_CZ	       104
+#define LOKAL_SLAV_LUB_SPOMIENKA_FMA_CZ    105
+#define LOKAL_SLAV_SVIATOK_VDB_CZ          106
+#define LOKAL_SLAV_SLAVNOST_FMA_CZ         107
 
 // 2010-08-03: pridaný kalendár
 #define KALENDAR_NEURCENY                   0
@@ -987,8 +993,10 @@ extern const char *nazov_slavenia_lokal[];
 #define KALENDAR_SK_CM                     12
 #define KALENDAR_CZ_OPRAEM                 13
 #define KALENDAR_CZ_OFMCAP                 14
+#define KALENDAR_CZ_CSSR                   15
+#define KALENDAR_CZ_SDB                    16
 
-#define POCET_KALENDAROV                   14
+#define POCET_KALENDAROV                   16
 
 // filenames for special calendars / názov súbora pre kalendáre
 extern const char *nazov_htm_kalendar[POCET_KALENDAROV + 1];
@@ -1502,8 +1510,9 @@ void analyzuj_rok(short int year);
 	a.prik = NIE_JE_PRIKAZANY_SVIATOK; \
 	a.spolcast = _encode_spol_cast(MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA); \
 	mystrcpy(a.meno, STR_UNDEF, MENO_SVIATKU); \
-	a.farba = LIT_FARBA_NEURCENA;\
-	a.kalendar = KALENDAR_NEURCENY;\
+	a.farba = LIT_FARBA_NEURCENA; \
+	a.kalendar = KALENDAR_NEURCENY; \
+	mystrcpy(a.lc_str_id, STR_EMPTY, MAX_LC_STR_ID); \
 }
 
 // inicializacne definy pridane 2003-08-13
