@@ -1156,6 +1156,7 @@ short int setForm(void){
 				case 8: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_PC); break; // BIT_OPT_5_HYMNUS_VN_PC
 				case 9: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_RCH); break; // BIT_OPT_5_HYMNUS_VN_RCH
 				case 10: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_VESP); break; // BIT_OPT_5_HYMNUS_VN_VESP
+				case 11: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_1VESP); break; // BIT_OPT_5_HYMNUS_1VESP
 			}// switch(i)
 			strcat(local_str, "=");
 			strcat(local_str, pom_MODL_OPTF_ALTERNATIVES[i]);
@@ -3263,8 +3264,8 @@ void interpretParameter(short int type, char *paramname, short int aj_navigacia 
 			}
 			else if(_global_modlitba == MODL_POSV_CITANIE){
 				bit = (je_alternativa_hymnus_ocr) ? BIT_OPT_5_HYMNUS_PC : BIT_OPT_5_HYMNUS_VN_PC;
-				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], (je_alternativa_hymnus_ocr) ? html_text_option5_PCHymnusII[_global_jazyk] : html_text_option5_PCHymnusVNnedela[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], (je_alternativa_hymnus_ocr) ? html_text_option5_PCHymnusI[_global_jazyk] : html_text_option5_PCHymnusVNferia[_global_jazyk]);
+				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], (je_alternativa_hymnus_ocr) ? html_text_option5_PCHymnusII[_global_jazyk] : html_text_option5_PCHymnusVNferia[_global_jazyk]);
+				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], (je_alternativa_hymnus_ocr) ? html_text_option5_PCHymnusI[_global_jazyk] : html_text_option5_PCHymnusVNnedela[_global_jazyk]);
 			}
 			else if(_global_modlitba == MODL_PREDPOLUDNIM){
 				bit = BIT_OPT_5_HYMNUS_MCD_PREDPOL;
@@ -3283,14 +3284,19 @@ void interpretParameter(short int type, char *paramname, short int aj_navigacia 
 			}
 			else if(_global_modlitba == MODL_RANNE_CHVALY){
 				bit = BIT_OPT_5_HYMNUS_VN_RCH;
-				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_RChHymnusVNnedela[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_RChHymnusVNferia[_global_jazyk]);
+				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_RChHymnusVNferia[_global_jazyk]);
+				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_RChHymnusVNnedela[_global_jazyk]);
 			}
 			else if(_global_modlitba == MODL_VESPERY){
 				// 2013-05-14: nie je potrebnÈ, aby tu bolo explicitne kontrolovanÈ, Ëi ide o MODL_PRVE_VESPERY || MODL_DRUHE_VESPERY, pretoûe tie vûdy patria nedeli; alternatÌvny hymnus len pre fÈrie
 				bit = BIT_OPT_5_HYMNUS_VN_VESP;
-				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_VespHymnusVNnedela[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_VespHymnusVNferia[_global_jazyk]);
+				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_VespHymnusVNferia[_global_jazyk]);
+				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_VespHymnusVNnedela[_global_jazyk]);
+			}
+			else if(_global_modlitba == MODL_PRVE_VESPERY){
+				bit = BIT_OPT_5_HYMNUS_1VESP;
+				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_1VHymnusPC[_global_jazyk]);
+				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_option5_1VHymnusNe[_global_jazyk]);
 			}
 			else{
 				podmienka = NIE;
@@ -6348,6 +6354,9 @@ void init_global_string_podnadpis(short int modlitba){
 	Log("-- init_global_string_podnadpis(%d, %s) -- koniec\n", modlitba, nazov_modlitby(modlitba));
 }// init_global_string_podnadpis()
 
+// 2014-09-03: prvÈ pÌsmeno veækÈ maj˙ len n·zvy vlastn˝ch ËastÌ pre CZOP (pre SK chybne d·valo: "panny M·rie")
+#define lowered_nazov_spolc(a) ((_global_jazyk == JAZYK_CZ_OP)? mystr_first_lower(nazov_spolc(a)) : nazov_spolc(a))
+
 short int init_global_string_spol_cast(short int sc_jedna, short int poradie_svateho){
 	// 2012-08-16: vytvorenÈ
 	short int ret_sc = sc_jedna; // obsahuje nejak˙ hodnotu MODL_SPOL_CAST_...: buÔ spol. Ëasù na vstupe alebo ak bol MODL_SPOL_CAST_NULL (-1), tak prv˙ zo zoznamu
@@ -6370,23 +6379,23 @@ short int init_global_string_spol_cast(short int sc_jedna, short int poradie_sva
 
 		if((sc.a1 != MODL_SPOL_CAST_NEURCENA) && (sc.a1 != MODL_SPOL_CAST_NEBRAT)){
 			ret_sc = sc.a1;
-			strcat(_global_string_spol_cast, mystr_first_lower(nazov_spolc(sc.a1)));
+			strcat(_global_string_spol_cast, lowered_nazov_spolc(sc.a1));
 			if(sc.a2 != MODL_SPOL_CAST_NEURCENA){
 				strcat(_global_string_spol_cast, ", ");
 				strcat(_global_string_spol_cast, nazov_spolc_alebo_jazyk[_global_jazyk]);
 				strcat(_global_string_spol_cast, " ");
-				strcat(_global_string_spol_cast, mystr_first_lower(nazov_spolc(sc.a2)));
+				strcat(_global_string_spol_cast, lowered_nazov_spolc(sc.a2));
 				if(sc.a3 != MODL_SPOL_CAST_NEURCENA){
 					strcat(_global_string_spol_cast, ", ");
 					strcat(_global_string_spol_cast, nazov_spolc_alebo_jazyk[_global_jazyk]);
 					strcat(_global_string_spol_cast, " ");
-					strcat(_global_string_spol_cast, mystr_first_lower(nazov_spolc(sc.a3)));
+					strcat(_global_string_spol_cast, lowered_nazov_spolc(sc.a3));
 				}
 			}
 		}
 	}
 	else if((sc_jedna != MODL_SPOL_CAST_NEURCENA) && (sc_jedna != MODL_SPOL_CAST_NEBRAT)){
-		sprintf(_global_string_spol_cast, "%s", mystr_first_lower(nazov_spolc(sc_jedna)));
+		sprintf(_global_string_spol_cast, "%s", lowered_nazov_spolc(sc_jedna));
 	}
 	else{
 		mystrcpy(_global_string_spol_cast, STR_EMPTY, SMALL);
@@ -6622,6 +6631,9 @@ void xml_export_options(void){
 							break;
 						case 10: // BIT_OPT_5_HYMNUS_VN_VESP
 							Export(ELEMOPT_SLASH_BEGIN(XML_BIT_OPT_5_HYMNUS_VN_VESP)"%d"ELEM_END(XML_BIT_OPT_5_HYMNUS_VN_VESP)"\n", BIT_OPT_5_HYMNUS_VN_VESP, STR_MODL_OPTF_5_HYMNUS_VN_VESP, html_text_option5_VespHymnusVNnedela[_global_jazyk], html_text_option5_VespHymnusVNferia[_global_jazyk], ((_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_VN_VESP) == BIT_OPT_5_HYMNUS_VN_VESP));
+							break;
+						case 11: // BIT_OPT_5_HYMNUS_1VESP
+							Export(ELEMOPT_SLASH_BEGIN(XML_BIT_OPT_5_HYMNUS_1VESP)"%d"ELEM_END(XML_BIT_OPT_5_HYMNUS_1VESP)"\n", BIT_OPT_5_HYMNUS_1VESP, STR_MODL_OPTF_5_HYMNUS_VN_VESP, html_text_option5_1VHymnusNe[_global_jazyk], html_text_option5_1VHymnusPC[_global_jazyk], ((_global_opt[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_1VESP) == BIT_OPT_5_HYMNUS_1VESP));
 							break;
 					}// switch(j)
 				}// for j
@@ -9028,6 +9040,13 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 				// pole (checkbox) WWW_/STR_MODL_OPTF_5_HYMNUS_MCD_POPOL
 				_export_main_formular_checkbox_slash(OPT_5_ALTERNATIVES, BIT_OPT_5_HYMNUS_MCD_POPOL, STR_MODL_OPTF_5_HYMNUS_MCD_POPOL, html_text_option5_MCDPoHymnus1[_global_jazyk], html_text_option5_MCDPoHymnus2[_global_jazyk]);
 
+				// prvÈ veöpery
+				Export(HTML_CRLF_LINE_BREAK);
+				Export("<"HTML_SPAN_BOLD_TOOLTIP">%s (%s/%s)"HTML_SPAN_END, nazov_modlitby(MODL_PRVE_VESPERY), nazov_modlitby(MODL_PRVE_VESPERY), nazov_dna(DEN_NEDELA), nazov_obdobia(OBD_CEZ_ROK));
+
+				// pole (checkbox) WWW_/STR_MODL_OPTF_5_HYMNUS_1VESP
+				_export_main_formular_checkbox_slash(OPT_5_ALTERNATIVES, BIT_OPT_5_HYMNUS_1VESP, STR_MODL_OPTF_5_HYMNUS_1VESP, html_text_option5_1VHymnusNe[_global_jazyk], html_text_option5_1VHymnusPC[_global_jazyk]);
+
 				// kompletÛrium
 				Export(HTML_CRLF_LINE_BREAK);
 				Export("<"HTML_SPAN_BOLD_TOOLTIP">%s"HTML_SPAN_END, nazov_modlitby(MODL_KOMPLETORIUM), nazov_modlitby(MODL_KOMPLETORIUM));
@@ -9071,6 +9090,7 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 			Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_5_HYMNUS_VN_PC, ((_global_optf[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_VN_PC) == BIT_OPT_5_HYMNUS_VN_PC)? ANO: NIE);
 			Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_5_HYMNUS_VN_RCH, ((_global_optf[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_VN_RCH) == BIT_OPT_5_HYMNUS_VN_RCH)? ANO: NIE);
 			Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_5_HYMNUS_VN_VESP, ((_global_optf[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_VN_VESP) == BIT_OPT_5_HYMNUS_VN_VESP)? ANO: NIE);
+			Export("<"HTML_FORM_INPUT_HIDDEN" name=\"%s\" value=\"%d\">\n", STR_MODL_OPTF_5_HYMNUS_1VESP, ((_global_optf[OPT_5_ALTERNATIVES] & BIT_OPT_5_HYMNUS_1VESP) == BIT_OPT_5_HYMNUS_1VESP)? ANO: NIE);
 		}// else: treba nastaviù hidden pre vöetky options pre _global_optf
 
 		Export("</td></tr>\n");
@@ -10887,6 +10907,8 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 	_type_kompletorium *_local_modl_kompletorium_ptr;
 #define _local_modl_kompletorium (*_local_modl_kompletorium_ptr)
 
+	short _local_spol_cast = MODL_SPOL_CAST_NEURCENA;
+
 	Log("Allocating memory...\n");
 // _local_modl_prve_vespery_ptr
 	if((_local_modl_prve_vespery_ptr = (_type_1vespery*) malloc(sizeof(_type_1vespery))) == NULL){
@@ -10977,7 +10999,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 		LOG_ciara;
 
 		_local_den = _global_den;
-
+		_local_spol_cast = _global_opt[OPT_3_SPOLOCNA_CAST]; // 2014-09-03: uchovanie prÌpadne zmenenej spoloËnej Ëasti
 		_local_modl_prve_vespery = _global_modl_prve_vespery;
 		_local_modl_prve_kompletorium = _global_modl_prve_kompletorium;
 		_local_modl_vespery = _global_modl_vespery;
@@ -11121,8 +11143,19 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 			Log("nastavujem _global_string_modlitba... if((_global_den.smer < 5) || ...\n");
 			init_global_string_modlitba(modlitba);
+
 			Log("nastavujem _global_string_podnadpis... if((_global_den.smer < 5) || ...\n");
 			init_global_string_podnadpis(modlitba);
+
+			Log("kontrolujem _global_opt[OPT_3_SPOLOCNA_CAST]... if((_global_den.smer < 5) || : ");
+			if(_local_spol_cast != MODL_SPOL_CAST_NEURCENA){
+				_global_opt[OPT_3_SPOLOCNA_CAST] = _local_spol_cast;
+				Log("upravenÈ podæa _local_spol_cast na %s (%d)\n", nazov_spolc(_local_spol_cast), _local_spol_cast);
+			}
+			else{
+				Log("bez ˙pravy.\n");
+			}
+
 			Log("nastavujem _global_string_spol_cast... if((_global_den.smer < 5) || ...\n");
 			ret_sc = init_global_string_spol_cast(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], poradie_svaty);
 		}// _global_den ma dvoje vespery/kompletorium, teda musime brat DRUHE
@@ -11199,10 +11232,22 @@ LABEL_ZMENA:
 
 				Log("v Ëasti LABEL_ZMENA nastavujem _global_string...\n");
 				mystrcpy(_global_string, _local_string, MAX_GLOBAL_STR); // veækosù 2011-09-27 opraven· podæa _global_string
+
 				Log("v Ëasti LABEL_ZMENA nastavujem _global_string_modlitba...\n");
 				init_global_string_modlitba(modlitba);
+
 				Log("v Ëasti LABEL_ZMENA nastavujem _global_string_podnadpis...\n");
 				init_global_string_podnadpis(modlitba);
+
+				Log("v Ëasti LABEL_ZMENA kontrolujem _global_opt[OPT_3_SPOLOCNA_CAST]: ");
+				if(_local_spol_cast != MODL_SPOL_CAST_NEURCENA){
+					_global_opt[OPT_3_SPOLOCNA_CAST] = _local_spol_cast;
+					Log("upravenÈ podæa _local_spol_cast na %s (%d)\n", nazov_spolc(_local_spol_cast), _local_spol_cast);
+				}
+				else{
+					Log("bez ˙pravy.\n");
+				}
+
 				Log("v Ëasti LABEL_ZMENA nastavujem _global_string_spol_cast...\n"); // potrebnÈ pouûiù svaty_dalsi_den
 				ret_sc = init_global_string_spol_cast(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA))? MODL_SPOL_CAST_NULL: _global_opt[OPT_3_SPOLOCNA_CAST], _global_poradie_svaty /* svaty_dalsi_den */);
 			}
@@ -14784,6 +14829,7 @@ short int getForm(void){
 			case 8: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_PC); break; // BIT_OPT_5_HYMNUS_VN_PC
 			case 9: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_RCH); break; // BIT_OPT_5_HYMNUS_VN_RCH
 			case 10: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_VESP); break; // BIT_OPT_5_HYMNUS_VN_VESP
+			case 11: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_1VESP); break; // BIT_OPT_5_HYMNUS_1VESP
 		}// switch(i)
 		ptr = getenv(local_str);
 		if(ptr != NULL){
@@ -15612,6 +15658,7 @@ short int parseQueryString(void){
 			case 8: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_PC); break; // BIT_OPT_5_HYMNUS_VN_PC
 			case 9: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_RCH); break; // BIT_OPT_5_HYMNUS_VN_RCH
 			case 10: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_VN_VESP); break; // BIT_OPT_5_HYMNUS_VN_VESP
+			case 11: strcat(local_str, STR_MODL_OPTF_5_HYMNUS_1VESP); break; // BIT_OPT_5_HYMNUS_1VESP
 		}// switch(j)
 		// premenn· WWW_MODL_OPTF_5_... (nepovinn·), j = 0 aû POCET_OPT_5_ALTERNATIVES
 		i = pocet; // backwards; param[0] by mal sÌce obsahovaù query type, ale radöej kontrolujeme aû po 0
