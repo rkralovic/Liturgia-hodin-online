@@ -80,6 +80,7 @@
 #define FALSE 0
 #define ANO   1
 #define NIE   0
+#define CIASTOCNE 2
 
 #define MAX_GLOBAL_STR		2048 // _global_string; 31/03/2000A.D.; 2010-12-07: rozšírené; 2011-01-31: rozšírené kvôli text_JAN_31_SDB[]; 2011-02-02: rozšírené kvôli text_FEB_04_SJ[];
 #define MAX_GLOBAL_STR2		200 // _global_string2, pridané 2006-08-19
@@ -122,13 +123,15 @@ void updateUnCGIName(void);
 extern char FILE_PATH[MAX_STR]; // inicializovane v breviar.cpp
  */
 
-#define MESSAGE_FOLDER "msg/"
-#define FILE_PRESTUPNY_ROK		MESSAGE_FOLDER"prestupn.htm"
-#define FILE_JULIANSKY_DATUM	MESSAGE_FOLDER"juldat.htm"
-#define FILE_NEDELNE_PISMENO	MESSAGE_FOLDER"nedpism.htm"
-#define FILE_LITURGICKY_ROK	    MESSAGE_FOLDER"lr-pism.htm"
-#define FILE_NAME_POKEC         MESSAGE_FOLDER"xxx"
-#define FILE_NAME_CHYBA         MESSAGE_FOLDER"chyba.htm"
+#define DOCS_FOLDER "docs"
+
+#define MESSAGE_FOLDER "msg"
+#define FILE_PRESTUPNY_ROK		MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"prestupn.htm"
+#define FILE_JULIANSKY_DATUM	MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"juldat.htm"
+#define FILE_NEDELNE_PISMENO	MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"nedpism.htm"
+#define FILE_LITURGICKY_ROK	    MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"lr-pism.htm"
+#define FILE_NAME_POKEC         MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"xxx"
+#define FILE_NAME_CHYBA         MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"chyba.htm"
 
 extern short int query_type; // premenna obsahujuca PRM_...
 
@@ -204,7 +207,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_PRM_MESIAC_ROKA "pmr"
 #endif
 
-// pridana konstanta pre batch mode; 2003-07-04
 #define PRM_BATCH_MODE 21
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_BATCH_MODE "PRM_BATCH_MODE"
@@ -224,6 +226,13 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_PRM_XML "PRM_XML_EXPORT"
 #else
 	#define STR_PRM_XML "pxml"
+#endif
+
+#define PRM_STATIC_TEXT 	22
+#ifdef LONG_PARAM_NAMES
+	#define STR_PRM_STATIC_TEXT "PRM_STATIC_TEXT"
+#else
+	#define STR_PRM_STATIC_TEXT "pst"
 #endif
 
 // nasleduju parametre z formularov pre vsetky typy dotazov,
@@ -353,6 +362,23 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #else
 	#define STR_TABULKA_LINKY "hl" // od 'hyperlinks'
 #endif
+
+// nasleduju parametre z formularov pre dotaz PRM_STATIC_TEXT
+#define STATIC_TEXT 14
+#ifdef LONG_PARAM_NAMES
+	#define STR_STATIC_TEXT "STATIC_TEXT"
+#else
+	#define STR_STATIC_TEXT "st"
+#endif
+
+#define MODL_ORDINARIUM 39
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_ORDINARIUM "MODL_ORDINARIUM"
+#else
+	#define STR_MODL_ORDINARIUM "pp"
+#endif
+
+//
 
 #define PRM_DETAILY 30 // dotaz na konkretny datum, to iste ako PRM_DATUM
 #ifdef LONG_PARAM_NAMES
@@ -526,11 +552,19 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #endif
 
 // buttons order: 0 = date navigation BEFORE info on day (default for web); 1 = day details first (with prayer buttons) (default for mobile apps)
-#define MODL_OPTF_0_BUTTONS_ORDER
+#define MODL_OPTF_0_BUTTONS_ORDER 68
 #ifdef LONG_PARAM_NAMES
 	#define STR_MODL_OPTF_0_BUTTONS_ORDER "MODL_OPTF_0_BUTTONS_ORDER"
 #else
 	#define STR_MODL_OPTF_0_BUTTONS_ORDER "of0bo"
+#endif
+
+// blind-friendly mode
+#define MODL_OPTF_0_BLIND_FRIENDLY 69
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF_0_BLIND_FRIENDLY "MODL_OPTF_0_BLIND_FRIENDLY"
+#else
+	#define STR_MODL_OPTF_0_BLIND_FRIENDLY "of0bf"
 #endif
 
 // pre force option 1 jednotlivé bit-komponenty (parciálne vo¾by)
@@ -962,26 +996,30 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_NONBREAKING_SPACE_LOOONG "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 #define HTML_LINE_BREAK_SPACE_LOONG ((_global_jazyk != JAZYK_CZ)?(HTML_NONBREAKING_SPACE""HTML_SLASH""HTML_NONBREAKING_SPACE""HTML_LINE_BREAK""HTML_NONBREAKING_SPACE_LOOONG):(HTML_NONBREAKING_SPACE""HTML_SLASH""HTML_NONBREAKING_SPACE))
 
-#define HTML_DIV_RED_SMALL  "div class=\"redsmall\""
-#define HTML_DIV_END  "</div>"
+#define HTML_DIV_END             "</div>"
 
-#define HTML_SPAN_END "</span>"
+#define HTML_DIV_RED_SMALL       "div class=\"redsmall\""
+#define HTML_DIV_RED_SUBTITLE    "div class=\"redsubtitle\""
 
-#define HTML_SPAN_NORMAL    "span class=\"normal\""
-#define HTML_SPAN_ITALIC    "span class=\"it\""
-#define HTML_SPAN_BOLD      "span class=\"bold\""
-#define HTML_SPAN_BOLD_IT   "span class=\"boldit\""
-#define HTML_SPAN_RED       "span class=\"red\""
-#define HTML_SPAN_RED_BOLD  "span class=\"redbold\""
-#define HTML_SPAN_BLUE      "span class=\"blue\""
-#define HTML_SPAN_BLUE_BOLD "span class=\"bluebold\""
-#define HTML_SPAN_RED_SMALL "span class=\"redsmall\""
-#define HTML_SPAN_SMALL     "span class=\"small\""
-#define HTML_SPAN_EXPLAIN   "span class=\"explain\""
-#define HTML_SPAN_PARAMETER "span class=\"parameter\""
-#define HTML_SPAN_VALUE     "span class=\"value\""
-#define HTML_SPAN_SMALLCAPS "span class=\"smallcaps\""
-#define HTML_SPAN_XS_CAPS   "span class=\"xsmallcaps\""
+#define HTML_SPAN_END            "</span>"
+
+#define HTML_SPAN_NORMAL         "span class=\"normal\""
+#define HTML_SPAN_ITALIC         "span class=\"it\""
+#define HTML_SPAN_BOLD           "span class=\"bold\""
+#define HTML_SPAN_BOLD_IT        "span class=\"boldit\""
+#define HTML_SPAN_RED_TITLE      "span class=\"redtitle\""
+#define HTML_SPAN_RED            "span class=\"red\""
+#define HTML_SPAN_RED_BOLD       "span class=\"redbold\""
+#define HTML_SPAN_BLUE           "span class=\"blue\""
+#define HTML_SPAN_BLUE_BOLD      "span class=\"bluebold\""
+#define HTML_SPAN_RED_SMALL      "span class=\"redsmall\""
+#define HTML_SPAN_RED_SUBTITLE   "span class=\"redsubtitle\""
+#define HTML_SPAN_SMALL          "span class=\"small\""
+#define HTML_SPAN_EXPLAIN        "span class=\"explain\""
+#define HTML_SPAN_PARAMETER      "span class=\"parameter\""
+#define HTML_SPAN_VALUE          "span class=\"value\""
+#define HTML_SPAN_SMALLCAPS      "span class=\"smallcaps\""
+#define HTML_SPAN_XS_CAPS        "span class=\"xsmallcaps\""
 
 #define HTML_CLASS_CALENDAR "class=\"calendar\""
 #define HTML_CALENDAR_HEADING "span class=\"calendar heading\""
@@ -1029,6 +1067,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 
 #define HTML_LINK_CALL1         "%s?%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s"
 #define HTML_LINK_CALL2         "%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s"
+#define HTML_LINK_CALL3         "%s?%s=%s"HTML_AMPERSAND"%s=%s%s"
 #define HTML_LINK_CALL_PARAM    HTML_AMPERSAND"%s=%s"
 // 2011-01-26: pridané jednoduché šípky v¾avo/vpravo
 #define HTML_LEFT_ARROW_SINGLE	"&lsaquo;"
@@ -1129,6 +1168,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define XML_BIT_OPT_0_TELAKRVI_NEDELA           "BitOpt0CorpusChristiOnSunday"
 #define XML_BIT_OPT_0_FONT_NORMAL               "BitOpt0ForceNormalFontWeight"
 #define XML_BIT_OPT_0_BUTTONS_ORDER             "BitOpt0ButtonsOrder"
+#define XML_BIT_OPT_0_BLIND_FRIENDLY            "BitOpt0BlindFriendly"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"

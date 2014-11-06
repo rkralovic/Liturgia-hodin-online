@@ -62,7 +62,7 @@ extern short int query_type; // premenna obsahujuca PRM_..., deklarovana v mydef
 
 extern void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short int den_zoznam = ANO, short int zobrazit_mcd = ANO);
 extern void _export_rozbor_dna_buttons_dni_dnes(short int dnes_dnes, short int som_v_tabulke, char pom2[MAX_STR], short int zobraz_odkaz_na_skrytie);
-extern void _export_rozbor_dna_buttons_dni(short int typ, short int dnes_dnes = ANO);
+extern void _export_rozbor_dna_buttons_dni(short int typ, short int dnes_dnes = ANO, short int aj_navigacia = ANO);
 extern void _export_rozbor_dna_buttons_dni_orig(short int typ, short int dnes_dnes = ANO);
 extern void _export_rozbor_dna_buttons_dni_compact(short int typ, short int dnes_dnes = ANO);
 extern void _export_rozbor_dna_buttons_dni_call(short int typ, short int dnes_dnes = ANO);
@@ -130,6 +130,9 @@ extern _type_kompletorium *_global_modl_kompletorium_ptr;
 // _type_kompletorium _global_modl_kompletorium;
 #define _global_modl_kompletorium (*_global_modl_kompletorium_ptr)
 
+extern _struct_anchor_and_file *_global_include_static_text_ptr;
+#define _global_include_static_text (*_global_include_static_text_ptr)
+
 // globalna premenna, ktora obsahuje MODL_...
 extern short int _global_modlitba;
 
@@ -176,6 +179,8 @@ extern char *_global_buf2; // 2006-08-01: túto premennú tiež alokujeme
 extern short int _global_jazyk;
 // 2010-08-04: pridané kvôli kalendárom (napr. reho¾ný), súvisí s jazykovými mutáciami
 extern short int _global_kalendar;
+// 2014-09-22: pridané
+extern short int _global_ritus;
 
 extern short int _global_css; // 2008-08-08: Pridané kvôli rôznym css
 
@@ -203,17 +208,24 @@ extern char _global_css_font_size[SMALL];
 extern char _global_export_navig_hore[SMALL];
 extern short int _global_opt_export_date_format;
 
-// 2009-01-28: jednotlivé define týkajúce sa riadenia modlitby presunuté sem na zaèiatok súboru, nako¾ko ich používa nielen interpretParameter() alebo showPrayer(), ale aj includeFile()
-// 2009-08-11: opravená podmienka pre je_tedeum (odstránené nepotrebné 9.11.)
-// 2010-05-14: definy presunuté z breviar.cpp
-// 2012-02-09: definované je_privileg pre testovanie, èi ide o privilegované dni (VSLH è. 238-239): to isté ako je_post + december poènúc 17.-tym (všedné di od 17. do 24. decembra a Vianoèná oktáva); striktne by tu nemal by ve¾ký týždeò a ve¾konoèné trojdnie, ale nezaškodí to tu
-#define je_privileg ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && ((_global_den.denvt == DEN_PIATOK) || (_global_den.denvt == DEN_SOBOTA))) || ((_global_den.mesiac - 1 == MES_DEC) && (_global_den.den >= 17)))
+#define set_tyzzal_1_2(tyzzal) ((tyzzal > 2)? (tyzzal - 2) : tyzzal)
+
+#define je_modlitba_cez_den(modlitba) ((modlitba == MODL_PREDPOLUDNIM) || (modlitba == MODL_NAPOLUDNIE) || (modlitba == MODL_POPOLUDNI))
+#define je_kompletorium12(modlitba) ((modlitba == MODL_KOMPLETORIUM) || (modlitba == MODL_PRVE_KOMPLETORIUM) || (modlitba == MODL_DRUHE_KOMPLETORIUM))
+
+#define je_modlitba_ok_buttons(modlitba) ((modlitba >= MODL_INVITATORIUM) && (modlitba < MODL_NEURCENA))
+
+#define je_vianocne(litobd) ((litobd == OBD_VIANOCNE_I) || (litobd == OBD_VIANOCNE_II))
+
 #define je_post ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && ((_global_den.denvt == DEN_PIATOK) || (_global_den.denvt == DEN_SOBOTA))))
 #define je_velka_noc ((_global_den.litobd == OBD_VELKONOCNE_I) || (_global_den.litobd == OBD_VELKONOCNE_II) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && (_global_den.denvt == DEN_NEDELA)) || (_global_den.litobd == OBD_VELKONOCNA_OKTAVA))
 #define je_aleluja_aleluja ((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && (_global_den.denvt == DEN_NEDELA)) || ((_global_den.denvr == _global_r._ZOSLANIE_DUCHA_SV.denvr) && ((_global_modlitba == MODL_VESPERY) || (_global_modlitba == MODL_DRUHE_VESPERY))))
 #define je_34_ocr ((_global_den.litobd == OBD_CEZ_ROK) && (_global_den.tyzden == 34) && (_global_den.denvt != DEN_NEDELA))
 #define je_tedeum (type == MODL_POSV_CITANIE) && (((_global_den.denvt == DEN_NEDELA) && (_global_den.litobd != OBD_POSTNE_I) && (_global_den.litobd != OBD_POSTNE_II_VELKY_TYZDEN)) || (_global_den.typslav == SLAV_SLAVNOST) || (_global_den.typslav == SLAV_SVIATOK) || (_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || (_global_den.litobd == OBD_OKTAVA_NARODENIA))
-// 2010-05-24: doplnené; 2011-03-16: rozšírené o posvätné èítanie
+
+// 2012-02-09: definované je_privileg pre testovanie, èi ide o privilegované dni (VSLH è. 238-239): to isté ako je_post + december poènúc 17.-tym (všedné di od 17. do 24. decembra a Vianoèná oktáva); striktne by tu nemal by ve¾ký týždeò a ve¾konoèné trojdnie, ale nezaškodí to tu
+#define je_privileg ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && ((_global_den.denvt == DEN_PIATOK) || (_global_den.denvt == DEN_SOBOTA))) || ((_global_den.mesiac - 1 == MES_DEC) && (_global_den.den >= 17)))
+
 #define je_ant_modl_spomprivileg (( \
 (_global_modlitba == MODL_RANNE_CHVALY &&  \
 	(_global_modl_ranne_chvaly.ant_spomprivileg.anchor != NULL) && (_global_modl_ranne_chvaly.ant_spomprivileg.file != NULL) && \
@@ -407,14 +419,14 @@ extern short int _global_opt_export_date_format;
 // 2014-01-10: doplnené 02FEB (ak padne na nede¾u, má prvé vešpery)
 // 2014-04-08: 14SEP platí aj pre CZ (ak padne na nede¾u, má prvé vešpery)
 #define PODMIENKA_SVIATKY_PANA_SVATYCH_PREDNOST (\
-((_global_den.den == 6) && (_global_den.mesiac - 1 == MES_AUG)) || \
 ((_global_den.den == 2) && (_global_den.mesiac - 1 == MES_FEB)) || \
-((_global_den.den == 15) && (_global_den.mesiac - 1 == MES_AUG)) || \
 ((_global_den.den == 29) && (_global_den.mesiac - 1 == MES_JUN)) || \
 ((_global_den.den == 5) && (_global_den.mesiac - 1 == MES_JUL) && ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP))) || \
+((_global_den.den == 6) && (_global_den.mesiac - 1 == MES_AUG)) || \
+((_global_den.den == 15) && (_global_den.mesiac - 1 == MES_AUG)) || \
 ((_global_den.den == 20) && (_global_den.mesiac - 1 == MES_AUG) && (_global_jazyk == JAZYK_HU)) || \
-((_global_den.den == 28) && (_global_den.mesiac - 1 == MES_SEP) && ((_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP))) || \
 ((_global_den.den == 14) && (_global_den.mesiac - 1 == MES_SEP)) || \
+((_global_den.den == 28) && (_global_den.mesiac - 1 == MES_SEP) && ((_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP))) || \
 ((_global_den.den == 1) && (_global_den.mesiac - 1 == MES_NOV)) \
 )
 

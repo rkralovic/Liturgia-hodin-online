@@ -189,6 +189,16 @@ short int _allocate_global_var(void){
 		_INIT_TMODLITBA3(_global_modl_kompletorium);
 	}
 
+// _global_include_static_text_ptr
+	if((_global_include_static_text_ptr = (_struct_anchor_and_file*) malloc(sizeof(_struct_anchor_and_file))) == NULL){
+		Log("  Not enough memory to allocate buffer for `_global_include_static_text_ptr'\n");
+		ret = FAILURE;
+	}
+	else{
+		Log("  %d bytes for `_global_include_static_text_ptr'\n", sizeof(_struct_anchor_and_file));
+		_INIT_ANCHOR_AND_FILE(_global_include_static_text);
+	}
+
 // _global_r_ptr
 	if((_global_r_ptr = (_struct_lrok*) malloc(sizeof(_struct_lrok))) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_r_ptr'\n");
@@ -529,9 +539,6 @@ void prilep_request_options(char pom2 [MAX_STR], char pom3 [MAX_STR], short int 
 	short int podmienka;
 	for(i = 0; i < POCET_GLOBAL_OPT; i++){
 		Log("i == %d...\n", i);
-/*		if(i == 3)
-			continue;
-*/
 		local_opt_default = CFG_OPTION_DEFAULT(i);
 		if(force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE){
 			Log("_global_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %d;\n", i, _global_opt[i], i, local_opt_default);
@@ -553,7 +560,7 @@ void prilep_request_options(char pom2 [MAX_STR], char pom3 [MAX_STR], short int 
 			}// switch(i)
 			sprintf(pom3, HTML_AMPERSAND"%s=%d", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE)? _global_opt[i]: _global_optf[i]);
 			strcat(pom2, pom3);
-			Log("\tPrilepil som aj opt%c %d: `%s'\n", (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE)? ' ': 'f', i, pom3);
+			Log("\tPrilepil som aj opt%c %d: `%s'\n", (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE)? CHAR_SPACE: 'f', i, pom3);
 		}
 	}// for i
 
@@ -1440,6 +1447,44 @@ void _dm_velkonocna_nedela(short int rok, short int _vn){
 	mystrcpy(_global_result.lc_str_id, "1V", MAX_LC_STR_ID);
 }// _dm_velkonocna_nedela()
 
+short int modlitba_predchadzajuca(short int modlitba, short int exclude_mcd_komplet){
+	short int ret = modlitba - 1;
+
+	if(exclude_mcd_komplet == ANO){
+		if(je_modlitba_cez_den(ret)){
+			ret = MODL_RANNE_CHVALY;
+		}
+		else if(je_kompletorium12(ret)){
+			;
+		}
+	}
+
+	// kontrola
+	if(!je_modlitba_ok_buttons(ret)){
+		ret = MODL_NEURCENA;
+	}
+	return ret;
+}// modlitba_predchadzajuca()
+
+short int modlitba_nasledujuca(short int modlitba, short int exclude_mcd_komplet){
+	short int ret = modlitba + 1;
+
+	if(exclude_mcd_komplet == ANO){
+		if(je_modlitba_cez_den(ret)){
+			ret = MODL_VESPERY;
+		}
+		else if(je_kompletorium12(ret)){
+			ret = MODL_NEURCENA;
+		}
+	}
+
+	// kontrola
+	if(!je_modlitba_ok_buttons(ret)){
+		ret = MODL_NEURCENA;
+	}
+	return ret;
+}// modlitba_nasledujuca()
+
 //---------------------------------------------------------------------
 /* analyzuj_rok()
  *
@@ -1615,6 +1660,10 @@ void Log(struct tmodlitba5 t){
 	Log_struktura_tm5("   chval3                file `%s', anchor `%s'\n", t.chval3.file, t.chval3.anchor);
 	Log_struktura_tm5("   evanjelium            file `%s', anchor `%s'\n", t.evanjelium.file, t.evanjelium.anchor);
 	Log_struktura_tm5("   modlitba              file `%s', anchor `%s'\n", t.modlitba.file, t.modlitba.anchor);
+}
+
+void Log_filename_anchor(_struct_anchor_and_file af){
+	Log("file `%s', anchor `%s'\n", af.file, af.anchor);
 }
 
 //---------------------------------------------------------------------

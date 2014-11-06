@@ -53,15 +53,22 @@
 const char *TEMPLAT[POCET_MODLITIEB + 1] =
 {TEMPLAT_INVITATORIUM, TEMPLAT_POSV_CITANIE, TEMPLAT_RANNE_CHVALY,
  TEMPLAT_CEZ_DEN_9, TEMPLAT_CEZ_DEN_12, TEMPLAT_CEZ_DEN_3,
- TEMPLAT_VESPERY, TEMPLAT_KOMPLETORIUM, STR_EMPTY,
+ TEMPLAT_VESPERY, TEMPLAT_KOMPLETORIUM, TEMPLAT_STATIC_TEXT,
  TEMPLAT_VESPERY, TEMPLAT_KOMPLETORIUM, 
- TEMPLAT_VESPERY, TEMPLAT_KOMPLETORIUM, TEMPLAT_NEURCENY, TEMPLAT_NEURCENY};
+ TEMPLAT_VESPERY, TEMPLAT_KOMPLETORIUM, TEMPLAT_EMPTY, TEMPLAT_EMPTY};
+
+const char *ORDINARIUM[POCET_MODLITIEB + 1] =
+{ORDINARIUM_INVITATORIUM, ORDINARIUM_POSV_CITANIE, ORDINARIUM_RANNE_CHVALY,
+ ORDINARIUM_CEZ_DEN, ORDINARIUM_CEZ_DEN, ORDINARIUM_CEZ_DEN,
+ ORDINARIUM_VESPERY, ORDINARIUM_KOMPLETORIUM, ORDINARIUM_EMPTY,
+ ORDINARIUM_VESPERY, ORDINARIUM_KOMPLETORIUM, 
+ ORDINARIUM_VESPERY, ORDINARIUM_KOMPLETORIUM, ORDINARIUM_EMPTY, ORDINARIUM_EMPTY};
 
 // 2008-04-09: doplnené pre batch generovanie modlitieb
 const char char_modlitby[POCET_MODLITIEB + 1] =
 {CHAR_MODL_INVITATORIUM, CHAR_MODL_POSV_CITANIE, CHAR_MODL_RANNE_CHVALY, 
  CHAR_MODL_CEZ_DEN_9, CHAR_MODL_CEZ_DEN_12, CHAR_MODL_CEZ_DEN_3,
- CHAR_MODL_VESPERY, CHAR_MODL_KOMPLETORIUM, 32 /* ' ' */,
+ CHAR_MODL_VESPERY, CHAR_MODL_KOMPLETORIUM, CHAR_SPACE,
  CHAR_MODL_PRVE_VESPERY, CHAR_MODL_PRVE_KOMPLETORIUM, 
  CHAR_MODL_VESPERY, CHAR_MODL_KOMPLETORIUM, CHAR_MODL_NEURCENA, CHAR_MODL_VSETKY};
 
@@ -500,7 +507,7 @@ const char *nazov_kalendara_long[POCET_KALENDAROV + 1] =
 ,"obecnı [pro Èechy a Moravu]"
 ,""
 ,"pre Kongregáciu najsv. Vykupite¾a — redemptoristov (CSsR)" // bol ve¾mi dlhı combo-box, keï bolo: "pre Kongregáciu najsvätejšieho Vykupite¾a — redemptoristov (CSsR)"
-,""
+,"általános [Magyarország]"
 ,"pre Spoloènos Boieho Slova — verbistov (SVD)"
 ,"pre Spoloènos Jeišovu — jezuitov (SJ)"
 ,"pre saleziánsku rodinu — SDB, FMA, ASC" // bolo VDB -> ASC; saleziáni spolupracovníci majú skratku ASC - Associazione dei salesiani cooperatori - teda Zdruzenie salezianov spolupravovnikov (upozornil Mao Linhart, 2012-02-13)
@@ -514,6 +521,8 @@ const char *nazov_kalendara_long[POCET_KALENDAROV + 1] =
 ,"s vlastními texty Kongregace nejsv. Vykupitele — redemptoristù (CSsR)"
 ,"s vlastními texty pro salesiánskou rodinu" // (SDB, FMA, VDB, ASC)
 };
+
+#define nazov_kalendara(kalendar) ((kalendar == KALENDAR_NEURCENY) || (kalendar == KALENDAR_VSEOBECNY) || (equals(nazov_kalendara_long[kalendar], STR_EMPTY))? nazov_kalendara_long[default_kalendar[_global_jazyk]] : nazov_kalendara_long[kalendar])
 
 // special "local" or "partial" characteristics of various celebrations - each in one language; no need to translate; special strings will be added
 // 2007-08-31: upravené TT -> BA-TT
@@ -618,7 +627,7 @@ const char *nazov_slavenia_lokal[] =
 ,"pre OFS: sviatok"                                                                                             // LOKAL_SLAV_SVIATOK_OFS
 ,"pre OFMConv., OFMCap: spomienka"                                                                              // LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP
 ,"pre OSC: slávnos"                                                                                            // LOKAL_SLAV_SPOMIENKA_OSC
-,"pre Slovensko zatia¾ nedovolené slávenie"                                                                     // LOKAL_SLAV_NEDOVOLENE
+,"pre Slovensko zatia¾ nedovolené slávenie"                                                                     // LOKAL_SLAV_NEDOVOLENE_SK
 ,"Katonai Ordinariátus: "HTML_LINE_BREAK"Az Ordinariátus védõszentje; fõünnep"                                  // LOKAL_SLAV_KATONAI_ORDINARIAT
 ,"Debrecen-Nyíregyháza: "HTML_LINE_BREAK"A székesegyház felszentelése; fõünnep"                                 // LOKAL_SLAV_DEBR_NYIREGY
 ,"jen kanonie Doksany"                                                                                          // LOKAL_SLAV_OPRAEM_DOKSANY
@@ -963,6 +972,18 @@ const char *poradie_SLOVOM_jazyk[POCET_TYZDNOV + 1][POCET_JAZYKOV + 1] =
 , {"34. ", "34", "34", "34", "34", "34", "34."}
 };
 
+// the names of rites
+const char *nazov_ritu_jazyka[POCET_JAZYKOV + 1][POCET_RITOV + 1] =
+{{"rímskokatolícky", "gréckokatolícky"},
+ {"øímskokatolickı", "øeckokatolickı"},
+ {"Roman catholic", "Greek catholic"},
+ {"Roman catholic", "Greek catholic"},
+ {"Roman catholic", "Greek catholic"},
+ {"øímskokatolickı", "øeckokatolickı"},
+ {"római katolikus", "görög katolikus"},
+};
+#define nazov_ritu(a) nazov_ritu_jazyka[_global_jazyk][a]
+
 // the names of languages
 // 2006-07-11: Pridané kvôli jazykovım mutáciám
 const char *nazov_jazyka[POCET_JAZYKOV + 1] =
@@ -997,15 +1018,21 @@ const char *skratka_css[POCET_CSS + 1] =
 const short int default_css_jazyk[POCET_JAZYKOV + 1] =
 {CSS_breviar_sk, CSS_ebreviar_cz, CSS_breviar_sk, CSS_breviar_sk, CSS_breviar_sk, CSS_ebreviar_cz, CSS_breviar_sk};
 
-// CSS obsahujuci invertovane farby
+// CSS obsahujuci invertovane farby | CSS for "night mode" (inverted colors) - includes ONLY ammendment to base css (breviar.css)
 const char *nazov_css_invert_colors = "breviar-invert-colors.css";
 
-// CSS obsahujuci force normal font weight
+// CSS obsahujuci force normal font weight | CSS for "no-bold mode" (only normal font) - includes ONLY ammendment to base css (breviar.css)
 const char *nazov_css_normal_font_weight = "breviar-normal-font.css";
+
+// blind-friendly CSS | includes ONLY ammendment to base css (breviar.css)
+const char *nazov_css_blind_friendly = "breviar-blind-friendly.css";
 
 // language charset (encoding); used for HTML heading
 const char *charset_jazyka[POCET_JAZYKOV + 1] =
-{"windows-1250", "windows-1250", "windows-1251", "windows-1251", "utf-8", "windows-1250", "windows-1250"};
+{"windows-1250", "windows-1250", "windows-1250", "windows-1250", "utf-8", "windows-1250", "windows-1250"};
+
+const char *skratka_static_text[POCET_STATIC_TEXTOV + 1] = 
+{"", "ma", "ord"};
 
 // 2011-05-06: pridané kvôli monosti vo¾by písma
 const char *nazov_fontu[POCET_FONTOV + 1] =
@@ -1204,6 +1231,7 @@ const char *html_text_tyzden_cislo[POCET_JAZYKOV + 1] = {"%d. tıdeò", "%d. tıde
 const char *html_text_tyzden[POCET_JAZYKOV + 1] = {". tıdeò", ". tıden", ". week", "hebdomada ", "", ". tıden", ". hét"};
 const char *html_text_v_tyzdni_zaltara[POCET_JAZYKOV + 1] = {". tıdni altára", ". tıdnu altáøe", "week of Psaltary", "hebdomada", "", ". tıdnu altáøe", ". zsoltáros hét"};
 const char *html_text_pre[POCET_JAZYKOV + 1] = {"pre", "pro", "for", "per", "", "pro", ""};
+const char *html_text_ordinarium[POCET_JAZYKOV + 1] = {"ordinárium", "uspoøádání", "ordinary", "ordinarium", "", "ordinárium", "általános rész:"};
 // in the following: you MUST keep all HTML elements, e.g. <a href...>, <br/> etc.
 const char *html_text_dnes_je_atd[POCET_JAZYKOV + 1] = 
 {"Dnes je %d. deò v roku%s, <a href=\"%s%s\">juliánsky dátum</a> JD = %ld%s.\n"HTML_LINE_BREAK"\n",
@@ -1222,6 +1250,8 @@ const char *html_text_nie_je[POCET_JAZYKOV + 1] = {"nie je", "není", "is not", "
 const char *html_text_prestupny[POCET_JAZYKOV + 1] = {"prestupnı", "pøestupnı", "...", "...", "", "pøestupnı", "szökõév"};
 const char *html_text_datumy_pohyblivych_slaveni[POCET_JAZYKOV + 1] = {"Dátumy pohyblivıch slávení", "Dáta promìnlivıch slávení", "Dates for movable celebrations", "", "", "Data promìnlivıch slavení", "A mozgó (változó) ünnepek dátumai"};
 
+const char *html_text_ritus[POCET_JAZYKOV + 1] = {"Rítus", "Obøad", "Ritus", "Ritus", "", "Ritus", "Szertartás"};
+
 const char *html_text_den_v_roku[POCET_JAZYKOV + 1] = {"%d. deò v roku", "%d. den v roce", "%d. day of the year", "%d. ", "%d. ", "%d. den v roce", "az év %d. napja"};
 
 const char *html_text_zacina[POCET_JAZYKOV + 1] = {"zaèína", "zaèíná", "starts", "", "", "zaèíná", "kezdõdik"};
@@ -1229,177 +1259,170 @@ const char *html_text_liturgicky_rok[POCET_JAZYKOV + 1] = {"liturgickı rok", "li
 
 const char *html_text_txt_export[POCET_JAZYKOV + 1] = {"Textovı vıstup: ", "Textovı vıstup: ", "Text export: ", "Text export:", "", "Textovı vıstup: ", "Szöveg exportálása: "};
 
-const char *html_text_pohyblive1[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Rok"HTML_LINE_BREAK"Pána</td>\n",
-	"<td "HTML_ALIGN_CENTER">Léto"HTML_LINE_BREAK"Pánì</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Anno"HTML_LINE_BREAK"Domini</td>\n",
-	"<td "HTML_ALIGN_CENTER">Anno"HTML_LINE_BREAK"Domini</td>\n",
-	"",
-	"<td "HTML_ALIGN_CENTER">Léto"HTML_LINE_BREAK"Pánì</td>\n",
-	"<td "HTML_ALIGN_CENTER">Naptári"HTML_LINE_BREAK"év</td>\n"
-};
+#define POCET_HTML_TEXT_POHYBLIVE 12
+#define HTML_TEXT_POHYBLIVE_ZJAVENIE_PANA 3
 
-const char *html_text_pohyblive2[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Nede¾ná"HTML_LINE_BREAK"litera</td>\n",
-	"<td "HTML_ALIGN_CENTER">Nedìlní"HTML_LINE_BREAK"písmeno</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Sunday"HTML_LINE_BREAK"Letter</td>\n",
-	"<td "HTML_ALIGN_CENTER">Let."HTML_LINE_BREAK"Dom.</td>\n",
+const char *html_text_pohyblive[POCET_HTML_TEXT_POHYBLIVE + 1][POCET_JAZYKOV + 1] = {
+{
+	"Rok"HTML_LINE_BREAK"Pána",
+	"Léto"HTML_LINE_BREAK"Pánì", 
+	"Anno"HTML_LINE_BREAK"Domini",
+	"Anno"HTML_LINE_BREAK"Domini",
 	"",
-	"<td "HTML_ALIGN_CENTER">Nedìlní"HTML_LINE_BREAK"písmeno</td>\n",
-	"<td "HTML_ALIGN_CENTER">Vasárnap"HTML_LINE_BREAK"betûje</td>\n"
-};
-
-const char *html_text_pohyblive3[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Nede¾nı"HTML_LINE_BREAK"cyklus</td>\n",
-	"<td "HTML_ALIGN_CENTER">Nedìlní"HTML_LINE_BREAK"cyklus</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Sunday"HTML_LINE_BREAK"cycle</td>\n",
-	"<td "HTML_ALIGN_CENTER">Cycl."HTML_LINE_BREAK"Dom.</td>\n",
+	"Léto"HTML_LINE_BREAK"Pánì",
+	"Naptári"HTML_LINE_BREAK"év"
+},
+{
+	"Nede¾ná"HTML_LINE_BREAK"litera",
+	"Nedìlní"HTML_LINE_BREAK"písmeno", 
+	"Sunday"HTML_LINE_BREAK"Letter",
+	"Let."HTML_LINE_BREAK"Dom.",
 	"",
-	"<td "HTML_ALIGN_CENTER">Nedìlní"HTML_LINE_BREAK"cyklus</td>\n",
-	"<td "HTML_ALIGN_CENTER">Vasárnapi"HTML_LINE_BREAK"ciklus</td>\n"
-};
-
-const char *html_text_pohyblive3b[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Zjavenie"HTML_LINE_BREAK"Pána</td>\n",
-	"<td "HTML_ALIGN_CENTER">Zjevení"HTML_LINE_BREAK"Pánì</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Epiphany</td>\n",
-	"<td "HTML_ALIGN_CENTER">Epiphania"HTML_LINE_BREAK"Domini</td>\n",
+	"Nedìlní"HTML_LINE_BREAK"písmeno",
+	"Vasár-"HTML_LINE_BREAK"nap"HTML_LINE_BREAK"betûje"
+},
+{
+	"Nede¾nı"HTML_LINE_BREAK"cyklus",
+	"Nedìlní"HTML_LINE_BREAK"cyklus", 
+	"Sunday"HTML_LINE_BREAK"cycle",
+	"Cycl."HTML_LINE_BREAK"Dom.",
 	"",
-	"<td "HTML_ALIGN_CENTER">Zjevení"HTML_LINE_BREAK"Pánì</td>\n",
-	"<td "HTML_ALIGN_CENTER">Urunk"HTML_LINE_BREAK"megjelenése"HTML_LINE_BREAK"(Vízkereszt)</td>\n"
-};
-
-const char *html_text_pohyblive4[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Krst Krista"HTML_LINE_BREAK"Pána</td>\n",
-	"<td "HTML_ALIGN_CENTER">Køest Krista"HTML_LINE_BREAK"Pánì</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Bapt. of"HTML_LINE_BREAK"the Lord</td>\n",
-	"<td "HTML_ALIGN_CENTER">Bapt."HTML_LINE_BREAK"Domini</td>\n",
+	"Nedìlní"HTML_LINE_BREAK"cyklus",
+	"Vasár-"HTML_LINE_BREAK"napi"HTML_LINE_BREAK"ciklus"
+},
+{
+	"Zjavenie"HTML_LINE_BREAK"Pána",
+	"Zjevení"HTML_LINE_BREAK"Pánì", 
+	"Epiphany",
+	"Epiphania"HTML_LINE_BREAK"Domini",
 	"",
-	"<td "HTML_ALIGN_CENTER">Køest Krista"HTML_LINE_BREAK"Pánì</td>\n",
-	"<td "HTML_ALIGN_CENTER">Urunk"HTML_LINE_BREAK"megkeresztel-"HTML_LINE_BREAK"kedése</td>\n"
-};
-
-const char *html_text_pohyblive5[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"pred"HTML_LINE_BREAK"PO</a></td>\n",
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"pøed"HTML_LINE_BREAK"postem</a></td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">PA fest.</td>\n",
+	"Zjevení"HTML_LINE_BREAK"Pánì",
+	"Urunk"HTML_LINE_BREAK"megjelenése"HTML_LINE_BREAK"(Vízkereszt)"
+},
+{
+	"Krst"HTML_LINE_BREAK"Krista"HTML_LINE_BREAK"Pána",
+	"Køest"HTML_LINE_BREAK"Krista"HTML_LINE_BREAK"Pánì", 
+	"Bapt. of"HTML_LINE_BREAK"the Lord",
+	"Bapt."HTML_LINE_BREAK"Domini",
 	"",
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"pøed"HTML_LINE_BREAK"postem</a></td>\n",
-	"<td "HTML_ALIGN_CENTER">EK a HSZ elõtt</td>\n"
-};
-
-const char *html_text_pohyblive6[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Popolcová"HTML_LINE_BREAK"streda</td>\n",
-	"<td "HTML_ALIGN_CENTER">Popeleèní"HTML_LINE_BREAK"støeda</td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"Køest"HTML_LINE_BREAK"Krista"HTML_LINE_BREAK"Pánì",
+	"Urunk"HTML_LINE_BREAK"megkeresztel-"HTML_LINE_BREAK"kedése"
+},
+{
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"pred"HTML_LINE_BREAK"PO</a>",
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"pøed"HTML_LINE_BREAK"postem</a>", 
+	"...",
+	"PA fest.",
 	"",
-	"<td "HTML_ALIGN_CENTER">Popeleèní"HTML_LINE_BREAK"støeda</td>\n",
-	"<td "HTML_ALIGN_CENTER">Hamvazó-"HTML_LINE_BREAK"szerda</td>\n"
-};
-
-const char *html_text_pohyblive7[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Ve¾ká"HTML_LINE_BREAK"noc</td>\n",
-	"<td "HTML_ALIGN_CENTER">Veliko-"HTML_LINE_BREAK"noce</td>\n", 
-	"<td "HTML_ALIGN_CENTER">Easter</td>\n",
-	"<td "HTML_ALIGN_CENTER">Pascha</td>\n",
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"pøed"HTML_LINE_BREAK"postem</a>",
+	"EK"HTML_LINE_BREAK"a HSZ"HTML_LINE_BREAK"elõtt"
+},
+{
+	"Popolcová"HTML_LINE_BREAK"streda",
+	"Popeleèní"HTML_LINE_BREAK"støeda", 
+	"...",
+	"...",
 	"",
-	"<td "HTML_ALIGN_CENTER">Veliko-"HTML_LINE_BREAK"noce</td>\n",
-	"<td "HTML_ALIGN_CENTER">Húsvét</td>\n"
-};
-
-const char *html_text_pohyblive8[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Nanebo-"HTML_LINE_BREAK"vstúpenie"HTML_LINE_BREAK"Pána</td>\n",
-	"<td "HTML_ALIGN_CENTER">Nanebe-"HTML_LINE_BREAK"vstoupení"HTML_LINE_BREAK"Pánì</td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"Popeleèní"HTML_LINE_BREAK"støeda",
+	"Hamvazó-"HTML_LINE_BREAK"szerda"
+},
+{
+	"Ve¾ká"HTML_LINE_BREAK"noc",
+	"Veliko-"HTML_LINE_BREAK"noce", 
+	"Easter",
+	"Pascha",
 	"",
-	"<td "HTML_ALIGN_CENTER">Nanebe-"HTML_LINE_BREAK"vstoupení"HTML_LINE_BREAK"Pánì</td>\n",
-	"<td "HTML_ALIGN_CENTER">Urunk"HTML_LINE_BREAK"menny-"HTML_LINE_BREAK"bemenetele</td>\n"
-};
-
-const char *html_text_pohyblive9[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Zoslanie"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svätého</td>\n",
-	"<td "HTML_ALIGN_CENTER">Seslání"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svatého</td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"Veliko-"HTML_LINE_BREAK"noce",
+	"Húsvét"
+},
+{
+	"Nanebo-"HTML_LINE_BREAK"vstúpenie"HTML_LINE_BREAK"Pána",
+	"Nanebe-"HTML_LINE_BREAK"vstoupení"HTML_LINE_BREAK"Pánì", 
+	"...",
+	"...",
 	"",
-	"<td "HTML_ALIGN_CENTER">Seslání"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svatého</td>\n",
-	"<td "HTML_ALIGN_CENTER">Pünkösd</td>\n"
-};
-
-const char *html_text_pohyblive10[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a></td>\n",
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a></td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"Nanebe-"HTML_LINE_BREAK"vstoupení"HTML_LINE_BREAK"Pánì",
+	"Urunk"HTML_LINE_BREAK"menny-"HTML_LINE_BREAK"bemenetele"
+},
+{
+	"Zoslanie"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svätého",
+	"Seslání"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svatého", 
+	"...",
+	"...",
 	"",
-	"<td "HTML_ALIGN_CENTER"><a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a></td>\n",
-	"<td "HTML_ALIGN_CENTER">EK a HU után</td>\n"
-};
-
-const char *html_text_pohyblive11[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Prvá"HTML_LINE_BREAK"adventná"HTML_LINE_BREAK"nede¾a</td>\n",
-	"<td "HTML_ALIGN_CENTER">První"HTML_LINE_BREAK"adventní"HTML_LINE_BREAK"nedìle</td>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"Seslání"HTML_LINE_BREAK"Ducha"HTML_LINE_BREAK"Svatého",
+	"Pünkösd"
+},
+{
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a>",
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a>", 
+	"...",
+	"...",
 	"",
-	"<td "HTML_ALIGN_CENTER">První"HTML_LINE_BREAK"adventní"HTML_LINE_BREAK"nedìle</td>\n",
-	"<td "HTML_ALIGN_CENTER">Advent elsõ"HTML_LINE_BREAK"vasárnapja</td>\n"
-};
-
-const char *html_text_pohyblive12[POCET_JAZYKOV + 1] = {
-	"<td "HTML_ALIGN_CENTER">Nede¾a Svätej"HTML_LINE_BREAK"rodiny</td></tr>\n",
-	"<td "HTML_ALIGN_CENTER">Nedìle Svaté"HTML_LINE_BREAK"rodiny</td></tr>\n", 
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
-	"<td "HTML_ALIGN_CENTER">...</td>\n",
+	"<a href=\"#explain\">OCR"HTML_LINE_BREAK"po"HTML_LINE_BREAK"VN</a>",
+	"EK"HTML_LINE_BREAK"a HU"HTML_LINE_BREAK"után"
+},
+{
+	"Prvá"HTML_LINE_BREAK"adventná"HTML_LINE_BREAK"nede¾a",
+	"První"HTML_LINE_BREAK"adventní"HTML_LINE_BREAK"nedìle", 
+	"...",
+	"...",
 	"",
-	"<td "HTML_ALIGN_CENTER">Nedìle Svaté"HTML_LINE_BREAK"rodiny</td></tr>\n",
-	"<td "HTML_ALIGN_CENTER">Szent"HTML_LINE_BREAK"Család"HTML_LINE_BREAK"ünnepe</td>\n"
+	"První"HTML_LINE_BREAK"adventní"HTML_LINE_BREAK"nedìle",
+	"Advent"HTML_LINE_BREAK"elsõ"HTML_LINE_BREAK"vasárnapja"
+},
+{
+	"Nede¾a"HTML_LINE_BREAK"Svätej"HTML_LINE_BREAK"rodiny",
+	"Nedìle"HTML_LINE_BREAK"Svaté"HTML_LINE_BREAK"rodiny", 
+	"...",
+	"...",
+	"",
+	"Nedìle"HTML_LINE_BREAK"Svaté"HTML_LINE_BREAK"rodiny",
+	"Szent"HTML_LINE_BREAK"Család"HTML_LINE_BREAK"ünnepe"
+}
 };
 
 const char *html_text_Nedelne_pismeno[POCET_JAZYKOV + 1] = {"Nede¾né písmeno", "Nedìlní písmeno", "Sunday letter", "", "", "Nedìlní písmeno", "A vasárnap betûje"};
 const char *html_text_Nedelne_pismena[POCET_JAZYKOV + 1] = {"Nede¾né písmená", "Nedìlní písmena", "Sunday letters", "", "", "Nedìlní písmena", "A vasárnap betûje"};
 
 const char *html_text_Od_prvej_adv_atd[POCET_JAZYKOV + 1] = {
-	"Od prvej adventnej nedele v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".\n",
-	"Od první nedìle adventní v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".\n",
-	"From the 1st Advent Sunday in the year %d (%s) continues <a href=\"%s%s\">liturgical year</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".\n",
-	"Od prvej adventnej nedele v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".\n",
+	"Od prvej adventnej nedele v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".",
+	"Od první nedìle adventní v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".",
+	"From the 1st Advent Sunday in the year %d (%s) continues <a href=\"%s%s\">liturgical year</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".",
+	"Od prvej adventnej nedele v roku %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".",
 	"",
-	"Od první nedìle adventní v roce %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".\n",
-	"%d (%s) advent elsõ vasárnapjától az <"HTML_SPAN_BOLD">%c"HTML_SPAN_END" <a href=\"%s%s\">liturgikus év</a> folytatódik.\n",
+	"Od první nedìle adventní v roce %d (%s) pokraèuje <a href=\"%s%s\">liturgickı rok</a> <"HTML_SPAN_BOLD">%c"HTML_SPAN_END".",
+	"%d (%s) advent elsõ vasárnapjától az <"HTML_SPAN_BOLD">%c"HTML_SPAN_END" <a href=\"%s%s\">liturgikus év</a> folytatódik.",
 };
 
 const char *html_text_Po_Velkej_noci_atd[POCET_JAZYKOV + 1] = {
-	"Po Ve¾kej noci nasleduje %d. %s v cezroènom období.\n",
-	"Po Velikonocích následuje %d. %s v mezibdobí.\n",
-	"After Easter follows %d. %s per annum.\n",
-	"Po Ve¾kej noci nasleduje %d. %s per annum.\n",
-	"Po Ve¾kej noci nasleduje %d. %s v cezroènom období.\n", // v období „cez rok“
-	"Po Velikonocích následuje %d. %s v mezibdobí.\n",
-	"Húsvét után az évközi idõ %d. %sja következik.\n", // vasárnapja, nede¾a = vasárnap
+	"Po Ve¾kej noci nasleduje %d. %s v cezroènom období.",
+	"Po Velikonocích následuje %d. %s v mezibdobí.",
+	"After Easter follows %d. %s per annum.",
+	"Po Ve¾kej noci nasleduje %d. %s per annum.",
+	"Po Ve¾kej noci nasleduje %d. %s v cezroènom období.", // v období „cez rok“
+	"Po Velikonocích následuje %d. %s v mezibdobí.",
+	"Húsvét után az évközi idõ %d. %sja következik.", // vasárnapja, nede¾a = vasárnap
 };
 
 const char *html_text_Prikazane_sviatky_v_roku[POCET_JAZYKOV + 1] = {
-	"<p><"HTML_SPAN_RED">Prikázané sviatky v roku %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">Pøikázané svátky v roce %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">Obliged celebrations in the year %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">Prikázané sviatky v roku %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">Prikázané sviatky v roku %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">Pøikázané svátky v roce %s:"HTML_SPAN_END"\n",
-	"<p><"HTML_SPAN_RED">%s kötelezõ ünnepei:"HTML_SPAN_END"\n",
+	"Prikázané sviatky v roku %s",
+	"Pøikázané svátky v roce %s",
+	"Obliged celebrations in the year %s",
+	"Prikázané sviatky v roku %s",
+	"Prikázané sviatky v roku %s",
+	"Pøikázané svátky v roce %s",
+	"%s kötelezõ ünnepei",
 };
 
 const char *html_text_Jednotlive_mesiace_roku[POCET_JAZYKOV + 1] = {
-	"<"HTML_SPAN_RED">Jednotlivé mesiace roku %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Jednotlivé mìsíce v roce %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Individual months of the year %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Jednotlivé mesiace roku %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Jednotlivé mesiace roku %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Jednotlivé mìsíce v roce %s:"HTML_SPAN_END"\n",
-	"<"HTML_SPAN_RED">Egyes hónapok %s-ben(-ban):"HTML_SPAN_END"\n",
+	"Jednotlivé mesiace roku %s",
+	"Jednotlivé mìsíce v roce %s",
+	"Individual months of the year %s",
+	"Jednotlivé mesiace roku %s",
+	"Jednotlivé mesiace roku %s",
+	"Jednotlivé mìsíce v roce %s",
+	"Egyes hónapok %s-ben(-ban)",
 };
 
 const char *str_doplnkova_psalmodia[POCET_JAZYKOV + 1] = 
@@ -1436,13 +1459,13 @@ const char *str_nie[POCET_JAZYKOV + 1] =
 // const char *html_text_jazyk_android = "SK/CZ/HU:";
 
 const char *html_text_jazyk[POCET_JAZYKOV + 1] = 
-{"Jazyk:",
- "Jazyk:",
- "Language:",
- "Lingua:",
- "",
- "Jazyk:",
- "Nyelv:"
+{"Jazyk",
+ "Jazyk",
+ "Language",
+ "Lingua",
+ "Language",
+ "Jazyk",
+ "Nyelv"
 };
 
 const char *html_text_jazyk_long[POCET_JAZYKOV + 1] = 
@@ -1744,6 +1767,26 @@ const char *html_text_option0_buttons_order[POCET_JAZYKOV + 1] =
 
 const char *html_text_option0_buttons_order_explain[POCET_JAZYKOV + 1] = 
 {"Liturgia hodín pouíva tuèné písmo pre texty, ktoré sa priamo èítajú, a tie aj pre niektoré medzinadpisy. Táto vo¾ba potlaèí pouitie tuèného písma.", 
+ "", 
+ "", 
+ "",
+ "", 
+ "", 
+ ""
+};
+
+const char *html_text_option0_blind_friendly[POCET_JAZYKOV + 1] = 
+{"zobrazi iba text modlitieb (pre nevidiacich a slabozrakıch) bez rubrík",
+ "zobrazit jenom text modliteb (pro slepé a slabozraké) bez rubrik",
+ "blind-friendly text (without rubrics)",
+ "",
+ "",
+ "zobrazit jenom text modliteb (pro slepé a slabozraké) bez rubrik",
+ "megmutatni csak az imaszövegeket (vakok és gyengénlátók részére) rubrikák nélkül"
+};
+
+const char *html_text_option0_blind_friendly_explain[POCET_JAZYKOV + 1] = 
+{"Vo vıslednej modlitbe bude zobrazenı len ten text, ktorı sa èíta; nebudú zobrazené iadne rubriky alebo názvy èastí modlitieb. Toto je vhodné pre hlasovı vıstup napr. pre nevidiacich a slabozrakıch.", 
  "", 
  "", 
  "",
@@ -2700,14 +2743,24 @@ const char *html_text_kalendar[POCET_JAZYKOV + 1] =
 };
 // 2010-09-14
 const char *html_text_kalendar_miestny[POCET_JAZYKOV + 1] = 
-{"kalendár Liturgie hodín: ",
- "kalendáø Liturgie hodin: ",
- "local or general calendar: ", 
- "calendario per Liturgia horarum: ",
+{"Kalendár Liturgie hodín",
+ "Kalendáø Liturgie hodin",
+ "Local or general calendar", 
+ "Calendario per Liturgia horarum",
  "",
- "kalendáø Liturgie hodin: ",
- "Az imaórák liturgiája (AK SA DÁ, DA VİBER SEM) naptárát használják"
+ "Kalendáø Liturgie hodin",
+ "Az imaórák liturgiája"
 };
+const char *html_text_kalendar_miestny_post[POCET_JAZYKOV + 1] = 
+{"",
+ "",
+ "", 
+ "",
+ "",
+ "",
+ "naptárát használják"
+};
+
 const char *html_text_kalendar_miestny_explain[POCET_JAZYKOV + 1] = 
 {"Je moné zvoli miestny kalendár (propriá) reho¾nej rodiny, rádu, kongregácie, inštitútu...", 
  "Je moné vzít místní kalendáø øeholní rodiny, øádu, kongregace, institutu...", 
@@ -2730,13 +2783,13 @@ const char *html_text_detaily_explain[POCET_JAZYKOV + 1] =
 
 // 2010-06-04: text pre popis do invitatória
 const char *html_text_inv_slavaotcu[POCET_JAZYKOV + 1] = 
-{"<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Sláva Otcu"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Následuje"HTML_SPAN_END" <span class=\"small\">Sláva Otci"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje se antifona."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Follows"HTML_SPAN_END" <span class=\"small\">Glory..."HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Gloria Patri"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Sláva Otcu"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Následuje"HTML_SPAN_END" <span class=\"small\">Sláva Otci"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje se antifona."HTML_SPAN_END, 
- "<p>&nbsp;&nbsp;&nbsp; <"HTML_SPAN_RED_SMALL">Következik a"HTML_SPAN_END" <span class=\"small\">Dicsõség az Atyának"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">és megismételjük az antifónát."HTML_SPAN_END, 
+{"<p><"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Sláva Otcu"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Následuje"HTML_SPAN_END" <span class=\"small\">Sláva Otci"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje se antifona."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Follows"HTML_SPAN_END" <span class=\"small\">Glory..."HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Gloria Patri"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Nasleduje"HTML_SPAN_END" <span class=\"small\">Sláva Otcu"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje sa antifóna."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Následuje"HTML_SPAN_END" <span class=\"small\">Sláva Otci"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">a opakuje se antifona."HTML_SPAN_END, 
+ "<p><"HTML_SPAN_RED_SMALL">Következik a"HTML_SPAN_END" <span class=\"small\">Dicsõség az Atyának"HTML_SPAN_END" <"HTML_SPAN_RED_SMALL">és megismételjük az antifónát."HTML_SPAN_END, 
 };
 
 // 2013-02-22: page navigation (top, bottom)
@@ -7379,7 +7432,7 @@ const char *text_OKT_08_HU[POCET_JAZYKOV + 1] =
  "",
  "",
  "",
- "Szûz Mária, Magyarok nagyaszszonya, Magyarország fõpátronája",
+ "Szûz Mária, Magyarok Nagyasszonya, Magyarország fõpátronája",
  };
 const char *text_OKT_08_1_OP[POCET_JAZYKOV + 1] = 
 {"Bl. Ambróza Sansedoniho, kòaza",
@@ -7436,16 +7489,16 @@ const char *text_OKT_10_OPRAEM[POCET_JAZYKOV + 1] =
  "",
  };
 const char *text_OKT_11[POCET_JAZYKOV + 1] = 
-{"Bl. Jána XXIII., pápea",
+{"Sv. Jána XXIII., pápea",
+ "Sv. Jana XXIII., papee",
  "",
  "",
  "",
  "",
- "",
- "Boldog XXIII. János pápa",
+ "Szent XXIII. János pápa",
  };
 const char *text_OKT_11_OFM[POCET_JAZYKOV + 1] = 
-{"Bl. Jána XXIII., pápea, èlena 3. rádu",
+{"Sv. Jána XXIII., pápea, èlena 3. rádu",
  "",
  "",
  "",
@@ -7706,13 +7759,13 @@ const char *text_OKT_22_OP[POCET_JAZYKOV + 1] =
  "",
  };
 const char *text_OKT_22[POCET_JAZYKOV + 1] = 
-{"Bl. Jána Pavla II., pápea",
- "Bl. Jana Pavla II., papee",
+{"Sv. Jána Pavla II., pápea",
+ "Sv. Jana Pavla II., papee",
  "",
  "",
  "",
- "Bl. Jana Pavla II., papee",
- "Boldog II. János Pál pápa",
+ "Sv. Jana Pavla II., papee",
+ "Szent II. János Pál pápa",
  };
 const char *text_OKT_23[POCET_JAZYKOV + 1] = 
 {"Sv. Jána Kapistránskeho, kòaza",

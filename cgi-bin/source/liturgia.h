@@ -85,6 +85,10 @@
 #define MENO_SVIATKU 250
 #define MAX_LC_STR_ID 50
 
+// 2014-09-22: prÌprava pre viacerÈ rÌty
+#define RITUS_RIM_KAT   0
+#define RITUS_GR_KAT    1
+
 // 2006-07-11: PridanÈ kvÙli jazykov˝m mut·ci·m 
 // 2006-12-12: Pridan· latinËina, kÛdy s˙ podæa ISO 639-1 (aû na Ëeötinu)
 // 2008-08-15: Pridan· "dominik·nska Ëeötina"; presunutÈ sem bezprostredne za definÌciu POCET_JAZYKOV
@@ -96,6 +100,10 @@
 #define JAZYK_UNDEF 4
 #define JAZYK_CZ_OP 5
 #define JAZYK_HU    6
+
+// rite for languages
+const short int ritus_jazyka[POCET_JAZYKOV + 1] =
+{RITUS_RIM_KAT, RITUS_RIM_KAT, RITUS_RIM_KAT, RITUS_RIM_KAT, RITUS_RIM_KAT, RITUS_RIM_KAT, RITUS_RIM_KAT};
 
 // 2011-05-12: form·ty vypisovania d·tumu, kvÙli maÔarËine, angliËtine...
 #define FORMAT_DATUMU_DEN_MESIAC_ROK 0 // DD. MM RRRR
@@ -113,6 +121,13 @@ extern const short int format_datumu[POCET_JAZYKOV + 1];
 #define CSS_breviar_sk_invert	2
 #define CSS_kbd_sk				3
 #define CSS_ebreviar_cz			4
+
+// static texts
+#define POCET_STATIC_TEXTOV               2
+
+#define STATIC_TEXT_UNDEF                 0
+#define STATIC_TEXT_MARIANSKE_ANTIFONY    1
+#define STATIC_TEXT_ORDINARIUM            2
 
 #define	POCET_FONTOV	9
 
@@ -150,9 +165,8 @@ extern const short int format_datumu[POCET_JAZYKOV + 1];
 #define BIT_ALT_DOPLNK_PSALM_126_129   32
 #define BIT_ALT_HYMNUS_VN              64
 
-// nasledovne 2 definovane 2003-08-13; zmenene 2004-04-28 (12->16)
-#define MAX_STR_AF_FILE   16
-#define MAX_STR_AF_ANCHOR 23
+#define MAX_STR_AF_FILE   64
+#define MAX_STR_AF_ANCHOR 32
 struct _anchor_and_file{
 	char file[MAX_STR_AF_FILE];
 	char anchor[MAX_STR_AF_ANCHOR];
@@ -378,12 +392,26 @@ extern const char *nazov_MODLITBY_jazyk[POCET_MODLITIEB + 1][POCET_JAZYKOV + 1];
 #define TEMPLAT_CEZ_DEN_3        "m_popol.htm"
 #define TEMPLAT_VESPERY          "m_vespery.htm"
 #define TEMPLAT_KOMPLETORIUM     "m_komplet.htm"
-#define TEMPLAT_NEURCENY         "" // 2011-10-03: doplnenÈ kvÙli MODL_VSETKY
+#define TEMPLAT_EMPTY            STR_EMPTY // MODL_VSETKY + MODL_DETAILY
+#define TEMPLAT_STATIC_TEXT      "m_text.htm" // MODL_NEURCENA
 
 // pridanÈ 2006-10-24 pre kompletÛrium
 #define nazov_obd_KOMPLETORIUM   "cezrok_k.htm"
 
 extern const char *TEMPLAT[POCET_MODLITIEB + 1];
+
+#define ORDINARIUM_INVITATORIUM     "ord_invitat.htm"
+#define ORDINARIUM_POSV_CITANIE     "ord_posvcit.htm"
+#define ORDINARIUM_RANNE_CHVALY     "ord_rchvaly.htm"
+#define ORDINARIUM_CEZ_DEN          "ord_mcd.htm"
+#define ORDINARIUM_VESPERY          "ord_vespery.htm"
+#define ORDINARIUM_KOMPLETORIUM     "ord_komplet.htm"
+#define ORDINARIUM_EMPTY            STR_EMPTY // MODL_VSETKY + MODL_DETAILY
+
+extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
+
+#define SHOW_TEMPLAT_MODLITBA      1 // use TEMPLAT[]
+#define SHOW_TEMPLAT_STATIC_TEXT   2 // use ORDINARIUM[]
 
 // znaky, ktore znacia (pre interpretovanie templatu) zaciatok a koniec klucoveho slova
 #define CHAR_KEYWORD_BEGIN   '{'
@@ -396,7 +424,12 @@ extern const char *TEMPLAT[POCET_MODLITIEB + 1];
 
 // znak '_' pouûÌvame ako z·stupn˝ pre nezlomiteæn˙ medzeru (exportuje sa ako HTML_NONBREAKING_SPACE == "&nbsp;" definovanÈ v mydefs.h) 
 // 2011-05-02: pridanÈ; nevadÌ, ûe je duplicita s UNDERSCORE resp. CHAR_MODL_NEURCENA 
+// special characters in prayer texts (some of them to be removed for blind-friendly version)
 #define CHAR_NONBREAKING_SPACE '_'
+#define CHAR_SPACE             ' '
+#define CHAR_PRAYER_ASTERISK   '*'
+#define CHAR_PRAYER_CROSS      134 // '\x86' // '\u271D' // 'Ü' // NOTE: holds only for windows-1250 and windows-1251 encoding!
+#define CHAR_PRAYER_CROSS_ALT  '+'
 
 // include parameters (parametre v inkludovanych suboroch)
 #define INCLUDE_BEGIN   "BEGIN" // zaciatok
@@ -452,6 +485,9 @@ extern const char *TEMPLAT[POCET_MODLITIEB + 1];
 #define PARAM_CHVALOSPEV2   "CHVALOSPEV2"
 #define PARAM_CHVALOSPEV3   "CHVALOSPEV3"
 #define PARAM_EVANJELIUM    "EVANJELIUM"
+// 2014-10-09: nov· öablÛna m_text.htm pre include statickÈho textu
+#define PARAM_TEXT          "TEXT" // static text included into single file
+#define PARAM_MARIANSKE_ANTIFONY_LINK "MARIANSKE_ANTIFONY_LINK" // hyperlink to Maria antiphones (static HTML text or dynamically generated URL
 // 2012-09-05: moûnosù zobraziù pre doplnkov˙ psalmÛdiu priamy URL odkaz (na prepnutie)
 #define PARAM_DOPLNKOVA_PSALMODIA      "DOPLNKOVA-PSALMODIA" // 2012-10-01: _ sa menilo na &nbsp; preto som zmenil na -
 // 2013-08-22: moûnosù zobraziù priamy URL odkaz (na prepnutie) pre ûalmy z troch t˝ûdÚov ûalt·ra
@@ -965,7 +1001,7 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SVIATOK_OFS              94
 #define LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP 95
 #define LOKAL_SLAV_SPOMIENKA_OSC            96
-#define LOKAL_SLAV_NEDOVOLENE               97
+#define LOKAL_SLAV_NEDOVOLENE_SK            97
 #define LOKAL_SLAV_KATONAI_ORDINARIAT       98
 #define LOKAL_SLAV_DEBR_NYIREGY             99
 #define LOKAL_SLAV_OPRAEM_DOKSANY          100
@@ -997,6 +1033,10 @@ extern const char *nazov_slavenia_lokal[];
 #define KALENDAR_CZ_SDB                    16
 
 #define POCET_KALENDAROV                   16
+
+// default calendar for language (general)
+const short int default_kalendar[POCET_JAZYKOV + 1] = 
+{KALENDAR_VSEOBECNY_SK, KALENDAR_VSEOBECNY_CZ, /* ToDo */ KALENDAR_VSEOBECNY, /* ToDo */ KALENDAR_VSEOBECNY, KALENDAR_NEURCENY, KALENDAR_CZ_OP, KALENDAR_VSEOBECNY_HU};
 
 // filenames for special calendars / n·zov s˙bora pre kalend·re
 extern const char *nazov_htm_kalendar[POCET_KALENDAROV + 1];
@@ -1249,6 +1289,9 @@ extern _type_kompletorium *_global_modl_kompletorium_ptr;
 // extern _type_kompletorium _global_modl_kompletorium;
 #define _global_modl_kompletorium (*_global_modl_kompletorium_ptr)
 
+extern _struct_anchor_and_file *_global_include_static_text_ptr;
+#define _global_include_static_text (*_global_include_static_text_ptr)
+
 // globalna premenna, ktora obsahuje MODL_...
 extern short int _global_modlitba;
 
@@ -1286,7 +1329,7 @@ extern short int _global_opt[POCET_GLOBAL_OPT];
 // glob·lna premenn· -- pole -- obsahuj˙ca force options; pÙvodne to boli glob·lne premennÈ _global_optf 1..9 atÔ., obsahuj˙ pom_MODL_OPTF...
 extern short int _global_optf[POCET_GLOBAL_OPT];
 
-#define POCET_OPT_0_SPECIALNE               8 // jednotlivÈ komponenty option 0 -- bity pre force option 0
+#define POCET_OPT_0_SPECIALNE               9 // jednotlivÈ komponenty option 0 -- bity pre force option 0
 extern short int _global_opt_specialne[POCET_OPT_0_SPECIALNE];
 // 2011-04-08: ˙prava v˝znamu (a interpret·cie) option 0 ==  OPT_0_SPECIALNE (zobraziù/nezobraziù "pridan˙ hodnotu" oproti papierovej LH)
 #define BIT_OPT_0_VERSE                     1
@@ -1297,6 +1340,7 @@ extern short int _global_opt_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_TELAKRVI_NEDELA          32 // Ëi sa Najsv. Kristovho tela a krvi sl·vi v nedeæu (1) alebo nie (teda vo ötvrtok, 11.-ty deÚ po ZoslanÌ Ducha Sv.; hodnota 0 == default)
 #define BIT_OPT_0_FONT_NORMAL              64 // force font-weight: normal; // malo by byù v r·mci OPT_2_HTML_EXPORT, avöak t· uû je pln· (signed short int max. 32767)
 #define BIT_OPT_0_BUTTONS_ORDER           128 // buttons order: 0 = date navigation BEFORE info on day (default for web); 1 = day details first (with prayer buttons) (default for mobile apps)
+#define BIT_OPT_0_BLIND_FRIENDLY          256 // blind-friendly mode: 1 = use special CSS override to hide all red texts (rubrics)
 
 #define POCET_OPT_1_CASTI_MODLITBY         15 // jednotlivÈ komponenty option 1 -- bity pre force option 1
 extern short int _global_opt_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
@@ -1343,6 +1387,7 @@ extern short int _global_opt_offline_export[POCET_OPT_4_OFFLINE_EXPORT];
 // 2011-04-08: ˙prava v˝znamu (a interpret·cie) option 4 (rozliËnÈ prepÌnaËe pre offline export, napr. aj batch mÛd)
 #define BIT_OPT_4_MESIAC_RIADOK             1
 #define BIT_OPT_4_FNAME_MODL_ID             2 // Ëi pre n·zov s˙boru pouûiù (ËÌselnÈ) ID modlitby alebo pÌsmenko modlitby (default)
+#define BIT_OPT_4_EXCLUDE_MCD_KOMPLET       4 // Ëi sa pri generovanÌ tlaËidla pre predch·dzaj˙cu/nasleduj˙cu modlitbu maj˙ preskoËiù odkazy na MCD a kompletÛrium v metÛde _buttons_prev_up_next() [default: 0 = nie; treba nastavovaù kvÙli æubovoæn˝m spomienkam do batch mÛdu]
 
 #define POCET_OPT_5_ALTERNATIVES           12 // jednotlivÈ komponenty option 5 -- bity pre force option 5
 extern short int _global_opt_alternatives[POCET_OPT_5_ALTERNATIVES];
@@ -1400,7 +1445,7 @@ extern const char *nazov_css[POCET_CSS + 1];
 extern const char *skratka_css[POCET_CSS + 1];
 extern const char *nazov_css_invert_colors;
 extern const char *nazov_css_normal_font_weight;
-
+extern const char *nazov_css_blind_friendly;
 
 extern const char *charset_jazyka[POCET_JAZYKOV + 1];
 
@@ -1485,6 +1530,9 @@ void _dm_prva_adventna_nedela(short int rok, short int p2);
 void _dm_svatej_rodiny(short int rok);
 void _dm_krst_krista_pana(short int rok);
 void _dm_velkonocna_nedela(short int rok, short int _vn);
+
+short int modlitba_predchadzajuca(short int modlitba, short int exclude_mcd_komplet = NIE);
+short int modlitba_nasledujuca(short int modlitba, short int exclude_mcd_komplet = NIE);
 
 void analyzuj_rok(short int year);
 
@@ -1617,6 +1665,8 @@ void Log(struct tmodlitba3);
 void Log(struct tmodlitba4);
 #define Log_struktura_tm5 Log("  <tm5>"); Log
 void Log(struct tmodlitba5);
+
+extern void Log_filename_anchor(_struct_anchor_and_file af);
 
 int _encode_spol_cast(short int, short int, short int);
 int _encode_spol_cast(short int, short int);
