@@ -1,32 +1,10 @@
 /************************************************************************/
 /*                                                                      */
 /* myhpage.cpp                                                          */
-/* (c)1999-2014 | Juraj VidÈky | videky@breviar.sk                      */
+/* (c)1999-2014 | Juraj Vid√©ky | videky@breviar.sk                      */
 /*                                                                      */
 /* description | obsahuje vypis hlavicky a patky HTML dokumentu         */
-/* document history                                                     */
-/*   28/10/1999A.D. | created                                           */
-/*   25/02/2000A.D. | zrusena funkcia linky()                           */
-/*   12/04/2000A.D. | pridana stranka cfg_HTTP_ADDRESS_default          */
-/*   06/09/2001A.D. | tento popis                                       */
-/*   2003-06-30a.D. | pridane vypisovanie BUILD_DATE (mybase.h)         */
-/*                  - tiez zapoznamkovane Kodovanie w-1250.             */
-/*   2003-07-01a.D. | citanie hlavicky zo suboru                        */
-/*   2003-07-02a.D. | trosku zmenena patka                              */
-/*   2003-07-15a.D. | trosku zmenena hlavicka (ako _header.htm)         */
-/*   2004-03-16a.D. | funkcie hlavicka a patka aj do suboru             */
-/*   2006-07-31a.D. | prvÈ kroky k jazykov˝m mut·ci·m                   */
-/*   2008-01-23a.D. | upravenÈ funkcie patka()                          */
-/*   2008-08-08a.D. | upravenÈ funkcie hlavicka() kvÙli css             */
-/*   2008-09-26a.D. | pridanÈ pouûitie nazov_mesiaca()                  */
-/*   2008-12-22a.D. | upravenÈ exportovanie p‰tky (Ëas)                 */
-/*   2009-08-05a.D. | upravenÈ exportovanie hlaviËky                    */
-/*   2010-02-15a.D. | upravenÈ hlaviËky aj p‰tky (navig·cia)            */
-/*   2011-05-13a.D. | doplnen· aj veækosù fontu                         */
-/*   2011-05-18a.D. | doplnenÈ pouûitie charset_jazyka[]                */
-/*   2011-05-18a.D. | upraven· a zjednoten· hlaviËka a p‰tka,           */
-/*                    _hlavicka() a _patka() pouûÌvaj˙ Export_to_file() */
-/*                                                                      */
+/*               HTML document generated header and footer              */
 /*                                                                      */
 /************************************************************************/
 
@@ -44,9 +22,9 @@
 #include "myexpt.h"
 #include "mystring.h" // kvoli mystrcpy, 2003-07-01
 #include "mylog.h"
-#include "breviar.h" // 2006-07-31 kvÙli jazyku a css (2008-08-08)
-#include "liturgia.h" // 2006-07-31 kvÙli jazyku
-#include "mybuild.h" // 2011-07-11: pridanÈ, kvÙli BUILD_DATE
+#include "breviar.h" // 2006-07-31 kv√¥li jazyku a css (2008-08-08)
+#include "liturgia.h" // 2006-07-31 kv√¥li jazyku
+#include "mybuild.h" // 2011-07-11: pridan√©, kv√¥li BUILD_DATE
 
 short int bol_content_type_text_html = NIE;
 short int bol_content_type_text_xml = NIE;
@@ -61,7 +39,7 @@ const char *html_header_1 =
 //    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n\t\"http://www.w3.org/TR/html4/loose.dtd\">\n"
 	"<!DOCTYPE html>\n"
 #endif
-    "<html>\n<head>\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%s\">\n\t<meta name=\"Author\" content=\"Juraj VidÈky\">\n";
+    "<html>\n<head>\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%s\">\n\t<meta name=\"Author\" content=\"Juraj Videky\">\n";
 const char *html_header_css = "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"";
 const char *html_footer_1 = STR_EMPTY; // "<p><center>______</center>"; // "<hr>";
 
@@ -88,8 +66,8 @@ void myhpage_init_globals() {
 void _header_css(FILE* expt, short int level, const char* nazov_css_suboru) {
 	Export_to_file(expt, html_header_css);
 #ifdef	EXPORT_CMDLINE_CSS
-	// pre command-line pouûitie (aj pre batch mÛd): "./breviar.css" resp. ".\breviar.css"
-	// 2009-08-03: level oznaËuje poËet adres·rov, o ktorÈ je treba Ìsù "hore" (pre mesaËn˝ export)
+	// pre command-line pou≈æitie (aj pre batch m√≥d): "./breviar.css" resp. ".\breviar.css"
+	// 2009-08-03: level oznaƒçuje poƒçet adres√°rov, o ktor√© je treba √≠s≈• "hore" (pre mesaƒçn√Ω export)
 	if(level == 0 && _global_opt_batch_monthly == ANO)
 		level = 1;
 	if(level < 0 || level > 5)
@@ -107,13 +85,13 @@ void _header_css(FILE* expt, short int level, const char* nazov_css_suboru) {
 	Export_to_file(expt, STR_PATH_SEPARATOR_HTML);
 #else
 	Q_UNUSED(level);
-	// pre web-pouûitie (aj pre ruby): "/breviar.css"
+	// pre web-pou≈æitie (aj pre ruby): "/breviar.css"
 	Export_to_file(expt, "/");
 #endif
-	Export_to_file(expt, "%s\">\n", nazov_css_suboru); // n·zov css s˙boru
+	Export_to_file(expt, "%s\">\n", nazov_css_suboru); // n√°zov css s√∫boru
 }
 
-// exportuje buttony pre predch·dzaj˙cu a nasleduj˙cu modlitbu | bolo v _hlavicka() aj _patka()
+// exportuje buttony pre predch√°dzaj√∫cu a nasleduj√∫cu modlitbu | bolo v _hlavicka() aj _patka()
 void _buttons_prev_up_next(FILE * expt){
 	short int _local_modlitba_prev, _local_modlitba_next;
 	_local_modlitba_prev = modlitba_predchadzajuca(_local_modlitba, ((_global_opt[OPT_4_OFFLINE_EXPORT] & BIT_OPT_4_EXCLUDE_MCD_KOMPLET) == BIT_OPT_4_EXCLUDE_MCD_KOMPLET));
@@ -122,7 +100,7 @@ void _buttons_prev_up_next(FILE * expt){
 	Export_to_file(expt, "\n<center>");
 	pismeno_modlitby = CHAR_MODL_NEURCENA;
 	if((_local_modlitba < MODL_NEURCENA) && (_local_modlitba >= MODL_INVITATORIUM)){
-		// 2013-07-29: generovanie n·zvu s˙boru s pÌsmenkom modlitby (default) alebo s ID modlitby
+		// 2013-07-29: generovanie n√°zvu s√∫boru s p√≠smenkom modlitby (default) alebo s ID modlitby
 		if((_global_opt[OPT_4_OFFLINE_EXPORT] & BIT_OPT_4_FNAME_MODL_ID) != BIT_OPT_4_FNAME_MODL_ID){
 			pismeno_modlitby = char_modlitby[_local_modlitba];
 		}
@@ -138,7 +116,7 @@ void _buttons_prev_up_next(FILE * expt){
 	ptr = strstr(file_name_pom, ext);
 	if((_local_modlitba < MODL_NEURCENA) && (_local_modlitba > MODL_INVITATORIUM) && (_local_modlitba_prev < MODL_NEURCENA)){
 		if(ptr != NULL){
-			// 2013-07-29: generovanie n·zvu s˙boru s pÌsmenkom modlitby (default) alebo s ID modlitby
+			// 2013-07-29: generovanie n√°zvu s√∫boru s p√≠smenkom modlitby (default) alebo s ID modlitby
 			if((_global_opt[OPT_4_OFFLINE_EXPORT] & BIT_OPT_4_FNAME_MODL_ID) != BIT_OPT_4_FNAME_MODL_ID){
 				sprintf(pismeno_prev, "%c", char_modlitby[_local_modlitba_prev]);
 			}
@@ -156,7 +134,7 @@ void _buttons_prev_up_next(FILE * expt){
 	// |
 	Export_to_file(expt, " | ");
 	// ^ hore
-	Export_to_file(expt, "<a href=\".%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, _global_export_navig_hore); // v tom istom adres·ri
+	Export_to_file(expt, "<a href=\".%s%s\" "HTML_CLASS_BUTTON">", STR_PATH_SEPARATOR_HTML, _global_export_navig_hore); // v tom istom adres√°ri
 	Export_to_file(expt, (char *)html_text_batch_Back[_global_jazyk]);
 	Export_to_file(expt, "</a>");
 	// |
@@ -166,7 +144,7 @@ void _buttons_prev_up_next(FILE * expt){
 	ptr = strstr(file_name_pom, ext);
 	if((_local_modlitba != MODL_NEURCENA) && (_local_modlitba < MODL_KOMPLETORIUM) && (_local_modlitba_next < MODL_NEURCENA)){
 		if(ptr != NULL){
-			// 2013-07-29: generovanie n·zvu s˙boru s pÌsmenkom modlitby (default) alebo s ID modlitby
+			// 2013-07-29: generovanie n√°zvu s√∫boru s p√≠smenkom modlitby (default) alebo s ID modlitby
 			if((_global_opt[OPT_4_OFFLINE_EXPORT] & BIT_OPT_4_FNAME_MODL_ID) != BIT_OPT_4_FNAME_MODL_ID){
 				sprintf(pismeno_next, "%c", char_modlitby[_local_modlitba_next]);
 			}
@@ -187,7 +165,7 @@ void _buttons_prev_up_next(FILE * expt){
 
 // exportuje hlavicku HTML dokumentu, kam pojde vysledok query
 void _hlavicka(char *title, FILE * expt, short int level, short int spec){
-	Log("_hlavicka() -- zaËiatok...\n");
+	Log("_hlavicka() -- zaƒçiatok...\n");
 
 	_local_modlitba = _global_modlitba;
 	if((_local_modlitba == MODL_PRVE_VESPERY) || (_local_modlitba == MODL_DRUHE_VESPERY)){
@@ -197,16 +175,16 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 		_local_modlitba = MODL_KOMPLETORIUM;
 	}
 
-	// 2009-08-04: viackr·t sa pri exporte modlitby do HTML exportovala hlaviËka; pridan· kontrola
+	// 2009-08-04: viackr√°t sa pri exporte modlitby do HTML exportovala hlaviƒçka; pridan√° kontrola
 	if(_global_hlavicka_Export > 0){
 		Log("return... (_global_hlavicka_Export > 0)\n");
 		return;
 	}
 	_global_hlavicka_Export++;
 
-	// 2013-12-09: inÈ CSS bud˙ len "doplnky" (overrides) k hlavnÈmu CSS
+	// 2013-12-09: in√© CSS bud√∫ len "doplnky" (overrides) k hlavn√©mu CSS
 	if(_global_css != CSS_breviar_sk){
-		Log("ako prv˝ bude exportovan˝ nazov_css_suboru == %s...\n", nazov_css[CSS_breviar_sk]);
+		Log("ako prv√Ω bude exportovan√Ω nazov_css_suboru == %s...\n", nazov_css[CSS_breviar_sk]);
 	}
 	const char *nazov_css_suboru;
 	if(_global_css == CSS_UNDEF){
@@ -218,8 +196,8 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 	Log("nazov_css_suboru == %s...\n", nazov_css_suboru);
 
 	// 2011-05-05: nastavenie font-family
-	//             zatiaæ len pevnÈ reùazce; Ëasom moûno bude premenn· pre n·zov fontu
-	// 2011-05-06: doplnenÈ: najprv sa testuje nastavenie _global_font; n·sledne sa prÌpadne nastavia defaulty
+	//             zatiaƒæ len pevn√© re≈•azce; ƒçasom mo≈æno bude premenn√° pre n√°zov fontu
+	// 2011-05-06: doplnen√©: najprv sa testuje nastavenie _global_font; n√°sledne sa pr√≠padne nastavia defaulty
 	if((_global_font == FONT_UNDEF) || (_global_font == FONT_CHECKBOX)){
 		Log("(_global_font == FONT_UNDEF) || (_global_font == FONT_CHECKBOX)...\n");
 		if((_global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_FONT_FAMILY) == BIT_OPT_2_FONT_FAMILY){
@@ -241,7 +219,7 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 	}// else
 	Log("_global_css_font_family == %s...\n", _global_css_font_family);
 
-	// 2011-05-13: doplnenÈ: nastavenie font-size
+	// 2011-05-13: doplnen√©: nastavenie font-size
 	if(_global_font_size == FONT_SIZE_UNDEF){
 		mystrcpy(_global_css_font_size, STR_EMPTY, SMALL);
 	}// (_global_font_size == FONT_SIZE_UNDEF)
@@ -261,12 +239,11 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 		bol_content_type_text_html = ANO;
 	}
 	Log("creating header...\n");
-	// 2003-07-15, zmenene na hlavicku pre css-ko; zrusene <style>
-	// 2008-08-08: pridanÈ dynamicky css-ko
-	// 2010-02-15: statickÈ texty do konöt·nt
-	// 2011-05-18: charset sa nastavÌ podæa jazyka
+	// 2008-08-08: pridan√© dynamicky css-ko
+	// 2010-02-15: statick√© texty do kon≈°t√°nt
+	// 2011-05-18: charset sa nastav√≠ podƒæa jazyka
 	Log("element <head>...\n");
-	Export_to_file(expt, (char *)html_header_1, charset_jazyka[_global_jazyk]);
+	Export_to_file(expt, (char *)html_header_1, nazov_charset[charset_jazyka[_global_jazyk]]);
 
 	// CSS (one or more)
 	if(_global_css != CSS_breviar_sk){
@@ -293,7 +270,7 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 
 	Log("element <body>...\n");
 	// 2011-05-05: pridanie font-family 
-	// 2011-05-06: font sa neprid·va vûdy
+	// 2011-05-06: font sa neprid√°va v≈ædy
 	Export_to_file(expt, "<body");
 	if((_global_font != FONT_CSS) || (_global_font_size != FONT_SIZE_CSS)){
 		Export_to_file(expt, " style=\"");
@@ -308,7 +285,7 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 		}
 		Export_to_file(expt, "\"");
 	}
-	// 2010-02-15: kvÙli öpeci·lnemu "zoznam.htm"
+	// 2010-02-15: kv√¥li ≈°peci√°lnemu "zoznam.htm"
 	if(spec == 1){
 		Export_to_file(expt, " onLoad=\"fn_aktualne(0,0,0)\"");
 	}
@@ -316,10 +293,10 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 
 	Export_to_file(expt, HTML_ANAME_TOP"\n");
 
-	// 2010-02-15: doplnenÈ predoöl· a nasledovn· modlitba
+	// 2010-02-15: doplnen√© predo≈°l√° a nasledovn√° modlitba
 	if(_global_opt_batch_monthly == ANO && query_type != PRM_BATCH_MODE){
 		_buttons_prev_up_next(expt);
-	}// << predoöl· | ^ hore | nasledovn· >>
+	}// << predo≈°l√° | ^ hore | nasledovn√° >>
 
 	Log("_hlavicka() -- koniec.\n");
 	return;
@@ -335,7 +312,7 @@ void hlavicka(char *title, FILE * expt, short int level, short int spec){
 // exportuje hlavicku XML dokumentu
 
 void _xml_hlavicka(FILE * expt){
-	Log("_xml_hlavicka() -- zaËiatok...\n");
+	Log("_xml_hlavicka() -- zaƒçiatok...\n");
 	if(bol_content_type_text_xml == NIE){
 #if defined(OS_linux)
 		Export_to_file(expt, "Content-type: text/xml\n");
@@ -346,7 +323,7 @@ void _xml_hlavicka(FILE * expt){
 #endif
 		bol_content_type_text_xml = ANO;
 	}
-	Export_to_file(expt, (char *)xml_header, charset_jazyka[_global_jazyk]);
+	Export_to_file(expt, (char *)xml_header, nazov_charset[charset_jazyka[_global_jazyk]]);
 	Export_to_file(expt, ELEM_BEGIN(XML_MAIN)"\n");
 	Log("_xml_hlavicka() -- koniec.\n");
 	return;
@@ -359,16 +336,16 @@ void xml_hlavicka(FILE * expt){
 	_xml_hlavicka(expt);
 }
 
-//const char *gpage[] = {"Generovan· str·nka", "Str·nky jsou generov·ny", "Generated page", "Generated"};
-const char *gpage[POCET_JAZYKOV + 1] = {"GenerovanÈ: ", "Generov·no: ", "Generated: ", "Generated: ", "Generated: ", "Generov·no: ", "Gener·lva: "};
-// GenerovanÈ + d·tum: "%d. %s %d, %02d:%02d:%02d" -- pÙvodne to bolo v z·tvork·ch
+//const char *gpage[] = {"Generovan√° str√°nka", "Str√°nky jsou generov√°ny", "Generated page", "Generated"};
+const char *gpage[POCET_JAZYKOV + 1] = {"Generovan√©: ", "Generov√°no: ", "Generated: ", "Generated: ", "Generated: ", "Generov√°no: ", "Gener√°lva: "};
+// Generovan√© + d√°tum: "%d. %s %d, %02d:%02d:%02d" -- p√¥vodne to bolo v z√°tvork√°ch
 const char *datum_cas_template[POCET_JAZYKOV + 1] = {"%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d"};
 // Build: "Build: %s. "
 const char *build_template[POCET_JAZYKOV + 1] = {"<!--Verzia: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->"};
-// GenerovanÈ + d·tum (bez Ëasu - pre batch mÛd, aby sa æahko porovn·vali vygenerovanÈ modlitby): "%d. %s %d"
+// Generovan√© + d√°tum (bez ƒçasu - pre batch m√≥d, aby sa ƒæahko porovn√°vali vygenerovan√© modlitby): "%d. %s %d"
 const char *datum_template[POCET_JAZYKOV + 1] = {"%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d"};
 
-const char *html_mail_label_long = "Juraj VidÈky";
+const char *html_mail_label_long = "Juraj Vid&#233;ky";
 const char *html_mail_label_short = "J. V.";
 
 #define ROK 5
@@ -376,7 +353,7 @@ const char *html_mail_label_short = "J. V.";
 // exportuje patku HTML dokumentu (vysledok query)
 void _patka(FILE * expt){
 	char mail_addr[MAX_MAIL_STR] = "";
-	Log("_patka() -- zaËiatok...\n");
+	Log("_patka() -- zaƒçiatok...\n");
 	_local_modlitba = _global_modlitba;
 	if((_local_modlitba == MODL_PRVE_VESPERY) || (_local_modlitba == MODL_DRUHE_VESPERY)){
 		_local_modlitba = MODL_VESPERY;
@@ -385,7 +362,7 @@ void _patka(FILE * expt){
 		_local_modlitba = MODL_KOMPLETORIUM;
 	}
 
-	// 2011-07-01: viackr·t sa pri exporte modlitby do HTML exportovala p‰tka; pridan· kontrola
+	// 2011-07-01: viackr√°t sa pri exporte modlitby do HTML exportovala p√§tka; pridan√° kontrola
 	if(_global_patka_Export > 0)
 		return;
 	_global_patka_Export++;
@@ -407,10 +384,10 @@ void _patka(FILE * expt){
 		sprintf(rok, "-%d", dnes.tm_year);
 	}
 
-	// 2010-02-15: vloûenÈ "^ hore" podæa hlavicka(); doplnenÈ predoöl· a nasledovn· modlitba
+	// 2010-02-15: vlo≈æen√© "^ hore" podƒæa hlavicka(); doplnen√© predo≈°l√° a nasledovn√° modlitba
 	if(_global_opt_batch_monthly == ANO && query_type != PRM_BATCH_MODE){
 		_buttons_prev_up_next(expt);
-	}// << predoöl· | ^ hore | nasledovn· >>
+	}// << predo≈°l√° | ^ hore | nasledovn√° >>
 
 	Export_to_file(expt, (char *)html_footer_1);
 
@@ -423,14 +400,14 @@ void _patka(FILE * expt){
 	}
 
 	Export("\n");
-	// 2010-02-15: celÈ zapozn·mkovanÈ 
+	// 2010-02-15: cel√© zapozn√°mkovan√© 
 	// 2011-07-01: pre web sa exportuje
 	Export_to_file(expt, "<"HTML_P_PATKA">\n");
 #ifdef BEHAVIOUR_WEB
 	if(_global_opt_batch_monthly == ANO && query_type != PRM_BATCH_MODE){
 		Export_to_file(expt, "%s\n", gpage[_global_jazyk]);
 		// Export_to_file(expt, "(%s). ", ctime(&t) + 4);
-		// 2008-12-22: odvetvenÈ - pre commandline export (do s˙boru) sa netlaËÌ Ëasov· zloûka, kedy bolo HTML generovanÈ
+		// 2008-12-22: odvetven√© - pre commandline export (do s√∫boru) sa netlaƒç√≠ ƒçasov√° zlo≈æka, kedy bolo HTML generovan√©
 #if defined(EXPORT_TO_FILE) && !defined(IO_ANDROID)
 		Export_to_file(expt, (char *)datum_template[_global_jazyk],
 			dnes.tm_mday,
@@ -452,7 +429,7 @@ void _patka(FILE * expt){
 	// nezabudni zmenit #define BUILD_DATE v mydefs.h (2003-07-15)
 	Export_to_file(expt, (char *)build_template[_global_jazyk], BUILD_DATE);
 
-	// Export_to_file(expt, "KÛdovanie Windows-1250 (Central European).\n"); // zapoznamkovane, 2003-06-30
+	// Export_to_file(expt, "K√≥dovanie Windows-1250 (Central European).\n"); // zapoznamkovane, 2003-06-30
 	// Export_to_file(expt, HTML_LINE_BREAK"\n"); // commented, 2013-11-12
 #endif
 
@@ -481,9 +458,9 @@ void patka(FILE * expt){
 
 // exportuje patku XML dokumentu
 void _xml_patka(FILE * expt){
-	Log("_xml_patka() -- zaËiatok...\n");
+	Log("_xml_patka() -- zaƒçiatok...\n");
 
-	// aby sa p‰tka neexportovala viackr·t
+	// aby sa p√§tka neexportovala viackr√°t
 	if(_global_patka_Export > 0)
 		return;
 	_global_patka_Export++;
