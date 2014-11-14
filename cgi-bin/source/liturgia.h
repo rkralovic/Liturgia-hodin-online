@@ -365,10 +365,10 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 // znak '_' používame ako zástupný pre nezlomiteľnú medzeru (exportuje sa ako HTML_NONBREAKING_SPACE == "&nbsp;" definované v mydefs.h) 
 // 2011-05-02: pridané; nevadí, že je duplicita s UNDERSCORE resp. CHAR_MODL_NEURCENA 
 // special characters in prayer texts (some of them to be removed for blind-friendly version)
-#define CHAR_NONBREAKING_SPACE L'_'
+#define CHAR_NONBREAKING_SPACE '_'
 #define CHAR_SPACE             ' '
 #define CHAR_PRAYER_ASTERISK   '*'
-#define CHAR_PRAYER_CROSS      L'†'
+#define CHAR_PRAYER_CROSS      L'\x2020' /*†*/
 #define CHAR_PRAYER_CROSS_ALT  '+'
 
 // include parameters (parametre v inkludovanych suboroch)
