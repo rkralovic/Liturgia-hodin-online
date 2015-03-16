@@ -1,7 +1,7 @@
 /************************************************************************/
 /*                                                                      */
 /* myhpage.cpp                                                          */
-/* (c)1999-2014 | Juraj Vidéky | videky@breviar.sk                      */
+/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk                      */
 /*                                                                      */
 /* description | HTML document dynamically generated header and footer  */
 /*                                                                      */
@@ -271,16 +271,16 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 	// 2011-05-05: pridanie font-family 
 	// 2011-05-06: font sa nepridáva vždy
 	Export_to_file(expt, "<body");
-	if((_global_font != FONT_CSS) || (_global_font_size != FONT_SIZE_CSS)){
+	if((_global_font != FONT_CSS) || (_global_font_size != FONT_SIZE_CSS) || (_global_style_margin != 0)){
 		Export_to_file(expt, " style=\"");
 		if(_global_font != FONT_CSS){
-			Export_to_file(expt, "font-family: %s", _global_css_font_family);
+			Export_to_file(expt, "font-family: %s; ", _global_css_font_family);
 		}
 		if(_global_font_size != FONT_SIZE_CSS){
-			if(_global_font != FONT_CSS){
-				Export_to_file(expt, "; ");
-			}
-			Export_to_file(expt, "font-size: %s", _global_css_font_size);
+			Export_to_file(expt, "font-size: %s; ", _global_css_font_size);
+		}
+		if(_global_style_margin != 0){
+			Export_to_file(expt, "margin-left: %dpx; margin-right: %dpx; ", _global_style_margin, _global_style_margin);
 		}
 		Export_to_file(expt, "\"");
 	}
@@ -345,7 +345,7 @@ const char *build_template[POCET_JAZYKOV + 1] = {"<!--Verzia: %s -->", "<!--Verz
 const char *datum_template[POCET_JAZYKOV + 1] = {"%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d"};
 
 const char *html_mail_label_long = "Juraj Vid&#233;ky";
-const char *html_mail_label_short = "J. V.";
+const char *html_mail_label_short = "J. Vid&#233;ky";
 
 #define ROK 5
 
@@ -432,10 +432,11 @@ void _patka(FILE * expt){
 	// Export_to_file(expt, HTML_LINE_BREAK"\n"); // commented, 2013-11-12
 #endif
 
-	// pridana stranka cfg_HTTP_ADDRESS_default, 12/04/2000A.D.
 	Export_to_file(expt, "<"HTML_LINK_NORMAL" href=\"%s\" target=\"_top\">%s</a>\n", cfg_http_address_default[_global_jazyk], cfg_http_display_address_default[_global_jazyk]);
+
 	Log("cfg_mail_address_default[%s] == %s\n", cfg_mail_address_default[_global_jazyk], skratka_jazyka[_global_jazyk]);
 	mystrcpy(mail_addr, cfg_mail_address_default[_global_jazyk], MAX_MAIL_STR);
+
 	Log("mail_addr == %s\n", mail_addr);
 	Export_to_file(expt, "&#169; %d%s <"HTML_LINK_NORMAL" href=\"mailto:%s\">%s</a>\n", baserok, rok, mail_addr, html_mail_label);
 

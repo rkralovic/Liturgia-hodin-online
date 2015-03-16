@@ -65,6 +65,11 @@ body { background-color: #000000; color: #cccccc; }
 </head>
 <body>
 
+<p><b>Újdonságok az 1.10.1-es verzióban:</b>
+<ul>
+<li> Many fixes...
+</ul>
+
 <p><b>Újdonságok az 1.10-es verzióban:</b>
 <ul>
 <li> Az imák egyszerűsített megjelenítése (csak az imák szövege, címek és rubrikák nélkül) látássérültek számára. Felolvasó gépek használhatják.

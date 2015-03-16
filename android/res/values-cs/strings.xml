@@ -24,6 +24,9 @@
     <string name="fullscreenOn">Celá obrazovka</string>
     <string name="fullscreenOff">Zobraz navigaci</string>
 
+    <string name="nightmodeOn">Noční režim</string>
+    <string name="nightmodeOff">Denní režim</string>
+
     <string name="inv">Invitatoř</string>
     <string name="rch">Ranní chvály</string>
     <string name="vesp">Nešpory</string>
@@ -64,6 +67,11 @@ body { background-color: #000000; color: #cccccc; }
 </style>
 </head>
 <body>
+
+<p><b>Nové ve verzi 1.10.1:</b>
+<ul>
+<li> Oprava chyb a překlepů.
+</ul>
 
 <p><b>Nové ve verzi 1.10:</b>
 <ul>
