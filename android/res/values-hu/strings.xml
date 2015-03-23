@@ -24,6 +24,9 @@
     <string name="fullscreenOn">Teljes képernyő</string>
     <string name="fullscreenOff">Teljes képernyő elhagyása</string>
 
+    <string name="nightmodeOn">Éjszakai mód</string>
+    <string name="nightmodeOff">Nappali mód</string>
+
     <string name="inv">Imádságra hívás</string>
     <string name="rch">Reggeli dicséret</string>
     <string name="vesp">Esti dicséret</string>
@@ -42,12 +45,12 @@
     <string name="h12_notify">Itt az idő a déli napközi imaórára!</string>
     <string name="h15_notify">Itt az idő a délután napközi imaórára!</string>
 
-    <string name="menu_about">Névjegy</string>
+    <string name="menu_about">Névjegy...</string>
     <string name="about">Névjegy</string>
     <string name="about_PROJECT_URL">zsolozsma.katolikus.hu</string>
     <string name="about_E_MAIL">android@breviar.sk</string>
-    <string name="about_APP_NAME">Zsolozsma alkalmazás for OS Android</string>
-    <string name="about_SPECIAL_CREDITS">Speciális köszönet: Andrea Fülöpová, Julianna Blahó.</string>
+    <string name="about_APP_NAME">Zsolozsma alkalmazás Androidhoz</string>
+    <string name="about_SPECIAL_CREDITS">Speciális köszönet: Blahó Julianna, Dvornik László, Elek László SJ, Fülöpová Andrea, Izing Gabriel.</string>
     <string name="about_PROJECT_SOURCE_STORAGE">GitHub</string>
     <string name="about_PROJECT_SOURCE_URL">https://github.com/breviar-sk/Liturgia-hodin-online</string>
     <string name="about_PLATFORM_ANDROID">Android</string>
@@ -65,9 +68,12 @@ body { background-color: #000000; color: #cccccc; }
 </head>
 <body>
 
-<p><b>Újdonságok az 1.10.1-es verzióban:</b>
+<p><b>Újdonságok az 1.11-es verzióban:</b>
 <ul>
-<li> Many fixes...
+<li> Éjszakai/nappali mód váltása a főmenüből.
+<li> Nagyobb sorköz a jobb olvashatóság érdekében.
+<li> Frissített „Névjegy” párbeszédablak.
+<li> Gépelési hibák javítása mindegyik nyelvnél.
 </ul>
 
 <p><b>Újdonságok az 1.10-es verzióban:</b>
