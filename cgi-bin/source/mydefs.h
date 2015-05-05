@@ -48,17 +48,12 @@
 #define MAX_QUERY_STR		2000 // query_string
 #define MAX_POM_QUERY_TYPE	2000 // pom_QUERY_TYPE
 #define MAX_GLOBAL_LINK		2000 // maximalna dlzka retazca _global_link
-//#define MAX_ENV	100 // maximalna dlzka environmentalnej premennej | 2006-08-01: nepoužíva sa
 #define MAX_VARIABLES		600 // maximalny pocet syst. premennych WWW_..., zvyseny 2003-08-07 a opätovne 2006-08-01 a opäť 2011-01-26 a zas 2011-04-11 a 2011-04-12 (na 50)
 #define MAX_GLOBAL_BUFFER	4000 // _global_buf, pridané 2005-08-01
-//***************************************************************
-//* EOF of former file mybase.h                                 *
-//***************************************************************
 
 #define MAX_POCET_SVATY 5
 #define PORADIE_PM_SOBOTA  (MAX_POCET_SVATY + 1)
 
-// Nazvy programov, suborov, skriptov...
 #define SCRIPT_NAME          "l.cgi"
 #define SCRIPT_PATH(a)       "cgi-bin/"a
 
@@ -76,13 +71,6 @@ extern char uncgi_name[MAX_STR];  // = cfg_HTTP_ADDRESS_default + UNCGI_SCRIPT_N
 void updateScriptName(void);
 void updateUnCGIName(void);
 
-// tu kedysi bolo aj #define PATH(a) zvacsa a, ale nebolo to treba; vyhodene 2003-07-02
-
-/* 2004-03-17
- * FILE_PATH nie je potrebne; citame to z myconf.cpp::readConfig() (config file)
-extern char FILE_PATH[MAX_STR]; // inicializovane v breviar.cpp
- */
-
 #define DOCS_FOLDER "docs"
 
 #define MESSAGE_FOLDER "msg"
@@ -93,7 +81,7 @@ extern char FILE_PATH[MAX_STR]; // inicializovane v breviar.cpp
 #define FILE_NAME_POKEC         MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"xxx"
 #define FILE_NAME_CHYBA         MESSAGE_FOLDER""STR_PATH_SEPARATOR_HTML"chyba.htm"
 
-extern short int query_type; // premenna obsahujuca PRM_...
+extern short int query_type; // contains constants PRM_...
 
 // meno skriptu nasleduje zoznam parametrov, alebo sa precitaju z form
 #define 	SCRIPT_PARAM_FROM_FORM     200 // z formulara
@@ -195,12 +183,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_PRM_STATIC_TEXT "pst"
 #endif
 
-// nasleduju parametre z formularov pre vsetky typy dotazov,
-// kedysi bolo pre kazdy STR_... definovane WWW_STR_..., teraz ADD_WWW_PREFIX_(STR_...) 
-// 2004-08-14: 
-// definicia ADD_WWW_PREFIX_(a) ("WWW_"##a) ktora bola OK na g++ (gcc version 2.95.4 20011002)
-// sposobovala problemy na g++ (gcc version 3.3.3 20040412)
-// preto zmenene na ADD_WWW_PREFIX_(a) ("WWW_"a)
+// ----------------------------------------------------
 #define WWW_PREFIX "WWW_"
 #define ADD_WWW_PREFIX_(a) ("WWW_"a)
 
@@ -347,11 +330,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_PRM_DETAILY "pdet"
 #endif
 
-/* nasleduju parametre pre modlitbu (PRM_DATUM, PRM_DETAILY)
- * -- specialne options, ktore platia rovnako pre oboje, ale
- * de facto sa vyuzivaju len pre PRM_DETAILY 
- * 2011-01-26: doplnené aj verzie "force" pre formulár; používajú sa totiž aj na PRM_DNES hlavnom okne
- */
+// nasleduju parametre pre modlitbu (PRM_DATUM, PRM_DETAILY)
 #define MODL_OPT_0 38
 #ifdef LONG_PARAM_NAMES
 	#define STR_MODL_OPT_0 "MODL_OPT_0"
@@ -784,90 +763,102 @@ extern short int query_type; // premenna obsahujuca PRM_...
 
 #define MODL_OPTF_5_HYMNUS_KOMPL 101
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_KOMPL "STR_MODL_OPTF_5_HYMNUS_KOMPL"
+	#define STR_MODL_OPTF_5_HYMNUS_KOMPL "MODL_OPTF_5_HYMNUS_KOMPL"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_KOMPL "of5hk"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_PC 102
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_PC "STR_MODL_OPTF_5_HYMNUS_PC"
+	#define STR_MODL_OPTF_5_HYMNUS_PC "MODL_OPTF_5_HYMNUS_PC"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_PC "of5hpc"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_MCD_PREDPOL 103
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_MCD_PREDPOL "STR_MODL_OPTF_5_HYMNUS_MCD_PREDPOL"
+	#define STR_MODL_OPTF_5_HYMNUS_MCD_PREDPOL "MODL_OPTF_5_HYMNUS_MCD_PREDPOL"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_MCD_PREDPOL "of5hpred"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_MCD_NAPOL 104
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_MCD_NAPOL "STR_MODL_OPTF_5_HYMNUS_MCD_NAPOL"
+	#define STR_MODL_OPTF_5_HYMNUS_MCD_NAPOL "MODL_OPTF_5_HYMNUS_MCD_NAPOL"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_MCD_NAPOL "of5hna"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_MCD_POPOL 105
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_MCD_POPOL "STR_MODL_OPTF_5_HYMNUS_MCD_POPOL"
+	#define STR_MODL_OPTF_5_HYMNUS_MCD_POPOL "MODL_OPTF_5_HYMNUS_MCD_POPOL"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_MCD_POPOL "of5hpo"
 #endif
 
 #define MODL_OPTF_5_DOPLNK_PSALM_122_129 106
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_DOPLNK_PSALM_122_129 "STR_MODL_OPTF_5_DOPLNK_PSALM_122_129"
+	#define STR_MODL_OPTF_5_DOPLNK_PSALM_122_129 "MODL_OPTF_5_DOPLNK_PSALM_122_129"
 #else
 	#define STR_MODL_OPTF_5_DOPLNK_PSALM_122_129 "of5ps29"
 #endif
 
 #define MODL_OPTF_5_DOPLNK_PSALM_127_131 107
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_DOPLNK_PSALM_127_131 "STR_MODL_OPTF_5_DOPLNK_PSALM_127_131"
+	#define STR_MODL_OPTF_5_DOPLNK_PSALM_127_131 "MODL_OPTF_5_DOPLNK_PSALM_127_131"
 #else
 	#define STR_MODL_OPTF_5_DOPLNK_PSALM_127_131 "of5ps71"
 #endif
 
 #define MODL_OPTF_5_DOPLNK_PSALM_126_129 108
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_DOPLNK_PSALM_126_129 "STR_MODL_OPTF_5_DOPLNK_PSALM_126_129"
+	#define STR_MODL_OPTF_5_DOPLNK_PSALM_126_129 "MODL_OPTF_5_DOPLNK_PSALM_126_129"
 #else
 	#define STR_MODL_OPTF_5_DOPLNK_PSALM_126_129 "of5ps69"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_VN_PC 109
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_VN_PC "STR_MODL_OPTF_5_HYMNUS_VN_PC"
+	#define STR_MODL_OPTF_5_HYMNUS_VN_PC "MODL_OPTF_5_HYMNUS_VN_PC"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_VN_PC "of5vnpc"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_VN_RCH 110
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_VN_RCH "STR_MODL_OPTF_5_HYMNUS_VN_RCH"
+	#define STR_MODL_OPTF_5_HYMNUS_VN_RCH "MODL_OPTF_5_HYMNUS_VN_RCH"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_VN_RCH "of5vnhrch"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_VN_VESP 111
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_VN_VESP "STR_MODL_OPTF_5_HYMNUS_VN_VESP"
+	#define STR_MODL_OPTF_5_HYMNUS_VN_VESP "MODL_OPTF_5_HYMNUS_VN_VESP"
 #else
 	#define STR_MODL_OPTF_5_HYMNUS_VN_VESP "of5vnv"
 #endif
 
 #define MODL_OPTF_5_HYMNUS_1VESP 113
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_5_HYMNUS_1VESP "STR_MODL_OPTF_5_HYMNUS_1VESP"
+#define STR_MODL_OPTF_5_HYMNUS_1VESP "MODL_OPTF_5_HYMNUS_1VESP"
 #else
-	#define STR_MODL_OPTF_5_HYMNUS_1VESP "of5h1v"
+#define STR_MODL_OPTF_5_HYMNUS_1VESP "of5h1v"
 #endif
 
+#define MODL_OPTF_5_POPOL_STREDA_PSALMODIA 115
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_5_POPOL_STREDA_PSALMODIA "MODL_OPTF_5_POPOL_STREDA_PSALMODIA"
+#else
+#define STR_MODL_OPTF_5_POPOL_STREDA_PSALMODIA "of5psps"
+#endif
 
-// 2008-08-08: Pridané kvôli rôznym css
+#define MODL_OPTF_5_CZ_HYMNY_VYBER 116
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_5_CZ_HYMNY_VYBER "MODL_OPTF_5_CZ_HYMNY_VYBER"
+#else
+#define STR_MODL_OPTF_5_CZ_HYMNY_VYBER "of5czh"
+#endif
+
 #define CSS 40
 #ifdef LONG_PARAM_NAMES
 	#define STR_CSS "CSS"
@@ -875,7 +866,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_CSS "c"
 #endif
 
-// 2008-11-29: Pridané: spôsob zapisovania dátumu pre súbory v batch móde
 #define MODL_OPT_DATE_FORMAT 41
 #ifdef LONG_PARAM_NAMES
 	#define STR_MODL_OPT_DATE_FORMAT "MODL_OPT_DATE_FORMAT"
@@ -883,7 +873,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_MODL_OPT_DATE_FORMAT "u"
 #endif
 
-// 2010-08-04: Pridané kvôli jazykovým mutáciám -- kalendár (napr. rehoľný)
 #define KALENDAR 42
 #ifdef LONG_PARAM_NAMES
 	#define STR_KALENDAR "KALENDAR"
@@ -891,7 +880,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_KALENDAR "k"
 #endif
 
-// názov fontu
 #define FONT_NAME 43
 #ifdef LONG_PARAM_NAMES
 	#define STR_FONT_NAME "FONT_NAME"
@@ -899,7 +887,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_FONT_NAME "f"
 #endif
 
-// názov veľkosti fontu
 #define FONT_SIZE 44
 #ifdef LONG_PARAM_NAMES
 	#define STR_FONT_SIZE "FONT_SIZE"
@@ -915,7 +902,7 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_STYLE_MARGIN "mm"
 #endif
 
-// global
+// query type
 #define QUERY_TYPE	20
 #ifdef LONG_PARAM_NAMES
 	#define STR_QUERY_TYPE "QUERY_TYPE"
@@ -923,8 +910,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	#define STR_QUERY_TYPE "qt"
 #endif
 
-// 2012-10-16: upravený tento define tak, že vždy musí byť pred volaním funkcie Export(); doňho dovnútra som dal volanie hlavičky
-// Export("<p>Ak probl&eacute;my pretrv&aacute;vaj&uacute;, kontaktujte pros&iacute;m <a href=\"mailto:%s\">autora str&aacute;nky</a>.</p>\n", cfg_mail_address_default[_global_jazyk]);
 #define ALERT	{\
 	Log("ALERT\n");\
 	hlavicka((char *)html_title[_global_jazyk]);\
@@ -936,14 +921,15 @@ extern short int query_type; // premenna obsahujuca PRM_...
 	_export_rozbor_dna_buttons_dni_dnes(2 /* dnes_dnes */, NIE /* som_v_tabulke */, pom2, NIE /* zobraz_odkaz_na_skrytie */);\
 	}
 
-// HTML stringy - casti stringov sustredene na tomto mieste; pridane 2003-07-02; rozšírené 2011-01-27
+// HTML stringy - casti stringov sustredene na tomto mieste
 #define HTML_FORM_INPUT_SUBMIT   "input type=\"submit\" class=\"button\""
 #define HTML_FORM_INPUT_RESET    "input type=\"reset\" class=\"reset\""
 #define HTML_FORM_INPUT_RADIO    "input type=\"radio\" class=\"radio\""
 #define HTML_FORM_INPUT_TEXT     "input type=\"text\" class=\"text\""
 #define HTML_FORM_INPUT_TEXT_ROK "input type=\"text\" class=\"text\" size=\"4\" maxlength=\"4\" style=\"font-family:monospace\""
 #define HTML_FORM_INPUT_CHECKBOX "input type=\"checkbox\" class=\"checkbox\""
-// 2011-01-27: pridané buttony (0. level: pre predošlý/nasledovný; 1. level: button "dnes"; 2. level: použité pre menej dôležité buttony)
+
+// buttons (0. level: pre predošlý/nasledovný; 1. level: button "dnes"; 2. level: použité pre menej dôležité buttony)
 #define HTML_FORM_INPUT_SUBMIT0  "input type=\"submit\" class=\"button0\""
 #define HTML_FORM_INPUT_RESET0   "input type=\"reset\" class=\"reset0\""
 #define HTML_FORM_INPUT_SUBMIT1  "input type=\"submit\" class=\"button1\""
@@ -952,7 +938,6 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_FORM_INPUT_RESET2   "input type=\"reset\" class=\"reset2\""
 #define HTML_FORM_INPUT_HIDDEN   "input type=\"hidden\""
 
-// #define HTML_FORM_METHOD_GET  "<form action=\"%s\">\n"
 #define HTML_FORM_METHOD_GET     "<form action=\"%s\" method=\"get\">\n"
 #define HTML_FORM_METHOD_POST    "<form action=\"%s\" method=\"post\">\n"
 
@@ -972,10 +957,35 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_NONBREAKING_SPACE_LOOONG "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 #define HTML_LINE_BREAK_SPACE_LOONG ((_global_jazyk != JAZYK_CZ)?(HTML_NONBREAKING_SPACE""HTML_SLASH""HTML_NONBREAKING_SPACE""HTML_LINE_BREAK""HTML_NONBREAKING_SPACE_LOOONG):(HTML_NONBREAKING_SPACE""HTML_SLASH""HTML_NONBREAKING_SPACE))
 
+#define HTML_DIV_TABLE "div class=\"table\""
+#define HTML_DIV_TABLE_CAPTION "div class=\"table-caption\""
+#define HTML_DIV_TABLE_ROW "div class=\"table-row\""
+#define HTML_DIV_TABLE_CELL "div class=\"table-cell\""
+
+#define HTML_DIV_TABLE_LEFT "div class=\"table-left\""
+#define HTML_DIV_TABLE_CELL_BORDER "div class=\"table-cell-bordered\""
+
+#define HTML_DIV_TABLE_END HTML_DIV_END""HTML_COMMENT_BEGIN"table"HTML_COMMENT_END
+#define HTML_DIV_TABLE_ROW_END HTML_DIV_END""HTML_COMMENT_BEGIN"row"HTML_COMMENT_END
+#define HTML_DIV_TABLE_CELL_END HTML_DIV_END""HTML_COMMENT_BEGIN"cell"HTML_COMMENT_END
+
 #define HTML_DIV_END             "</div>"
 
 #define HTML_DIV_RED_SMALL       "div class=\"redsmall\""
 #define HTML_DIV_RED_SUBTITLE    "div class=\"redsubtitle\""
+
+#define HTML_TABLE			HTML_DIV_TABLE // "table"
+#define HTML_TABLE_CAPTION	HTML_DIV_TABLE_CAPTION // "th"
+#define HTML_TABLE_ROW		HTML_DIV_TABLE_ROW // "tr"
+#define HTML_TABLE_CELL		HTML_DIV_TABLE_CELL // "td"
+#define HTML_TABLE_END		HTML_DIV_END""HTML_COMMENT_BEGIN"table"HTML_COMMENT_END // "</table>"
+#define HTML_TABLE_CAPTION_END	HTML_DIV_END""HTML_COMMENT_BEGIN"caption"HTML_COMMENT_END // "</th>"
+#define HTML_TABLE_ROW_END	HTML_DIV_END""HTML_COMMENT_BEGIN"row"HTML_COMMENT_END // "</tr>"
+#define HTML_TABLE_CELL_END	HTML_DIV_END""HTML_COMMENT_BEGIN"cell"HTML_COMMENT_END // "</td>"
+
+#define HTML_TABLE_LEFT			HTML_DIV_TABLE_LEFT // "table" left-aligned
+#define HTML_TABLE_CELL_BORDER		HTML_DIV_TABLE_CELL_BORDER // "td" with borders
+#define HTML_TABLE_CELL_BORDER_END	HTML_TABLE_CELL_END
 
 #define HTML_SPAN_END            "</span>"
 
@@ -998,10 +1008,12 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_SPAN_XS_CAPS        "span class=\"xsmallcaps\""
 
 #define HTML_CLASS_CALENDAR "class=\"calendar\""
+
 #define HTML_CALENDAR_HEADING "span class=\"calendar heading\""
 #define HTML_CALENDAR_DAYS   "span class=\"calendar day_name\""
 #define HTML_CALENDAR_TODAY_SUNDAY   "span class=\"calendar today bold\""
 #define HTML_CALENDAR_TODAY   "span class=\"calendar today\""
+
 #define HTML_CLASS_NAME_CALENDAR_TODAY_SUNDAY "calendar today bold"
 #define HTML_CLASS_NAME_CALENDAR_TODAY "calendar today"
 #define HTML_CLASS_NAME_CALENDAR_SUNDAY "calendar day bold"
@@ -1021,6 +1033,8 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_CLASS_BUTTON   "class=\"button\""
 #define HTML_CLASS_SMALL    "class=\"small\""
 
+#define HTML_CLASS_QUIET_SMALL    "class=\"quiet small\""
+
 #define HTML_ALIGN_CENTER   "align=\"center\""
 #define HTML_ALIGN_LEFT     "align=\"left\""
 #define HTML_ALIGN_RIGHT    "align=\"right\""
@@ -1028,13 +1042,15 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_VALIGN_TOP     "valign=\"top\""
 #define HTML_VALIGN_BASE    "valign=\"baseline\""
 
-// pridane 2003-07-09, zmenene v cestach pre skript
+#define HTML_BUTTON_BEGIN	"<button type=\"button\" "HTML_CLASS_BUTTON">" // wrapping <a> element to look like button
+#define HTML_BUTTON_END		"</button>"
+
 #define HTML_AMPERSAND          "&amp;"
 
 #define HTML_COMMENT_BEGIN		"<!--"
 #define HTML_COMMENT_END		"-->"
 #define HTML_FONT_SIZE_FARBA	"2"
-// 2007-03-19: pridané namiesto gt a lt html znakov
+
 #define HTML_LEFT_ARROW			"&laquo;"
 #define HTML_RIGHT_ARROW		"&raquo;"
 
@@ -1045,27 +1061,22 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define HTML_LINK_CALL2         "%s?%s=%s"HTML_AMPERSAND"%s=%s"HTML_AMPERSAND"%s=%d"HTML_AMPERSAND"%s=%d%s"
 #define HTML_LINK_CALL3         "%s?%s=%s"HTML_AMPERSAND"%s=%s%s"
 #define HTML_LINK_CALL_PARAM    HTML_AMPERSAND"%s=%s"
-// 2011-01-26: pridané jednoduché šípky vľavo/vpravo
+
 #define HTML_LEFT_ARROW_SINGLE	"&lsaquo;"
 #define HTML_RIGHT_ARROW_SINGLE	"&rsaquo;"
-// 2011-01-26: pridané "trojité" šípky vľavo/vpravo
+
 #define HTML_LEFT_ARROW_HUGE	"&lsaquo;&laquo;"
 #define HTML_RIGHT_ARROW_HUGE	"&raquo;&rsaquo;"
 
 // 2007-03-19: výpis "Dnes je..." sa zobrazí len pri tomto nastavení, ak je 1
 #define HTML_ZOBRAZIT_DNES_JE	0
 
-// 2007-06-01: niektoré definy presunuté z liturgia.h
-
-// option 2
 #define MODL_ZALMY_ZO_DNA 0
 #define MODL_ZALMY_ZO_SV  1
 
-// option 5, 2003-08-06, upravena 2003-08-13
 #define MODL_CEZ_DEN_ZALMY_ZO_DNA         0
 #define MODL_CEZ_DEN_DOPLNKOVA_PSALMODIA  1
 
-// 2008-11-29: pridané rôzne možnosti batch exportu
 #define	EXPORT_DATE_SIMPLE 0
 #define	EXPORT_DATE_FULL   1
 
@@ -1194,6 +1205,8 @@ extern short int query_type; // premenna obsahujuca PRM_...
 #define XML_BIT_OPT_5_HYMNUS_VN_RCH             "BitOpt5HymnTPLaud"
 #define XML_BIT_OPT_5_HYMNUS_VN_VESP            "BitOpt5HymnTPVesp"
 #define XML_BIT_OPT_5_HYMNUS_1VESP              "BitOpt5Hymn1Vesp"
+#define XML_BIT_OPT_5_POPOL_STREDA_PSALMODIA    "BitOpt5AshWednPsalmody"
+#define XML_BIT_OPT_5_CZ_HYMNY_VYBER            "BitOpt5CZhymnsAlt"
 
 // starting, closing element (XML, HTML)
 #define ELEM_BEGIN(elem)     "<"elem">"

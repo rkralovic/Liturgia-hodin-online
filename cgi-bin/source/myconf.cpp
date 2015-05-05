@@ -41,11 +41,12 @@ char cfg_http_address_default[POCET_JAZYKOV + 1][MAX_HTTP_STR];
 char cfg_http_display_address_default[POCET_JAZYKOV + 1][MAX_HTTP_STR];
 char cfg_mail_address_default[POCET_JAZYKOV + 1][MAX_MAIL_STR];
 
-const char *cfg_option_prefix[POCET_GLOBAL_OPT + POCET_DALSICH_CONF] = 
-{"specialne", "casti_modlitby", "html_export", "", "offline_export", "alternatives", "http_adresa", "http_zobraz_adr", "mail_adresa"};
+const char *cfg_option_prefix[POCET_GLOBAL_OPT + POCET_DALSICH_CONF] =
+{ "specialne", "casti_modlitby", "html_export", "", "offline_export", "alternatives", "http_adresa", "http_zobraz_adr", "mail_adresa" };
 #define ODDELOVAC_CFG_OPTION_PREFIX_POSTFIX "_"
-const char *cfg_option_postfix[POCET_JAZYKOV + 1] = 
-{"def", "cz", "en", "la", "", "czop", "hu"};
+
+const char *cfg_option_postfix[POCET_JAZYKOV + 1] =
+{ "def", "cz", "en", "la", "", "czop", "hu", "ru", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 void printConfigOptions(void){
 	short int j = 0, o = 0;
@@ -257,6 +258,7 @@ void readConfig(void)
 	for(j = 0; j <= POCET_JAZYKOV; j++){
 		if(cfg_option_default[OPT_2_HTML_EXPORT][j] != GLOBAL_OPTION_NULL){
 			Log("=== Jazyk `%s' (%s):\n", skratka_jazyka[j], nazov_jazyka[j]);
+
 			// nastavenie parametrov OPT_2_HTML_EXPORT: pridáme bity pre nastavenie
 			if((cfg_option_default[OPT_2_HTML_EXPORT][j] & BIT_OPT_2_NAVIGATION) != BIT_OPT_2_NAVIGATION){
 				Log("Pre option %d nastavujem bit pre '%d'\n", OPT_2_HTML_EXPORT, BIT_OPT_2_NAVIGATION);

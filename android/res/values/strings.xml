@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="version">1.11</string>
+    <string name="version">1.11.1</string>
 
     <string name="app_name">Breviary</string>
     <string name="back">Back</string>
@@ -85,6 +85,12 @@ body { background-color: #000000; color: #cccccc; }
 </style>
 </head>
 <body>
+
+<p><b>News in v1.11.1:</b>
+<ul>
+<li> Liturgical readings: Backward compatibility with Android 2.x and older.
+<li> Typos and fixes for all languages.
+</ul>
 
 <p><b>News in v1.11:</b>
 <ul>
