@@ -50,6 +50,14 @@ public class UrlOptions {
     setBit("o2", 8, value);
   }
 
+  public boolean isOnlyNonBoldFont() {
+    return hasBit("o0", 6);
+  }
+
+  public void setOnlyNonBoldFont(boolean value) {
+    setBit("o0", 6, value);
+  }
+
   int getInt(String key) {
     try {
       return Integer.parseInt(params.get(key));
