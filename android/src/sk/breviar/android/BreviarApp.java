@@ -84,6 +84,18 @@ public class BreviarApp extends Application {
     editor.commit();
   }
 
+  static public String getUrlOptions(Context ctx) {
+    SharedPreferences settings = ctx.getSharedPreferences(Util.prefname, 0);
+    return settings.getString("params", "");
+  }
+
+  static public void setUrlOptions(Context ctx, String opts) {
+    SharedPreferences settings = ctx.getSharedPreferences(Util.prefname, 0);
+    SharedPreferences.Editor editor = settings.edit();
+    editor.putString("params", opts);
+    editor.commit();
+  }
+
   static public void initLocale(Context ctx) {
     Configuration cfg = new Configuration();
     if (getOverrideLocale(ctx)) {

@@ -11,7 +11,11 @@ public class UrlOptions {
     if (is_full_url) {
       base_uri = Uri.parse(opts);
     } else {
-      base_uri = Uri.parse("http://127.0.0.1/cgi?q=pdnes" + opts.replaceAll("&amp;", "&"));
+      String decoded = opts.replaceAll("&amp;", "&");
+      if (decoded.startsWith("&")) {
+        decoded = decoded.substring(1);
+      }
+      base_uri = Uri.parse("http://127.0.0.1/cgi?" + decoded);
     }
     params = new java.util.HashMap<String, String>();
 
@@ -30,7 +34,11 @@ public class UrlOptions {
     this(opts, false);
   }
 
-  public String build() {
+  public void override(UrlOptions other) {
+    params.putAll(other.params);
+  }
+
+  public String build(boolean build_query_only) {
     Uri.Builder builder = new Uri.Builder();
     builder.scheme(base_uri.getScheme());
     builder.encodedAuthority(base_uri.getEncodedAuthority());
@@ -38,8 +46,18 @@ public class UrlOptions {
     for (Map.Entry<String, String> entry : params.entrySet()) {
       builder.appendQueryParameter(entry.getKey(), entry.getValue());
     }
-    String result = builder.build().toString();
+    String result;
+    if (build_query_only) {
+      result = "&amp;" + builder.build().getEncodedQuery().replaceAll("&", "&amp;");
+    } else {
+      result = builder.build().toString();
+    }
+    Log.v("breviar", "url built: " + result);
     return result;
+  }
+
+  public String build() {
+    return build(false);
   }
 
   public boolean isNightmode() {
@@ -56,6 +74,38 @@ public class UrlOptions {
 
   public void setOnlyNonBoldFont(boolean value) {
     setBit("o0", 6, value);
+  }
+
+  public boolean isEpiphanySunday() {
+    return hasBit("o0", 3);
+  }
+
+  public void setEpiphanySunday(boolean value) {
+    setBit("o0", 3, value);
+  }
+
+  public boolean isAscensionSunday() {
+    return hasBit("o0", 4);
+  }
+
+  public void setAscensionSunday(boolean value) {
+    setBit("o0", 4, value);
+  }
+
+  public boolean isBodyBloodSunday() {
+    return hasBit("o0", 5);
+  }
+
+  public void setBodyBloodSunday(boolean value) {
+    setBit("o0", 5, value);
+  }
+
+  public boolean isEmphasizeLocalCalendar() {
+    return hasBit("o2", 15);
+  }
+
+  public void setEmphasizeLocalCalendar(boolean value) {
+    setBit("o2", 15, value);
   }
 
   int getInt(String key) {

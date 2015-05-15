@@ -53,6 +53,7 @@ public class Breviar extends Activity implements View.OnLongClickListener {
     String language;
     boolean initialized, clearHistory;
     boolean fullscreen = false;
+    boolean need_to_reload_preferences = false;
     float scroll_to = -1;
 
     int appEventId = -1;
@@ -87,19 +88,29 @@ public class Breviar extends Activity implements View.OnLongClickListener {
     }
 
     void resetLanguage() {
+      need_to_reload_preferences = false;
       S.setLanguage(language);
       clearHistory = true;
-      // povodne sme zahadzovali cele nastavenia:
+
+      // Povodne sme zahadzovali cele nastavenia:
       // wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname + "?qt=pdnes");
       // namiesto toho sa snazime z nich iba dat prec co je nekompatibilne. Toto je prvy pokus.
-      wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname +
-                 "?qt=pdnes" + Html.fromHtml(S.getOpts()
-                     .replaceAll("&amp;c=[^&]*&amp;", "&amp;")
-                     .replaceAll("&amp;c=[^&]*$", "")
-                     .replaceAll("&amp;j=[^&]*&amp;", "&amp;")
-                     .replaceAll("&amp;j=[^&]*$", "")));
+      // Since we call this only after LangSelect, url options in shared settings are up to date.
+      String new_opts = BreviarApp.getUrlOptions(getApplicationContext())
+                            .replaceAll("&amp;c=[^&]*&amp;", "&amp;")
+                            .replaceAll("&amp;c=[^&]*$", "")
+                            .replaceAll("&amp;j=[^&]*&amp;", "&amp;")
+                            .replaceAll("&amp;j=[^&]*$", "");
+      S.setOpts(new_opts);
+
+      String new_url = "http://127.0.0.1:" + S.port + "/" + scriptname +
+                       "?qt=pdnes" + Html.fromHtml(new_opts);
+
+      Log.v("breviar", "resetLanguage: " + language + " new_url: " + new_url);
+
+      wv.loadUrl(new_url);
       syncPreferences();
-      BreviarApp.initLocale(this);
+      BreviarApp.initLocale(getApplicationContext());
       recreateIfNeeded();
     }
 
@@ -127,7 +138,8 @@ public class Breviar extends Activity implements View.OnLongClickListener {
       language = settings.getString("language", "sk");
       scale = settings.getInt("scale", 100);
       fullscreen = settings.getBoolean("fullscreen", false);
-      String opts = settings.getString("params", "");
+
+      String opts = BreviarApp.getUrlOptions(getApplicationContext());
 
       lock = ((PowerManager)getSystemService(POWER_SERVICE))
                  .newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "breviar");
@@ -324,12 +336,24 @@ public class Breviar extends Activity implements View.OnLongClickListener {
     boolean resumed = false;
     @Override
     protected void onResume() {
+      if (need_to_reload_preferences) {
+        need_to_reload_preferences = false;
+        scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
+
+        UrlOptions opts = new UrlOptions(wv.getUrl(), true);
+        opts.override(new UrlOptions(BreviarApp.getUrlOptions(
+              getApplicationContext()).replaceAll("&amp;", "&")));
+
+        String new_url = opts.build();
+        Log.v("breviar", "Reloading preferences; new url = " + new_url);
+        wv.loadUrl(new_url);
+      }
       if (!resumed) {
         resumed = true;
-        if (BreviarApp.getDimLock(this)) {
+        if (BreviarApp.getDimLock(getApplicationContext())) {
           lock.acquire();
         }
-        if (BreviarApp.getMute(this)) {
+        if (BreviarApp.getMute(getApplicationContext())) {
           AudioManager manager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
           ringMode = manager.getRingerMode();
           manager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
@@ -346,7 +370,7 @@ public class Breviar extends Activity implements View.OnLongClickListener {
       super.onPause();
       if (resumed) {
         resumed = false;
-        if (BreviarApp.getDimLock(this)) {
+        if (BreviarApp.getDimLock(getApplicationContext())) {
           lock.release();
         }
         if (ringMode != -1) {
@@ -392,12 +416,11 @@ public class Breviar extends Activity implements View.OnLongClickListener {
       editor.putString("language", language);
       editor.putInt("scale", scale);
       editor.putBoolean("fullscreen", fullscreen);
-      if (S != null) {
-        editor.putString("params", S.getOpts());
-      }
-
-      // Commit the edits!
       editor.commit();
+
+      if (S != null) {
+        BreviarApp.setUrlOptions(getApplicationContext(), S.getOpts());
+      }
     }
 
     void markVersion() {
@@ -478,6 +501,8 @@ public class Breviar extends Activity implements View.OnLongClickListener {
       UrlOptions opts;
       switch (item.getItemId()) {
         case R.id.lang_select:
+          syncPreferences();
+          need_to_reload_preferences = true;
           Intent selectLang = new Intent(this, LangSelect.class);
           startActivityForResult(selectLang, 0);
           return true;
