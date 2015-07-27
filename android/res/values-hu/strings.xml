@@ -7,26 +7,45 @@
     <string name="pgup">Fel</string>
     <string name="pgdn">Le</string>
 
-    <string name="lang_select">Beállítás</string>
-    <string name="lang_select_title">Nyelvválasztás:</string>
+    <string name="lang_select">Beállítások</string>
+
+    <string name="lang_select_title">Nyelv:</string>
     <string name="lang_cz">Cseh</string>
     <string name="lang_sk">Szlovák</string>
     <string name="lang_hu">Magyar</string>
-    <string name="override_locale">Rendszerszintű nyelvi beállítások felülírása</string>
+    <string name="override_locale">rendszerszintű nyelvi beállítások felülírása</string>
 
-    <string name="settings_title">Beállítás:</string>
-    <string name="vol_buttons">Hangerőt állító gombok használata görgetéshez</string>
-    <string name="dimlock">Ne sötétüljön el a képernyő</string>
-    <string name="mute">A telefon csendes módba kapcsolása</string>
+    <string name="settings_title">Eszköz beállításai:</string>
+    <string name="vol_buttons">hangerőt állító gombok használata görgetéshez</string>
+    <string name="dimlock">ne sötétüljön el a képernyő</string>
+    <string name="mute">a telefon csendes módba kapcsolása</string>
+
+    <string name="prayer_content_settings1_title">Tartalom beállításai:</string>
+    <string name="various_options_in_prayers">mutassa az imáknál a különböző lehetőségeket hiperhivatkozásokként</string>
+    <string name="alternatives">lehetőségek</string>
+
+    <string name="prayer_content_settings_title">Az imaóra szövegében jelenjenek meg:</string>
+    <string name="display_communia_info">hogy a közös részek honnan lettek véve</string>
+    <string name="verse_numbering">a versek számai</string>
+    <string name="bible_references">a bibliai hivatkozások</string>
+    <string name="liturgical_readings">a liturgikus olvasmányok</string>
+
+    <string name="display_settings_title">Megjelenés beállításai:</string>
+    <string name="navigation">navigáció mutatása az imaszövegben</string>
+    <string name="wrapping_printed">hosszú sorok tördelése, mint a nyomtatott kiadásban (versrészek)</string>
+    <string name="smart_buttons">az imaórák gombjainak gazdaságos elhelyezése</string>
+    <string name="night_mode">éjszakai mód</string>
+    <string name="normal_font">normál betűtípus használata (félkövér tiltása)</string>
+    <string name="buttons_order">a fejlécben a dátumválasztó gombok legyenek az imaóra választó gombok után</string>
 
     <string name="calendar_settings_title">Liturgikus naptár:</string>
-    <string name="epiphany_sunday">Urunk megjelenése (Vízkereszt) megünneplése vasárnap, január 2. és 8. között</string>
+    <string name="epiphany_sunday">Urunk megjelenését (Vízkeresztet) vasárnap ünnepelni, január 2. és 8. között</string>
     <string name="ascension_sunday">Urunk mennybemenetelét vasárnap ünnepelni</string>
-    <string name="body_blood_sunday">Krisztus Szent Teste és Vére ünnepe vasárnapra téve</string>
+    <string name="body_blood_sunday">Krisztus Szent Teste és Vére ünnepét vasárnap ünnepelni</string>
     <string name="emphasize_local_calendar">kijelölni az ünnepeket a nemzeti naptárban</string>
 
     <string name="alarms">Értesítések</string>
-    <string name="alarms_title">Értesítések beállítása:</string>
+    <string name="alarms_title">Értesítések beállításai:</string>
     <string name="alarmOff">letiltás</string>
 
     <string name="fullscreenOn">Teljes képernyő</string>
@@ -36,7 +55,7 @@
     <string name="nightmodeOff">Nappali mód</string>
 
     <string name="onlyNonBoldFontOn">Normál betűtípus</string>
-    <string name="onlyNonBoldFontOff">És félkövér betűtípus</string>
+    <string name="onlyNonBoldFontOff">Félkövér betűtípus</string>
 
     <string name="inv">Imádságra hívás</string>
     <string name="rch">Reggeli dicséret</string>
@@ -79,12 +98,22 @@ body { background-color: #000000; color: #cccccc; }
 </head>
 <body>
 
-<p><b>Újdonságok az 1.11.2-es verzióban:</b>
+<p><b>Zsolozsma alkalmazás | Újdonságok</b>
+
+<p><b>Verzió 1.12:</b>
 <ul>
-<li> New menu item: Dispay only normal font (vs use also bold font).
+<li> Possibility to display közös zsolozsmája.
+<li> Gépelési hibák javítása.
 </ul>
 
-<p><b>Újdonságok az 1.11.1-es verzióban:</b>
+<p><b>Verzió 1.11.2:</b>
+<ul>
+<li> Új menüelem: félkövér betűtípussal való megjelenítés engedélyezése/tiltása.
+<li> Gépelési hibák javítása.
+<li> Új beállítások hozzáadása.
+</ul>
+
+<p><b>Verzió 1.11.1:</b>
 <ul>
 <li> Gépelési hibák javítása.
 <li> Visszafelé való kompatibilitás javítása az Android 2.x és régebbi verziókkal.
@@ -92,7 +121,7 @@ body { background-color: #000000; color: #cccccc; }
 <li> Több bekezdésből álló könyörgések olvashatóbb tagolása.
 </ul>
 
-<p><b>Újdonságok az 1.11-es verzióban:</b>
+<p><b>Verzió 1.11:</b>
 <ul>
 <li> Éjszakai/nappali mód váltása a főmenüből.
 <li> Nagyobb sorköz a jobb olvashatóság érdekében.
@@ -100,7 +129,7 @@ body { background-color: #000000; color: #cccccc; }
 <li> Gépelési hibák javítása mindegyik nyelvnél.
 </ul>
 
-<p><b>Újdonságok az 1.10-es verzióban:</b>
+<p><b>Verzió 1.10:</b>
 <ul>
 <li> Az imák egyszerűsített megjelenítése (csak az imák szövege, címek és rubrikák nélkül) látássérültek számára. Felolvasó gépek használhatják.
 <li> Új lehetőség a főoldalon: Általános rész.
@@ -108,14 +137,14 @@ body { background-color: #000000; color: #cccccc; }
 <li> Android 5.0 (Lollipop) kompatibilitás.
 </ul>
 
-<p><b>Újdonságok az 1.9.10-es verzióban:</b>
+<p><b>Verzió 1.9.10:</b>
 <ul>
 <li> Új beállítási lehetőség: automatikus csendes módba kapcsolás imádság közben.
 <li> Új beállítási lehetőség: I. Esti dicséret himnusza (évközi időben).
 <li> Fohászok formázása.
 </ul>
 
-<p><b>Újdonságok az 1.9.9-es verzióban:</b>
+<p><b>Verzió 1.9.9:</b>
 <ul>
 <li> A befejező imaóra kantikuma félkövéren jelenik meg.
 <li> Hármaspont karakter használata.
@@ -124,7 +153,7 @@ body { background-color: #000000; color: #cccccc; }
 <li> Gépelési hibák javítása.
 </ul>
 
-<p><b>Újdonságok az 1.9.8-as verzióban:</b>
+<p><b>Verzió 1.9.8:</b>
 <ul>
 <li> Hosszú érintésre elrejti az alsó navigációs sávot.
 <li> Új opció: a képernyő ne sötétüljön el.

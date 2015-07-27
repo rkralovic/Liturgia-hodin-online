@@ -52,7 +52,7 @@
 	font-weight: normal; 
 }
 
-.respons p.respR, p.respV, p.respO, p.respF { 
+.respons p.respR, .respons p.respV, .respons p.respO, .respons p.respF, p.respR, p.respV, p.respO, p.respF, .respR, .respV, .respO, .respF { 
 	font-weight: bold; 
 	margin: 0; 
 	-webkit-margin-after: 0em; 
@@ -61,25 +61,25 @@
 
 
 /* for SK & LA, R/V is used; for CZ, O/V is used; for HU, V/F is used */
-.respons p.respR:before { 
+.respons p.respR:before, .respR:before { 
 	color: #ff0000; 
 	content: 'R. '; 
 	font-weight: bold; 
 }
 
-.respons p.respV:before { 
+.respons p.respV:before, .respV:before { 
 	color: #ff0000; 
 	content: 'V. '; 
 	font-weight: bold; 
 }
 
-.respons p.respO:before { 
+.respons p.respO:before, .respO:before { 
 	color: #ff0000; 
 	content: 'O. '; 
 	font-weight: bold; 
 }
 
-.respons p.respF:before { 
+.respons p.respF:before, .respF:before { 
 	color: #ff0000; 
 	content: 'F. '; 
 	font-weight: bold; 
@@ -90,6 +90,22 @@ div.hymn, div.responsory, div.readings {
 	font-weight: bold;
 }
 
+div.daily p {
+	text-align: center;
+}
+
+div.nav p {
+	text-align: center;
+}
+
+div.navd p {
+	text-align: center;
+}
+
+div.navm p {
+	text-align: center;
+}
+
 /* 2014-12-02 for HU */
 div.responsory {
 	margin: 1em 0;
@@ -97,7 +113,7 @@ div.responsory {
 
 /* 2013-09-19 class for calendar */
 .calendar { 
-	padding: 4px 4px 4px 0; 
+	padding: 2px; 
 }
 
 .calendar.heading { 
@@ -108,7 +124,7 @@ div.responsory {
 	/* display: inline; */
 	font-weight: bold; 
 	min-width: 22px; 
-	padding: 4px 4px 0px 0; 
+	text-align: right;
 }
 
 .calendar.day_name { 
@@ -119,7 +135,7 @@ div.responsory {
 	display: block; 
 	font-style: italic; 
 	min-width: 22px; 
-	padding: 4px 4px 0px 0; 
+	text-align: right;
 }
 
 .calendar.day { 
@@ -129,6 +145,7 @@ div.responsory {
 	border-top: 1px dotted; 
 	display: block; 
 	min-width: 22px; 
+	text-align: right;
 }
 
 .calendar.today { 
@@ -140,6 +157,7 @@ div.responsory {
 	color: #FFFFCC; 
 	display: block; 
 	min-width: 22px; 
+	text-align: right;
 }
 
 /* 2013-09-09 class .preces for prayers and intercessions */
@@ -245,6 +263,10 @@ div.responsory {
 	font-weight: normal; 
 }
 
+.psalm p.bold { 
+	font-weight: bold; 
+}
+
 .psalm p.verse { 
 	font-weight: bold; 
 	margin:0; 
@@ -344,10 +366,10 @@ div.responsory {
 	height: 1px; 
 }
 
-div.biblereference { 
-	color: #ff0000; 
+p.bibleref {
+	color: #ff0000;
 	font-weight: normal;
-	text-align: right; 
+	text-align: right;
 }
 
 .daytime-praise .time { 
@@ -379,6 +401,10 @@ div.biblereference {
 	float: left; 
 	height: 1em; 
 	width: 15px; 
+}
+
+.center {
+	text-align: center;
 }
 
 /* apply to all elements, used for <span> (character style) and <div> (paragraph style), 2005-07-27 */
@@ -743,18 +769,22 @@ li {
 
 h1 { 
 	font-size: 180%; 
+	text-align: center;
 }
 
 h2 { 
 	font-size: 150%; 
+	text-align: center;
 }
 
 h3 { 
 	font-size: 100%; 
+	text-align: center;
 }
 
 h4 { 
 	font-size: 100%; 
+	text-align: center;
 }
 
 sup { 
@@ -802,6 +832,14 @@ sup {
 	padding: 1px; /* all four paddings */
 }
 
+.table-cell-valign-top
+{
+	display: table-cell;
+	margin: 0 auto;
+	padding: 1px; /* all four paddings */
+	vertical-align: top;
+}
+
 .table-cell-bordered {
 	display: table-cell;
 	border: 1px solid black;
@@ -811,3 +849,10 @@ sup {
 	-moz-box-sizing: border-box;
 }
 
+.inline {
+	display: inline;
+}
+
+.hidden {
+    display: none;
+}

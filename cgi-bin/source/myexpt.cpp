@@ -130,8 +130,9 @@ short int Export(const char *fmt, ...){
 #else
 	if (exptused == SUCCESS){
 		cnt = vfprintf(exportfile, fmt, argptr);
-		if (isbothExports)
+		if (isbothExports){
 			cnt = vprintf(fmt, argptr);
+		}
 	}
 	else{
 		cnt = vprintf(fmt, argptr);
@@ -139,6 +140,31 @@ short int Export(const char *fmt, ...){
 #endif /* EXPORT_TO_STRING */
 	va_end(argptr);
 
+	return(cnt);
+}
+
+short int ExportHtmlComment(const char *fmt, ...){
+	
+	va_list argptr;
+	short int cnt = Export("\n"HTML_COMMENT_BEGIN);
+
+	va_start(argptr, fmt);
+#ifdef EXPORT_TO_STRING
+	cnt += Export_to_string(fmt, argptr);
+#else
+	if (exptused == SUCCESS){
+		cnt += vfprintf(exportfile, fmt, argptr);
+		if (isbothExports){
+			cnt += vprintf(fmt, argptr);
+		}
+	}
+	else{
+		cnt += vprintf(fmt, argptr);
+	}
+#endif /* EXPORT_TO_STRING */
+	va_end(argptr);
+
+	cnt += Export(HTML_COMMENT_END"\n");
 	return(cnt);
 }
 
@@ -154,8 +180,9 @@ short int Export_to_file(FILE * expt, const char *fmt, ...){
 	va_start(argptr, fmt);
 	if (expt != NULL){
 		cnt = vfprintf(expt, fmt, argptr);
-		if (isbothExports)
+		if (isbothExports){
 			cnt = vprintf(fmt, argptr);
+		}
 	}
 	else{
 #ifdef EXPORT_TO_STRING

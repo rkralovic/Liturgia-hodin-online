@@ -88,7 +88,6 @@ short int __Log(const char *fmt, ...)
 	va_list argptr;
 	short int cnt;
 
-	/* 2005-03-28; odkomentované a upravené 2006-08-19: Ak logujeme na stdout (teda zrejme do HTML), vypiseme HTML <p> */
 #if defined(LOG_TO_STDOUT)
 	fprintf(logfile, "\n<!-- Log: ");
 #endif
@@ -100,8 +99,9 @@ short int __Log(const char *fmt, ...)
 #else // not LOG_TO_ANDROID
 	if(used == 0){
 		cnt = vfprintf(logfile, fmt, argptr);
-		if(both)
+		if (both){
 			cnt = vprintf(fmt, argptr);
+		}
 	}
 	else
 		cnt = vprintf(fmt, argptr);

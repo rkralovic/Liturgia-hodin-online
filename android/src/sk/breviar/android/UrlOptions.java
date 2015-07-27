@@ -60,14 +60,7 @@ public class UrlOptions {
     return build(false);
   }
 
-  public boolean isNightmode() {
-    return hasBit("o2", 8);
-  }
-
-  public void setNightmode(boolean value) {
-    setBit("o2", 8, value);
-  }
-
+  // of0fn
   public boolean isOnlyNonBoldFont() {
     return hasBit("o0", 6);
   }
@@ -76,6 +69,43 @@ public class UrlOptions {
     setBit("o0", 6, value);
   }
 
+  // of0bo
+  public boolean isButtonsOrder() {
+    return hasBit("o0", 7);
+  }
+
+  public void setButtonsOrder(boolean value) {
+    setBit("o0", 7, value);
+  }
+
+  // of0v
+  public boolean isVerseNumbering() {
+    return hasBit("o0", 0);
+  }
+
+  public void setVerseNumbering(boolean value) {
+    setBit("o0", 0, value);
+  }
+
+  // of0r
+  public boolean isBibleReferences() {
+    return hasBit("o0", 1);
+  }
+
+  public void setBibleReferences(boolean value) {
+    setBit("o0", 1, value);
+  }
+
+  // of0cit
+  public boolean isLiturgicalReadings() {
+    return hasBit("o0", 2);
+  }
+
+  public void setLiturgicalReadings(boolean value) {
+    setBit("o0", 2, value);
+  }
+
+  // of0zjvne
   public boolean isEpiphanySunday() {
     return hasBit("o0", 3);
   }
@@ -84,6 +114,7 @@ public class UrlOptions {
     setBit("o0", 3, value);
   }
 
+  // of0nanne
   public boolean isAscensionSunday() {
     return hasBit("o0", 4);
   }
@@ -92,6 +123,7 @@ public class UrlOptions {
     setBit("o0", 4, value);
   }
 
+  // of0tkne
   public boolean isBodyBloodSunday() {
     return hasBit("o0", 5);
   }
@@ -100,6 +132,70 @@ public class UrlOptions {
     setBit("o0", 5, value);
   }
 
+  // of1zspc
+  public boolean isDisplayCommuniaInfo() {
+    return hasBit("o1", 12);
+  }
+
+  public void setDisplayCommuniaInfo(boolean value) {
+    setBit("o1", 12, value);
+  }
+
+  // of2nav
+  public boolean isNavigation() {
+    return hasBit("o2", 5);
+  }
+
+  public void setNavigation(boolean value) {
+    setBit("o2", 5, value);
+  }
+
+  // of2tw
+  public boolean isTextWrap() {
+    return hasBit("o2", 6);
+  }
+
+  public void setTextWrap(boolean value) {
+    setBit("o2", 6, value);
+  }
+
+  // of2btnu
+  public boolean isSmartButtons() {
+    return hasBit("o2", 7);
+  }
+
+  public void setSmartButtons(boolean value) {
+    setBit("o2", 7, value);
+  }
+
+  // of2nr
+  public boolean isNightmode() {
+    return hasBit("o2", 8);
+  }
+
+  public void setNightmode(boolean value) {
+    setBit("o2", 8, value);
+  }
+
+  // of2rm
+  public boolean isDisplayVariousOptions() {
+    return hasBit("o2", 9);
+  }
+
+  public void setDisplayVariousOptions(boolean value) {
+    setBit("o2", 9, value);
+  }
+
+  // of2a
+  public boolean isDisplayAlternatives() {
+    return hasBit("o2", 14);
+  }
+
+  public void setDisplayAlternatives(boolean value) {
+    setBit("o2", 14, value);
+  }
+
+  // of2sdc
   public boolean isEmphasizeLocalCalendar() {
     return hasBit("o2", 15);
   }

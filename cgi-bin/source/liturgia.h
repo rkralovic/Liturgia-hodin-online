@@ -532,11 +532,11 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define PARAM_REFERENCIA_BEGIN				"r"
 #define PARAM_REFERENCIA_END				"/r"
 
-// 2011-09-01: odkaz na katechézy (pôvodne v HTML zdrojákoch bola subscript hviezdička za nadpisom)
+// 2011-09-01: odkaz na katechézy
 #define PARAM_KATECHEZA_BEGIN				"k"
 #define PARAM_KATECHEZA_END					"/k"
 
-// 2011-09-06: odkaz na žalm 95 (pôvodne v HTML zdrojákoch pre žalmy 24, 67, 100 bol natvrdo <a href> odkaz)
+// 2011-09-06: odkaz na žalm 95
 #define PARAM_LINK_ZALM95_BEGIN				"z95"
 #define PARAM_LINK_ZALM95_END				"/z95"
 
@@ -554,29 +554,33 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define PARAM_DOPLNK_PSALM_126_129          "DPSALM-126-129"
 #define PARAM_DOPLNK_PSALM_127_131          "DPSALM-127-131"
 
-// 2009-04-08: zakončenie modlitby trojaké, krátke resp. dlhé
+// zakončenie modlitby trojaké, krátke resp. dlhé
 #define PARAM_ZAKONCENIE_SKRZE              "SKRZE"
 #define PARAM_ZAKONCENIE_LEBO_TY            "LEBO_TY"
 #define PARAM_ZAKONCENIE_LEBO_ON            "LEBO_ON"
-// 2009-12-14: zakončenie modlitby trojaké, krátke resp. dlhé s malým písmenkom na začiatku
+// zakončenie modlitby trojaké, krátke resp. dlhé s malým písmenkom na začiatku
 #define PARAM_ZAKONCENIE_SKRZE_MALE         "SKRZE_MALE"
 #define PARAM_ZAKONCENIE_LEBO_TY_MALE       "LEBO_TY_MALE"
 #define PARAM_ZAKONCENIE_LEBO_ON_MALE       "LEBO_ON_MALE"
-// 2010-06-07: ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé (POST1_MODLITBA5NE)
+// ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé (POST1_MODLITBA5NE)
 #define PARAM_ZAKONCENIE_ON_JE              "ON_JE"
-// 2010-01-14: ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé
+// ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé
 #define PARAM_ZAKONCENIE_KTORY_JE           "KTORY_JE"
-// 2012-03-16: predslovy k zakončeniam, ktoré sa pre férie nemajú zobraziť, ak sa slávi spomienka v privilegovaných dňoch
+// predslovy k zakončeniam, ktoré sa pre férie nemajú zobraziť, ak sa slávi spomienka v privilegovaných dňoch
 #define PARAM_ZAKONCENIE_O_TO_TA_PROSIME    "O_TO_TA_PROSIME"
 
-// 2011-08-15: force pre jednotlivé časti modlitby, funkcie _set_spolocna_cast()...
-#define FORCE_BRAT_ANTIFONY      1
-#define FORCE_BRAT_ZALMY         2
-#define FORCE_BRAT_KCIT_1CIT     4 // krátke čítanie pre rch+v; 1. čítanie pre posvätné čítanie
-#define FORCE_BRAT_KRESP_PROSBY  8
-#define FORCE_BRAT_2CITANIE     16
-#define FORCE_BRAT_ANTIFONY_MCD 32
-#define FORCE_BRAT_HYMNUS       64
+// force pre jednotlivé časti modlitby, funkcie _set_spolocna_cast()...
+#define FORCE_NEBRAT               0
+#define FORCE_BRAT_ANTIFONY        1 // antifóny pre ranné chvály, posv. čítanie a vešpery
+#define FORCE_BRAT_ZALMY           2
+#define FORCE_BRAT_KCIT_1CIT       4 // krátke čítanie pre rch+v a mcd; 1. čítanie pre posvätné čítanie
+#define FORCE_BRAT_KRESP_PROSBY    8 // krátke responzórium a prosby pre ranné chvály, vešpery a mcd; krátke responzórium pre posv. čítanie
+#define FORCE_BRAT_2CITANIE       16 // 2. čítanie pre posvätné čítanie
+#define FORCE_BRAT_ANTIFONY_MCD   32 // antifóny pre modlitbu cez deň
+#define FORCE_BRAT_HYMNUS         64 // hymnus pre všetky modlitby
+#define FORCE_BRAT_ANTIFONY_B_M  128 // Benediktus + Magnifikat
+#define FORCE_BRAT_ANTIFONY_INV  256 // antifóny pre invitatórium
+#define FORCE_BRAT_MODLITBA      512 // modlitba (používa sa pre modlitbu cez deň)
 
 extern const char *str_ano[POCET_JAZYKOV + 1];
 #ifndef		STR_ANO
@@ -632,6 +636,37 @@ extern const char *str_modl_zalmy_zo_sv[POCET_JAZYKOV + 1];
 #define MODL_SPOL_CAST_SV_MUZ_MANZ       26 // pre tých, čo žili v manželstve
 #define MODL_SPOL_CAST_NEBRAT            27 // nechce zo spol. casti // MUST BE THE LAST VALUE
 #define POCET_SPOL_CASTI	MAX_MODL_SPOL_CAST - 1
+
+const short int poradie_spol_cast[POCET_SPOL_CASTI + 1] = {
+	MODL_SPOL_CAST_NEBRAT,
+	MODL_SPOL_CAST_ZA_ZOSNULYCH,
+	MODL_SPOL_CAST_POSVIACKA_CHRAMU,
+	MODL_SPOL_CAST_PANNA_MARIA,
+	MODL_SPOL_CAST_APOSTOL,
+	MODL_SPOL_CAST_VIAC_MUCENIKOV,
+	MODL_SPOL_CAST_MUCENIK,
+	MODL_SPOL_CAST_MUCENICA,
+	MODL_SPOL_CAST_DUCH_PAST_PAPEZ,
+	MODL_SPOL_CAST_DUCH_PAST_BISKUP,
+	MODL_SPOL_CAST_DUCH_PAST_KNAZ,
+	MODL_SPOL_CAST_DUCH_PAST_VIACERI,
+	MODL_SPOL_CAST_UCITEL_CIRKVI,
+	MODL_SPOL_CAST_PANNA,
+	MODL_SPOL_CAST_PANNY_VIACERE,
+	MODL_SPOL_CAST_SV_MUZ,
+	MODL_SPOL_CAST_SV_MUZ_MANZ,
+	MODL_SPOL_CAST_SV_MUZ_VIACERI,
+	MODL_SPOL_CAST_SV_ZENA,
+	MODL_SPOL_CAST_SV_ZENA_MANZ,
+	MODL_SPOL_CAST_SV_ZENA_VIACERE,
+	MODL_SPOL_CAST_SV_MUZ_REHOLNIK,
+	MODL_SPOL_CAST_SV_ZENA_REHOLNIK,
+	MODL_SPOL_CAST_SV_MUZ_SKUTKYMIL,
+	MODL_SPOL_CAST_SV_ZENA_SKUTKYMIL,
+	MODL_SPOL_CAST_SV_MUZ_VYCH,
+	MODL_SPOL_CAST_SV_ZENA_VYCH,
+	MODL_SPOL_CAST_NEURCENA
+};
 
 extern const char *str_doplnkova_psalmodia[POCET_JAZYKOV + 1];
 
@@ -918,6 +953,8 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_LUB_SPOMIENKA_FMA_CZ    105
 #define LOKAL_SLAV_SVIATOK_VDB_CZ          106
 #define LOKAL_SLAV_SLAVNOST_FMA_CZ         107
+#define LOKAL_SLAV_SZEGED_CSAN_EGYH3       108
+#define LOKAL_SLAV_ORDINARIAT              109
 
 // calendar
 #define KALENDAR_NEURCENY                   0 // undefined
@@ -1131,18 +1168,20 @@ struct lrok{
 };
 typedef struct lrok _struct_lrok;
 
-#define LINK_DEN_MESIAC_NIE 0 // 2008-01-22: pridané, Vlado Kiš upozornil, že je to zbytočné
+#define LINK_DEN_MESIAC_NIE 0
 #define LINK_DEN_MESIAC_ROK 1
 #define LINK_DEN_MESIAC 3
 #define LINK_DEN 2
-#define LINK_DEN_MESIAC_ROK_PRESTUP 4 // pridana kvoli prestupnym rokom, 2003-07-02
-#define LINK_ISO_8601 5 // pridana kvoli SIMPLE exportu, 2005-03-21
-#define LINK_DEN_MESIAC_PREDOSLY 6 // 2007-08-15 pridané kvôli novému kalendáru
-#define LINK_DEN_MESIAC_NASLEDOVNY 7 // 2007-08-15 pridané kvôli novému kalendáru
-#define LINK_DEN_MESIAC_GEN 8 // 2011-12-19: to isté ako LINK_DEN_MESIAC, len mesiac je v genitíve
+#define LINK_DEN_MESIAC_ROK_PRESTUP 4
+#define LINK_ISO_8601 5 // pridana kvoli SIMPLE exportu
+#define LINK_DEN_MESIAC_PREDOSLY 6
+#define LINK_DEN_MESIAC_NASLEDOVNY 7
+#define LINK_DEN_MESIAC_GEN 8 // the same as LINK_DEN_MESIAC but the month name is in genitive form
+
+#define LINK_SHIFT 50 // shift added to base LINK constant
 
 //---------------------------------------------------------------------
-// globalne premenne -- su definovane v dnes.cpp (18/02/2000A.D.)
+// global variables
 
 // globalna premenna, do ktorej sa ukladaju info o analyzovanom dni
 extern _struct_dm *_global_den_ptr;
@@ -1342,6 +1381,7 @@ extern short int _global_pocet_zalmov_kompletorium;
 extern const char *nazov_jazyka[POCET_JAZYKOV + 1];
 extern const char *skratka_jazyka[POCET_JAZYKOV + 1];
 extern const char *postfix_jazyka[POCET_JAZYKOV + 1];
+extern const char *skratka_jazyka_title[POCET_JAZYKOV + 1];
 
 extern const char *nazov_kalendara_short[POCET_KALENDAROV + 1];
 extern const char *skratka_kalendara[POCET_KALENDAROV + 1];
@@ -1375,17 +1415,19 @@ char *convert_nonbreaking_spaces(const char *input);
 char *_vytvor_string_z_datumu(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align);
 // podľa toho, ako sa funkcia volá, určím case (použitie veľkých/malých písmen)
 #define vytvor_global_link(den, mesiac, rok, typ, align)	_vytvor_global_link(den, mesiac, rok, CASE_case, typ, align)
+#define vytvor_global_link_class_new(den, mesiac, rok, typ, align, html_class, nazov_dna)	_vytvor_global_link(den, mesiac, rok, CASE_case, typ + LINK_SHIFT, align, html_class, nazov_dna)
 #define vytvor_global_link_class(den, mesiac, rok, typ, align, html_class)	_vytvor_global_link(den, mesiac, rok, CASE_case, typ, align, html_class)
 #define Vytvor_global_link(den, mesiac, rok, typ, align)	_vytvor_global_link(den, mesiac, rok, CASE_Case, typ, align)
 #define VYTVOR_global_link(den, mesiac, rok, typ, align)	_vytvor_global_link(den, mesiac, rok, CASE_CASE, typ, align)
-// 2011-05-11: doplnený nový parameter align -- či zarovnať jednociferné dátumy (číslovka dňa) medzerou zľava
+// parameter align -- či zarovnať jednociferné dátumy (číslovka dňa) medzerou zľava
 void _vytvor_global_link(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align);
 void _vytvor_global_link(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align, const char * html_class);
+void _vytvor_global_link(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align, const char * html_class, const char * nazov_dna);
 
 #define PRILEP_REQUEST_OPTIONS_DEFAULT   0
 #define PRILEP_REQUEST_OPTIONS_AJ_FORCE  1
 #define PRILEP_REQUEST_OPTIONS_LEN_FORCE 2
-void prilep_request_options(char pom2 [MAX_STR], char pom3 [MAX_STR], short int force_opt = PRILEP_REQUEST_OPTIONS_DEFAULT); // 2013-03-07: pokus; pravdepodobne PRILEP_REQUEST_OPTIONS_LEN_FORCE je neužitočné a PRILEP_REQUEST_OPTIONS_AJ_FORCE možno trocha riskantné...
+void prilep_request_options(char pom2 [MAX_STR], char pom3 [MAX_STR], short int force_opt = PRILEP_REQUEST_OPTIONS_DEFAULT);
 
 short int prestupny(short int);
 short int pocet_dni_v_roku(short int);
