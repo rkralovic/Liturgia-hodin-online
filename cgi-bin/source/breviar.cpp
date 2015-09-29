@@ -2884,7 +2884,6 @@ void interpretParameter(short int type, char *paramname, short int aj_navigacia 
 			Log("  _global_den.smer == %d...\n", _global_den.smer);
 			podmienka &= (!(je_len_doplnkova_psalmodia(_global_modlitba)));
 			podmienka &= (je_modlitba_cez_den(_global_modlitba));
-			specific_string = HTML_SEQUENCE_PARAGRAPH; // HTML_P_BEGIN
 			mystrcpy(popis_show, html_text_option1_mcd_zalmy_nie_ine_short[_global_jazyk], SMALL);
 			mystrcpy(popis_hide, html_text_option1_mcd_zalmy_ine_short[_global_jazyk], SMALL);
 		}
