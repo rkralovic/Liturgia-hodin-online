@@ -1,7 +1,7 @@
 /******************************************************************/
 /*                                                                */
 /* citania.h                                                      */
-/* (c)2010-2015 | Richard Kr·loviË                                */
+/* (c)2010-2015 | Richard Kr√°loviƒç                                */
 /*                                                                */
 /* description | declarations of methods for liturgical readings  */
 /*               for Android app                                  */
@@ -14,6 +14,8 @@
 #include "breviar.h"
 #include "mysystem.h"
 #include "mysysdef.h"
+#include "mydefs.h"
+#include "common.h"
 
 #ifdef LITURGICKE_CITANIA_ANDROID
 

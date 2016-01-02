@@ -21,7 +21,9 @@
 #include "mydefs.h"
 #include "mysystem.h"
 #include "mysysdef.h"
+#include "common.h"
 #include "mystring.h"
+#include "myconf.h"
 #include "utf8-utils.h"
 #include <ctype.h>
 #include <wctype.h>
@@ -427,7 +429,7 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 	for (i = 0; i < POCET_GLOBAL_OPT; i++){
 		Log("i == %d...\n", i);
 		local_opt_default = CFG_OPTION_DEFAULT(i);
-#ifdef IO_ANDROID
+#if defined(IO_ANDROID) || defined(BEHAVIOUR_WEB)
 		// Export all options in android, so that the UI can parse and
 		// modify their values correctly.
 		podmienka = 1;

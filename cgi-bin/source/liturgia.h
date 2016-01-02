@@ -21,6 +21,7 @@
 #include "mysystem.h"
 #include "mysysdef.h"
 #include "mydefs.h"
+#include "common.h"
 #include "mylog.h"
 #include <time.h>
 #include <stdio.h>
@@ -366,24 +367,6 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define SHOW_TEMPLAT_MODLITBA      1 // use TEMPLAT[]
 #define SHOW_TEMPLAT_STATIC_TEXT   2 // use ORDINARIUM[]
 
-// keyword (anchor) begin + end
-#define CHAR_KEYWORD_BEGIN   '{'
-#define CHAR_KEYWORD_END     '}'
-#define CHAR_KEYWORD_DIVIDER ':'
-
-// underscore '_' used as placeholder for non-breaking space (it will be exported as HTML_NONBREAKING_SPACE == "&nbsp;" defined in mydefs.h) 
-#define CHAR_NONBREAKING_SPACE '_'
-
-// special characters in prayer texts (some of them to be removed for blind-friendly version)
-#define CHAR_SPACE             ' '
-#define CHAR_PRAYER_ASTERISK   '*'
-#define CHAR_PRAYER_CROSS      L'\x2020' /*†*/
-#define CHAR_PRAYER_CROSS_ALT  '+'
-
-// include parameters
-#define INCLUDE_BEGIN   "BEGIN" // zaciatok
-#define INCLUDE_END     "END"   // koniec
-
 // parameter identifiers
 #define PARAM_POPIS         "POPIS"
 #define PARAM_HYMNUS        "HYMNUS"
@@ -498,58 +481,58 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define PARAM_JE_VIGILIA_BEGIN              "JE_VIGILIA_BEGIN"
 #define PARAM_JE_VIGILIA_END                "JE_VIGILIA_END"
 
-// 2010-05-21: doplnené zobrazenie antifóny a modlitby pre spomienku svätca v pôstnom období
-// 2012-02-09: zovšeobecnené v zmysle VSLH č. 238 (Spomienky pripadajúce na privilegované dni)
+// zobrazenie antifóny a modlitby pre spomienku svätca v pôstnom období + zovšeobecnené v zmysle VSLH č. 238 (Spomienky pripadajúce na privilegované dni)
 #define PARAM_SPOMIENKA_PRIVILEG_BEGIN      "SPOMIENKA_PRIVILEG_BEGIN"
 #define PARAM_SPOMIENKA_PRIVILEG_END        "SPOMIENKA_PRIVILEG_END"
-// 2011-01-12: doplnené zobrazenie/skrytie myšlienky k žalmu -- pre cezročné obdobie alternatívnej antifóny žalmu/chválospevu ("myšlienka k žalmu" podľa bodu 111 a 114 VSLH)
+// zobrazenie/skrytie myšlienky k žalmu -- pre cezročné obdobie alternatívnej antifóny žalmu/chválospevu ("myšlienka k žalmu" podľa bodu 111 a 114 VSLH)
 #define PARAM_PSALMODIA_MYSLIENKA           "PSALMODIA_MYSLIENKA" // 2011-08-31: zmenené; pôvodne bolo: PARAM_MYSLIENKA_K_ZALMU "MYSLIENKA_K_ZALMU"
-// 2011-08-31: doplnené zobrazenie/skrytie nadpisu k žalmu/chválospevu ("nadpis k žalmu" podľa bodu 111 VSLH)
+// zobrazenie/skrytie nadpisu k žalmu/chválospevu ("nadpis k žalmu" podľa bodu 111 VSLH)
 #define PARAM_PSALMODIA_NADPIS              "PSALMODIA_NADPIS"
 
 #define PARAM_RUBRIKA_BEGIN                 "RUBRIKA_BEGIN"
 #define PARAM_RUBRIKA_END                   "RUBRIKA_END"
 
-// 2011-05-03: doplnené kvôli posvätnému čítaniu na veľkonočnú nedeľu
+// posvätné čítanie na veľkonočnú nedeľu
 #define PARAM_VN_VYNECHAJ_BEGIN             "VELK_NEDELA_VYNECHAJ_BEGIN"
 #define PARAM_VN_VYNECHAJ_END               "VELK_NEDELA_VYNECHAJ_END"
 
-// 2011-07-07: doplnené kvôli zobrazovaniu/skrývaniu dlhších záverov responzórií v posvätnom čítaní
+// zobrazovanie/skrývanie dlhších záverov responzórií v posvätnom čítaní + responzóriá pre ranné chvály a vešpery po krátkom čítaní
 #define PARAM_PLNE_RESP                     "PLNE_RESP"
 #define PARAM_PLNE_RESP_BODKA               "PLNE_RESP_BODKA"
+#define PARAM_NIE_PLNE_RESP                 "NIE_PLNE_RESP" // negácia PARAM_PLNE_RESP
 
-// 2011-10-05: doplnené kvôli zobrazovaniu/skrývaniu opakovaného zvolania v prosbách (ranné chvály, vešpery)
+// zobrazovanie/skrývanie opakovaného zvolania v prosbách (ranné chvály, vešpery)
 #define PARAM_ZVOLANIE                      "ZVOLANIE"
 
-// 2011-10-26: doplnené rubriky priamo v includovaných HTML súboroch
+// rubriky priamo v includovaných HTML súboroch
 #define PARAM_RUBRIKA                       "RUBRIKA"
 
-// 2011-04-04: doplnené zobrazenie/skrytie číslovania veršov v žalmoch, chválospevoch a biblických čítaniach
+// zobrazenie/skrytie číslovania veršov v žalmoch, chválospevoch a biblických čítaniach
 #define PARAM_CISLO_VERSA_BEGIN				"v"
 #define PARAM_CISLO_VERSA_END				"/v"
 
-// 2011-04-05: doplnenie referencie podľa biblického odkazu na stránky dkc.kbs.sk (Biblia -- Matúš Brilla)
+// referencia podľa biblického odkazu na stránky dkc.kbs.sk (Biblia -- Matúš Brilla)
 #define PARAM_REFERENCIA_BEGIN				"r"
 #define PARAM_REFERENCIA_END				"/r"
 
-// 2011-09-01: odkaz na katechézy
+// odkaz na katechézy
 #define PARAM_KATECHEZA_BEGIN				"k"
 #define PARAM_KATECHEZA_END					"/k"
 
-// 2011-09-06: odkaz na žalm 95
+// odkaz na žalm 95
 #define PARAM_LINK_ZALM95_BEGIN				"z95"
 #define PARAM_LINK_ZALM95_END				"/z95"
 
-// 2011-07-08: zobrazovanie/nezobrazenie krížika (antifóna totožná s veršom žalmu/chválospevu)
+// zobrazovanie/nezobrazenie krížika (antifóna totožná s veršom žalmu/chválospevu)
 #define PARAM_KRIZIK                        "KRIZIK"
 
-// 2011-07-14: zobrazovanie/nezobrazenie zalomených textov tak, ako je v tlačenom vydaní LH (dlhé riadky-verše žalmov/chválospevov a pod.)
+// zobrazovanie/nezobrazenie zalomených textov tak, ako je v tlačenom vydaní LH (dlhé riadky-verše žalmov/chválospevov a pod.)
 #define PARAM_ZALOMENIE                     "ZALOMENIE"
 
-// 2011-10-07: zakončenie modlitieb (skrze, lebo on, lebo ty...) ináč (jednoduchšie, bez begin-end)
+// zakončenie modlitieb (skrze, lebo on, lebo ty...) ináč (jednoduchšie, bez begin-end)
 #define PARAM_ZAKONCENIE                    "ZAKONCENIE"
 
-// 2013-02-26: doplnková psalmódia, alternatívne žalmy
+// doplnková psalmódia, alternatívne žalmy
 #define PARAM_DOPLNK_PSALM_122_129          "DPSALM-122-129"
 #define PARAM_DOPLNK_PSALM_126_129          "DPSALM-126-129"
 #define PARAM_DOPLNK_PSALM_127_131          "DPSALM-127-131"
@@ -729,45 +712,6 @@ struct dm{
 };
 typedef struct dm _struct_dm;
 
-// week days
-#define DEN_NEDELA      0
-#define DEN_PONDELOK    1
-#define DEN_UTOROK      2
-#define DEN_STREDA      3
-#define DEN_STVRTOK     4
-#define DEN_PIATOK      5
-#define DEN_SOBOTA      6
-#define DEN_UNKNOWN     7
-// number ofweek  days
-#define POCET_DNI		7
-
-// all days
-#define VSETKY_DNI   32
-#define STR_VSETKY_DNI  "*"
-
-// months
-#define MES_JAN 0
-#define MES_FEB 1
-#define MES_MAR 2
-#define MES_APR 3
-#define MES_MAY 4
-#define MES_MAJ 4
-#define MES_JUN 5
-#define MES_JUL 6
-#define MES_AUG 7
-#define MES_SEP 8
-#define MES_OCT 9
-#define MES_OKT 9
-#define MES_NOV 10
-#define MES_DEC 11
-#define UNKNOWN_MESIAC	12
-// number of months
-#define POCET_MESIACOV	12
-
-// all months
-#define VSETKY_MESIACE	13
-#define STR_VSETKY_MESIACE  "*"
-
 // liturgické obdobia | liturgical times/seasons
 //OBD_ADVENTNE
 #define OBD_ADVENTNE_I             0 // do 16. decembra
@@ -884,11 +828,11 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_PLZEN 					36
 #define LOKAL_SLAV_OSTRAVA_OPAVA_SLAVNOST	37
 #define LOKAL_SLAV_CESKE_BUDEJOVICE_PAMATKA	38
-#define LOKAL_SLAV_SPIS_BA_PATRON			39 // pre 11. novembra, patróna BA-arcidiecézy; 2008-06-24; nahrádza LOKAL_SLAV_SPIS_PATRON
-#define LOKAL_SLAV_BRATISLAVA				40 // doplnené 2010-03-16
-#define LOKAL_SLAV_KONIEC_OKTAVY_NAR_HU		41 // doplnené 2010-05-17
-#define LOKAL_SLAV_KONGREGACIA_SSK			42 // doplnené 2011-01-27
-#define LOKAL_SLAV_SPOMIENKA_OFMCAP			43 // nasledovné doplnené 2011-03-16
+#define LOKAL_SLAV_SPIS_BA_PATRON			39 // pre 11. novembra, patróna BA-arcidiecézy; nahrádza LOKAL_SLAV_SPIS_PATRON
+#define LOKAL_SLAV_BRATISLAVA				40
+#define LOKAL_SLAV_KONIEC_OKTAVY_NAR_HU		41
+#define LOKAL_SLAV_KONGREGACIA_SSK			42
+#define LOKAL_SLAV_SPOMIENKA_OFMCAP			43
 #define LOKAL_SLAV_SVIATOK_OFM				44
 #define LOKAL_SLAV_SPOMIENKA_OFM			45
 #define LOKAL_SLAV_SVIATOK_OFMCAP			46 // nasledovné doplnené 2011-03-17
@@ -899,7 +843,7 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SVIATOK_SCSC				51
 #define LOKAL_SLAV_DRUHA_VELK_NEDELA_HU		52
 #define LOKAL_SLAV_SZOMBATHELYI_EGYH        53
-#define LOKAL_SLAV_NAGYSZ_PATRON       54
+#define LOKAL_SLAV_NAGYSZ_PATRON            54
 #define LOKAL_SLAV_SZEGED_CSAN_PATRON       55
 #define LOKAL_SLAV_PECSI_EGYH               56
 #define LOKAL_SLAV_PECSI_EGYH_PATRON        57
@@ -955,6 +899,10 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SLAVNOST_FMA_CZ         107
 #define LOKAL_SLAV_SZEGED_CSAN_EGYH3       108
 #define LOKAL_SLAV_ORDINARIAT              109
+#define LOKAL_SLAV_HU_KLARISSZAKNAL_EM     110
+#define LOKAL_SLAV_HU_KLARISSZAKNAL_FOU    111
+#define LOKAL_SLAV_LEN_MORAVA              112
+#define LOKAL_SLAV_LEN_CECHY               113
 
 // calendar
 #define KALENDAR_NEURCENY                   0 // undefined
@@ -975,9 +923,10 @@ extern const char *nazov_slavenia_lokal[];
 #define KALENDAR_CZ_CSSR                   15
 #define KALENDAR_CZ_SDB                    16
 #define KALENDAR_VSEOBECNY_RU              17
+#define KALENDAR_HU_OFM                    18
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   17
+#define POCET_KALENDAROV                   18
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1007,10 +956,6 @@ extern const char *nazov_kalendara_long[POCET_KALENDAROV + 1];
 #define PRIKAZANY_SVIATOK           0
 #define NIE_JE_PRIKAZANY_SVIATOK    1
 #define VOLNA_LUBOVOLNA_SPOMIENKA   2 // pre SK OP; v kalendári značené kurzívou (bez popisu "ľubovoľná spomienka"); 2012-04-01
-
-// div, mod: delenie pre short int
-#define DIV	/
-#define MOD	%
 
 // dodefinované rôzne správanie funkcie zaltar_zvazok();
 #define	ZALTAR_VSETKO                0
@@ -1046,9 +991,6 @@ extern const char *nazov_farby_jazyk[POCET_FARIEB_REALNYCH + 1][POCET_JAZYKOV + 
 extern const char *html_farba_pozadie[POCET_FARIEB_REALNYCH + 1];
 extern const char *html_farba_popredie[POCET_FARIEB_REALNYCH + 1];
 
-// juliansky datum, funkcia juliansky_datum, dane synonymum JD
-#define	JD	juliansky_datum
-
 #define ZVAZKY_LH 4
 
 // tyzden zaltara (1, 2, 3, 4) podla tyzdna t
@@ -1063,11 +1005,6 @@ extern const char char_nedelne_pismeno[POCET_DNI];
 
 #define POCET_NEDELNY_CYKLUS 3
 extern const char char_nedelny_cyklus[POCET_NEDELNY_CYKLUS];
-
-#define	ROK_1968		1968
-#define	JUL_DATE_0_JAN_1968	2439856L // juliansky datum pre 0. januar 1968
-
-#define	POCET_DNI_V_ROKU	365
 
 #define	POCET_NEDIEL_CEZ_ROK	34
 #define	KRISTA_KRALA	34 // 34. nedela v obdobi cez rok je sviatok K.K.
@@ -1152,10 +1089,6 @@ extern const char *poradie_SLOVOM_jazyk[POCET_TYZDNOV + 1][POCET_JAZYKOV + 1];
 #define _ZOSLANIE_DUCHA_SV        _den[idx_ZOSLANIE_DUCHA_SV]
 #define _SVATEJ_RODINY            _den[idx_SVATEJ_RODINY]
 
-#undef YES
-#undef NO
-#define YES 1
-#define NO  0
 
 #define NIJAKE_NEDELNE_PISMENO 'x'
 struct lrok{

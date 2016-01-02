@@ -46,7 +46,7 @@
  { "02B070603", "Iz 50,4-9b<*di.>; Ž 69,8-10.21-22.31+33-34; Mt 26,14-25", "Vo svojej veľkej láske vyslyš ma, Pane.", "Buď pozdravený, náš Kráľ, poslušný Otcovi; vedený na kríž ako tichý baránok na zabitie." }, /* , Streda Veľkého týždňa, 2009-04-08 */
  { "02B100300", "Sk 3,13-15.17-19; Ž 4,2.4.7.9; 1Jn 2,1-5a<*alá.>; Lk 24,35-48", "Pane, ukáž nám svetlo tvojej tváre ako znamenie.", "Pane Ježišu, otvor nám Písma; daj, nech naše srdce horí, keď k nám hovoríš." }, /* , 3. Veľkonočná nedeľa, 2009-04-26 */
  { "02B100400", "Sk 4,8-12; Ž 118,1+8-9.21-23.26+28-29; 1Jn 3,1-2; Jn 10,11-18", "Kameň, čo stavitelia zavrhli, stal sa kameňom uholným.", "Ja som dobrý pastier, hovorí Pán; Poznám svoje ovce  a moje poznajú mňa." }, /* , 4. Veľkonočná nedeľa, 2009-05-03 */
- { "02B100500", "Sk 9,26-31; Ž 22,26b<>-27.28+30.31-32; 1Jn 3,18-24; Jn 5,1-8", "Tvoje milosrdenstvo, Pane, nech je nad nami, ako dúfame v teba.", "Ostaňte vo mne a ja vo vás, hovorí Pán; kto ostáva vo mne, prináša veľa ovocia." }, /* , 5. Veľkonočná nedeľa, 2009-05-10 */
+ { "02B100500", "Sk 9,26-31; Ž 22,26b<>-27.28+30.31-32; 1Jn 3,18-24; Jn 15,1-8", "Tvoje milosrdenstvo, Pane, nech je nad nami, ako dúfame v teba.", "Ostaňte vo mne a ja vo vás, hovorí Pán; kto ostáva vo mne, prináša veľa ovocia." }, /* , 5. Veľkonočná nedeľa, 2009-05-10 */
  { "02B100600", "Sk 10,25-26.34-35.44-48; Ž 98,1.2-3b.3c-4; 1Jn 4,7-10; Jn 15,9-17", "Pred očami pohanov vyjavil Pán svoju spásu.", "Kto ma miluje, bude zachovávať moje slovo, hovorí Pán; a môj Otec ho bude milovať a prídeme k nemu." }, /* , 6. Veľkonočná nedeľa, 2009-05-17 */
  { "02B110700", "Sk 1,15-17.20a.20d-26; Ž 103,1-2.11-12.19-20; 1Jn 4,11-16; Jn 17,11b<Sv*>-19", "Dobrorečte Pánovi, čo má trón v nebesiach.", "Nenechám vás ako siroty, hovorí Pán; odchádzam, ale prídem k vám a vaše srdce sa bude radovať." }, /* , 7. Veľkonočná nedeľa, 2009-05-24 */
  { "02BKvetna nedela", "Iz 50,4-7; Ž 22,8-9.17-18a<*ti.>.19-20.23-24; Flp 2,6-11; Mk 14,1 - 15,47 /kr./ Mk 15,1-39 /; na sprievod:/ Mk 11,1-10 /al./ Jn 12,12-16", "Bože môj, Bože môj, prečo si ma opustil?", "Kristus sa stal pre nás poslušným až na smrť, až na smrť na kríži. Preto ho Boh nad všetko povýšil a dal mu meno, ktoré je nad každé iné meno." }, /* , Kvetná nedeľa - nedeľa utrpenia Pána, 2009-04-05 */
@@ -64,6 +64,9 @@
  { "02BZjavenie Pana", "Iz 60,1-6; Ž 72,1-2. 7-8. 10-11. 12-13; Ef 3,2-3a<*vo>. 5-6; Mt 2,1-12", "Budú sa ti klaňať, Pane, všetky národy sveta", "Videli sme jeho hviezdu na východe a prišli sme sa pokloniť Pánovi." }, /* (slávnosť), Zjavenie Pána, 2009-01-06 */
  { "02BZoslanie Ducha Svateho", "Sk 2,1-11; Ž 104,1ab<*ký.>+24ac.29b<odní*>-30.31+34; 1Kor 12,3b<nik *>-7.12-13 /al./ Gal 5,16-25; Jn 20,19-23 /al./ Jn 15,26-27. 16,12-15", "Pane, zošli svojho Ducha a obnov tvárnosť zeme.", "Príď, Duchu Svätý, naplň srdcia svojich veriacich a zapáľ v nás oheň svojej lásky." }, /* (slávnosť), Nedeľa Zoslania Ducha Svätého, 2009-05-31 */
  { "02C000100", "Jer 33,14-16; Ž 25,4-5b<*sa>.8-9.10+14; 1Sol 3,12-4,2; Lk 21,25-28.34-36", "K tebe, Pane, dvíham svoju dušu.", "Ukáž nám, Pane, svoje milosrdenstvo a daj nám svoju spásu." }, /* , 1. adventná nedeľa (rok C, cyklus II), 2009-11-29 */
+ { "02C000200", "Bar 5,1-9; Ž 126,1-6; Flp 1,4-6.8-11; Lk 3,1-6", "Veľké veci urobil s nami Pán a máme z toho radosť.", "" },  /* 2015-12-06  */
+ { "02C000300", "Sof 3,14-18a; Iz 12,2-6; Flp 4,4-7; Lk 3,11-18", "Plesajme a jasajme, lebo uprostred nás je Svätý, Boh.", "" },  /* 2015-12-13  */
+ { "02C010400", "Mich 5,1-4a; Ž 80,2-19; Hebr 10,5-10; Lk 1,39-45", "Bože, obnov nás, rozjasni svoju tvár a budeme spasení.", "" },  /* 2015-12-20  */
  { "02C060100", "Dt 26,4-10; Ž 91,1-15; Rim 10,8-13; Lk 4,1-13", "Pane, buď so mnou v mojich skúškach.", "" }, /* , 1. nedeľa v pôstnom období, 2007-02-25 */
  { "02C060200", "Gn 15,5-12.17-18; Ž 27,1-14; Flp 3,17-4,1; Lk 9,28b<vzal*>-36", "Pán je moje svetlo a moja spása.", "" }, /* , 2. nedeľa v pôstnom období, 2007-03-04 */
  { "02C060300", "Ex 3,1-8a<*ťanov>.13-15; Ž 103,1-11; 1Kor 10,1-6.10-12; Lk 13,1-9", "Milostivý a milosrdný je Pán.", "" }, /* , 3. nedeľa v pôstnom období, 2007-03-11 */
@@ -79,6 +82,7 @@
  { "02C110700", "Sk 7,55-60; Ž 97,1-9; Zjv 22,12-14.16-17.20; Jn 17,20-26", "Pán kraľuje, Najvyšší na celej zemi.", "" }, /* , 7. veľkonočná nedeľa, 2007-05-20 */
  { "02CKvetna nedela", "Iz 50,4-7; Ž 22,8-24; Flp 2,6-11; Lk 22,14-23,56 (sprievod: Lk 19,28-40)", "Bože môj, Bože môj, prečo si ma opustil?", "" }, /* , Kvetná nedeľa - nedeľa utrpenia Pána, 2007-04-01 */
  { "02CNanebovstupenie Pana", "Sk 1,1-11 ;Ž 47,2-9; Hebr 9,24-28. 10,19-23 /al./ Ef 1,17-23; Lk 24,46-53", "Pán vystupuje do neba za hlaholu poľnice.", "" }, /* (slávnosť), Nanebovstúpenie Pána, 2007-05-17 */
+ { "02CNarodenie Pana", "Iz 9,1-3.5-6; Ž 96,1-2a. 2b-3. 11-12a. 12b-13; Tít 2,11-14; Lk 2,1-14", "Dnes sa nám narodil Spasiteľ, Kristus Pán.", "" }, /* (slávnosť), Narodenie Pána (polnočná), 2015-12-25 */
  { "02CNedela vo Velkonocnej oktave", "Sk 5,12-16; Ž 118,2-4.22-27; Zjv 1,9-11a<*vám>.12-13.17-19; Jn 20,19-31", "Oslavujme Pána, lebo je dobrý, lebo jeho milosrdenstvo trvá naveky.", "" }, /* , 2. veľkonočná nedeľa, 2007-04-15 */
  { "02CPopolcova streda", "Joel 2,12-18; Ž 51,3-17; 2Kor 5,20-6,2; Mt 6,1-6.16-18", "Zmiluj sa, Pane, lebo sme zhrešili.", "" }, /* , Popolcová streda, 2007-02-21 */
  { "02CVelkonocna sobota", "Sk 4,13-21; Ž 118,1-21; Mk 16,9-15", "Vzdávame ti vďaky, Pane, Bože milosrdný.", "" }, /* , Veľkonočná sobota, 2007-04-14 */
@@ -125,6 +129,7 @@
  { "03CNajsvatejsieho Srdca Jezisovho", "Ez 34,11-16; Ž 23,1-6; Rim 5,5-11; Lk 15,3-7", "Pán je môj pastier, nič mi nechýba.", "" }, /* (slávnosť), Najsvätejšieho Srdca Ježišovho, 2007-06-15 */
  { "03CNanebovzatie prebl. Panny Marie", "Zjv 11,19a<*vy.>. 12,1-6a<*sto>.10ab<*ho,>; Ž 45,10-16; 1Kor 15,20-27a<*hy.>; Lk 1,39-56", "Po tvojej pravici, Pane, stojí kráľovná ozdobená zlatom.", "" }, /* (slávnosť) , Nanebovzatie Panny Márie, 2007-08-15 */
  { "03CNarodenie sv. Jana Krstitela", "Iz 49,1-6; Ž 139,1-15; Sk 13,22-26; Lk 1,57-66.80", "Chválim ťa, Pane, že som vznikol tak zázračne.", "" }, /* (slávnosť), Narodenie svätého Jána Krstiteľa, 2007-06-24 */
+ { "03CNeposkvrnene pocatie Panny Marie", "Gn 3,9-15.20; Ž 85,9-14; Ef 1,3-6.11-12; Lk 1,26-38", "Spievajte Pánovi pieseň novú, lebo vykonal veci zázračné.", "" },  /* 2015-12-08 Nepoškvrnené počatie Panny Márie */
  { "03CPanny Marie Bohorodicky", "Nm 6,22-27; Ž 67,2-8; Gal 4,4-7; Lk 2,16-21", "Bože, buď nám milostivý a žehnaj nás.", "" }, /* (slávnosť), Slávnosť Panny Marie Bohorodičky, 2007-01-01 */
  { "03CSedembolestnej Panny Marie, patronky Slovenska", "Sk 1,12-14; (Ž) Lk 1,46-55; 1Pt 4,13-16; Jn 19,25-27 /al./ Lk 2,33-35", "Ty si sláva nášho národa, ty si radosť nášho ľudu.", "" }, /* (slávnosť), Sedembolestnej Panny Márie, patrónky Slovenska, 2007-09-15 */
  { "03CSv. Cyrila a Metoda, slovanskych vierozvestov, apostolov", "Sir 44,1.4-7.11-15; Ž 117,1-2; Ef 4,1-7.11-13; Mt 28,16-20", "Choďte do celého sveta a hlásajte evanjelium.", "" }, /* (slávnosť), Svätých Cyrila a Metoda, slovanských vierozvestov, 2007-07-05 */
@@ -152,6 +157,7 @@
  { "05CObetovanie Pana", "Mal 3,1-4 /al./ Hebr 2,14-18; Ž 24,7-10; Lk 2,22-40", "Príď, Pane, do svojho svätého chrámu.", "" }, /* (sviatok), Obetovanie Pána, 2007-02-02 */
  { "05CPovysenie svateho kriza", "Nm 21,4c<Ces*>-9 /al./ Flp 2,6-11; Ž 78,1.2.34-38; Jn 3,13-17", "Pane, ty buď našou spásou.", "" }, /* (sviatok), Povýšenie svätého kríža, 2007-09-14 */
  { "05CPremenenie Pana", "Dan 7,9-10.13-14 /al./ 2Pt 1,16-19; Ž 97,1-9; Lk 9,28b<vz*>-36", "Pánovu slávu uvidia všetky národy.", "" }, /* (sviatok), Premenenie Pána, 2007-08-06 */
+ { "05CSvatej rodiny Jezisa, Marie a Jozefa", "Sir 3,3-7.14-16; Ž 128,1-2. 3. 4-5; Kol 3,12-21; Mt 2,13-15.19-23", "Blažení všetci, čo sa boja Pána a kráčajú po jeho cestách.", "" }, /* 2015-12-27 Svätej rodiny Ježiša, Márie a Jozefa */
  { "05CVyrocie posviacky Lateranskej baziliky", "Ez 47,1-2.8-9.12 /al./ 1Kor 3,9c<vy*>-11.16-17; Ž 46,2-9; Jn 2,13-22", "Riečne ramená obveseľujú Božie mesto, posvätný stánok Najvyššieho.", "" }, /* (sviatok), Výročie posviacky Lateránskej baziliky, 2007-11-09 */
  { "06A0302", "Sir 24,1-2.12-16; Ž 147,12-15.19-20; Ef 1,3-6.15-18; Jn 1,1-18", "Slovo sa telom stalo a prebývalo medzi nami.", "Sláva ti Kriste, teba zvestovali národom; sláva ti Kriste, v teba uverili na svete." },  /* 2014-01-05 2. nedeľa po Narodení Pána */
  { "06A0502", "Iz 49,3.5-6; Ž 40,2.4. 7-10; 1Kor 1,1-3; Jn 1,29-34", "Hľa, prichádzam, Pane, chcem plniť  tvoju vôľu", "" },  /* 2014-01-19  */
@@ -271,9 +277,10 @@
  { "090119", "Sdc 13,2-7.24-25a; Ž 71,3-6b.16-17; Lk 1,5-25", "Nech sa mi ústa naplnia chválou a budem spievať o tvojej sláve.", "" },  /* 2013-12-19  */
  { "090120", "Iz 7,10-14; Ž 24,1-6; Lk 1,26-38", "Nech vojde Pán, on je Kráľ slávy.", "" },  /* 2013-12-20  */
  { "090121", "Pies 2,8-14 /al./ Sof 3,14-17; Ž 33,2-3.11-12.20-21; Lk 1,39-45", "Plesajte, spravodliví, v Pánovi, spievajte mu novú pieseň.", "" },  /* 2013-12-21  */
- { "090122", "1Sam 1,24-28; (Ž) 1Sam 2,1b–e<.Sr*>. 4-5. 6-7. 8a–d; Lk 1,46-56", "Srdce mi plesá v mojom Bohu.", "" }, /* , , 2007-12-22 */
+ { "090122", "1Sam 1,24-28; (Ž) 1Sam 2,1b–e<.Sr*>. 4-5. 6-7. 8a–d; Lk 1,46-56", "Srdce mi plesá v mojom Bohu.", "" },  /* 2015-12-22  */
  { "090123", "Mal 3,1-4.23-24; Ž 25,4-5b.8-10.14; Lk 1,57-66", "Zodvihnite hlavu, blíži sa Vaše vykúpenie.", "Kráľ národov a uholný kameň Cirkvi; príď a spas človeka, ktorého si utvoril zo zeme." },  /* 2013-12-23  */
  { "090124", "2Sam 7,1-5.8b-12.14a.16; Ž 89,2-5.27.29; Lk 1,67-79; {Vigília} Iz 62,1-5; Ž 89; Sk 13,16-17.22-25; Mt 1,1-25", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky.", "Hviezda, čo vychádza, jas večného Svetla a Slnko spravodlivosti; príď a osviť tých, čo sedia v temnotách a v tieni smrti." },  /* 2013-12-24  TODO: alelujovy vers pre vigiliu */
+ { "09025", "1Jn 2,3-11; Ž 96,1-6; Lk 2,22-35", "Tešte sa, nebesia, a plesaj, zem.", "" },  /* 2015-12-29  */
  { "09026", "1Jn 2,12-17; Ž 96,7-10; Lk 2,36-40", "Tešte sa, nebesia, a plesaj zem.", "" },  /* 2013-12-30 */
  { "09027", "1Jn 2,18-21; Ž 96,1-2.11-13; Jn 1,1-18", "Tešte sa, nebesia, a plesaj zem.", "" },  /* 2013-12-31 */
  { "091020101", "1Jn 2,3-11; Ž 96,1-2a. 2b-3. 5b<Pán*>-6; Lk 2,22-35", "Tešte sa, nebesia, a plesaj, zem.", "" }, /* (ľubovoľná spomienka), Svätého Tomáša Becketa, biskupa mučeníka, 2008-12-29 */
@@ -637,13 +644,15 @@
  { "132000104", "Iz 26,1-6; Ž 118,1.8-9.19-21.25-27a; Mt 7,21.24-27", "Požehnaný, ktorý prichádza v mene Pánovom.", "" },  /* 2013-12-05  */
  { "132000105", "Iz 29,17-24; Ž 27,1.4.13-14; Mt 9,27-31", "Pán je moje svetlo a moja spása.", "" },  /* 2013-12-06  */
  { "132000106", "Iz 30,19-21.23-26; Ž 147,1-6; Mt 9,35-10,1.5a.6-8", "Blahoslavení všetci, čo očakávajú Pána", "" },  /* 2013-12-07  */
- { "132000201", "Iz 35,1-10; Ž 85,9ab<*svätým>+10. 11-12. 13-14; Lk 5,17-26", "Hľa, náš Boh príde a spasí nás.", "" }, /* , , 2007-12-10 */
+ { "132000201", "Iz 35,1-10; Ž 85,9ab<*svätým>+10. 11-12. 13-14; Lk 5,17-26", "Hľa, náš Boh príde a spasí nás.", "" },  /* 2015-12-07  */
  { "132000202", "Iz 40,1-11; Ž 96,1-3.10-13; Mt 18,12-14", "Hľa, Pán, Boh prichádza so všetkou mocou.", "" },  /* 2013-12-10  */
  { "132000203", "Iz 40,25-31; Ž 103,1-4.8.10; Mt 11,28-30", "Duša moja, dobroreč svojmu Bohu.", "" },  /* 2013-12-11  */
  { "132000204", "Iz 41,13-20; Ž 145,1.9-13b; Mt 11,11-15", "Milostivý a milosrdný je Pán, zhovievavý a veľmi láskavý.", "" },  /* 2013-12-12  */
  { "132000205", "Iz 48,17-19; Ž 1,1-4.6; Mt 11,16-19", "Pane, kto nasleduje teba, bude mať svetlo života.", "" },  /* 2013-12-13  */
  { "132000206", "Sir 48,1-4.9-11; Ž 80,2-3.15-16.18-19; Mt 17,10-13", "Bože, obnov nás, rozjasni svoju tvár a budeme spasení.", "" },  /* 2013-12-14  */
  { "132000301", "Nm 24,2-7.15-17d; Ž 25,4-9; Mt 21,23-27", "Veď ma, Pane, po svojich cestách", "" },  /* 2013-12-16  */
+ { "132000302", "Sof 3,1-2.9-13; Ž 34,2-7.17-23; Mt 21,28-32", "Úbožiak zavolal a Pán ho vyslyšal.", "" },  /* 2015-12-15  */
+ { "132000303", "Iz 45,6c-8.18.21d-25; Ž 85,9-14; Lk 7,19-23", "Roste, nebesia z výsosti, z oblakov nech prší spravodliosť.", "" },  /* 2015-12-16  */
  { "132030103", "1Jn 2,22-28; Ž 98,1. 2-3b. 3c-4; Jn 1,19-28", "Uzreli všetky končiny zeme spásu nášho Boha", "" }, /* (spomienka), Svätých Bazila Veľkého a Gregora Nazianzského, biskupov a učiteľov Cirkvi, 2008-01-02 */
  { "132030104", "1Jn 2,29 - 3,6; Ž 8,4-5. 6-7. 8-9; Jn 1,29-34", "Pane, náš Vládca, aké vznešené je tvoje meno na celej zemi", "" }, /* (ľubovoľná spomienka), Najsvätejšieho mena Ježiš, 2008-01-03 */
  { "132030105", "1Jn 3,7-10; Ž 98,1. 7-8. 9; Jn 1,35-42", "Uzreli všetky končiny zeme spásu nášho Boha", "" }, /* , , 2008-01-04 */
