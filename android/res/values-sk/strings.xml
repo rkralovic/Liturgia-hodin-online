@@ -21,6 +21,7 @@
     <string name="dimlock">nezhasínať obrazovku</string>
     <string name="mute">vypnúť zvonenie</string>
     <string name="long_click_toggles_bar">dlhé stlačenie skryje navigačnú lištu</string>
+    <string name="transparent_nav">navigačná šípka v texte</string>
 
     <string name="prayer_content_settings1_title">Obsah modlitieb:</string>
     <string name="various_options_in_prayers">rozličné možnosti priamo v textoch modlitieb ako klikateľné odkazy</string>
@@ -30,6 +31,7 @@
     <string name="display_communia_info">info, odkiaľ sa berú spoločné časti k modlitbe svätého</string>
     <string name="verse_numbering">číslovanie veršov</string>
     <string name="bible_references">biblické odkazy</string>
+    <string name="footnotes">poznámky pod čiarou</string>
     <string name="liturgical_readings">liturgické čítania</string>
 
     <string name="display_settings_title">Ďalšie zobrazenia:</string>
@@ -101,6 +103,12 @@ body { background-color: #000000; color: #cccccc; }
 <body>
 
 <p><b>Aplikácia Breviár | Čo je nové</b>
+
+<p><b>Verzia 1.12.3</b>
+<ul>
+<!-- <li> Nové nastavenie: Zobraziť poznámky pod čiarou pre druhé čítania.</li> -->
+<li> Ofícium za zosnulých, možnosť vziať žalm 146 alebo 150 pre ranné chvály.</li>
+</ul>
 
 <p><b>Verzia 1.12.2</b>
 <ul>

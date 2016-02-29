@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* mydefs.h                                              */
-/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | core basic define's                     */
 /*                                                       */
@@ -522,9 +522,25 @@ extern short int query_type; // contains constants PRM_...
 // blind-friendly mode
 #define MODL_OPTF_0_BLIND_FRIENDLY 69
 #ifdef LONG_PARAM_NAMES
-	#define STR_MODL_OPTF_0_BLIND_FRIENDLY "MODL_OPTF_0_BLIND_FRIENDLY"
+#define STR_MODL_OPTF_0_BLIND_FRIENDLY "MODL_OPTF_0_BLIND_FRIENDLY"
 #else
-	#define STR_MODL_OPTF_0_BLIND_FRIENDLY "of0bf"
+#define STR_MODL_OPTF_0_BLIND_FRIENDLY "of0bf"
+#endif
+
+// footnotes
+#define MODL_OPTF_0_FOOTNOTES 70
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_0_FOOTNOTES "MODL_OPTF_0_FOOTNOTES"
+#else
+#define STR_MODL_OPTF_0_FOOTNOTES "of0ff"
+#endif
+
+// transparent navigation arrow
+#define MODL_OPTF_0_TRANSPARENT_NAV 120
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_0_TRANSPARENT_NAV "MODL_OPTF_0_TRANSPARENT_NAV"
+#else
+#define STR_MODL_OPTF_0_TRANSPARENT_NAV "of0tn"
 #endif
 
 // pre force option 1 jednotlivé bit-komponenty (parciálne voľby)
@@ -617,6 +633,13 @@ extern short int query_type; // contains constants PRM_...
 	#define STR_MODL_OPTF_1_MCD_ZALTAR_TRI "of1ps3"
 #endif
 
+// prayer conclusions
+#define MODL_OPTF_1_ZAVER 118
+#ifdef LONG_PARAM_NAMES
+	#define STR_MODL_OPTF_1_ZAVER "MODL_OPTF_1_ZAVER"
+#else
+	#define STR_MODL_OPTF_1_ZAVER "of1zm"
+#endif
 
 // žalmy zo sviatku
 #define MODL_OPTF_1_SPOMIENKA_SPOL_CAST 79
@@ -880,6 +903,20 @@ extern short int query_type; // contains constants PRM_...
 #define STR_MODL_OPTF_5_CZ_HYMNY_VYBER "of5czh"
 #endif
 
+#define MODL_OPTF_5_OFF_DEF_PSALM_146_150 117
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_5_OFF_DEF_PSALM_146_150 "MODL_OPTF_5_OFF_DEF_PSALM_146_150"
+#else
+#define STR_MODL_OPTF_5_OFF_DEF_PSALM_146_150 "of5ofps60"
+#endif
+
+#define MODL_OPTF_5_ZAVER_KNAZ_DIAKON 119
+#ifdef LONG_PARAM_NAMES
+#define STR_MODL_OPTF_5_ZAVER_KNAZ_DIAKON "MODL_OPTF_5_ZAVER_KNAZ_DIAKON"
+#else
+#define STR_MODL_OPTF_5_ZAVER_KNAZ_DIAKON "of5zkd"
+#endif
+
 #define CSS 40
 #ifdef LONG_PARAM_NAMES
 	#define STR_CSS "CSS"
@@ -946,6 +983,7 @@ extern short int query_type; // contains constants PRM_...
 #define HTML_SEQUENCE_NONE       0
 #define HTML_SEQUENCE_LINE_BREAK 1
 #define HTML_SEQUENCE_PARAGRAPH  2
+#define HTML_SEQUENCE_DIV        3
 
 // 2007-03-19: výpis "Dnes je..." sa zobrazí len pri tomto nastavení, ak je 1
 #define HTML_ZOBRAZIT_DNES_JE	0
@@ -974,7 +1012,7 @@ extern short int query_type; // contains constants PRM_...
 
 #define HTML_ISO_FORMAT      "%04d-%02d-%02d"
 
-#define TEXT_COPYRIGHT       "(c)1999-2015 Juraj Vidéky"
+#define TEXT_COPYRIGHT       "(c)1999-2016 Juraj Vidéky"
 #define TEXT_EMAIL           "videky@breviar.sk"
 
 // main XML element
@@ -1035,6 +1073,8 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_FONT_NORMAL               "BitOpt0ForceNormalFontWeight"
 #define XML_BIT_OPT_0_BUTTONS_ORDER             "BitOpt0ButtonsOrder"
 #define XML_BIT_OPT_0_BLIND_FRIENDLY            "BitOpt0BlindFriendly"
+#define XML_BIT_OPT_0_FOOTNOTES                 "BitOpt0Footnotes"
+#define XML_BIT_OPT_0_TRANSPARENT_NAV           "BitOpt0TransparentNav"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"
@@ -1052,6 +1092,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_1_ZOBRAZ_SPOL_CAST          "BitOpt1ShowCommuniaDescription"
 #define XML_BIT_OPT_1_VESP_KRATSIE_PROSBY       "BitOpt1UseVespShortenPrayers"
 #define XML_BIT_OPT_1_MCD_ZALTAR_TRI            "BitOpt1PsalmsDuringDayPsalt3Weeks"
+#define XML_BIT_OPT_1_ZAVER                     "BitOpt1PrayerConclusions"
 
 // POCET_OPT_2_HTML_EXPORT
 #define XML_BIT_OPT_2_ISO_DATUM                 "BitOpt2ISOFormat"
@@ -1086,6 +1127,8 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_5_HYMNUS_1VESP              "BitOpt5Hymn1Vesp"
 #define XML_BIT_OPT_5_POPOL_STREDA_PSALMODIA    "BitOpt5AshWednPsalmody"
 #define XML_BIT_OPT_5_CZ_HYMNY_VYBER            "BitOpt5CZhymnsAlt"
+#define XML_BIT_OPT_5_OFF_DEF_PSALM_146_150     "BitOpt5OffDefPsalm146or150"
+#define XML_BIT_OPT_5_ZAVER_KNAZ_DIAKON         "BitOpt5ConclusionPriestDiacon"
 
 // starting, closing element (XML, HTML)
 #define ELEM_BEGIN(elem)     "<"elem">"

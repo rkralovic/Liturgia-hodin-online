@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* liturgia.cpp                                             */
-/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | basic 'liturgical' methods for calendar,   */
 /*               working with dates and strings             */
@@ -424,22 +424,20 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 	}
 
 	char local_str[SMALL];
-	int local_opt_default;
 	short int podmienka;
 	for (i = 0; i < POCET_GLOBAL_OPT; i++){
 		Log("i == %d...\n", i);
-		local_opt_default = CFG_OPTION_DEFAULT(i);
 #if defined(IO_ANDROID) || defined(BEHAVIOUR_WEB)
 		// Export all options in android, so that the UI can parse and
 		// modify their values correctly.
 		podmienka = 1;
 #else
 		if (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE){
-			Log("_global_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %d;\n", i, _global_opt[i], i, local_opt_default);
+			Log("_global_opt[%d] == %ld; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, local_opt_default);
 			podmienka = (_global_opt[i] != local_opt_default);
 		}
 		else{
-			Log("_global_opt[%d] == %d; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %d;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
+			Log("_global_opt[%d] == %ld; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
 			podmienka = (_global_optf[i] != local_opt_default);
 		}
 #endif
@@ -448,24 +446,25 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 
 			strcat_str_modl_opt_bit_order(local_str, i, USE_STR_MODL_OPT);
 
-			sprintf(pom3, HTML_AMPERSAND"%s=%d", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_optf[i]);
+			sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_optf[i]);
 			strcat(pom2, pom3);
 			Log("\tPrilepil som aj opt%c %d: `%s'\n", (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? CHAR_SPACE : 'f', i, pom3);
 		}
 	}// for i
 
+	long local_opt_default;
 	if (force_opt == PRILEP_REQUEST_OPTIONS_AJ_FORCE){
 		Log("prilepujem aj force options...\n");
 		for (i = 0; i < POCET_GLOBAL_OPT; i++){
 			Log("i == %d...\n", i);
 			local_opt_default = CFG_OPTION_DEFAULT(i);
-			Log("_global_opt[%d] == %d; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %d;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
+			Log("_global_opt[%d] == %ld; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
 			if ((_global_opt[i] != _global_optf[i]) && (_global_opt[i] != local_opt_default)){
 				strcpy(local_str, STR_EMPTY);
 
 				strcat_str_modl_opt_bit_order(local_str, i, USE_STR_MODL_OPTF);
 
-				sprintf(pom3, HTML_AMPERSAND"%s=%d", local_str, _global_optf[i]);
+				sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, _global_optf[i]);
 				strcat(pom2, pom3);
 				Log("\tPrilepil som aj optf %d: `%s'\n", i, pom3);
 			}
@@ -474,6 +473,36 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 
 	Log("prilep_request_options() -- koniec.\n");
 }// prilep_request_options();
+
+char *_vytvor_string_z_datumu_ext(short int den, short int mesiac, short int rok, short int _case, short int align){
+	short int typ = 0;
+	mystrcpy(_global_pom_str, STR_EMPTY, MAX_STR);
+
+	if ((den < 1) || (den > 31)){
+		den = VSETKY_DNI;
+	}
+	if (mesiac > 11){
+		mesiac = VSETKY_MESIACE;
+	}
+
+	if ((den == VSETKY_DNI) && (mesiac == VSETKY_MESIACE))
+	{
+		sprintf(_global_pom_str, "%d", rok);
+		return (_global_pom_str);
+	}
+	else if ((den > 0) && ((mesiac > 0) && (mesiac != VSETKY_MESIACE))){
+		if (rok == 0){
+			typ = LINK_DEN_MESIAC;
+		}
+		else{
+			typ = LINK_DEN_MESIAC_ROK;
+		}
+		return _vytvor_string_z_datumu(den, mesiac, rok, _case, typ, align);
+	}
+	else{
+		return (_global_pom_str);
+	}
+}// _vytvor_string_z_datumu_ext()
 
 char *_vytvor_string_z_datumu(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align){
 	char pom[MAX_STR] = STR_EMPTY;
@@ -1551,6 +1580,8 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 			case 6: mystrcpy(str, STR_MODL_OPTF_0_FONT_NORMAL, SMALL); break; // BIT_OPT_0_FONT_NORMAL
 			case 7: mystrcpy(str, STR_MODL_OPTF_0_BUTTONS_ORDER, SMALL); break; // BIT_OPT_0_BUTTONS_ORDER
 			case 8: mystrcpy(str, STR_MODL_OPTF_0_BLIND_FRIENDLY, SMALL); break; // BIT_OPT_0_BLIND_FRIENDLY
+			case 9: mystrcpy(str, STR_MODL_OPTF_0_FOOTNOTES, SMALL); break; // BIT_OPT_0_FOOTNOTES
+			case 10: mystrcpy(str, STR_MODL_OPTF_0_TRANSPARENT_NAV, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV
 			}
 		}
 		break;
@@ -1575,6 +1606,7 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 			case 12: mystrcpy(str, STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST, SMALL); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
 			case 13: mystrcpy(str, STR_MODL_OPTF_1_VESP_KRATSIE_PROSBY, SMALL); break; // BIT_OPT_1_VESP_KRATSIE_PROSBY
 			case 14: mystrcpy(str, STR_MODL_OPTF_1_MCD_ZALTAR_TRI, SMALL); break; // BIT_OPT_1_MCD_ZALTAR_TRI
+			case 15: mystrcpy(str, STR_MODL_OPTF_1_ZAVER, SMALL); break; // BIT_OPT_1_ZAVER
 			}
 		}
 		break;
@@ -1639,6 +1671,8 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 			case 11: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_1VESP, SMALL); break; // BIT_OPT_5_HYMNUS_1VESP
 			case 12: mystrcpy(str, STR_MODL_OPTF_5_POPOL_STREDA_PSALMODIA, SMALL); break; // BIT_OPT_5_POPOL_STREDA_PSALMODIA
 			case 13: mystrcpy(str, STR_MODL_OPTF_5_CZ_HYMNY_VYBER, SMALL); break; // BIT_OPT_5_CZ_HYMNY_VYBER
+			case 14: mystrcpy(str, STR_MODL_OPTF_5_OFF_DEF_PSALM_146_150, SMALL); break; // BIT_OPT_5_OFF_DEF_PSALM_146_150
+			case 15: mystrcpy(str, STR_MODL_OPTF_5_ZAVER_KNAZ_DIAKON, SMALL); break; // BIT_OPT_5_ZAVER_KNAZ_DIAKON
 			}
 		}
 		break;

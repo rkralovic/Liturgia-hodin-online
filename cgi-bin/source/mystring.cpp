@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* mystring.cpp                                                */
-/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk             */
+/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | proprietary string manipulation methods       */
 /*                                                             */
@@ -242,6 +242,22 @@ char *mystr_first_upper(const char *string){
 		newstr[0] = c;
 	}
 	return newstr;
+}
+
+// Custom function for detecting whether base is starts with str
+short int startsWith(char* base, char* str) {
+	return (0 == (strstr(base, str) - base));
+}
+
+// Custom function for detecting whether base is ends with str
+short int endsWith(char* base, char* str){
+	int blen = strlen(base);
+	int slen = strlen(str);
+	if (slen <= blen)
+	{
+		return (0 == strcmp(base + blen - slen, str));
+	}
+	return 0;
 }
 
 #endif // __MYSTRING_CPP_

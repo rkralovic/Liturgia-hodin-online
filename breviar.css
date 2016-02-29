@@ -277,6 +277,15 @@ div.responsory {
 	font-weight: normal;
 }
 
+.reading p.footnotes { 
+	font-size: 80%;
+	font-style: normal;
+	font-weight: normal;
+	padding-left: 0em; 
+	padding-top: 0.5em;
+	text-indent: 0em; 
+}
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 .hymn p { 
@@ -621,6 +630,11 @@ p.patka {
 	letter-spacing: 0mm; 
 	text-align: center; 
 	text-indent: 0em; 
+}
+
+/* really quiet hyperlink without dotted underlining */
+.without-border { 
+	border: 0px; 
 }
 
 a.quiet { 

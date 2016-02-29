@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* hodin.h                                                  */
-/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | originally used for string constants       */
 /*                                                          */
@@ -654,6 +654,7 @@ const char *nazov_slavenia_lokal[] =
 , "A Klarisszáknál: Főünnep"                                                                                    // LOKAL_SLAV_HU_KLARISSZAKNAL_FOU
 , "jen na Moravě"                                                                                               // LOKAL_SLAV_LEN_MORAVA
 , "jen v Čechách"                                                                                               // LOKAL_SLAV_LEN_CECHY
+, "A Conceptionistáknál: Ünnep"                                                                                 // LOKAL_SLAV_HU_CONCEPTIONISTAK_UN
 };
 
 // names of liturgical colors
@@ -2002,6 +2003,33 @@ const char *html_text_option0_blind_friendly_explain[POCET_JAZYKOV + 1] =
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
+const char *html_text_option0_footnotes[POCET_JAZYKOV + 1] =
+{
+	"zobraziť poznámky pod čiarou",
+	"zobrazit poznámky pod čarou",
+	"show footnotes",
+	"",
+	"",
+	"zobrazit poznámky pod čarou",
+	"lábjegyzetek",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+// for other languages use: ""
+const char *html_text_option0_footnotes_explain[POCET_JAZYKOV + 1] =
+{
+	"Vo výslednej modlitbe (najmä posvätné čítania) budú zobrazené aj poznámky pod čiarou (a odkazy na ne).",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
 const char *html_text_option1_chvalospevy[POCET_JAZYKOV + 1] =
 {
 	"evanjeliové chválospevy (Benediktus, Magnifikat, Nunk dimittis)",
@@ -2192,7 +2220,7 @@ const char *html_text_option_pouzit[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"použít",
-	"hu_text",
+	"használat",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -2323,6 +2351,35 @@ const char *html_text_option1_mcd_zalmy_tri_explain[POCET_JAZYKOV + 1] =
 	"",
 	"Pokud se někdo modlí více částí modlitby uprostřed dne, může nejprve použít psalmodii daného dne a potom psalmodii předchozího, nebo následujícího týdne.",
 	"Ha valaki többször naponta mondja a napközi imát, a zsoltározás három hétből (aktuális, előző, következő) van alkalmazva.\nNincs hatása, ha ki van választva a kiegészítő zsoltárok alkalmazása.",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+#define HTML_TEXT_HU_OPTION1_ZAVER_SHOW "a befejezést megjeleníteni"
+#define HTML_TEXT_HU_OPTION1_ZAVER_HIDE "a befejezést elrejteni"
+
+const char *html_text_option1_zaver[POCET_JAZYKOV + 1] =
+{
+	"zakončenie",
+	"zakončení",
+	"",
+	"conclusion",
+	"",
+	"zakončení",
+	"befejezést",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char *html_text_option1_zaver_explain[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -3208,12 +3265,12 @@ const char *html_text_option5_CZhymnyRENC[POCET_JAZYKOV + 1] =
 const char *html_text_option5_DPsalmZ122_129[POCET_JAZYKOV + 1] =
 {
 	"namiesto žalmu 122 brať žalm 129",
- "místo žalmu 122 vzít žalm 129",
- "instead of psalm 122 use 129",
- "",
- "",
- "místo žalmu 122 vzít žalm 129",
- "a 121. helyett vehető a 128. zsoltár",
+	"místo žalmu 122 vzít žalm 129",
+	"instead of psalm 122 use 129",
+	"",
+	"",
+	"místo žalmu 122 vzít žalm 129",
+	"a 121. helyett vehető a 128. zsoltár",
 };
 
 const char *html_text_option5_DPsalmZ126_129[POCET_JAZYKOV + 1] =
@@ -3232,12 +3289,12 @@ const char *html_text_option5_DPsalmZ126_129[POCET_JAZYKOV + 1] =
 const char *html_text_option5_DPsalmZ127_131[POCET_JAZYKOV + 1] = 
 {
 	"namiesto žalmu 127 brať žalm 131",
- "místo žalmu 127 vzít žalm 131",
- "instead of psalm 127 use 131",
- "",
- "",
- "místo žalmu 127 vzít žalm 131",
- "a 126. helyett vehető a 130. zsoltár",
+	"místo žalmu 127 vzít žalm 131",
+	"instead of psalm 127 use 131",
+	"",
+	"",
+	"místo žalmu 127 vzít žalm 131",
+	"a 126. helyett vehető a 130. zsoltár",
 };
 
 const char *html_text_option5_DPsalmZ122_NORMAL[POCET_JAZYKOV + 1] =
@@ -3316,6 +3373,72 @@ const char *html_text_option5_DPsalmZ127_131_explain[POCET_JAZYKOV + 1] =
 	"A kiegészítő zsoltároknál a 126. helyett vehető a 130. zsoltár.",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char *html_text_option5_OffDefZ146_150[POCET_JAZYKOV + 1] =
+{
+	"namiesto žalmu 146 brať žalm 150",
+	"místo žalmu 146 vzít žalm 150",
+	"instead of psalm 146 use 150",
+	"",
+	"",
+	"místo žalmu 146 vzít žalm 150",
+	"a 145. helyett vehető a 150. zsoltár",
+};
+
+const char *html_text_option5_OffDefZ146_150_explain[POCET_JAZYKOV + 1] =
+{
+	"V ranných chválach ofícia za zosnulých namiesto žalmu 146 brať žalm 150",
+	"místo žalmu 146 vzít žalm 150",
+	"instead of psalm 146 use 150",
+	"",
+	"",
+	"místo žalmu 146 vzít žalm 150",
+	"a 145. helyett vehető a 150. zsoltár",
+};
+
+const char *html_text_option5_OffDefZ146_150_NORMAL[POCET_JAZYKOV + 1] =
+{
+	"namiesto žalmu 150 brať žalm 146",
+	"místo žalmu 150 vzít žalm 146",
+	"instead of psalm 150 use 146",
+	"",
+	"",
+	"místo žalmu 150 vzít žalm 146",
+	"a 150. helyett vehető a 145. zsoltár",
+};
+
+const char *html_text_option5_zaver_knaz_diakon[POCET_JAZYKOV + 1] =
+{
+	"záver, ak predsedá kňaz alebo diakon",
+	"závěr, předsedá-li kněz nebo jáhen",
+	"conclusion in case when priest or diacon is present",
+	"",
+	"",
+	"závěr, pokud předsedá kněz nebo jáhen",
+	"ezután, ha pap vagy diakónus vezeti",
+};
+
+const char *html_text_option5_zaver_knaz_diakon_explain[POCET_JAZYKOV + 1] =
+{
+	"V ranných chválach a vešperách závisí záver modlitby od toho, či predsedá kňaz alebo diakon, alebo nie.",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+};
+
+const char *html_text_option5_zaver_knaz_diakon_NORMAL[POCET_JAZYKOV + 1] =
+{
+	"záver, ak nepredsedá kňaz alebo diakon a pri recitovaní jednotlivca",
+	"závěr, není-li přítomen kněz nebo jáhen anebo modlí-li se někdo sám",
+	"conclusion in case when priest or diacon is not present and for individual prayer",
+	"",
+	"",
+	"závěr, pokud nepředsedá kněz nebo jáhen a při recitovaní jednotlivce",
+	"ha nincs jelen pap vagy diakónus, valamint egyéni imádkozás esetén",
 };
 
 const char *html_text_font_name[POCET_JAZYKOV + 1] =
@@ -3647,11 +3770,11 @@ const char *text_JAN_03[POCET_JAZYKOV + 1] =
 const char *text_JAN_04_OFM[POCET_JAZYKOV + 1] =
 {
 	"Bl. Angely z Foligna, rehoľníčky, členky 3. rádu",
+	"Bl. Anděly z Foligna, členky 3. řádu",
 	"",
 	"",
 	"",
-	"",
-	"",
+	"Bl. Anděly z Foligna, členky 3. řádu",
 	"Folignói Boldog Angéla, szerzetesnő a III. Rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
@@ -7723,7 +7846,7 @@ const char *text_JUL_21_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"Sv. Vavřince z Brindisi, kněze a učitele Církve, člena 1. řádu",
-	"Brindisi Szent Lőrinc áldozópap és egyháztanító",
+	"Brindisi Szent Lőrinc, pap és Egyháztanító az I. Rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -9350,7 +9473,7 @@ const char *text_SEP_23_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"Sv. Pia z Pietrelciny, kněze",
-	"Pietrelcinai Szent Pio áldozópap",
+	"Pietrelcinai Szent Pió szerzetes és áldozópap az I. rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -9717,6 +9840,18 @@ const char *text_OKT_06_SJ[POCET_JAZYKOV + 1] =
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
+const char *text_OKT_06_HU_OFM[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"Az Úr Jézus Öt Sebéről nevezett Szent Mária Franciska, szűz A III. Rendből",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
 const char *text_OKT_06_OP[POCET_JAZYKOV + 1] =
 {
 	"Bl. Bartolomeja Longu, laika",
@@ -9822,6 +9957,18 @@ const char *text_OKT_10_OPRAEM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+const char *text_OKT_10_HU_OFM[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"Szent Dániel és vértanú társai az I. Rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -10185,6 +10332,18 @@ const char *text_OKT_22_OP[POCET_JAZYKOV + 1] =
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
+const char *text_OKT_22_HU_OFM[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"Boldog Josephina, szűz és vértanú A II. Rendből",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
 const char *text_OKT_22[POCET_JAZYKOV + 1] =
 {
 	"Sv. Jána Pavla II., pápeža",
@@ -10217,7 +10376,7 @@ const char *text_OKT_23_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"",
+	"Kapisztrán Szent János, pap az I. Rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -10473,6 +10632,18 @@ const char *text_OKT_30_CZ[POCET_JAZYKOV + 1] =
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
+const char *text_OKT_30_HU_OFM[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"A saját templom fölszentelesenek évfordulója",
+	"ru_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
 const char *text_OKT_31_SJ[POCET_JAZYKOV + 1] =
 {
 	"Sv. Alfonza Rodrígueza, rehoľníka",
@@ -10580,7 +10751,7 @@ const char *text_NOV_03_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"",
+	"Megemlékezés a Szeráfi Rend elhunytjairól", // HU: 24NOV
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -10964,7 +11135,7 @@ const char *text_NOV_17_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"",
+	"Árpádházi Szent Erzsébet a III. Rend Pátrónája", // HU: 19NOV
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -11000,7 +11171,7 @@ const char *text_NOV_19_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"",
+	"Assisi Szent Ágnes, szűz A II. Rendből", // HU: 16NOV
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -11180,7 +11351,7 @@ const char *text_NOV_27_OFM[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"",
+	"Fasani Szent Ferenc Antal áldozópap az I. rendből",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
@@ -11483,7 +11654,7 @@ const char *text_DEC_21[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"Sv. Petra Kanisia, kněze a učitele Církve",
-	"Kaníziusz Szent Péter áldozópap és egyháztaíntó",
+	"Kaníziusz Szent Péter áldozópap és egyháztanító",
 	"ru_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };

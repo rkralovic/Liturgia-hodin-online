@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* breviar.h                                                   */
-/* (c)1999-2015 | Juraj Vidéky | videky@breviar.sk             */
+/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | contains declarations of global variables     */
 /*                                                             */
@@ -133,9 +133,9 @@ extern _struct_lrok *_global_r_ptr;
 extern short int _global_pocet_svatych;
 
 // globálna premenná -- pole -- obsahujúca options; pôvodne to boli globálne premenné _global_opt 1..9 atď., obsahujú pom_MODL_OPT...
-extern int _global_opt[POCET_GLOBAL_OPT];
+extern long _global_opt[POCET_GLOBAL_OPT];
 // globálna premenná -- pole -- obsahujúca force options; pôvodne to boli globálne premenné _global_optf 1..9 atď., obsahujú pom_MODL_OPTF...
-extern int _global_optf[POCET_GLOBAL_OPT];
+extern long _global_optf[POCET_GLOBAL_OPT];
 
 // globalna premenna, co obsahuje string vypisany na obsazovku
 extern char *_global_string;
@@ -177,9 +177,14 @@ extern short int _global_opt_export_date_format;
 
 #define set_tyzzal_1_2(tyzzal) ((tyzzal > 2)? (tyzzal - 2) : tyzzal)
 
-// placeholder for checking whether option 'i' has set 'j'-th bit-component to TRUE
-#define isGlobalOption(opt_i, bit_opt_i_component_j) ((_global_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j)
-#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) ((_global_optf[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j)
+// placeholder for checking whether option 'i' has set 'j'-th bit-component to TRUE | used result ANO/NIE to prevent long datatype
+#define isGlobalOption(opt_i, bit_opt_i_component_j) (((_global_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
+#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) (((_global_optf[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
+
+#define odfiltrujSpolCast(modlitba, opt3) ((short int)(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA)) ? MODL_SPOL_CAST_NULL : opt3))
+
+// prvé písmeno veľké majú len názvy vlastných častí pre CZOP (pre SK chybne dávalo: "panny Márie")
+#define lowered_nazov_spolc(a) ((_global_jazyk == JAZYK_CZ_OP)? mystr_first_lower(nazov_spolc(a)) : nazov_spolc(a))
 
 // define for decide whether offline (Android) app supports hyperlinks to Bible app for liturgical readings -- currently in SK only
 #define su_liturgicke_citania_offline (_global_jazyk == JAZYK_SK)
@@ -390,6 +395,11 @@ extern short int _global_opt_export_date_format;
 	((modlitba == MODL_POPOLUDNI) && ((_global_modl_popol.alternativy & BIT_ALT_DOPLNK_PSALM_126_129) == BIT_ALT_DOPLNK_PSALM_126_129)) \
 )
 
+// is psalm 146/150 in Officium defunctoribus? (it would suffice: morning prayer)
+#define je_alternativa_off_def_z146_150(modlitba) (\
+	((modlitba == MODL_RANNE_CHVALY) && ((_global_modl_ranne_chvaly.alternativy & BIT_ALT_OFF_DEF_PSALM_146_150) == BIT_ALT_OFF_DEF_PSALM_146_150)) \
+)
+
 // 2011-02-02: presunuté do #define -- kontrola, ktorá zabezpečuje, že normálne správanie sa slávení nie je prebité pre "CZOP miestne slávenia"
 // 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY(i) aj pre slovenské, ktoré majú nastavené "lokálne" verzie
 // 2014-03-21: aj pre SK všeobecné kvôli 2014-10-26 | bolo: #define MIESTNE_SLAVENIE_LOKAL_SVATY(i) (((_global_svaty(i).kalendar == KALENDAR_CZ_OFMCAP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OPRAEM) || (_global_svaty(i).kalendar == KALENDAR_SK_OP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OP) || (_global_svaty(i).kalendar == KALENDAR_SK_CSSR) || (_global_svaty(i).kalendar == KALENDAR_SK_SVD) || (_global_svaty(i).kalendar == KALENDAR_SK_SJ) || (_global_svaty(i).kalendar == KALENDAR_SK_SDB) || (_global_svaty(i).kalendar == KALENDAR_SK_OFM) || (_global_svaty(i).typslav_lokal != LOKAL_SLAV_NEURCENE)) && ((_global_svaty(i).smer == 4) || (_global_svaty(i).smer == 8) || (_global_svaty(i).smer == 11)))
@@ -425,6 +435,8 @@ extern short int _global_opt_export_date_format;
 #define PODMIENKA_EXPORTOVAT_CSS ( (_global_css != CSS_UNDEF) && (_global_css != CSS_breviar_sk) )
 
 #define PODMIENKA_EXPORTOVAT_STYLE_MARGIN ( (_global_style_margin > MIN_STYLE_MARGIN) && (_global_style_margin < MAX_STYLE_MARGIN) )
+
+#define PODMIENKA_JE_BATCH_MODE_MONTHLY__AND__PLAIN_EXPORT ((_global_opt_batch_monthly == ANO) && (export_monthly_druh > 2))
 
 //---------------------------------------------------------------------
 // definicie pre _rozbor_dna():

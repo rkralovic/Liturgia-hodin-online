@@ -96,6 +96,15 @@ public class UrlOptions {
     setBit("o0", 1, value);
   }
 
+  // of0ff
+  public boolean isFootnotes() {
+    return hasBit("o0", 9);
+  }
+
+  public void setFootnotes(boolean value) {
+    setBit("o0", 9, value);
+  }
+
   // of0cit
   public boolean isLiturgicalReadings() {
     return hasBit("o0", 2);
@@ -130,6 +139,15 @@ public class UrlOptions {
 
   public void setBodyBloodSunday(boolean value) {
     setBit("o0", 5, value);
+  }
+
+  // of0tn
+  public boolean isTransparentNav() {
+    return hasBit("o0", 10);
+  }
+
+  public void setTransparentNav(boolean value) {
+    setBit("o0", 10, value);
   }
 
   // of1zspc
