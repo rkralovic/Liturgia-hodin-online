@@ -261,7 +261,12 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 		_header_css(expt, level, nazov_css_blind_friendly);
 	}
 
+#if defined(IO_ANDROID)
+	Export_to_file(expt, "\t<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0\" />\n");
+#else
 	Export_to_file(expt, "\t<meta name=\"viewport\" content=\"width=device-width, user-scalable=yes, initial-scale=1.0\" />\n");
+#endif
+
 	Export_to_file(expt, "<title>%s</title>\n", title);
 	Export_to_file(expt, "</head>\n\n");
 	Log("element </head>...\n");
@@ -380,6 +385,9 @@ void _patka_body_html_end(FILE * expt){
 	Export_to_file(expt, HTML_DIV_END"\n");
 #endif
 
+#ifdef IO_ANDROID
+	Export_to_file(expt, "<script src='/zoom.js'></script>\n");
+#endif
 	Export_to_file(expt, "</body>\n</html>\n");
 
 	Log("_patka_body_html_end() -- koniec.\n");
