@@ -114,6 +114,15 @@ public class UrlOptions {
     setBit("o0", 2, value);
   }
 
+  // of0cit
+  public boolean isPsalmsOmissions() {
+    return hasBit("o0", 11);
+  }
+
+  public void setPsalmsOmissions(boolean value) {
+    setBit("o0", 11, value);
+  }
+
   // of0zjvne
   public boolean isEpiphanySunday() {
     return hasBit("o0", 3);
@@ -193,6 +202,15 @@ public class UrlOptions {
 
   public void setNightmode(boolean value) {
     setBit("o2", 8, value);
+  }
+
+  // of2bo
+  public boolean isBackgroundOverride() {
+    return hasBit("o2", 16);
+  }
+
+  public void setBackgroundOverride(boolean value) {
+    setBit("o2", 16, value);
   }
 
   // of2rm

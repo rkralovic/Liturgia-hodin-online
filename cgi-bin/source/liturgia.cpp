@@ -204,16 +204,6 @@ short int _allocate_global_var(void){
 		mystrcpy(_global_link_ptr, STR_UNDEF, MAX_GLOBAL_LINK);
 	}
 
-	// _global_pom_str
-	if ((_global_pom_str = (char*)malloc(MAX_STR)) == NULL){
-		Log("  Not enough memory to allocate buffer for `_global_pom_str'\n");
-		ret = FAILURE;
-	}
-	else{
-		Log("  %d bytes for `_global_pom_str'\n", MAX_STR);
-		mystrcpy(_global_pom_str, STR_UNDEF, MAX_STR);
-	}
-
 	// _global_string
 	if ((_global_string = (char*)malloc(MAX_GLOBAL_STR)) == NULL){
 		Log("  Not enough memory to allocate buffer for `_global_string'\n");
@@ -438,16 +428,16 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 			podmienka = (_global_opt[i] != local_opt_default);
 		}
 		else{
-			Log("_global_opt[%d] == %ld; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
-			podmienka = (_global_optf[i] != local_opt_default);
+			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
+			podmienka = (_global_force_opt[i] != local_opt_default);
 		}
 #endif
 		if(podmienka){
 			strcpy(local_str, STR_EMPTY);
 
-			strcat_str_modl_opt_bit_order(local_str, i, USE_STR_MODL_OPT);
+			strcat_str_opt_bit_order(local_str, i, USE_STR_OPT);
 
-			sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_optf[i]);
+			sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_force_opt[i]);
 			strcat(pom2, pom3);
 			Log("\tPrilepil som aj opt%c %d: `%s'\n", (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? CHAR_SPACE : 'f', i, pom3);
 		}
@@ -458,15 +448,15 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 		for (i = 0; i < POCET_GLOBAL_OPT; i++){
 			Log("i == %d...\n", i);
 			local_opt_default = CFG_OPTION_DEFAULT(i);
-			Log("_global_opt[%d] == %ld; _global_optf[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_optf[i], i, local_opt_default);
-			if ((_global_opt[i] != _global_optf[i]) && (_global_opt[i] != local_opt_default)){
+			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
+			if ((_global_opt[i] != _global_force_opt[i]) && (_global_opt[i] != local_opt_default)){
 				strcpy(local_str, STR_EMPTY);
 
-				strcat_str_modl_opt_bit_order(local_str, i, USE_STR_MODL_OPTF);
+				strcat_str_opt_bit_order(local_str, i, USE_STR_FORCE_OPT);
 
-				sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, _global_optf[i]);
+				sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, _global_force_opt[i]);
 				strcat(pom2, pom3);
-				Log("\tPrilepil som aj optf %d: `%s'\n", i, pom3);
+				Log("\tPrilepil som aj force_opt %d: `%s'\n", i, pom3);
 			}
 		}// for i
 	}// aj_force
@@ -979,7 +969,7 @@ unsigned char _nedelne_pismeno(short int rok){
 	return (char)((vn + 5) MOD 7); // (char) pridane 01/03/2000A.D.
 }
 
-char nedelne_pismeno(short int rok){
+char nedelne_pismeno(short int rok) {
 	return char_nedelne_pismeno[_nedelne_pismeno(rok)];
 }
 
@@ -1018,6 +1008,18 @@ unsigned char _nedelne_pismeno(_struct_den_mesiac den_a_mesiac, short int rok){
 char nedelne_pismeno(_struct_den_mesiac den_a_mesiac, short int rok){
 	return char_nedelne_pismeno[_nedelne_pismeno(den_a_mesiac, rok)];
 }// nedelne_pismeno()
+
+short int index_nedelne_pismeno(char nedelne_pismeno) {
+	short int idx = nedelne_pismeno - char_nedelne_pismeno[0];
+	if (nedelne_pismeno == char_nedelne_pismeno[POCET_DNI - 1]) {
+		idx = POCET_DNI - 1;
+	}
+	return idx;
+}// index_nedelne_pismeno()
+
+short int index_nedelny_cyklus(char nedelny_cyklus) {
+	return nedelny_cyklus - char_nedelny_cyklus[0];
+}// index_nedelny_cyklus()
 
 // z poradoveho cisla dna v roku urobi datum,
 // 1 == 1.1., 2 == 2.1., 32 == 1.2., ... 365 == 31.12./30.12.
@@ -1559,7 +1561,7 @@ _struct_sc _decode_spol_cast(int spolc){
 	return ret;
 }
 
-void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short bit_order){
+void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_order){
 
 	char str[SMALL] = STR_EMPTY;
 
@@ -1569,19 +1571,20 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 		if (bit_order < POCET_OPT_0_SPECIALNE){
 			switch (bit_order)
 			{
-			case -2: mystrcpy(str, STR_MODL_OPT_0, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-			case -1: mystrcpy(str, STR_MODL_OPTF_0, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
-			case 0: mystrcpy(str, STR_MODL_OPTF_0_VERSE, SMALL); break; // BIT_OPT_0_VERSE
-			case 1: mystrcpy(str, STR_MODL_OPTF_0_REF, SMALL); break; // BIT_OPT_0_REFERENCIE
-			case 2: mystrcpy(str, STR_MODL_OPTF_0_CIT, SMALL); break; // BIT_OPT_0_CITANIA
-			case 3: mystrcpy(str, STR_MODL_OPTF_0_ZJAV_NED, SMALL); break; // BIT_OPT_0_ZJAVENIE_PANA_NEDELA
-			case 4: mystrcpy(str, STR_MODL_OPTF_0_NAN_NED, SMALL); break; // BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA
-			case 5: mystrcpy(str, STR_MODL_OPTF_0_TK_NED, SMALL); break; // BIT_OPT_0_TELAKRVI_NEDELA
-			case 6: mystrcpy(str, STR_MODL_OPTF_0_FONT_NORMAL, SMALL); break; // BIT_OPT_0_FONT_NORMAL
-			case 7: mystrcpy(str, STR_MODL_OPTF_0_BUTTONS_ORDER, SMALL); break; // BIT_OPT_0_BUTTONS_ORDER
-			case 8: mystrcpy(str, STR_MODL_OPTF_0_BLIND_FRIENDLY, SMALL); break; // BIT_OPT_0_BLIND_FRIENDLY
-			case 9: mystrcpy(str, STR_MODL_OPTF_0_FOOTNOTES, SMALL); break; // BIT_OPT_0_FOOTNOTES
-			case 10: mystrcpy(str, STR_MODL_OPTF_0_TRANSPARENT_NAV, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV
+			case -2: mystrcpy(str, STR_OPT_0, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+			case -1: mystrcpy(str, STR_FORCE_OPT_0, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
+			case 0: mystrcpy(str, STR_FORCE_BIT_OPT_0_VERSE, SMALL); break; // BIT_OPT_0_VERSE
+			case 1: mystrcpy(str, STR_FORCE_BIT_OPT_0_REF, SMALL); break; // BIT_OPT_0_REFERENCIE
+			case 2: mystrcpy(str, STR_FORCE_BIT_OPT_0_CIT, SMALL); break; // BIT_OPT_0_CITANIA
+			case 3: mystrcpy(str, STR_FORCE_BIT_OPT_0_ZJAV_NED, SMALL); break; // BIT_OPT_0_ZJAVENIE_PANA_NEDELA
+			case 4: mystrcpy(str, STR_FORCE_BIT_OPT_0_NAN_NED, SMALL); break; // BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA
+			case 5: mystrcpy(str, STR_FORCE_BIT_OPT_0_TK_NED, SMALL); break; // BIT_OPT_0_TELAKRVI_NEDELA
+			case 6: mystrcpy(str, STR_FORCE_BIT_OPT_0_FONT_NORMAL, SMALL); break; // BIT_OPT_0_FONT_NORMAL
+			case 7: mystrcpy(str, STR_FORCE_BIT_OPT_0_BUTTONS_ORDER, SMALL); break; // BIT_OPT_0_BUTTONS_ORDER
+			case 8: mystrcpy(str, STR_FORCE_BIT_OPT_0_BLIND_FRIENDLY, SMALL); break; // BIT_OPT_0_BLIND_FRIENDLY
+			case 9: mystrcpy(str, STR_FORCE_BIT_OPT_0_FOOTNOTES, SMALL); break; // BIT_OPT_0_FOOTNOTES
+			case 10: mystrcpy(str, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV
+			case 11: mystrcpy(str, STR_FORCE_BIT_OPT_0_ZALMY_FULL_TEXT, SMALL); break; // BIT_OPT_0_ZALMY_FULL_TEXT
 			}
 		}
 		break;
@@ -1589,24 +1592,24 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 		if (bit_order < POCET_OPT_1_CASTI_MODLITBY){
 			switch (bit_order)
 			{
-			case -2: mystrcpy(str, STR_MODL_OPT_1, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-			case -1: mystrcpy(str, STR_MODL_OPTF_1, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
-			case 0: mystrcpy(str, STR_MODL_OPTF_1_TD, SMALL); break; // BIT_OPT_1_TEDEUM
-			case 1: mystrcpy(str, STR_MODL_OPTF_1_RUB, SMALL); break; // BIT_OPT_1_RUBRIKY
-			case 2: mystrcpy(str, STR_MODL_OPTF_1_CHV, SMALL); break; // BIT_OPT_1_CHVALOSPEVY
-			case 3: mystrcpy(str, STR_MODL_OPTF_1_SL, SMALL); break; // BIT_OPT_1_SLAVA_OTCU
-			case 4: mystrcpy(str, STR_MODL_OPTF_1_OT, SMALL); break; // BIT_OPT_1_OTCENAS
-			case 5: mystrcpy(str, STR_MODL_OPTF_1_MCD_DOPLNKOVA, SMALL); break; // BIT_OPT_1_MCD_DOPLNKOVA
-			case 6: mystrcpy(str, STR_MODL_OPTF_1_VIGILIA, SMALL); break; // BIT_OPT_1_PC_VIGILIA
-			case 7: mystrcpy(str, STR_MODL_OPTF_1_SPOMIENKA_SPOL_CAST, SMALL); break; // BIT_OPT_1_SPOMIENKA_SPOL_CAST
-			case 8: mystrcpy(str, STR_MODL_OPTF_1_PLNE_RESP, SMALL); break; // BIT_OPT_1_PLNE_RESP
-			case 9: mystrcpy(str, STR_MODL_OPTF_1_ZALM95, SMALL); break; // BIT_OPT_1_ZALM95
-			case 10: mystrcpy(str, STR_MODL_OPTF_1_PROSBY_ZVOLANIE, SMALL); break; // BIT_OPT_1_PROSBY_ZVOLANIE
-			case 11: mystrcpy(str, STR_MODL_OPTF_1_SKRY_POPIS, SMALL); break; // BIT_OPT_1_SKRY_POPIS
-			case 12: mystrcpy(str, STR_MODL_OPTF_1_ZOBRAZ_SPOL_CAST, SMALL); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
-			case 13: mystrcpy(str, STR_MODL_OPTF_1_VESP_KRATSIE_PROSBY, SMALL); break; // BIT_OPT_1_VESP_KRATSIE_PROSBY
-			case 14: mystrcpy(str, STR_MODL_OPTF_1_MCD_ZALTAR_TRI, SMALL); break; // BIT_OPT_1_MCD_ZALTAR_TRI
-			case 15: mystrcpy(str, STR_MODL_OPTF_1_ZAVER, SMALL); break; // BIT_OPT_1_ZAVER
+			case -2: mystrcpy(str, STR_OPT_1, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+			case -1: mystrcpy(str, STR_FORCE_OPT_1, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
+			case 0: mystrcpy(str, STR_FORCE_BIT_OPT_1_TD, SMALL); break; // BIT_OPT_1_TEDEUM
+			case 1: mystrcpy(str, STR_FORCE_BIT_OPT_1_RUB, SMALL); break; // BIT_OPT_1_RUBRIKY
+			case 2: mystrcpy(str, STR_FORCE_BIT_OPT_1_CHV, SMALL); break; // BIT_OPT_1_CHVALOSPEVY
+			case 3: mystrcpy(str, STR_FORCE_BIT_OPT_1_SL, SMALL); break; // BIT_OPT_1_SLAVA_OTCU
+			case 4: mystrcpy(str, STR_FORCE_BIT_OPT_1_OT, SMALL); break; // BIT_OPT_1_OTCENAS
+			case 5: mystrcpy(str, STR_FORCE_BIT_OPT_1_MCD_DOPLNKOVA, SMALL); break; // BIT_OPT_1_MCD_DOPLNKOVA
+			case 6: mystrcpy(str, STR_FORCE_BIT_OPT_1_VIGILIA, SMALL); break; // BIT_OPT_1_PC_VIGILIA
+			case 7: mystrcpy(str, STR_FORCE_BIT_OPT_1_SPOMIENKA_SPOL_CAST, SMALL); break; // BIT_OPT_1_SPOMIENKA_SPOL_CAST
+			case 8: mystrcpy(str, STR_FORCE_BIT_OPT_1_PLNE_RESP, SMALL); break; // BIT_OPT_1_PLNE_RESP
+			case 9: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZALM95, SMALL); break; // BIT_OPT_1_ZALM95
+			case 10: mystrcpy(str, STR_FORCE_BIT_OPT_1_PROSBY_ZVOLANIE, SMALL); break; // BIT_OPT_1_PROSBY_ZVOLANIE
+			case 11: mystrcpy(str, STR_FORCE_BIT_OPT_1_SKRY_POPIS, SMALL); break; // BIT_OPT_1_SKRY_POPIS
+			case 12: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZOBRAZ_SPOL_CAST, SMALL); break; // BIT_OPT_1_ZOBRAZ_SPOL_CAST
+			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_1_VESP_KRATSIE_PROSBY, SMALL); break; // BIT_OPT_1_VESP_KRATSIE_PROSBY
+			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_1_MCD_ZALTAR_TRI, SMALL); break; // BIT_OPT_1_MCD_ZALTAR_TRI
+			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZAVER, SMALL); break; // BIT_OPT_1_ZAVER
 			}
 		}
 		break;
@@ -1614,40 +1617,41 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 		if (bit_order < POCET_OPT_2_HTML_EXPORT){
 			switch (bit_order)
 			{
-			case -2: mystrcpy(str, STR_MODL_OPT_2, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-			case -1: mystrcpy(str, STR_MODL_OPTF_2, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
-			case 0: mystrcpy(str, STR_MODL_OPTF_2_ISO_DATUM, SMALL); break; // BIT_OPT_2_ISO_DATUM
-			case 1: mystrcpy(str, STR_MODL_OPTF_2_PRVE_VESPERY, SMALL); break; // BIT_OPT_2_BUTTON_PRVE_VESPERY
-			case 2: mystrcpy(str, STR_MODL_OPTF_2_FONT_FAMILY, SMALL); break; // BIT_OPT_2_FONT_FAMILY
-			case 3: mystrcpy(str, STR_MODL_OPTF_2_FONT_NAME_CHOOSER, SMALL); break; // BIT_OPT_2_FONT_NAME_CHOOSER
-				// case 4: mystrcpy(str, STR_MODL_OPTF_2_FONT_SIZE, SMALL); break; // BIT_OPT_2_FONT_SIZE_CHOOSER
-			case 5: mystrcpy(str, STR_MODL_OPTF_2_NAVIGATION, SMALL); break; // BIT_OPT_2_NAVIGATION
-			case 6: mystrcpy(str, STR_MODL_OPTF_2_TEXT_WRAP, SMALL); break; // BIT_OPT_2_TEXT_WRAP
-			case 7: mystrcpy(str, STR_MODL_OPTF_2_BUTTONY_USPORNE, SMALL); break; // BIT_OPT_2_BUTTONY_USPORNE
-			case 8: mystrcpy(str, STR_MODL_OPTF_2_NOCNY_REZIM, SMALL); break; // BIT_OPT_2_NOCNY_REZIM
-			case 9: mystrcpy(str, STR_MODL_OPTF_2_ROZNE_MOZNOSTI, SMALL); break; // BIT_OPT_2_ROZNE_MOZNOSTI
-			case 10: mystrcpy(str, STR_MODL_OPTF_2_HIDE_NAVIG_BUTTONS, SMALL); break; // BIT_OPT_2_HIDE_NAVIG_BUTTONS
-			case 11: mystrcpy(str, STR_MODL_OPTF_2_HIDE_KALENDAR, SMALL); break; // BIT_OPT_2_HIDE_KALENDAR
-			case 12: mystrcpy(str, STR_MODL_OPTF_2_HIDE_OPTIONS1, SMALL); break; // BIT_OPT_2_HIDE_OPTIONS1
-			case 13: mystrcpy(str, STR_MODL_OPTF_2_HIDE_OPTIONS2, SMALL); break; // BIT_OPT_2_HIDE_OPTIONS2
-			case 14: mystrcpy(str, STR_MODL_OPTF_2_ALTERNATIVES, SMALL); break; // BIT_OPT_2_ALTERNATIVES
-			case 15: mystrcpy(str, STR_MODL_OPTF_2_SHOW_DEFAULT_CALENDAR, SMALL); break; // BIT_OPT_2_SHOW_DEFAULT_CALENDAR
+			case -2: mystrcpy(str, STR_OPT_2, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+			case -1: mystrcpy(str, STR_FORCE_OPT_2, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
+			case 0: mystrcpy(str, STR_FORCE_BIT_OPT_2_ISO_DATUM, SMALL); break; // BIT_OPT_2_ISO_DATUM
+			case 1: mystrcpy(str, STR_FORCE_BIT_OPT_2_PRVE_VESPERY, SMALL); break; // BIT_OPT_2_BUTTON_PRVE_VESPERY
+			case 2: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_FAMILY, SMALL); break; // BIT_OPT_2_FONT_FAMILY
+			case 3: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_NAME_CHOOSER, SMALL); break; // BIT_OPT_2_FONT_NAME_CHOOSER
+				// case 4: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_SIZE, SMALL); break; // BIT_OPT_2_FONT_SIZE_CHOOSER
+			case 5: mystrcpy(str, STR_FORCE_BIT_OPT_2_NAVIGATION, SMALL); break; // BIT_OPT_2_NAVIGATION
+			case 6: mystrcpy(str, STR_FORCE_BIT_OPT_2_TEXT_WRAP, SMALL); break; // BIT_OPT_2_TEXT_WRAP
+			case 7: mystrcpy(str, STR_FORCE_BIT_OPT_2_BUTTONY_USPORNE, SMALL); break; // BIT_OPT_2_BUTTONY_USPORNE
+			case 8: mystrcpy(str, STR_FORCE_BIT_OPT_2_NOCNY_REZIM, SMALL); break; // BIT_OPT_2_NOCNY_REZIM
+			case 9: mystrcpy(str, STR_FORCE_BIT_OPT_2_ROZNE_MOZNOSTI, SMALL); break; // BIT_OPT_2_ROZNE_MOZNOSTI
+			case 10: mystrcpy(str, STR_FORCE_BIT_OPT_2_HIDE_NAVIG_BUTTONS, SMALL); break; // BIT_OPT_2_HIDE_NAVIG_BUTTONS
+			case 11: mystrcpy(str, STR_FORCE_BIT_OPT_2_HIDE_KALENDAR, SMALL); break; // BIT_OPT_2_HIDE_KALENDAR
+			case 12: mystrcpy(str, STR_FORCE_BIT_OPT_2_HIDE_OPTIONS1, SMALL); break; // BIT_OPT_2_HIDE_OPTIONS1
+			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_2_HIDE_OPTIONS2, SMALL); break; // BIT_OPT_2_HIDE_OPTIONS2
+			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_2_ALTERNATIVES, SMALL); break; // BIT_OPT_2_ALTERNATIVES
+			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_2_SHOW_DEFAULT_CALENDAR, SMALL); break; // BIT_OPT_2_SHOW_DEFAULT_CALENDAR
+			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_2_BACKGROUND_OVERRIDE, SMALL); break; // BIT_OPT_2_BACKGROUND_OVERRIDE
 			}
 		}
 		break;
 	case OPT_3_SPOLOCNA_CAST:
 		switch (bit_order)
 		{
-		case -2: mystrcpy(str, STR_MODL_OPT_3, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-		case -1: mystrcpy(str, STR_MODL_OPTF_3, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
+		case -2: mystrcpy(str, STR_OPT_3, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+		case -1: mystrcpy(str, STR_FORCE_OPT_3, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
 		}
 		break;
 	case OPT_4_OFFLINE_EXPORT:
 		if (bit_order < POCET_OPT_4_OFFLINE_EXPORT){
 			switch (bit_order)
 			{
-			case -2: mystrcpy(str, STR_MODL_OPT_4, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-			case -1: mystrcpy(str, STR_MODL_OPTF_4, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
+			case -2: mystrcpy(str, STR_OPT_4, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+			case -1: mystrcpy(str, STR_FORCE_OPT_4, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
 			}
 		}
 		break;
@@ -1655,24 +1659,24 @@ void strcat_str_modl_opt_bit_order(char str_to_append[SMALL], short opt, short b
 		if (bit_order < POCET_OPT_5_ALTERNATIVES){
 			switch (bit_order)
 			{
-			case -2: mystrcpy(str, STR_MODL_OPT_5, SMALL); break; // no bit = ordinary option string | USE_STR_MODL_OPT
-			case -1: mystrcpy(str, STR_MODL_OPTF_5, SMALL); break; // no bit = force option string | USE_STR_MODL_OPTF
-			case 0: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_KOMPL, SMALL); break; // BIT_OPT_5_HYMNUS_KOMPL
-			case 1: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_PC, SMALL); break; // BIT_OPT_5_HYMNUS_PC
-			case 2: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_MCD_PREDPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_PREDPOL
-			case 3: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_MCD_NAPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_NAPOL
-			case 4: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_MCD_POPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_POPOL
-			case 5: mystrcpy(str, STR_MODL_OPTF_5_DOPLNK_PSALM_122_129, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_122_129
-			case 6: mystrcpy(str, STR_MODL_OPTF_5_DOPLNK_PSALM_127_131, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_127_131
-			case 7: mystrcpy(str, STR_MODL_OPTF_5_DOPLNK_PSALM_126_129, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_126_129
-			case 8: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_VN_PC, SMALL); break; // BIT_OPT_5_HYMNUS_VN_PC
-			case 9: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_VN_RCH, SMALL); break; // BIT_OPT_5_HYMNUS_VN_RCH
-			case 10: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_VN_VESP, SMALL); break; // BIT_OPT_5_HYMNUS_VN_VESP
-			case 11: mystrcpy(str, STR_MODL_OPTF_5_HYMNUS_1VESP, SMALL); break; // BIT_OPT_5_HYMNUS_1VESP
-			case 12: mystrcpy(str, STR_MODL_OPTF_5_POPOL_STREDA_PSALMODIA, SMALL); break; // BIT_OPT_5_POPOL_STREDA_PSALMODIA
-			case 13: mystrcpy(str, STR_MODL_OPTF_5_CZ_HYMNY_VYBER, SMALL); break; // BIT_OPT_5_CZ_HYMNY_VYBER
-			case 14: mystrcpy(str, STR_MODL_OPTF_5_OFF_DEF_PSALM_146_150, SMALL); break; // BIT_OPT_5_OFF_DEF_PSALM_146_150
-			case 15: mystrcpy(str, STR_MODL_OPTF_5_ZAVER_KNAZ_DIAKON, SMALL); break; // BIT_OPT_5_ZAVER_KNAZ_DIAKON
+			case -2: mystrcpy(str, STR_OPT_5, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
+			case -1: mystrcpy(str, STR_FORCE_OPT_5, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
+			case 0: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_KOMPL, SMALL); break; // BIT_OPT_5_HYMNUS_KOMPL
+			case 1: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_PC, SMALL); break; // BIT_OPT_5_HYMNUS_PC
+			case 2: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_MCD_PREDPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_PREDPOL
+			case 3: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_MCD_NAPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_NAPOL
+			case 4: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_MCD_POPOL, SMALL); break; // BIT_OPT_5_HYMNUS_MCD_POPOL
+			case 5: mystrcpy(str, STR_FORCE_BIT_OPT_5_DOPLNK_PSALM_122_129, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_122_129
+			case 6: mystrcpy(str, STR_FORCE_BIT_OPT_5_DOPLNK_PSALM_127_131, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_127_131
+			case 7: mystrcpy(str, STR_FORCE_BIT_OPT_5_DOPLNK_PSALM_126_129, SMALL); break; // BIT_OPT_5_DOPLNK_PSALM_126_129
+			case 8: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_VN_PC, SMALL); break; // BIT_OPT_5_HYMNUS_VN_PC
+			case 9: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_VN_RCH, SMALL); break; // BIT_OPT_5_HYMNUS_VN_RCH
+			case 10: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_VN_VESP, SMALL); break; // BIT_OPT_5_HYMNUS_VN_VESP
+			case 11: mystrcpy(str, STR_FORCE_BIT_OPT_5_HYMNUS_1VESP, SMALL); break; // BIT_OPT_5_HYMNUS_1VESP
+			case 12: mystrcpy(str, STR_FORCE_BIT_OPT_5_POPOL_STREDA_PSALMODIA, SMALL); break; // BIT_OPT_5_POPOL_STREDA_PSALMODIA
+			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_5_CZ_HYMNY_VYBER, SMALL); break; // BIT_OPT_5_CZ_HYMNY_VYBER
+			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_5_OFF_DEF_PSALM_146_150, SMALL); break; // BIT_OPT_5_OFF_DEF_PSALM_146_150
+			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_5_ZAVER_KNAZ_DIAKON, SMALL); break; // BIT_OPT_5_ZAVER_KNAZ_DIAKON
 			}
 		}
 		break;

@@ -260,6 +260,15 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) {
 		_header_css(expt, level, nazov_css_blind_friendly);
 	}
+	// style override background
+	if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_BACKGROUND_OVERRIDE)) {
+		if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM)) {
+			_header_css(expt, level, nazov_css_background_ov_invert);
+		}
+		else {
+			_header_css(expt, level, nazov_css_background_override);
+		}
+	}
 
 #if defined(IO_ANDROID)
 	Export_to_file(expt, "\t<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0\" />\n");
@@ -296,13 +305,13 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 
 	// display transparent navigation (up/down arrows)
 	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV)){
-		Export_to_file(expt, HTML_TRANSPARENT_NAV"\n");
+		Export_to_file(expt, HTML_TRANSPARENT_NAV "\n");
 	}
 
 	#ifdef BEHAVIOUR_WEB
-		Export_to_file(expt, HTML_ANAME_TOP"\n");
+		Export_to_file(expt, HTML_ANAME_TOP "\n");
 	#else
-		Export_to_file(expt, HTML_DIV_BEGIN"\n");
+		Export_to_file(expt, HTML_DIV_BEGIN "\n");
 	#endif
 
 	// predošlá a nasledovná modlitba
@@ -314,22 +323,35 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec){
 	return;
 }// _hlavicka()
 
-void hlavicka(char *title, short int level, short int spec){
-	char _title[MAX_STR] = STR_EMPTY;
-#if defined(OS_Windows_Ruby)
-	mystrcpy(_title, skratka_jazyka_title[_global_jazyk], MAX_STR);
-	strcat(_title, STR_VERTICAL_BAR_WITH_SPACES);
+char *_hlavicka_title(void) {
+	mystrcpy(_global_pom_str, STR_EMPTY, MAX_STR);
+
+#if defined(OS_Windows_Ruby) || defined(OS_Windows)
+	char pom[MAX_STR] = STR_EMPTY;
+
+	mystrcpy(pom, skratka_jazyka_title[_global_jazyk], MAX_STR);
+	if (_global_kalendar != default_kalendar[_global_jazyk]) {
+		strcat(pom, STR_SPACE);
+		strcat(pom, nazov_kalendara_propria_only[_global_kalendar]);
+	}
+	strcat(pom, STR_VERTICAL_BAR_WITH_SPACES);
+
+	strcat(_global_pom_str, pom);
 #endif
+
+	return(_global_pom_str);
+}
+
+void hlavicka(char *title, short int level, short int spec) {
+	char _title[MAX_STR] = STR_EMPTY;
+	strcat(_title, _hlavicka_title());
 	strcat(_title, title);
 	_hlavicka(_title, NULL, level, spec);
 }
 
-void hlavicka(char *title, FILE * expt, short int level, short int spec){
+void hlavicka(char *title, FILE * expt, short int level, short int spec) {
 	char _title[MAX_STR] = STR_EMPTY;
-#if defined(OS_Windows_Ruby)
-	mystrcpy(_title, skratka_jazyka_title[_global_jazyk], MAX_STR);
-	strcat(_title, STR_VERTICAL_BAR_WITH_SPACES);
-#endif
+	strcat(_title, _hlavicka_title());
 	strcat(_title, title);
 	_hlavicka(_title, expt, level, spec);
 }
@@ -361,16 +383,16 @@ void xml_hlavicka(FILE * expt){
 	_xml_hlavicka(expt);
 }
 
-const char *gpage[POCET_JAZYKOV + 1] = { "Generované: ", "Generováno: ", "Generated: ", "Generated: ", "Generated: ", "Generováno: ", "Generálva: ", "ru_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
+const char *gpage[POCET_JAZYKOV + 1] = { "Generované: ", "Generováno: ", "Generated: ", "Generated: ", "Generated: ", "Generováno: ", "Generálva: ", "ru_text", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 // Generované + dátum: "%d. %s %d, %02d:%02d:%02d" -- pôvodne to bolo v zátvorkách
-const char *datum_cas_template[POCET_JAZYKOV + 1] = { "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", /* STRING_1_FOR_NEW_LANGUAGE */ };
+const char *datum_cas_template[POCET_JAZYKOV + 1] = { "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 // Build: "Build: %s. "
-const char *build_template[POCET_JAZYKOV + 1] = { "<!--Verzia: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", /* STRING_1_FOR_NEW_LANGUAGE */ };
+const char *build_template[POCET_JAZYKOV + 1] = { "<!--Verzia: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "<!--Verze: %s -->", "<!--Build: %s -->", "<!--Build: %s -->", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 // Generované + dátum (bez času - pre batch mód, aby sa ľahko porovnávali vygenerované modlitby): "%d. %s %d"
-const char *datum_template[POCET_JAZYKOV + 1] = { "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", /* STRING_1_FOR_NEW_LANGUAGE */ };
+const char *datum_template[POCET_JAZYKOV + 1] = { "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "%d. %s %d", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 const char *html_mail_label_long = "Juraj Vid&#233;ky";
 const char *html_mail_label_short = "J. Vid&#233;ky";
@@ -381,9 +403,9 @@ void _patka_body_html_end(FILE * expt){
 	Log("_patka_body_html_end() -- začiatok...\n");
 
 #ifdef BEHAVIOUR_WEB
-	Export_to_file(expt, HTML_ANAME_BOTTOM"\n");
+	Export_to_file(expt, HTML_ANAME_BOTTOM "\n");
 #else
-	Export_to_file(expt, HTML_DIV_END"\n");
+	Export_to_file(expt, HTML_DIV_END "\n");
 #endif
 
 #ifdef IO_ANDROID
@@ -532,13 +554,13 @@ void _xml_patka(FILE * expt){
 	dnes.tm_yday = dnes.tm_yday + 1;
 
 	Export_to_file(expt, ELEM_BEGIN(XML_INFO) "\n");
-	Export_to_file(expt, ELEM_BEGIN(XML_COPYRIGHT)"%s" ELEM_END(XML_COPYRIGHT) "\n", TEXT_COPYRIGHT);
-	Export_to_file(expt, ELEM_BEGIN(XML_ADDRESS)"%s" ELEM_END(XML_ADDRESS) "\n", TEXT_EMAIL);
-	Export_to_file(expt, ELEM_BEGIN(XML_GENERATED)"" HTML_ISO_FORMAT "" ELEM_END(XML_GENERATED) "\n", dnes.tm_year, dnes.tm_mon + 1, dnes.tm_mday);
-	Export_to_file(expt, ELEM_BEGIN(XML_BUILD_DATE)"%s" ELEM_END(XML_BUILD_DATE) "\n", BUILD_DATE);
-	Export_to_file(expt, ELEM_END(XML_INFO)"\n\n");
+	Export_to_file(expt, ELEM_BEGIN(XML_COPYRIGHT) "%s" ELEM_END(XML_COPYRIGHT) "\n", TEXT_COPYRIGHT);
+	Export_to_file(expt, ELEM_BEGIN(XML_ADDRESS) "%s" ELEM_END(XML_ADDRESS) "\n", TEXT_EMAIL);
+	Export_to_file(expt, ELEM_BEGIN(XML_GENERATED) "" HTML_ISO_FORMAT "" ELEM_END(XML_GENERATED) "\n", dnes.tm_year, dnes.tm_mon + 1, dnes.tm_mday);
+	Export_to_file(expt, ELEM_BEGIN(XML_BUILD_DATE) "%s" ELEM_END(XML_BUILD_DATE) "\n", BUILD_DATE);
+	Export_to_file(expt, ELEM_END(XML_INFO) "\n\n");
 
-	Export_to_file(expt, ELEM_END(XML_MAIN)"\n\n");
+	Export_to_file(expt, ELEM_END(XML_MAIN) "\n\n");
 
 	Log("_xml_patka() -- koniec.\n");
 	return;

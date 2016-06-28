@@ -132,10 +132,10 @@ extern _struct_lrok *_global_r_ptr;
 // -- v podstate neuklada do nej, ale v _rozbor_dna() sa do nej priradi vysledok (navratova hodnota) z sviatky_svatych()
 extern short int _global_pocet_svatych;
 
-// globálna premenná -- pole -- obsahujúca options; pôvodne to boli globálne premenné _global_opt 1..9 atď., obsahujú pom_MODL_OPT...
+// globálna premenná -- pole -- obsahujúca options; pôvodne to boli globálne premenné _global_opt 1..9 atď., obsahujú pom_OPT...
 extern long _global_opt[POCET_GLOBAL_OPT];
-// globálna premenná -- pole -- obsahujúca force options; pôvodne to boli globálne premenné _global_optf 1..9 atď., obsahujú pom_MODL_OPTF...
-extern long _global_optf[POCET_GLOBAL_OPT];
+// globálna premenná -- pole -- obsahujúca force options; pôvodne to boli globálne premenné _global_force_opt 1..9 atď., obsahujú pom_FORCE_OPT...
+extern long _global_force_opt[POCET_GLOBAL_OPT];
 
 // globalna premenna, co obsahuje string vypisany na obsazovku
 extern char *_global_string;
@@ -179,7 +179,7 @@ extern short int _global_opt_export_date_format;
 
 // placeholder for checking whether option 'i' has set 'j'-th bit-component to TRUE | used result ANO/NIE to prevent long datatype
 #define isGlobalOption(opt_i, bit_opt_i_component_j) (((_global_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
-#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) (((_global_optf[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
+#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) (((_global_force_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
 
 #define odfiltrujSpolCast(modlitba, opt3) ((short int)(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA)) ? MODL_SPOL_CAST_NULL : opt3))
 
@@ -400,9 +400,6 @@ extern short int _global_opt_export_date_format;
 	((modlitba == MODL_RANNE_CHVALY) && ((_global_modl_ranne_chvaly.alternativy & BIT_ALT_OFF_DEF_PSALM_146_150) == BIT_ALT_OFF_DEF_PSALM_146_150)) \
 )
 
-// 2011-02-02: presunuté do #define -- kontrola, ktorá zabezpečuje, že normálne správanie sa slávení nie je prebité pre "CZOP miestne slávenia"
-// 2011-03-07: MIESTNE_SLAVENIE_CZOP_SVATY(i) aj pre slovenské, ktoré majú nastavené "lokálne" verzie
-// 2014-03-21: aj pre SK všeobecné kvôli 2014-10-26 | bolo: #define MIESTNE_SLAVENIE_LOKAL_SVATY(i) (((_global_svaty(i).kalendar == KALENDAR_CZ_OFMCAP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OPRAEM) || (_global_svaty(i).kalendar == KALENDAR_SK_OP) || (_global_svaty(i).kalendar == KALENDAR_CZ_OP) || (_global_svaty(i).kalendar == KALENDAR_SK_CSSR) || (_global_svaty(i).kalendar == KALENDAR_SK_SVD) || (_global_svaty(i).kalendar == KALENDAR_SK_SJ) || (_global_svaty(i).kalendar == KALENDAR_SK_SDB) || (_global_svaty(i).kalendar == KALENDAR_SK_OFM) || (_global_svaty(i).typslav_lokal != LOKAL_SLAV_NEURCENE)) && ((_global_svaty(i).smer == 4) || (_global_svaty(i).smer == 8) || (_global_svaty(i).smer == 11)))
 #define MIESTNE_SLAVENIE_LOKAL_SVATY(i) ((_global_svaty(i).smer == 4) || (_global_svaty(i).smer == 8) || (_global_svaty(i).smer == 11))
 
 // 2014-04-08: presunuté do #define -- bolo na 2 rôznych miestach | sviatky Pána a svätých, ktoré majú prednosť pred Cezročnou nedeľou a majú (ak padnú na nedeľu) svoje vlastné prvé vešpery
@@ -413,7 +410,7 @@ extern short int _global_opt_export_date_format;
 // 2012-10-22: odpoznámkované 14SEP -- napr. pre rok 2014 potom nedávalo prvé vešpery, ak padne na nedeľu!
 // 2014-01-10: doplnené 02FEB (ak padne na nedeľu, má prvé vešpery)
 // 2014-04-08: 14SEP platí aj pre CZ (ak padne na nedeľu, má prvé vešpery)
-#define PODMIENKA_SVIATKY_PANA_SVATYCH_PREDNOST (\
+#define PODMIENKA_SVIATKY_PANA_SVATYCH_PREDNOST_PRED_NEDELOU_OCR (\
 ((_global_den.den == 2) && (_global_den.mesiac - 1 == MES_FEB)) || \
 ((_global_den.den == 29) && (_global_den.mesiac - 1 == MES_JUN)) || \
 ((_global_den.den == 5) && (_global_den.mesiac - 1 == MES_JUL) && ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP))) || \

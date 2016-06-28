@@ -196,6 +196,17 @@ public class LangSelect extends Activity {
 
       liturgical_readings_check.setChecked(url_options.isLiturgicalReadings());
 
+      CheckBox psalms_omisions_check = (CheckBox)findViewById(R.id.psalms_omisions_check);
+
+      psalms_omisions_check.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+          activity.url_options.setPsalmsOmissions(((CheckBox)v).isChecked());
+          BreviarApp.setUrlOptions(getApplicationContext(), activity.url_options.build(true));
+        }
+      });
+
+      psalms_omisions_check.setChecked(url_options.isPsalmsOmissions());
+
       // display_settings_title
 
       CheckBox navigation_check = (CheckBox)findViewById(R.id.navigation_check);
@@ -241,6 +252,17 @@ public class LangSelect extends Activity {
       });
 
       night_mode_check.setChecked(url_options.isNightmode());
+
+      CheckBox background_override_check = (CheckBox)findViewById(R.id.background_override_check);
+
+      background_override_check.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+          activity.url_options.setBackgroundOverride(((CheckBox)v).isChecked());
+          BreviarApp.setUrlOptions(getApplicationContext(), activity.url_options.build(true));
+        }
+      });
+
+      background_override_check.setChecked(url_options.isBackgroundOverride());
 
       CheckBox normal_font_check = (CheckBox)findViewById(R.id.normal_font_check);
 

@@ -2,6 +2,11 @@
 	font-weight: bold;
 }
 
+.comment, p.comment, .hymn p.comment { 
+	font-size: 80%; 
+	font-weight: normal; 
+}
+
 /* for HU/CZ first/second/third-ant is used; for SK ant-first/second/third is used */
 .antiphon.first-ant:before {
     color: #ff0000;
@@ -310,11 +315,6 @@ div.responsory {
 	padding-top: 1em; 
 }
 
-.hymn p.comment { 
-	font-size: 80%; 
-	font-weight: normal; 
-}
-
 .hymn p.rubric, .hymn p.rubric-always-display { 
 	color: #ff0000; 
 	font-size: 80%; 
@@ -577,6 +577,14 @@ p.bibleref {
 
 .verysmall { 
 	font-size: 60%; 
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+.capitalize {
+	text-transform: capitalize;
 }
 
 .smallcaps { 
@@ -927,6 +935,18 @@ sup {
 .hidden {
     display: none;
 }
+
+.psalm-indent, .psalm-indent p.verse {
+	display: block;
+	font-size: 95%; 
+	font-weight: normal; 
+	padding-left: 2.4em;
+}
+
+.psalm-indent p.last:after {
+	content: none; 
+}
+
 
 .nav-arrow {
   background-size: contain;
