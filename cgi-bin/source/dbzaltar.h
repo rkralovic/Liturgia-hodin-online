@@ -364,7 +364,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 * ak nematchuje, vrati MODL_SPOL_CAST_SV_MUZ; 03/03/2000A.D.
 * (predtym som vracal MODL_SPOL_CAST_NEURCENA)
 */
-#define otazka_sedi_to {\
+#define ucitel_cirkvi__sc_duch_pastier_panna {\
 	if((a == MODL_SPOL_CAST_DUCH_PAST_KNAZ) || (a == MODL_SPOL_CAST_DUCH_PAST_BISKUP) || (a == MODL_SPOL_CAST_DUCH_PAST_PAPEZ) || (a == MODL_SPOL_CAST_PANNA)){\
 		Log("matches (duchovny pastier || panna). returning %s (%d)\n", nazov_spolc(a), a);\
 		return a;\
@@ -375,7 +375,9 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	}\
 }
 
-#define otazka_sedi_to2 if(a == MODL_SPOL_CAST_PANNA){Log("matches. returning ANO\n");return ANO;}
+#define mucenik__sc_panna { if(a == MODL_SPOL_CAST_PANNA) { Log("matches. returning ANO\n"); return ANO; } }
+
+#define panna__sc_mucenica { if(a == MODL_SPOL_CAST_MUCENICA) { Log("matches. returning ANO\n"); return ANO; } }
 
 /* ------------------------------------------------------------------------------------------- */
 
@@ -789,7 +791,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 }
 
 // rovnako tak pre spolocnu cast...
-#define _spolocna_cast_kcitanie(modl)		if(su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modl) || ((force & FORCE_BRAT_KCIT_1CIT) == FORCE_BRAT_KCIT_1CIT)){ _vlastna_cast_kcitanie; }
+#define _spolocna_cast_kcitanie(modl)		if((je_modlitba_cez_den(modl) && su_kcit_kresp_modlitba_mcd_vlastne(modl)) || su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modl) || ((force & FORCE_BRAT_KCIT_1CIT) == FORCE_BRAT_KCIT_1CIT)){ _vlastna_cast_kcitanie; }
 #define _spolocna_cast_benediktus(modl)		if(su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modl) || ((force & FORCE_BRAT_ANTIFONY_B_M) == FORCE_BRAT_ANTIFONY_B_M)){ _vlastna_cast_benediktus; }
 #define _spolocna_cast_magnifikat(modl)		if(su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modl) || ((force & FORCE_BRAT_ANTIFONY_B_M) == FORCE_BRAT_ANTIFONY_B_M)){ _vlastna_cast_magnifikat; }
 #define _spolocna_cast_prosby(modl)			if(su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modl) || ((force & FORCE_BRAT_PROSBY) == FORCE_BRAT_PROSBY)){ _vlastna_cast_prosby; }
@@ -916,7 +918,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 // kratke responzorium
 #define _spolocna_cast_kresponz {\
-	if (su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modlitba) || ((force & FORCE_BRAT_KRESP) == FORCE_BRAT_KRESP)){\
+	if ((je_modlitba_cez_den(modlitba) && su_kcit_kresp_modlitba_mcd_vlastne(modlitba)) || su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modlitba) || ((force & FORCE_BRAT_KRESP) == FORCE_BRAT_KRESP)){\
 		sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_KRESPONZ);\
 		_set_kresponz(modlitba, _file, _anchor);\
 		set_LOG_svsv;\
@@ -1469,6 +1471,7 @@ extern const char *text_JUN_08_HU[POCET_JAZYKOV + 1];
 extern const char *text_JUN_09[POCET_JAZYKOV + 1];
 extern const char *text_JUN_11[POCET_JAZYKOV + 1];
 extern const char *text_JUN_12_CZ[POCET_JAZYKOV + 1];
+extern const char *text_JUN_12_BY[POCET_JAZYKOV + 1];
 extern const char *text_JUN_13[POCET_JAZYKOV + 1];
 extern const char *text_JUN_13_SK[POCET_JAZYKOV + 1];
 extern const char *text_JUN_14_HU[POCET_JAZYKOV + 1];
@@ -1494,10 +1497,11 @@ extern const char *text_JUL_02_BY[POCET_JAZYKOV + 1];
 extern const char *text_JUL_03[POCET_JAZYKOV + 1];
 extern const char *text_JUL_04[POCET_JAZYKOV + 1];
 extern const char *text_JUL_04_CZ[POCET_JAZYKOV + 1];
-extern const char *text_JUL_05[POCET_JAZYKOV + 1];
+extern const char *text_JUL_05_LA[POCET_JAZYKOV + 1];
+extern const char *text_JUL_05_SK_CZ[POCET_JAZYKOV + 1];
+extern const char *text_JUL_05_BY[POCET_JAZYKOV + 1];
 extern const char *text_JUL_06[POCET_JAZYKOV + 1];
 extern const char *text_JUL_06_CZOP[POCET_JAZYKOV + 1];
-extern const char *text_JUL_07_SK[POCET_JAZYKOV + 1];
 extern const char *text_JUL_08_HU[POCET_JAZYKOV + 1];
 extern const char *text_JUL_09[POCET_JAZYKOV + 1];
 extern const char *text_JUL_11[POCET_JAZYKOV + 1];
@@ -1529,6 +1533,7 @@ extern const char *text_AUG_02_1[POCET_JAZYKOV + 1];
 extern const char *text_AUG_02_2[POCET_JAZYKOV + 1];
 extern const char *text_AUG_04[POCET_JAZYKOV + 1];
 extern const char *text_AUG_05[POCET_JAZYKOV + 1];
+extern const char *text_AUG_05_BY[POCET_JAZYKOV + 1];
 extern const char *text_AUG_06[POCET_JAZYKOV + 1];
 extern const char *text_AUG_07_1[POCET_JAZYKOV + 1];
 extern const char *text_AUG_07_2[POCET_JAZYKOV + 1];
@@ -1569,6 +1574,7 @@ extern const char *text_SEP_05[POCET_JAZYKOV + 1];
 extern const char *text_SEP_06_SK[POCET_JAZYKOV + 1];
 extern const char *text_SEP_07[POCET_JAZYKOV + 1];
 extern const char *text_SEP_08[POCET_JAZYKOV + 1];
+extern const char *text_SEP_08_BY[POCET_JAZYKOV + 1];
 extern const char *text_SEP_09[POCET_JAZYKOV + 1];
 extern const char *text_SEP_10_CZ[POCET_JAZYKOV + 1];
 extern const char *text_SEP_12[POCET_JAZYKOV + 1];
@@ -1759,6 +1765,7 @@ extern const char *text_SEP_10_SJ[POCET_JAZYKOV + 1];
 extern const char *text_SEP_17_SJ[POCET_JAZYKOV + 1];
 extern const char *text_OKT_03_SJ[POCET_JAZYKOV + 1];
 extern const char *text_OKT_06_SJ[POCET_JAZYKOV + 1];
+extern const char *text_OKT_12_SJ[POCET_JAZYKOV + 1];
 extern const char *text_OKT_14_SJ[POCET_JAZYKOV + 1];
 extern const char *text_OKT_19_SJ[POCET_JAZYKOV + 1];
 extern const char *text_OKT_30_SJ[POCET_JAZYKOV + 1];

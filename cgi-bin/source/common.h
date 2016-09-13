@@ -34,7 +34,7 @@
 #define YES 1
 #define NO  0
 
-#define MAX_STR            300 // max string length
+#define MAX_STR           1024 // max string length
 
 #define GLOBAL_OPTION_NULL  -1 // undefined value for global option
 
@@ -83,7 +83,7 @@
 #define DEN_PIATOK      5
 #define DEN_SOBOTA      6
 #define DEN_UNKNOWN     7
-// number ofweek  days
+// number of week  days
 #define POCET_DNI		7
 
 // all days
@@ -129,12 +129,14 @@
 #define STR_CROSS "†"
 #define STR_SLASH "/"
 #define STR_UNDERSCORE "_"
+#define STR_DOT "."
 
 #pragma endregion
 
 #pragma region HTML string constants
 
 #define HTML_FORM_INPUT_SUBMIT   HTML_FORM_INPUT_DIV_BEGIN "<input type=\"submit\" class=\"button\""
+#define HTML_FORM_INPUT_SUBMIT_PRAYER   HTML_FORM_INPUT_DIV_BEGIN "<input type=\"submit\" class=\"button-prayer\""
 #define HTML_FORM_INPUT_RESET    HTML_FORM_INPUT_DIV_BEGIN "<input type=\"reset\" class=\"reset\""
 #define HTML_FORM_INPUT_RADIO    HTML_FORM_INPUT_DIV_BEGIN "<input type=\"radio\" class=\"radio\""
 #define HTML_FORM_INPUT_TEXT     HTML_FORM_INPUT_DIV_BEGIN "<input type=\"text\" class=\"text\""
@@ -174,10 +176,12 @@
 #define HTML_TARGET_TOP " target=\"_top\" "
 
 #define HTML_NONBREAKING_SPACE "&nbsp;"
+#define HTML_NONBREAKING_SPACE_LONG "&nbsp;&nbsp;&nbsp;"
 #define HTML_LINE_BREAK "<br/>"
 #define HTML_CRLF_LINE_BREAK "\n<br/>"
 #define HTML_NONBREAKING_SPACE_LOOONG "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#define HTML_LINE_BREAK_SPACE_LOONG ((_global_jazyk != JAZYK_CZ)?(HTML_NONBREAKING_SPACE "" STR_SLASH "" HTML_NONBREAKING_SPACE "" HTML_LINE_BREAK "" HTML_NONBREAKING_SPACE_LOOONG):(HTML_NONBREAKING_SPACE "" STR_SLASH "" HTML_NONBREAKING_SPACE))
+#define HTML_SLASH_SPACE_LOONG_LINE_BREAK (HTML_NONBREAKING_SPACE "" STR_SLASH "" HTML_NONBREAKING_SPACE "" HTML_LINE_BREAK "" HTML_NONBREAKING_SPACE_LOOONG)
+#define HTML_SLASH_SPACE_LOONG (HTML_NONBREAKING_SPACE "" STR_SLASH "" HTML_NONBREAKING_SPACE)
 
 #define HTML_P_BEGIN                "<p>"
 #define HTML_P_END                  "</p>"
@@ -213,7 +217,10 @@
 #define HTML_TABLE_CELL		        "div class=\"table-cell\"" // "td"
 #define HTML_TABLE_CELL_CENTER      "div class=\"table-cell center\""
 #define HTML_TABLE_CELL_BORDER      "div class=\"table-cell-bordered\"" // "td" with borders
+#define HTML_TABLE_CELL_3_COLUMNS   "div class=\"table-cell-3-columns\"" // "td" for tables with 3 columns
 #define HTML_TABLE_CELL_VALIGN_TOP  "div class=\"table-cell-valign-top\""
+
+#define HTML_TABLE_CELL_PRAYER      (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_BUTTONY_USPORNE) ? HTML_TABLE_CELL_3_COLUMNS : HTML_TABLE_CELL)
 
 #define HTML_TABLE_END		        HTML_DIV_END "" HTML_COMMENT_BEGIN "table" HTML_COMMENT_END // "</table>"
 #define HTML_TABLE_CAPTION_END	    HTML_DIV_END "" HTML_COMMENT_BEGIN "caption" HTML_COMMENT_END // "</th>"
@@ -271,6 +278,7 @@
 #define HTML_CLASS_LEVEL1           "class=\"level1\""
 #define HTML_CLASS_TT               "class=\"tt\""
 #define HTML_CLASS_BUTTON           "class=\"button\""
+#define HTML_CLASS_BUTTON_PRAYER    "class=\"button-prayer\""
 #define HTML_CLASS_SMALL            "class=\"small\""
 #define HTML_CLASS_SMALL_CENTER     "class=\"small center\""
 #define HTML_CLASS_INLINE           "class=\"inline\""
@@ -283,6 +291,7 @@
 #define HTML_VALIGN_BASE            "valign=\"baseline\""
 
 #define HTML_BUTTON_BEGIN	        "<button type=\"button\" " HTML_CLASS_BUTTON ">" // wrapping <a> element to look like button
+#define HTML_BUTTON_PRAYER_BEGIN	"<button type=\"button\" " HTML_CLASS_BUTTON_PRAYER ">" // wrapping <a> element to look like button
 #define HTML_BUTTON_END		        "</button>"
 
 #define HTML_AMPERSAND              "&amp;"

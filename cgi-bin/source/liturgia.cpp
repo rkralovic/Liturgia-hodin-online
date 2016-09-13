@@ -283,10 +283,9 @@ short int cislo_mesiaca(char *mesiac){
 }// cislo_mesiaca()
 
 //---------------------------------------------------------------------
-// urobi velke pismena 
-// 2011-01-31: nesmie pritom v HTML stringoch upravovať kódové mená, napr. &mdash; na veľké písmená
-// Assumes utf-8 encoding.
-char *caps_BIG(const char* input) {
+// converts UTF-8 string to UPPERCASE
+// nesmie pritom v HTML stringoch upravovať kódové mená, napr. &mdash; na veľké písmená
+char *mystr_UPPERCASE(const char* input) {
 	short int ok = TRUE;
 	const char* in = input;
 	char* out = _global_pom_str;
@@ -306,13 +305,13 @@ char *caps_BIG(const char* input) {
 	}
 	*out = 0;
 	return (_global_pom_str);
-}// caps_BIG()
+}// mystr_UPPERCASE()
 
 //---------------------------------------------------------------------
 // odstráni diakritiku
-// 2011-04-05: nesmie pritom v HTML stringoch upravovať kódové mená, napr. &mdash;
-// 2011-04-06: zmení aj dlhé pomlčky na obyčajný spojovník (znak mínus)
-char *remove_diacritics(const char *input){
+// nesmie pritom v HTML stringoch upravovať kódové mená, napr. &mdash;
+// zmení aj dlhé pomlčky na obyčajný spojovník (znak mínus)
+char *mystr_remove_diacritics(const char *input){
 	short int ok = TRUE;
 	const char* in = input;
 	char* out = _global_pom_str;
@@ -332,7 +331,7 @@ char *remove_diacritics(const char *input){
 	}
 	*out = 0;
 	return (_global_pom_str);
-}// remove_diacritics()
+}// mystr_remove_diacritics()
 
 //---------------------------------------------------------------------
 // konvertuje underscore na nezlomiteľné medzery
@@ -465,13 +464,16 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 }// prilep_request_options();
 
 char *_vytvor_string_z_datumu_ext(short int den, short int mesiac, short int rok, short int _case, short int align){
+	// note: mesiac here is 1--12
+	Log("_vytvor_string_z_datumu_ext(den == %d, mesiac == %d, rok == %d, _case == %d, align == %d): začiatok...\n", den, mesiac, rok, _case, align);
+
 	short int typ = 0;
 	mystrcpy(_global_pom_str, STR_EMPTY, MAX_STR);
 
 	if ((den < 1) || (den > 31)){
 		den = VSETKY_DNI;
 	}
-	if (mesiac > 11){
+	if (mesiac > 12){
 		mesiac = VSETKY_MESIACE;
 	}
 
@@ -495,6 +497,8 @@ char *_vytvor_string_z_datumu_ext(short int den, short int mesiac, short int rok
 }// _vytvor_string_z_datumu_ext()
 
 char *_vytvor_string_z_datumu(short int den, short int mesiac, short int rok, short int _case, short int typ, short int align){
+	Log("_vytvor_string_z_datumu(den == %d, mesiac == %d, rok == %d, _case == %d, typ == %d, align == %d): začiatok...\n", den, mesiac, rok, _case, typ, align);
+
 	char pom[MAX_STR] = STR_EMPTY;
 	char vypln[SMALL] = STR_EMPTY;
 	char strden[SMALL] = STR_EMPTY;
@@ -504,65 +508,66 @@ char *_vytvor_string_z_datumu(short int den, short int mesiac, short int rok, sh
 	if ((align != NIE) && (den < 10)){
 		mystrcpy(vypln, HTML_NONBREAKING_SPACE, SMALL);
 	}
-	if (den != VSETKY_DNI){
-		if (_global_jazyk == JAZYK_EN){
-			sprintf(strden, " %s%d", vypln, den);
-		}
-		else if (_global_jazyk == JAZYK_HU){
-			sprintf(strden, " %s%d.", vypln, den);
-		}
-		else{
-			// default pre JAZYK_LA, JAZYK_SK, JAZYK_CZ, JAZYK_CZ_OP
-			sprintf(strden, "%s%d. ", vypln, den);
+	
+	if (den != VSETKY_DNI) {
+		sprintf(strden, "%s%d", vypln, den);
+
+		if (use_dot_for_ordinals[_global_jazyk] == FORMAT_DATE_USE_DOT_FOR_ORDINALS) {
+			// add dot for ordinal number
+			strcat(strden, STR_DOT);
 		}
 	}
-	if (_global_jazyk == JAZYK_LA){
-		sprintf(pom, "%s%s", strden, nazov_Mesiaca_gen(mesiac - 1));
-		if (typ == LINK_DEN_MESIAC_ROK){
-			// pridame aj rok
-			strcat(_global_pom_str, pom);
-			sprintf(pom, " %d", rok);
+	
+	if ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_BY)) {
+		// force month in genitive
+		if (typ == LINK_DEN_MESIAC) {
+			typ = LINK_DEN_MESIAC_GEN;
 		}
-	}
-	else if (_global_jazyk == JAZYK_EN){
-		sprintf(pom, "%s%s", nazov_Mesiaca(mesiac - 1), strden);
-		if (typ == LINK_DEN_MESIAC_ROK){
+		else if (typ == LINK_DEN_MESIAC_ROK) {
+			typ = LINK_DEN_MESIAC_ROK_GEN;
+		}
+	}// LA, BY only
+
+	if (_global_jazyk == JAZYK_EN){
+		sprintf(pom, "%s %s", nazov_Mesiaca(mesiac - 1), strden);
+		if ((typ == LINK_DEN_MESIAC_ROK) || (typ == LINK_DEN_MESIAC_ROK_GEN)) {
 			// pridame aj rok
 			strcat(_global_pom_str, pom);
 			sprintf(pom, ", %d", rok);
 		}
-	}
-	// 2010-05-21: doplnené pre maďarčinu: 1999. augusztus 1. -- http://en.wikipedia.org/wiki/Date_and_time_notation_by_country#Hungary [2010-05-24]
+	}// EN only
 	else if (_global_jazyk == JAZYK_HU){
-		if (typ == LINK_DEN_MESIAC_ROK){
+		if ((typ == LINK_DEN_MESIAC_ROK) || (typ == LINK_DEN_MESIAC_ROK_GEN)) {
 			// pridáme najprv rok
 			sprintf(pom, "%d. ", rok);
 			strcat(_global_pom_str, pom);
 		}
 		sprintf(pom, "%s", nazov_mesiaca(mesiac - 1));
 		strcat(_global_pom_str, pom);
-		sprintf(pom, "%s", strden);
-	}
+		sprintf(pom, " %s", strden);
+	}// HU only | 1999. augusztus 1. -- http://en.wikipedia.org/wiki/Date_and_time_notation_by_country#Hungary [2010-05-24]
 	else{
-		// doterajšie správanie pre slovenčinu a češtinu
+		// default behaviour for SK, CZ; used also for LA, BY
 		switch (_case){
 		case CASE_case:
-			sprintf(pom, "%s%s", strden, (typ == LINK_DEN_MESIAC_GEN) ? nazov_mesiaca_gen(mesiac - 1) : nazov_mesiaca(mesiac - 1));
+			sprintf(pom, "%s %s", strden, ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? nazov_mesiaca_gen(mesiac - 1) : nazov_mesiaca(mesiac - 1));
 			break;
 		case CASE_Case:
-			sprintf(pom, "%s%s", strden, (typ == LINK_DEN_MESIAC_GEN) ? nazov_Mesiaca_gen(mesiac - 1) : nazov_Mesiaca(mesiac - 1));
+			sprintf(pom, "%s %s", strden, ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? nazov_Mesiaca_gen(mesiac - 1) : nazov_Mesiaca(mesiac - 1));
 			break;
 		case CASE_CASE:
-			sprintf(pom, "%s%s", strden, /* (typ == LINK_DEN_MESIAC_GEN)? nazov_MESIACA_gen(mesiac - 1) : */ nazov_MESIACA(mesiac - 1));
+			sprintf(pom, "%s %s", strden, ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? mystr_UPPERCASE(nazov_mesiaca_gen(mesiac - 1)) : nazov_MESIACA(mesiac - 1));
 			break;
-		}// switch(_case)
-		if (typ == LINK_DEN_MESIAC_ROK){
+		} // switch(_case)
+		if ((typ == LINK_DEN_MESIAC_ROK) || (typ == LINK_DEN_MESIAC_ROK_GEN)) {
 			// pridame aj rok
 			strcat(_global_pom_str, pom);
 			sprintf(pom, " %d", rok);
 		}
-	}
+	}// SK, CZ, LA, BY...
 	strcat(_global_pom_str, pom);
+
+	Log("_vytvor_string_z_datumu(): koniec, returning _global_pom_str == `'...\n", _global_pom_str);
 	return (_global_pom_str);
 }// _vytvor_string_z_datumu()
 
@@ -713,6 +718,7 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 
 	// printing link text itself
 	switch (typ){
+	case LINK_DEN_MESIAC_ROK_GEN:
 	case LINK_DEN_MESIAC_ROK_PRESTUP:
 	case LINK_DEN_MESIAC_PREDOSLY:
 	case LINK_DEN_MESIAC_NASLEDOVNY:
@@ -722,27 +728,27 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 			if (mesiac == VSETKY_MESIACE){
 				sprintf(pom, "%d", rok);
 			}
-			else{
-				if (typ == LINK_DEN_MESIAC_PREDOSLY){
+			else {
+				if (typ == LINK_DEN_MESIAC_PREDOSLY) {
 					sprintf(pom, HTML_LEFT_ARROW_WIDE);
 				}
-				else if (typ == LINK_DEN_MESIAC_NASLEDOVNY){
+				else if (typ == LINK_DEN_MESIAC_NASLEDOVNY) {
 					sprintf(pom, HTML_RIGHT_ARROW_WIDE);
 				}
-				else{
-					switch (_case){
+				else {
+					switch (_case) {
 					case CASE_case:
-						sprintf(pom, "%s", nazov_mesiaca(mesiac - 1));
+						sprintf(pom, "%s", ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? nazov_mesiaca_gen(mesiac - 1) : nazov_mesiaca(mesiac - 1));
 						break;
 					case CASE_Case:
-						sprintf(pom, "%s", nazov_Mesiaca(mesiac - 1));
+						sprintf(pom, "%s", ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? nazov_Mesiaca_gen(mesiac - 1) : nazov_Mesiaca(mesiac - 1));
 						break;
 					case CASE_CASE:
-						sprintf(pom, "%s", nazov_MESIACA(mesiac - 1));
+						sprintf(pom, "%s", ((typ == LINK_DEN_MESIAC_GEN) || (typ == LINK_DEN_MESIAC_ROK_GEN)) ? mystr_UPPERCASE(nazov_mesiaca_gen(mesiac - 1)) : nazov_MESIACA(mesiac - 1));
 						break;
-					}// switch(_case)
+					} // switch(_case)
 				}
-				if (typ == LINK_DEN_MESIAC_ROK){
+				if ((typ == LINK_DEN_MESIAC_ROK) || (typ == LINK_DEN_MESIAC_ROK_GEN)) {
 					// pridame aj rok
 					strcat(_global_link, pom);
 					sprintf(pom, " %d", rok);
@@ -781,11 +787,11 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 			sprintf(pom, "%s", _global_den.meno);
 			break;
 		case CASE_CASE:
-			sprintf(pom, "%s", caps_BIG(_global_den.meno));
+			sprintf(pom, "%s", mystr_UPPERCASE(_global_den.meno));
 			break;
-		}// switch(_case)
+		} // switch(_case)
 		break;
-	}// switch(typ)
+	} // switch(typ)
 
 	strcat(pom, HTML_A_END); // formerly was in each case
 
@@ -794,55 +800,55 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 }// _vytvor_global_link();
 
 // vrati 1, ak je rok priestupny, inak vrati 0
-short int prestupny(short int rok){
-	if ((rok MOD 4) == 0){
-		if ((rok MOD 100) == 0){
+short int prestupny(short int rok) {
+	if ((rok MOD 4) == 0) {
+		if ((rok MOD 100) == 0) {
 			return ((rok MOD 400) == 0);
 		}
-		else{
+		else {
 			return 1;
 		}
 	}
-	else{
+	else {
 		return 0;
 	}
-}
+}// prestupny()
 
-short int pocet_dni_v_roku(short int rok){
-	if (prestupny(rok)){
+short int pocet_dni_v_roku(short int rok) {
+	if (prestupny(rok)) {
 		return POCET_DNI_V_ROKU + 1;
 	}
-	else{
+	else {
 		return POCET_DNI_V_ROKU;
 	}
-}
+}// pocet_dni_v_roku()
 
 // vrati poradove cislo dna v roku, 1.1. == 1, 2.1. == 2, ..., 31.12. == 365/366 | ocakava cislo mesiaca 1-12 (pozn. 2003-07-04)
-short int poradie(short int den, short int mesiac, short int rok){
-	if (mesiac > 2){
+short int poradie(short int den, short int mesiac, short int rok) {
+	if (mesiac > 2) {
 		return prvy_den[mesiac - 1] + den - 1 + prestupny(rok);
 	}
-	else{
+	else {
 		return prvy_den[mesiac - 1] + den - 1;
 	}
 }// poradie()
 
-short int poradie(_struct_den_mesiac den_a_mesiac, short int rok){
+short int poradie(_struct_den_mesiac den_a_mesiac, short int rok) {
 	return poradie(den_a_mesiac.den, den_a_mesiac.mesiac, rok);
 }// poradie()
 
-short int zjavenie_pana(short int rok){
+short int zjavenie_pana(short int rok) {
 	short int ZJAVENIE_PANA; // zjavenie Pána
 	char nedelne_pismenko = _global_r.p1;
 
-	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ZJAVENIE_PANA_NEDELA)){
-		if (nedelne_pismenko == 'A'){
+	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ZJAVENIE_PANA_NEDELA)) {
+		if (nedelne_pismenko == 'A') {
 			nedelne_pismenko = 'h'; // aby vyšla nedeľa Zjavenia Pána na 8.1.
 		}
 		Log("Zjavenie Pána sa slávi v nedeľu; %c/%c\n", _global_r.p1, nedelne_pismenko);
 		ZJAVENIE_PANA = poradie((nedelne_pismenko - 'a') + 1, 1, rok); // nedeľa medzi 2. a 8. januárom
 	}
-	else{
+	else {
 		ZJAVENIE_PANA = poradie(6, 1, rok);
 	}
 	return ZJAVENIE_PANA;
@@ -859,29 +865,29 @@ short int zjavenie_pana(short int rok){
  * 1. januar 1920     == 2422325 JD
  * 1. januar 1968     == 2439857 JD
  */
-long juliansky_datum(short int por, short int rok){
+long juliansky_datum(short int por, short int rok) {
 	short int r;
 	long jd = 0;
-	if (rok >= ROK_1968){
-		for (r = ROK_1968; r < rok; r++){
+	if (rok >= ROK_1968) {
+		for (r = ROK_1968; r < rok; r++) {
 			jd = jd + pocet_dni_v_roku(r);
 		}
 		return (jd + por + JUL_DATE_0_JAN_1968);
 	}
-	else{
-		for (r = rok; r < ROK_1968; r++){
+	else {
+		for (r = rok; r < ROK_1968; r++) {
 			jd = jd + pocet_dni_v_roku(r);
 		}
 		return (por + JUL_DATE_0_JAN_1968 - jd);
 	}
-}
+}// juliansky_datum()
 
 // ocakava cislo mesiaca 1-12 (pozn. 2003-07-04)
-long juliansky_datum(short int den, short int mesiac, short int rok){
+long juliansky_datum(short int den, short int mesiac, short int rok) {
 	short int por;
 	por = poradie(den, mesiac, rok);
 	return juliansky_datum(por, rok);
-}
+}// juliansky_datum()
 
 //---------------------------------------------------------------------
 // nasledujuce funkcie zistuju datum velkonocnej nedele
@@ -1131,7 +1137,8 @@ _struct_dm por_den_mesiac_dm(short int poradie, short int rok){
 	result.tyzzal = 0;
 	result.litobd = OBD_CEZ_ROK; // nemam neurcene...
 	result.typslav = SLAV_NEURCENE;
-	result.smer = 14; // neurcene
+	result.typslav_lokal = LOKAL_SLAV_NEURCENE;
+	result.smer = 14; // undefined
 	result.prik = NIE_JE_PRIKAZANY_SVIATOK;
 	result.spolcast = _encode_spol_cast(MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA);
 	mystrcpy(result.meno, STR_EMPTY, MENO_SVIATKU);
@@ -1154,6 +1161,7 @@ short int cislo_nedele_cez_rok_po_vn(short int rok){
 
 // naplni strukturu _global_pm_sobota, ale az vtedy, ked v _global_den su spravne udaje
 void init_global_pm_sobota(void){
+	Log("init_global_pm_sobota...\n");
 	_global_pm_sobota.den = _global_den.den;
 	_global_pm_sobota.mesiac = _global_den.mesiac;
 	_global_pm_sobota.rok = _global_den.rok;
@@ -1176,6 +1184,7 @@ void init_global_pm_sobota(void){
 }
 
 void _dm_popolcova_streda(short int rok, short int _vn){
+	Log("_dm_popolcova_streda...\n");
 	_global_result = por_den_mesiac_dm(_vn + OD_VELKEJ_NOCI_PO_POPOLCOVU_STR, rok);
 	_global_result.typslav = SLAV_NEURCENE;
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
@@ -1192,6 +1201,7 @@ void _dm_popolcova_streda(short int rok, short int _vn){
 }// _dm_popolcova_streda()
 
 void _dm_nanebovstupenie(short int rok, short int _vn){
+	Log("_dm_nanebovstupenie...\n");
 	short int _nan;
 	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA)){
 		_nan = (_vn + OD_VELKEJ_NOCI_PO_NANEBOSTUPENIE_NE);
@@ -1215,6 +1225,7 @@ void _dm_nanebovstupenie(short int rok, short int _vn){
 }// _dm_nanebovstupenie()
 
 void _dm_zoslanie_ducha(short int rok, short int _vn){
+	Log("_dm_zoslanie_ducha...\n");
 	_global_result = por_den_mesiac_dm(_vn + OD_VELKEJ_NOCI_PO_ZOSLANIE_DUCHA, rok);
 	_global_result.typslav = SLAV_SLAVNOST;
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
@@ -1231,6 +1242,7 @@ void _dm_zoslanie_ducha(short int rok, short int _vn){
 }// _dm_zoslanie_ducha()
 
 void _dm_prva_adventna_nedela(short int rok, short int p2){
+	Log("_dm_prva_adventna_nedela...\n");
 	_global_result = por_den_mesiac_dm(PRVA_ADVENTNA_NEDELA_b + p2 + prestupny(rok), rok);
 	_global_result.typslav = SLAV_VLASTNE;
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
@@ -1247,6 +1259,7 @@ void _dm_prva_adventna_nedela(short int rok, short int p2){
 }// _dm_prva_adventna_nedela()
 
 void _dm_svatej_rodiny(short int rok){
+	Log("_dm_svatej_rodiny...\n");
 	short int _svrod;
 	if (den_v_tyzdni(25, 12, rok) == DEN_NEDELA){
 		_svrod = poradie(30, 12, rok);
@@ -1258,10 +1271,9 @@ void _dm_svatej_rodiny(short int rok){
 		}
 	}
 	_global_result = por_den_mesiac_dm(_svrod, rok);
-	_global_result.typslav = SLAV_SVIATOK;
+	_set_slavenie_typslav_smer(-1, SLAV_SVIATOK, 5); // sviatky Pána uvedené vo všeobecnom kalendári
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
 	_global_result.litobd = OBD_OKTAVA_NARODENIA;
-	_global_result.smer = 5;
 	_global_result.tyzden = 1; // 1. tyzden vianocneho obdobia, oktava
 	_global_result.prik = NIE_JE_PRIKAZANY_SVIATOK;
 	mystrcpy(_global_result.meno, text_NEDELA_SV_RODINY[_global_jazyk], MENO_SVIATKU);
@@ -1273,6 +1285,7 @@ void _dm_svatej_rodiny(short int rok){
 }// _dm_svatej_rodiny()
 
 void _dm_krst_krista_pana(short int rok){
+	Log("_dm_krst_krista_pana...\n");
 	short int _zjavenie_pana = zjavenie_pana(rok); // bolo tu static, ale pre viacnásobné volanie z analyzuj_rok() pre tabuľku tu 'static' nesmie byť
 	short int _krst = _zjavenie_pana + 1;
 
@@ -1282,11 +1295,11 @@ void _dm_krst_krista_pana(short int rok){
 		}// while -- hľadáme nedeľu
 	}// Zjavenie Pána sa slávi 6.1. alebo v nedeľu medzi 2. a 8. januárom, ktorá však nepripadne na 7. alebo 8. januára
 	_global_result = por_den_mesiac_dm(_krst, rok);
-	_global_result.typslav = SLAV_SVIATOK;
+
+	_set_slavenie_typslav_smer(-1, SLAV_SVIATOK, 5); // sviatky Pána uvedené vo všeobecnom kalendári
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
 	_global_result.litobd = OBD_VIANOCNE_II;
 	_global_result.tyzden = 1; // 1. nedeľa "cez rok" (resp. v krajinách, kde sa Zjavenie Pána slávi v nedeľu, pričom táto pripadne na 7. alebo 8. januára, je to pondelok)
-	_global_result.smer = 5; // sviatky Pána uvedené vo všeobecnom kalendári
 	mystrcpy(_global_result.meno, text_JAN_KRST[_global_jazyk], MENO_SVIATKU); // 2003-08-11 zmenena na mystrcpy
 	_global_result.spolcast = _encode_spol_cast(MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA, MODL_SPOL_CAST_NEURCENA);
 	_global_result.prik = NIE_JE_PRIKAZANY_SVIATOK;
@@ -1297,6 +1310,7 @@ void _dm_krst_krista_pana(short int rok){
 }// _dm_krst_krista_pana()
 
 void _dm_velkonocna_nedela(short int rok, short int _vn){
+	Log("_dm_velkonocna_nedela...\n");
 	_global_result = por_den_mesiac_dm(_vn, rok);
 	_global_result.typslav = SLAV_SLAVNOST;
 	_global_result.typslav_lokal = LOKAL_SLAV_NEURCENE;
@@ -1374,6 +1388,7 @@ void analyzuj_rok(short int year){
 	else{
 		_global_r.prestupny = NO;
 	}
+
 	// urcime nedele pismena
 	p1 = ((_vn + 5) MOD 7);
 	p2 = (_global_r.prestupny == YES) ?
@@ -1381,9 +1396,7 @@ void analyzuj_rok(short int year){
 		p1;               // inak p1 == p2
 	// teraz znaky (char)
 	_global_r.p1 = char_nedelne_pismeno[p1];
-	_global_r.p2 = (_global_r.prestupny == YES) ?
-		char_nedelne_pismeno[p2] :
-		NIJAKE_NEDELNE_PISMENO;
+	_global_r.p2 = (_global_r.prestupny == YES) ? char_nedelne_pismeno[p2] : NIJAKE_NEDELNE_PISMENO;
 
 	// slavnosti a sviatky
 	_dm_krst_krista_pana(year);      _global_r._KRST_KRISTA_PANA = _global_result;
@@ -1431,7 +1444,7 @@ void Log(_struct_dm g){
 	Log_struktura_dm("   tyzden: %d\n", g.tyzden);
 	Log_struktura_dm("   tyzzal: %d\n", g.tyzzal);
 	Log_struktura_dm("   litobd: %s\n", nazov_obdobia_[g.litobd]);
-	Log_struktura_dm("   typslav:%s\n", nazov_slavenia(g.typslav));
+	Log_struktura_dm("   typslav: %s\n", nazov_slavenia(g.typslav));
 	Log_struktura_dm("   typslav_lokal: %s\n", nazov_slavenia_lokal[g.typslav_lokal]);	
 	Log_struktura_dm("   smer:   %d\n", g.smer);
 	Log_struktura_dm("   prik:   %d\n", g.prik);
@@ -1527,6 +1540,25 @@ void Log_filename_anchor(_struct_anchor_and_file af){
 	Log("file `%s', anchor `%s'\n", af.file, af.anchor);
 }
 
+void _set_slavenie_typslav_smer(short int poradie, short int typslav, short int smer) {
+	Log("_set_slavenie_typslav_smer() pre poradie == %d, typslav == %d, smer == %d: začiatok...\n", poradie, typslav, smer);
+
+	if (poradie == 0) {
+		_global_den.typslav = typslav;
+		_global_den.smer = smer;
+	}
+	else if (poradie >= 1 && poradie <= MAX_POCET_SVATY) {
+		_global_svaty(poradie).typslav = typslav;
+		_global_svaty(poradie).smer = smer;
+	}
+	else if (poradie == -1) {
+		_global_result.typslav = typslav;
+		_global_result.smer = smer;
+	}
+
+	Log("_set_slavenie_typslav_smer() pre poradie: koniec.\n");
+}
+
 //---------------------------------------------------------------------
 /* popis:
  *
@@ -1555,9 +1587,9 @@ int _encode_spol_cast(short int a1){
 }
 _struct_sc _decode_spol_cast(int spolc){
 	_struct_sc ret;
-	ret.a3 = spolc DIV(MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST);
-	ret.a2 = (spolc MOD(MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST)) DIV MAX_MODL_SPOL_CAST;
-	ret.a1 = (spolc MOD(MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST)) MOD MAX_MODL_SPOL_CAST;
+	ret.a3 = spolc DIV (MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST);
+	ret.a2 = (spolc MOD (MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST)) DIV MAX_MODL_SPOL_CAST;
+	ret.a1 = (spolc MOD (MAX_MODL_SPOL_CAST * MAX_MODL_SPOL_CAST)) MOD MAX_MODL_SPOL_CAST;
 	return ret;
 }
 
@@ -1610,6 +1642,8 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_1_VESP_KRATSIE_PROSBY, SMALL); break; // BIT_OPT_1_VESP_KRATSIE_PROSBY
 			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_1_MCD_ZALTAR_TRI, SMALL); break; // BIT_OPT_1_MCD_ZALTAR_TRI
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZAVER, SMALL); break; // BIT_OPT_1_ZAVER
+			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV, SMALL); break; // BIT_OPT_1_OVERRIDE_STUP_SLAV
+			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST, SMALL); break; // BIT_OPT_1_STUP_SVIATOK_SLAVNOST
 			}
 		}
 		break;
@@ -1680,7 +1714,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			}
 		}
 		break;
-	}// switch
+	} // switch
 
 	strcat(str_to_append, str);
 }

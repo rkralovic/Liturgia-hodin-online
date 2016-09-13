@@ -192,20 +192,22 @@ short int equalsi(char *is1, const char *is2){
 
 // funkcia mystr_replace() nahradí všetky výskyty podreťazca substr v reťazci string reťazcom replacement
 // http://coding.debuntu.org/c-implementing-str_replace-replace-all-occurrences-substring | 2013-01-11
-char *mystr_replace(const char *string, const char *substr, const char *replacement){
+char *mystr_replace(const char *string, const char *substr, const char *replacement) {
 	char *tok = NULL;
 	char *newstr = NULL;
 	char *oldstr = NULL;
 	char *head = NULL;
+
 	/* if either substr or replacement is NULL, duplicate string a let caller handle it */
 	if (substr == NULL || replacement == NULL) return strdup(string);
+
 	newstr = strdup(string);
 	head = newstr;
-	while ((tok = strstr(head, substr))){
+	while ((tok = strstr(head, substr))) {
 		oldstr = newstr;
 		newstr = (char *)malloc(strlen(oldstr) - strlen(substr) + strlen(replacement) + 1);
 		/* failed to alloc mem, free old string and return NULL */
-		if (newstr == NULL){
+		if (newstr == NULL) {
 			free(oldstr);
 			return NULL;
 		}
@@ -218,31 +220,74 @@ char *mystr_replace(const char *string, const char *substr, const char *replacem
 		free(oldstr);
 	}
 	return newstr;
-}
+}// mystr_replace()
 
-char *mystr_first_lower(const char *string){
+char* mystr_replace_char(const char *string, const char orig_char, const char replacement) {
+	/* if either substr or replacement is NULL, duplicate string a let caller handle it */
+	if (orig_char == 0 || replacement == 0) return strdup(string);
+
+	char *newstr = NULL;
+	newstr = strdup(string);
+
+	int i = 0;
+	while (string[i] != '\0')
+	{
+		if (string[i] == orig_char)
+		{
+			newstr[i] = replacement;
+		}
+		i++;
+	}
+	return newstr;
+}// mystr_replace_char()
+
+char *mystr_first_lower(const char *string) {
 	char *newstr = NULL;
 	char c;
 	newstr = strdup(string);
 	c = newstr[0];
-	if (isupper(c)){
+	if (isupper(c)) {
 		c = tolower(c);
 		newstr[0] = c;
 	}
 	return newstr;
-}
+}// mystr_first_lower()
 
-char *mystr_first_upper(const char *string){
+char *mystr_first_upper(const char *string) {
 	char *newstr = NULL;
 	char c;
 	newstr = strdup(string);
 	c = newstr[0];
-	if (islower(c)){
+	if (islower(c)) {
 		c = toupper(c);
 		newstr[0] = c;
 	}
 	return newstr;
-}
+}// mystr_first_upper()
+
+// convert integer value to Roman numeral string; caller is responsible for buffer size
+// http://stackoverflow.com/questions/4986521/how-to-convert-integer-value-to-roman-numeral-string | 2016-08-16
+void convertToRoman(int val, char *res) {
+	const char *huns[] = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" };
+	const char *tens[] = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" };
+	const char *ones[] = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
+	int         size[] = { 0,   1,    2,     3,    2,   1,    2,     3,      4,    2 };
+
+	//  Add 'M' until we drop below 1000.
+	while (val >= 1000) {
+		*res++ = 'M';
+		val -= 1000;
+	}
+
+	// Add each of the correct elements, adjusting as we go.
+	strcpy(res, huns[val / 100]); res += size[val / 100]; val = val % 100;
+	strcpy(res, tens[val / 10]);  res += size[val / 10];  val = val % 10;
+	strcpy(res, ones[val]);     res += size[val];
+
+	// Finish string off.
+
+	*res = '\0';
+}// convertToRoman()
 
 // Custom function for detecting whether base is starts with str
 short int startsWith(char* base, char* str) {

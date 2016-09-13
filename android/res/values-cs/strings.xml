@@ -36,6 +36,7 @@
     <string name="psalms_omisions">vynechávky ze žalmů</string>
 
     <string name="display_settings_title">Další zobrazení:</string>
+    <string name="first_vespers_buttons">zobrazit tlačítko pro první nešpory pro neděle a slavnosti v den slavení</string>
     <string name="navigation">zobrazit navigaci v textech modliteb</string>
     <string name="wrapping_printed">zalomit dlouhé řádky poetických textů jako v tištěném vydání</string>
     <string name="smart_buttons">tlačítka pro modlitby zobrazit úsporně</string>
@@ -63,7 +64,7 @@
     <string name="onlyNonBoldFontOn">Obyčejné písmo</string>
     <string name="onlyNonBoldFontOff">I tučné písmo</string>
 
-    <string name="inv">Invitatoř</string>
+    <string name="inv">Uvedení</string>
     <string name="rch">Ranní chvály</string>
     <string name="vesp">Nešpory</string>
     <string name="kompl">Kompletář</string>
@@ -72,14 +73,14 @@
     <string name="h12">Modlitba napoledne</string>
     <string name="h15">Modlitba odpoledne</string>
 
-    <string name="inv_notify">Je čas na invitatoř!</string>
+    <string name="inv_notify">Je čas na uvedení!</string>
     <string name="rch_notify">Je čas na ranní chvály!</string>
     <string name="vesp_notify">Je čas na nešpory!</string>
     <string name="kompl_notify">Je čas na kompletář!</string>
     <string name="read_notify">Je čas na modlitbu se čtením!</string>
-    <string name="h9_notify">Je čas na odpolední modlitbu!</string>
+    <string name="h9_notify">Je čas na dopolední modlitbu!</string>
     <string name="h12_notify">Je čas na polední modlitbu!</string>
-    <string name="h15_notify">Je čas na popolední modlitbu!</string>
+    <string name="h15_notify">Je čas na odpolední modlitbu!</string>
 
     <string name="menu_about">O...</string>
     <string name="about">O aplikaci</string>
@@ -93,7 +94,7 @@
     <string name="about_PLATFORM_IOS">iOS</string>
     <string name="about_text">include_cz/about.htm</string>
 
-    <string name="btn_news">Co je nové</string>
+    <string name="btn_news">Co je nového</string>
     <string name="news"><![CDATA[
 <html>
 <head>
@@ -104,9 +105,16 @@ body { background-color: #000000; color: #cccccc; }
 </head>
 <body>
 
-<p><b>Aplikace Breviář | Co je nové</b>
+<p><b>Aplikace Breviář | Co je nového</b>
 
 <!-- <li>Český dominikánský breviář (jenom pokusně!).</li> -->
+
+<p><b>Verze 1.14</b>
+<ul>
+<li>Nová volba: Zobrazit tlačítko pro první nešpory pro neděle a slavnosti v den slavení.</li>
+<li>Možnost slavit slavení s vyšším stupněm (jako svátky/slavnosti).</li>
+<li>Opravy v liturgickém kalendáři.</li>
+</ul>
 
 <p><b>Verze 1.13.2</b>
 <ul>
