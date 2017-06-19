@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* myconf.h                                              */
-/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2017 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | interface to config file CONFIG_FILE    */
 /*                                                       */
@@ -56,11 +56,7 @@ extern char cfg_mail_address_default[POCET_JAZYKOV + 1][MAX_MAIL_STR];
 #define CFG_OPTION_DEFAULT(i) cfg_option_default[i][_global_jazyk]
 
 const long cfg_option_default_PROG[POCET_GLOBAL_OPT] = 
-#ifdef OS_Windows_Ruby
-{3, 64, 0, 0, 0};
-#else
-{0, 31, 0, 0, 0};
-#endif
+{130, 5376, 29432, 0, 0, 0, 0};
 
 void readConfig(void);
 void printConfig(void);

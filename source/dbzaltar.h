@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* dbzaltar.h                                               */
-/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2017 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | contains definitions for 'database'        */
 /*               of liturgical calendars                    */
@@ -262,13 +262,7 @@ extern void _spolocna_cast_magnifikat_rozne(short int modlitba, char *_anchor_po
 extern void _spolocna_cast_kresponz_rozne(short int modlitba, char *_anchor_pom, char *_anchor, char *_file, int force);
 extern void _spolocna_cast_2cit_rozne(short int modlitba, char *_anchor_pom, char *_anchor, char *_file);
 extern void _spolocna_cast_modlitba_rozne(short int modlitba, char *_anchor_pom, char *_anchor, char *_file);
-extern void _spolocna_cast_magnifikat_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file, int force);
-extern void _spolocna_cast_benediktus_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file, int force);
-extern void _spolocna_cast_prosby_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file, int force = 0);
-extern void _spolocna_cast_kresponz_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file, int force);
-extern void _spolocna_cast_ant3_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file);
 extern void _spolocna_cast_ant3_viac_ozz(char *_anchor_head, char *_anchor, char *_file);
-extern void _spolocna_cast_2cit_viac(short int kolko, char *_anchor_head, char *_anchor, char *_file);
 extern void _spolocna_cast_1cit_zvazok(short int modlitba, const char *_anchor_pom, const char *_anchor_zvazok, const char *_anchor, const char *_file, int force = 0);
 extern void _spolocna_cast_kresponz_zvazok(short int modlitba, char *_anchor_pom, char *_anchor_zvazok, char *_anchor, char *_file, int force);
 extern void __set_spolocna_cast(short int a, short int poradie_svaty, _struct_sc sc, int force = 0);
@@ -1108,6 +1102,15 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	sprintf(_anchor, "%s%c%s%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_KRESPONZ, POSTNA_PRIPONA);\
 	_set_kresponz(modlitba, _file, _anchor);\
 	set_LOG_svsv;\
+}
+
+#define _vlastna_cast_kresponz_po_ve {\
+	if ((_global_den.litobd == OBD_VELKONOCNE_I) || (_global_den.litobd == OBD_VELKONOCNE_II)) {\
+		_vlastna_cast_kresponz_ve;\
+	}\
+	else if ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN)) {\
+		_vlastna_cast_kresponz_po;\
+	}\
 }
 
 #define _vlastna_cast_mcd_ant_kcitresp_modl {\
@@ -2100,8 +2103,8 @@ extern const char *text_JAN_04_CM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_25_CM[POCET_JAZYKOV + 1];
 extern const char *text_FEB_01_CM[POCET_JAZYKOV + 1];
 extern const char *text_FEB_18_CM[POCET_JAZYKOV + 1];
-extern const char *text_MAR_15_CM[POCET_JAZYKOV + 1];
 extern const char *text_APR_26_CM[POCET_JAZYKOV + 1];
+extern const char *text_MAJ_09_CM[POCET_JAZYKOV + 1];
 extern const char *text_MAJ_23_CM[POCET_JAZYKOV + 1];
 extern const char *text_JUN_26_CM[POCET_JAZYKOV + 1];
 extern const char *text_JUL_30_CM[POCET_JAZYKOV + 1];
@@ -2111,5 +2114,7 @@ extern const char *text_SEP_11_CM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_27_CM[POCET_JAZYKOV + 1];
 extern const char *text_NOV_27_CM[POCET_JAZYKOV + 1];
 extern const char *text_NOV_28_CM[POCET_JAZYKOV + 1];
+
+extern short int pocet_multi(char *_anchor, long type);
 
 #endif // __DBZALTAR_H_

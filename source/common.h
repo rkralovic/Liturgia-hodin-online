@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* common.h                                              */
-/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2017 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | new core basic define's                 */
 /*                                                       */
@@ -250,6 +250,8 @@
 #define HTML_SPAN_XS_CAPS           "span class=\"xsmallcaps\""
 #define HTML_SPAN_HIDDEN            "span class=\"hidden\""
 #define HTML_SPAN_UPPERCASE         "span class=\"uppercase\""
+
+#define HTML_SPAN_COMMENT           "span class=\"comment\""
 
 #define HTML_CLASS_CALENDAR         "class=\"calendar\""
 

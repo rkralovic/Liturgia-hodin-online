@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* liturgia.h                                               */
-/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2017 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | basic 'liturgical' constants, defines      */
 /*               and structures                             */
@@ -31,6 +31,22 @@
 #define MENO_SVIATKU 250
 #define MAX_LC_STR_ID 50
 
+// "null" year, month, day
+#define NULL_YEAR 0
+#define NULL_MONTH -1
+#define NULL_DAY 0
+
+// "null" day order within year; special "null" values for special solemnities and feasts of the Lord
+#define NULL_DAY_OF_THE_YEAR 0
+#define NULL_KRST_KRISTA_PANA -1
+#define NULL_POPOLCOVA_STREDA -2
+#define NULL_VELKONOCNA_NEDELA -3
+#define NULL_NANEBOVSTUPENIE_PANA -4
+#define NULL_ZOSLANIE_DUCHA_SV -5
+#define NULL_PRVA_ADVENTNA_NEDELA -6
+#define NULL_SVATEJ_RODINY -7
+#define NULL_ZJAVENIE_PANA 6 // pretend as if date was Jan 6th
+
 // liturgical rites
 #define RITUS_RIM_KAT   0
 #define RITUS_GR_KAT    1
@@ -45,7 +61,7 @@
 #define JAZYK_CZ	1
 #define JAZYK_EN	2
 #define JAZYK_LA    3
-#define JAZYK_UNDEF 4
+#define JAZYK_UNDEF 4 // used also as JAZYK_ANY
 #define JAZYK_CZ_OP 5
 #define JAZYK_HU    6
 #define JAZYK_RU    7
@@ -97,22 +113,23 @@ extern const short int use_dot_for_ordinals[POCET_JAZYKOV + 1];
 #define STATIC_TEXT_ORDINARIUM            2
 
 // number of fonts
-#define	POCET_FONTOV	9
+#define	POCET_FONTOV    10
 
 // fonts used in drop-down list
-#define FONT_UNDEF		0
-#define FONT_CSS		1
-#define FONT_CHECKBOX	2
-#define FONT_CAMBRIA    3
-#define FONT_CANDARA	4
-#define FONT_GEORGIA	5
-#define FONT_TAHOMA		6
-#define FONT_HELVETICA	7
-#define FONT_SERIF		8
-#define FONT_SANS_SERIF	9
+#define FONT_UNDEF       0
+#define FONT_CSS         1
+#define FONT_CHECKBOX    2
+#define FONT_CAMBRIA     3
+#define FONT_CANDARA     4
+#define FONT_GEORGIA     5
+#define FONT_TAHOMA	     6
+#define FONT_HELVETICA   7
+#define FONT_VERDANA     8
+#define FONT_SERIF	     9
+#define FONT_SANS_SERIF 10
 
 // number of font-sizes
-#define	POCET_FONT_SIZE	8
+#define	POCET_FONT_SIZE  8
 
 // font-sizes in drop-down list
 #define FONT_SIZE_UNDEF		0
@@ -469,6 +486,7 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 // keywords
 #define KEYWORD_BEGIN   "BEGIN"
 #define KEYWORD_END     "END"
+#define KEYWORD_MULTI   "MULTI"
 
 #define KEYWORD_ALELUJA_ALELUJA         "ALELUJA_ALELUJA"
 #define KEYWORD_ALELUJA_NIE_V_POSTE     "ALELUJA_NIE_V_POSTE"
@@ -564,6 +582,16 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 // rubriky priamo v includovaných HTML súboroch
 #define PARAM_RUBRIKA                       "RUBRIKA"
 
+// multiple alternatives
+#define PARAM_ALT_HYMNUS_MULTI              PARAM_ALT_HYMNUS "-" KEYWORD_MULTI
+#define PARAM_ALT_CITANIE2_MULTI            "ALT-CITANIE2-" KEYWORD_MULTI
+#define PARAM_ALT_CITANIE1_MULTI            "ALT-CITANIE1-" KEYWORD_MULTI
+#define PARAM_ALT_ANTIFONA_MULTI            "ALT-ANTIFONA-" KEYWORD_MULTI
+#define PARAM_ALT_MODLITBA_MULTI            "ALT-MODLITBA-" KEYWORD_MULTI
+#define PARAM_ALT_PROSBY_MULTI              "ALT-PROSBY-" KEYWORD_MULTI
+#define PARAM_ALT_KCIT_RESP_MULTI           "ALT-KCIT-RESP-" KEYWORD_MULTI
+#define PARAM_ALT_KRESP_MULTI               "ALT-KRESP-" KEYWORD_MULTI
+
 // zobrazenie/skrytie číslovania veršov v žalmoch, chválospevoch a biblických čítaniach
 #define PARAM_CISLO_VERSA_BEGIN				"v"
 #define PARAM_CISLO_VERSA_END				SYMBOL_END "" PARAM_CISLO_VERSA_BEGIN
@@ -576,13 +604,17 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define PARAM_KATECHEZA_BEGIN				"k"
 #define PARAM_KATECHEZA_END					SYMBOL_END "" PARAM_KATECHEZA_BEGIN
 
-// footnote reference
+// footnote reference (subscript)
 #define PARAM_FOOTNOTE_REF_BEGIN			"fnr"
 #define PARAM_FOOTNOTE_REF_END				SYMBOL_END "" PARAM_FOOTNOTE_REF_BEGIN
 
-// footnote (text)
+// footnote (text under main text)
 #define PARAM_FOOTNOTE_BEGIN			    "fn"
 #define PARAM_FOOTNOTE_END				    SYMBOL_END "" PARAM_FOOTNOTE_BEGIN
+
+// note (text in parentheses)
+#define PARAM_NOTE_BEGIN			        "n"
+#define PARAM_NOTE_END				        SYMBOL_END "" PARAM_NOTE_BEGIN
 
 // odkaz na žalm 95
 #define PARAM_LINK_ZALM95_BEGIN				"z95"
@@ -1031,9 +1063,10 @@ extern const char *nazov_slavenia_lokal[];
 #define KALENDAR_SK_OCD                    19
 #define KALENDAR_HU_SVD                    20
 #define KALENDAR_VSEOBECNY_BY              21
+#define KALENDAR_CZ_OFM                    22
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   21
+#define POCET_KALENDAROV                   22
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1311,6 +1344,7 @@ extern short int _global_pocet_svatych;
 #define OPT_3_SPOLOCNA_CAST        3
 #define OPT_4_OFFLINE_EXPORT       4
 #define OPT_5_ALTERNATIVES         5
+#define OPT_6_ALTERNATIVES_MULTI   6
 
 // globálna premenná -- pole -- obsahujúca options; pôvodne to boli globálne premenné _global_opt 1..9 atď., obsahujú pom_OPT...
 extern long _global_opt[POCET_GLOBAL_OPT];
@@ -1408,19 +1442,40 @@ extern long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_CZ_HYMNY_VYBER         8192 // CZ: hymny z breviáře ("písničky") nebo k volnému výběru (podle LA, "Renč")
 #define BIT_OPT_5_OFF_DEF_PSALM_146_150 16384 // pre ranné chvály ofícia za zosnulých možno brať ako tretí žalm 146 resp. 150
 #define BIT_OPT_5_ZAVER_KNAZ_DIAKON     32768 // prayer conclusions for morning and evening prayer: whether take when priest/diacon is present (default: 0, no)
-#define BIT_OPT_5_INVITATORIUM_ANT          65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.)
+#define BIT_OPT_5_INVITATORIUM_ANT      65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.)
+
+#define POCET_OPT_6_ALTERNATIVES_MULTI      4 // this is not bitwise long, but simply decimal number; each decimal place representing one value
+extern long _global_opt_6_alternatives_multi[POCET_OPT_6_ALTERNATIVES_MULTI];
+#define PLACE_OPT_6_HYMNUS_MULTI              1
+#define PLACE_OPT_6_CITANIE2_MULTI            2
+#define PLACE_OPT_6_CITANIE1_MULTI            3
+#define PLACE_OPT_6_ANTIFONA_MULTI            4
+#define PLACE_OPT_6_MODLITBA_MULTI            5
+#define PLACE_OPT_6_PROSBY_MULTI              6
+#define PLACE_OPT_6_KCIT_RESP_MULTI           7
+#define PLACE_OPT_6_KRESP_MULTI               8
+
+#define BASE_OPT_6_HYMNUS_MULTI               1
+#define BASE_OPT_6_CITANIE2_MULTI            10
+#define BASE_OPT_6_CITANIE1_MULTI           100
+#define BASE_OPT_6_ANTIFONA_MULTI          1000
+#define BASE_OPT_6_MODLITBA_MULTI         10000
+#define BASE_OPT_6_PROSBY_MULTI          100000
+#define BASE_OPT_6_KCIT_RESP_MULTI      1000000
+#define BASE_OPT_6_KRESP_MULTI         10000000
+
 
 #define MAX_POCET_OPT                      18 // malo by to byť aspoň maximum z POCET_OPT_0_... až POCET_OPT_5_...
 
-const short int pocet_opt[POCET_GLOBAL_OPT] = {POCET_OPT_0_SPECIALNE, POCET_OPT_1_CASTI_MODLITBY, POCET_OPT_2_HTML_EXPORT, 0 /* option 3 nemá bitové komponenty */, POCET_OPT_4_OFFLINE_EXPORT, POCET_OPT_5_ALTERNATIVES};
+const short int pocet_opt[POCET_GLOBAL_OPT] = { POCET_OPT_0_SPECIALNE, POCET_OPT_1_CASTI_MODLITBY, POCET_OPT_2_HTML_EXPORT, 0 /* option 3 nemá bitové komponenty */, POCET_OPT_4_OFFLINE_EXPORT, POCET_OPT_5_ALTERNATIVES, POCET_OPT_6_ALTERNATIVES_MULTI /* decimal-places */ };
 
 // globalna premenna, co obsahuje string vypisany na obsazovku
 extern char *_global_string;
 extern char *_global_string2; // obsahuje I, II, III, IV, V alebo pismeno roka
-extern char *_global_string_farba; // 2006-08-19: doplnené
+extern char *_global_string_farba;
 
-extern char *_global_buf; // 2006-08-01: túto premennú tiež alokujeme
-extern char *_global_buf2; // 2006-08-01: túto premennú tiež alokujeme
+extern char *_global_buf;
+extern char *_global_buf2;
 
 extern short int _global_linky;
 
@@ -1527,7 +1582,9 @@ short int ferialny_cyklus(short int den, short int mesiac, short int rok);
 _struct_dm por_den_mesiac_dm(short int poradie, short int rok);
 short int tyzden_cez_rok_po_vn(short int rok);
 short int cislo_nedele_cez_rok_po_vn(short int rok);
+
 void init_global_pm_sobota(void);
+
 void _dm_popolcova_streda(short int rok, short int _vn);
 void _dm_nanebovstupenie(short int rok, short int _vn);
 void _dm_zoslanie_ducha(short int rok, short int _vn);
@@ -1535,6 +1592,7 @@ void _dm_prva_adventna_nedela(short int rok, short int p2);
 void _dm_svatej_rodiny(short int rok);
 void _dm_krst_krista_pana(short int rok);
 void _dm_velkonocna_nedela(short int rok, short int _vn);
+void _dm_zjavenie_pana(short int rok, short int _zjv);
 
 short int modlitba_predchadzajuca(short int modlitba, short int exclude_mcd_komplet = NIE);
 short int modlitba_nasledujuca(short int modlitba, short int exclude_mcd_komplet = NIE);
@@ -1549,7 +1607,7 @@ void analyzuj_rok(short int year);
 	a.mesiac = 1; \
 	a.rok = 1900; \
 	a.denvt = 0;  \
-	a.denvr = 1;  \
+	a.denvr = NULL_DAY_OF_THE_YEAR;  \
 	a.litrok = 'A'; \
 	a.tyzden = 1;   \
 	a.tyzzal = 1;   \
@@ -1674,6 +1732,7 @@ _struct_sc _decode_spol_cast(int);
 
 void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_order);
 
+extern const char *text_JAN_06[POCET_JAZYKOV + 1];
 extern const char *text_JAN_KRST[POCET_JAZYKOV + 1];
 extern const char *text_POPOLCOVA_STREDA[POCET_JAZYKOV + 1];
 extern const char *text_NANEBOVSTUPENIE_PANA[POCET_JAZYKOV + 1];
@@ -1720,6 +1779,13 @@ extern const char *text_PRO_OP[POCET_JAZYKOV + 1];
 extern const char *html_text_batch_Back[POCET_JAZYKOV + 1];
 extern const char *html_text_batch_Prev[POCET_JAZYKOV + 1];
 extern const char *html_text_batch_Next[POCET_JAZYKOV + 1];
+
+struct _anchor_and_count {
+	short int language;
+	char anchor[MAX_STR_AF_ANCHOR];
+	short int count;
+};
+typedef struct _anchor_and_count _struct_anchor_and_count;
 
 #endif // __LITURGIA_H_
 

@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* breviar.h                                                   */
-/* (c)1999-2016 | Juraj Vidéky | videky@breviar.sk             */
+/* (c)1999-2017 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | contains declarations of global variables     */
 /*                                                             */
@@ -178,9 +178,12 @@ extern short int _global_opt_export_date_format;
 
 #define set_tyzzal_1_2(tyzzal) ((tyzzal > 2)? (tyzzal - 2) : tyzzal)
 
-// placeholder for checking whether option 'i' has set 'j'-th bit-component to TRUE | used result ANO/NIE to prevent long datatype
-#define isGlobalOption(opt_i, bit_opt_i_component_j) (((_global_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
-#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) (((_global_force_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE)
+// placeholder for checking whether option 'i' has set 'j'-th bit-component to TRUE | used result ANO/NIE to prevent long datatype; OPT 6 uses decimal-place logic
+#define isGlobalOption(opt_i, bit_opt_i_component_j) ((opt_i == OPT_6_ALTERNATIVES_MULTI) ? ((_global_opt[opt_i] DIV bit_opt_i_component_j) MOD 10) : (((_global_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE))
+#define isGlobalOptionForce(opt_i, bit_opt_i_component_j) ((opt_i == OPT_6_ALTERNATIVES_MULTI) ? ((_global_force_opt[opt_i] DIV bit_opt_i_component_j) MOD 10) : (((_global_force_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE))
+
+// for setting option's 'i' 'j'-th bit-component to value (TRUE/FALSE); OPT 6 uses decimal-place logic
+extern void setGlobalOption(short opt_i, long bit_opt_i_component_j, short value);
 
 #define odfiltrujSpolCast(modlitba, opt3) ((short int)(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA)) ? MODL_SPOL_CAST_NULL : opt3))
 
@@ -192,6 +195,7 @@ extern short int _global_opt_export_date_format;
 
 #define je_modlitba_cez_den(modlitba) ((modlitba == MODL_PREDPOLUDNIM) || (modlitba == MODL_NAPOLUDNIE) || (modlitba == MODL_POPOLUDNI))
 #define je_kompletorium12(modlitba) ((modlitba == MODL_KOMPLETORIUM) || (modlitba == MODL_PRVE_KOMPLETORIUM) || (modlitba == MODL_DRUHE_KOMPLETORIUM))
+#define su_vespery12(modlitba) ((modlitba == MODL_VESPERY) || (modlitba == MODL_PRVE_VESPERY) || (modlitba == MODL_DRUHE_VESPERY))
 
 #define je_modlitba_ok_buttons(modlitba) ((modlitba >= MODL_INVITATORIUM) && (modlitba < MODL_NEURCENA))
 
@@ -302,29 +306,18 @@ extern short int _global_opt_export_date_format;
 	(_global_den.denvt == DEN_SOBOTA) && (!((_global_den.denvt == DEN_SOBOTA) && (_global_den.litobd == OBD_VELKONOCNE_TROJDNIE))) \
 )
 
-// are there alternate hymns? (for SK based on LA LH)
-#define je_alternativa_hymnus ( \
-(_global_modlitba == MODL_PRVE_KOMPLETORIUM && ((_global_modl_prve_kompletorium.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_DRUHE_KOMPLETORIUM && ((_global_modl_kompletorium.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_KOMPLETORIUM && ((_global_modl_kompletorium.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_POSV_CITANIE && ((_global_modl_posv_citanie.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_PREDPOLUDNIM && ((_global_modl_predpol.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_NAPOLUDNIE && ((_global_modl_napol.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_POPOLUDNI && ((_global_modl_popol.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_RANNE_CHVALY && ((_global_modl_ranne_chvaly.alternativy & BIT_ALT_HYMNUS_VN) == BIT_ALT_HYMNUS_VN)) \
-||  \
-(_global_modlitba == MODL_POSV_CITANIE && ((_global_modl_posv_citanie.alternativy & BIT_ALT_HYMNUS_VN) == BIT_ALT_HYMNUS_VN)) \
-||  \
-(_global_modlitba == MODL_PRVE_VESPERY && ((_global_modl_prve_vespery.alternativy & BIT_ALT_HYMNUS) == BIT_ALT_HYMNUS)) \
-||  \
-(_global_modlitba == MODL_VESPERY && ((_global_modl_vespery.alternativy & BIT_ALT_HYMNUS_VN) == BIT_ALT_HYMNUS_VN)) \
+// či sa môže sláviť ľubovoľná spomienka Panny Márie v sobotu (prvý level kontroly)
+#define je_spomienka_PM_v_sobotu ( \
+	(_global_den.litobd == OBD_CEZ_ROK) && (_global_den.denvt == DEN_SOBOTA) && (_global_den.denvr != SRDPM) \
+)
+
+// či sa naozaj môže sláviť ľubovoľná spomienka Panny Márie v sobotu (druhý level kontroly)
+#define PODMIENKA_MOZE_BYT_SPOMIENKA_PM_V_SOBOTU ( \
+	(je_spomienka_PM_v_sobotu) && \
+	( \
+		((_global_den.smer >= 11) && (_global_pocet_svatych == 0)) || \
+		((((_global_svaty1.smer >= 12) && (_decode_spol_cast(_global_svaty1.spolcast).a1 != MODL_SPOL_CAST_PANNA_MARIA)) || MIESTNE_SLAVENIE_LOKAL_SVATY(1)) && (_global_pocet_svatych > 0)) \
+	) \
 )
 
 // are there alternate hymns for Ordinary time (per annum)? (for SK based on LA LH)
