@@ -1397,8 +1397,8 @@ void _main_prazdny_formular(void){
 #define EXPORT_FOOTNOTES ANO
 #define EXPORT_FULL_TEXT ((!vnutri_full_text || isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ZALMY_FULL_TEXT)) && !(vnutri_full_text && isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)))
 #define EXPORT_REFERENCIA ((!vnutri_myslienky || je_myslienka) && (!vnutri_nadpisu || je_nadpis) && (!(vnutri_footnote || vnutri_note) || isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_FOOTNOTES)))
-#define EXPORT_HVIEZDICKA(modlitba) (!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)))
-#define EXPORT_TROJUHOLNIK ((!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY))) && (!(isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_SLAVA_OTCU))))
+#define EXPORT_RED_STUFF(modlitba) (!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)))
+#define EXPORT_RED_TRIANGLE ((!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY))) && (!(isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_SLAVA_OTCU))))
 #define EXPORT_VERSE_NUMBER (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && !isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY) && (EXPORT_FULL_TEXT))
 
 #define je_velkonocna_nedela_posv_cit (((equals(paramname, PARAM_CITANIE1)) || (equals(paramname, PARAM_CITANIE2))) && (_global_den.denvr = VELKONOCNA_NEDELA) && (_global_modlitba == MODL_POSV_CITANIE))
@@ -1441,6 +1441,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 
 	char refbuff[MAX_BUFFER]; // buffer pre referenciu
 	char refrest[MAX_BUFFER]; // 'rest' uložené zo začiatku referencie (používa sa až pri parsovaní konca referencie)
+	char reference[MAX_BUFFER]; // full reference
 
 	char katbuff[MAX_BUFFER]; // buffer pre odkaz na katechézu
 	char katrest[MAX_BUFFER]; // 'rest' uložené zo začiatku odkazu na katechézu (používa sa až pri parsovaní konca odkazu na katechézu)
@@ -1472,6 +1473,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 	mystrcpy(rest, STR_EMPTY, MAX_BUFFER);
 	mystrcpy(refbuff, STR_EMPTY, MAX_BUFFER);
 	mystrcpy(refrest, STR_EMPTY, MAX_BUFFER);
+	mystrcpy(reference, STR_EMPTY, MAX_BUFFER);
 	mystrcpy(katbuff, STR_EMPTY, MAX_BUFFER);
 	mystrcpy(katrest, STR_EMPTY, MAX_BUFFER);
 	mystrcpy(z95buff, STR_EMPTY, MAX_BUFFER);
@@ -1799,17 +1801,20 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 				// write = NIE; -- aby mohli byt nestovane viacere :-)
 				DetailLog("parameter does not match: %s != %s; vnutri_inkludovaneho == %d\n", rest, modlparam, vnutri_inkludovaneho);
 
-				// red asterisk, red cross
-				if ((equals(strbuff, PARAM_RED_HVIEZDICKA) || equals(strbuff, PARAM_RED_KRIZIK)) && (vnutri_inkludovaneho == ANO)) 
+// red asterisk, red cross, other "red stuff"
+				if ((equals(strbuff, PARAM_RED_ASTERISK)
+					|| equals(strbuff, PARAM_RED_CROSS)
+					) && (vnutri_inkludovaneho == ANO))
 				{
-					DetailLog("idem exportovať hviezdičku...\n");
-					if (EXPORT_HVIEZDICKA(_global_modlitba)) {
+					DetailLog("idem exportovať red stuff...\n");
+					if (EXPORT_RED_STUFF(_global_modlitba)) {
 						Export("<" HTML_SPAN_RED ">%s" HTML_SPAN_END, strbuff);
 					}
-				}// PARAM_RED_HVIEZDICKA, PARAM_RED_KRIZIK
-// red triangle (end of psalm/canticle)
-				if (equals(strbuff, PARAM_RED_TROJUHOLNIK) && (vnutri_inkludovaneho == ANO)) {
-					if (EXPORT_TROJUHOLNIK) {
+				}// red stuff
+// red triangle (end of psalm/canticle when doxology is not displayed)
+				if (equals(strbuff, PARAM_RED_TRIANGLE) && (vnutri_inkludovaneho == ANO)) {
+					DetailLog("idem exportovať red triangle...\n");
+					if (EXPORT_RED_TRIANGLE) {
 						Export(HTML_NONBREAKING_SPACE "<" HTML_SPAN_RED ">%s" HTML_SPAN_END, strbuff);
 					}
 				}// PARAM_RED_TROJUHOLNIK
@@ -2016,37 +2021,79 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 
 					refbuff[ref_index] = '\0';
 					if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REFERENCIE)) {
-						// ToDo: časom dať odkaz napr. do konfiguračného súboru
+
 						if (EXPORT_REFERENCIA) {
-							if (_global_jazyk == JAZYK_HU) {
-								Export(HTML_A_HREF_BEGIN "\"http://www.szentiras.hu/SZIT/");
-							}
-							else if (_global_jazyk == JAZYK_SK) {
-								Export(HTML_A_HREF_BEGIN "\"http://dkc.kbs.sk/?in=");
+							if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) {
+								Export(HTML_A_HREF_BEGIN "\"https://www.bible.com/bible/");
+#if defined(IO_ANDROID) || defined(__APPLE__)
+								// nothing to add here
+#else
+								// for web, add default version id
+								Export("%s" STR_SLASH, bible_version_id_default[_global_jazyk]);
+#endif // IO_ANDROID || __APPLE__
+
 							}
 							else {
-								Export(HTML_A_HREF_BEGIN "\"#");
+
+								// ToDo: to be moved as default to config file (URL for default bible translation)
+
+								if (_global_jazyk == JAZYK_HU) {
+									Export(HTML_A_HREF_BEGIN "\"http://www.szentiras.hu/SZIT/");
+								}
+								else if (_global_jazyk == JAZYK_SK) {
+									Export(HTML_A_HREF_BEGIN "\"https://dkc.kbs.sk/?in=");
+								}
+								else {
+									Export(HTML_A_HREF_BEGIN "\"#");
+								}
 							}
 						}
+
 						DetailLog("\trest     == %s\n", rest);
 						DetailLog("\trefrest  == %s\n", refrest);
 						DetailLog("\trefbuff  == %s\n", refbuff);
+
+						// Example A: {r:Iz}6, 1-13{/r}
+						// Example B: {r}Iz 6, 3{/r}
+						// Example C: {r:Ž 102,}18{/r}
+
+						// refrest: rest of the string within reference | A: "Iz" | B: empty | C: "Ž 102,"
+						// refbuff: buffer (inner content of reference) | A: "6, 1-13" | B: "Iz 6, 3" | C: "18"
+
+						// first, clean reference
+						strcpy(reference, STR_EMPTY);
+
+						// second, copy refrest to the beginning of reference (if not empty)
 						if (/* (refrest != NULL) && */ !(equals(refrest, STR_EMPTY))) {
 							// [ToDo]: doplniť nevypisovanie refbuff, ak refrest obsahuje medzeru
 							if (EXPORT_REFERENCIA) {
-#ifdef IO_ANDROID
-								Export("%s", mystr_remove_diacritics(refrest));
-#else
-								Export("%s", refrest); // pôvodne sa odstraňovala diakritika; ponechané len pre Android
-#endif
+								mystrcpy(reference, refrest, MAX_BUFFER);
+								strcat(reference, STR_SPACE);
 							}
-						}// načítanie na začiatok referencie
+						}
+
+						// third, append refbuff to the end of refrest to create full reference
+						strcat(reference, refbuff);
+
+						if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) {
+							// ToDo: transform reference using bible.com format
+						}
+
 						if (EXPORT_REFERENCIA) {
 #ifdef IO_ANDROID
-							Export("%s\" " HTML_TARGET_BLANK " " HTML_CLASS_QUIET ">", mystr_remove_diacritics(refbuff));
+							Export("%s", mystr_remove_diacritics(reference));
 #else
-							Export("%s\" " HTML_TARGET_BLANK " " HTML_CLASS_QUIET ">", refbuff); // pôvodne sa odstraňovala diakritika; ponechané len pre Android
+							if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) {
+								Export("%s", mystr_bible_com(reference));
+							}
+							else {
+								Export("%s", reference); // diacritics removal left only for Android
+							}
 #endif
+						}
+
+						if (EXPORT_REFERENCIA) {
+							Export("\" " HTML_TARGET_BLANK " " HTML_CLASS_QUIET ">");
 						}
 					}
 					if (EXPORT_REFERENCIA) {
@@ -2063,6 +2110,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 						write = ANO;
 					}
 					strcpy(refrest, STR_EMPTY);
+					strcpy(reference, STR_EMPTY); // cleanup
 
 					// spracujeme prípadný buffer ak to bolo vnorené v rámci footnote alebo note
 					if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_FOOTNOTES) && EXPORT_FOOTNOTES && ((vnutri_footnote == ANO) || (vnutri_note == ANO))) {
@@ -2549,7 +2597,7 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 }// includeFile()
 
 void _export_rozbor_dna_navig_top_bottom_simple(char *target, const char *text) {
-	Export(HTML_A_HREF_BEGIN "\"#%s\"" HTML_CLASS_QUIET ">%s" HTML_A_END, target, text);
+	Export(HTML_A_HREF_BEGIN "\"#%s\" " HTML_CLASS_QUIET ">%s" HTML_A_END, target, text);
 }// _export_rozbor_dna_navig_top_bottom_simple()
 
 void _export_rozbor_dna_navig_top_bottom(char *target, const char *text) {
@@ -2698,7 +2746,7 @@ void _export_global_string_spol_cast(short int aj_vslh_235b) {
 // 2009-01-28: jednotlivé define presunuté na začiatok súboru, nakoľko ich používa nielen interpretParameter(), ale aj includeFile()
 
 // 2007-11-20: doplnené @ifdef EXPORT_HTML_SPECIALS
-void interpretParameter(short int type, char *paramname, short int aj_navigacia = ANO){
+void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj_navigacia = ANO){
 	char path[MAX_STR] = STR_EMPTY;
 	mystrcpy(path, include_dir, MAX_STR);
 
@@ -2711,28 +2759,57 @@ void interpretParameter(short int type, char *paramname, short int aj_navigacia 
 
 	Log("interpretParameter(%s): Dumping by %s\n", paramname, paramname);
 
-	if (equals(paramname, PARAM_CISLO_VERSA_BEGIN)){
-		if (_global_skip_in_prayer == NIE){
-			if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && !isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)){
+	// verse numbering
+	if (equals(paramname, PARAM_CISLO_VERSA_BEGIN)) {
+		if (_global_skip_in_prayer == NIE) {
+			if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && !isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) {
 				Export("<sup>");
 			}
-			else{
+			else {
 				// Log("  ruším writing to export file, kvôli PARAM_CISLO_VERSA_BEGIN...\n");
 				_global_skip_in_prayer_2 = ANO;
 			}
-		}// skip in prayer
+		}
 	}// zobraziť/nezobraziť číslovanie veršov
-	else if (equals(paramname, PARAM_CISLO_VERSA_END)){
-		if (_global_skip_in_prayer == NIE){
-			if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && !isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)){
+	else if (equals(paramname, PARAM_CISLO_VERSA_END)) {
+		if (_global_skip_in_prayer == NIE) {
+			if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && !isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) {
 				Export("</sup>");
 			}
-			else{
+			else {
 				// Log("  opäť writing to export file, PARAM_CISLO_VERSA_END...\n");
 				_global_skip_in_prayer_2 = NIE;
 			}
-		}// skip in prayer
+		}
 	}// zobraziť/nezobraziť číslovanie veršov
+
+	// red asterisk, other "red stuff" (normal characters)
+	else if (equals(paramname, PARAM_RED_ASTERISK)) {
+		if (_global_skip_in_prayer == NIE) {
+			DetailLog("idem exportovať red stuff...\n");
+			if (EXPORT_RED_STUFF(_global_modlitba)) {
+				Export("<" HTML_SPAN_RED ">%s" HTML_SPAN_END, paramname);
+			}
+		}
+	}// show red asterisk, other "red stuff" (normal characters)
+
+	// red triangle (end of psalm/canticle when doxology is not displayed), red cross (Unicode special characters)
+	else if (equals(paramname, PARAM_RED_CROSS) || equals(paramname, PARAM_RED_CROSS_TXT)) {
+		if (_global_skip_in_prayer == NIE) {
+			DetailLog("idem exportovať red cross/triangle...\n");
+			if (EXPORT_RED_TRIANGLE) {
+				Export(HTML_NONBREAKING_SPACE "<" HTML_SPAN_RED ">%s" HTML_SPAN_END, PARAM_RED_CROSS);
+			}
+		}
+	}// show red cross
+	else if (equals(paramname, PARAM_RED_TRIANGLE) || equals(paramname, PARAM_RED_TRIANGLE_TXT)) {
+		if (_global_skip_in_prayer == NIE) {
+			DetailLog("idem exportovať red cross/triangle...\n");
+			if (EXPORT_RED_TRIANGLE) {
+				Export(HTML_NONBREAKING_SPACE "<" HTML_SPAN_RED ">%s" HTML_SPAN_END, PARAM_RED_TRIANGLE);
+			}
+		}
+	}// show red triangle
 
 	else if (
 		(equals(paramname, PARAM_CHVALOSPEV_BEGIN)) || (equals(paramname, PARAM_CHVALOSPEV_END))
@@ -4670,6 +4747,7 @@ void showPrayer(short int type, short int ktore_templaty = SHOW_TEMPLAT_MODLITBA
 	Log("option 0 == %ld, čo znamená: \n", _global_opt[OPT_0_SPECIALNE]);
 	Log("\t BIT_OPT_0_VERSE == %ld (áno == %ld)\n", _global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_VERSE, BIT_OPT_0_VERSE);
 	Log("\t BIT_OPT_0_REFERENCIE == %ld (áno == %ld)\n", _global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_REFERENCIE, BIT_OPT_0_REFERENCIE);
+	Log("\t BIT_OPT_0_REF_BIBLE_COM == %ld (áno == %ld)\n", _global_opt[OPT_0_SPECIALNE] & BIT_OPT_0_REF_BIBLE_COM, BIT_OPT_0_REF_BIBLE_COM);
 
 	// log option 1
 	Log("option 1 == %ld, čo znamená: \n", _global_opt[OPT_1_CASTI_MODLITBY]);
@@ -4917,6 +4995,10 @@ short int atojazyk(char *jazyk) {
 // popis: vráti číslo kalendára, napr. rehoľný
 //        inak vráti KALENDAR_NEURCENY
 short int atokalendar(char *kalendar) {
+	if (_global_jazyk == JAZYK_CZ_OP) {
+		// for JAZYK_CZ_OP, only one special kalendar available
+		return KALENDAR_CZ_OP;
+	}
 	short int i = 0;
 	do {
 		if (equalsi(kalendar, skratka_kalendara[i]) || equalsi(kalendar, nazov_kalendara_short[i]) || equalsi(kalendar, nazov_kalendara_smart[i]) || equalsi(kalendar, nazov_kalendara_long[i])) {
@@ -6497,11 +6579,26 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 		long strlen_popisok_kalendar = 0, strlen_popisok_lokal = 0;
 		strlen_popisok_kalendar = strlen(popisok_kalendar);
 		strlen_popisok_lokal = strlen(popisok_lokal);
-		if (strlen_popisok_kalendar + strlen_popisok_lokal > 0){
-			if ((strlen_popisok_kalendar > 0) && (strlen_popisok_lokal > 0)){
-				strcat(popisok_kalendar, STR_VERTICAL_BAR_WITH_SPACES);
+
+		if (strlen_popisok_kalendar + strlen_popisok_lokal > 0) {
+			if ((strlen_popisok_kalendar > 0) && (strlen_popisok_lokal > 0)) {
+				// before both strings were in parentheses respectively divided by STR_VERTICAL_BAR_WITH_SPACES
+				strcat(popisok_kalendar, STR_SPACE);
 			}
-			sprintf(pom, "\n" HTML_LINE_BREAK "<" HTML_SPAN_RED_SUBTITLE ">(%s%s)" HTML_SPAN_END "\n", popisok_kalendar, popisok_lokal);
+
+			sprintf(pom, "\n" HTML_LINE_BREAK "<" HTML_SPAN_RED_SUBTITLE ">");
+
+			if (strlen_popisok_kalendar > 0) {
+				strcat(pom, popisok_kalendar);
+			}
+			if (strlen_popisok_lokal > 0) {
+				strcat(pom, "(");
+				strcat(pom, popisok_lokal);
+				strcat(pom, ")");
+			}
+
+			strcat(pom, HTML_SPAN_END "\n");
+
 			Log("pridávam lokalizáciu slávenia resp. poznámku o lokálnom kalendári: %s\n", pom);
 			strcat(_local_string, pom);
 		}
@@ -6876,6 +6973,9 @@ void xml_export_options(void){
 					break;
 				case 11: // BIT_OPT_0_ZALMY_FULL_TEXT
 					Export(ELEMOPT_BEGIN(XML_BIT_OPT_0_ZALMY_FULL_TEXT)"%ld" ELEM_END(XML_BIT_OPT_0_ZALMY_FULL_TEXT) "\n", BIT_OPT_0_ZALMY_FULL_TEXT, STR_FORCE_BIT_OPT_0_ZALMY_FULL_TEXT, html_text_opt_0_zalmy_full_text[_global_jazyk], (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ZALMY_FULL_TEXT)));
+					break;
+				case 12: // BIT_OPT_0_REF_BIBLE_COM
+					Export(ELEMOPT_BEGIN(XML_BIT_OPT_0_REF_BIBLE_COM)"%ld" ELEM_END(XML_BIT_OPT_0_REF_BIBLE_COM) "\n", BIT_OPT_0_REF_BIBLE_COM, STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, html_text_opt_0_ref_bible_com[_global_jazyk], (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)));
 					break;
 				} // switch(j)
 			}// for j
@@ -9393,10 +9493,10 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 			Export("<option%s>%s</option>\n",
 				(_global_kalendar == KALENDAR_CZ_SDB) ? html_option_selected : STR_EMPTY,
 				nazov_kalendara_vyber[KALENDAR_CZ_SDB]);
-#if defined(DEBUG) || defined(OS_Windows_Ruby)
 			Export("<option%s>%s</option>\n",
 				(_global_kalendar == KALENDAR_CZ_OFM) ? html_option_selected : STR_EMPTY,
 				nazov_kalendara_vyber[KALENDAR_CZ_OFM]);
+#if defined(DEBUG) || defined(OS_Windows_Ruby)
 			Export("<option%s>%s</option>\n",
 				(_global_kalendar == KALENDAR_CZ_CSSR) ? html_option_selected : STR_EMPTY,
 				nazov_kalendara_vyber[KALENDAR_CZ_CSSR]);
@@ -9796,13 +9896,18 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_VERSE
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_VERSE, STR_FORCE_BIT_OPT_0_VERSE, html_text_opt_0_verse[_global_jazyk], html_text_opt_0_verse_explain[_global_jazyk]);
 
-		if((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_HU)){
-			// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_REF
-			_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_REFERENCIE, STR_FORCE_BIT_OPT_0_REF, html_text_opt_0_referencie[_global_jazyk], html_text_opt_0_referencie_explain[_global_jazyk]);
-		}// if((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_HU))
-		else{
-			Export(HTML_FORM_INPUT_HIDDEN " name=\"%s\" value=\"%d\"" HTML_FORM_INPUT_END "\n", STR_FORCE_BIT_OPT_0_REF, (isGlobalOptionForce(OPT_0_SPECIALNE, BIT_OPT_0_REFERENCIE)) ? ANO : NIE);
-		}// else: treba nastaviť hidden pre všetky options pre _global_force_opt
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_REF
+		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_REFERENCIE, STR_FORCE_BIT_OPT_0_REF, html_text_opt_0_referencie[_global_jazyk], html_text_opt_0_referencie_explain[_global_jazyk]);
+
+#ifdef OS_Windows_Ruby
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_REF_BIBLE_COM
+		Export(HTML_CRLF_LINE_BREAK);
+		Export(HTML_NONBREAKING_SPACE_LOOONG);
+		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM, STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, html_text_opt_0_ref_bible_com[_global_jazyk], html_text_opt_0_ref_bible_com_explain[_global_jazyk], NIE);
+#else
+		// else: treba nastaviť hidden pre všetky options pre _global_force_opt
+		Export(HTML_FORM_INPUT_HIDDEN " name=\"%s\" value=\"%d\"" HTML_FORM_INPUT_END "\n", STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, (isGlobalOptionForce(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) ? ANO : NIE);
+#endif
 
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_FOOTNOTES
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_FOOTNOTES, STR_FORCE_BIT_OPT_0_FOOTNOTES, html_text_opt_0_footnotes[_global_jazyk], html_text_opt_0_footnotes_explain[_global_jazyk]);
@@ -14538,6 +14643,18 @@ void _batch_mode_header(short mesiac, short rok)
 	fprintf(batch_month_file, HTML_A_END "" HTML_P_END);
 	// koniec hlavičky
 }
+
+#ifdef __APPLE__
+#include "TargetConditionals.h"
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+#define system(arg)
+#elif TARGET_OS_MAC
+#else
+#   error "Unknown Apple platform"
+#endif
+#else
+// nothing for Windows & unices
+#endif
 
 // dostane vela char *; najprv ich skontroluje a potom ak je vsetko v poriadku, do export fajlu generuje command-line prikazy pre vytvorenie modlitby na jednotlive dni dane obdobim
 void _main_batch_mode(

@@ -33,8 +33,6 @@
 #include "mystring.h"
 #include "liturgia.h"
 
-#define MAIL_ADDRESS_DEFAULT "videky@breviar.sk"
-
 char cfg_HTTP_ADDRESS_default[MAX_HTTP_STR] = "http://breviar.sk/";
 char cfg_HTTP_DISPLAY_ADDRESS_default[MAX_HTTP_STR] = "breviar.sk";
 char cfg_MAIL_ADDRESS_default[MAX_MAIL_STR] = "videky@breviar.sk";
@@ -287,6 +285,8 @@ void readConfig(void)
 				LogConfig("Pre option %d nastavujem bit pre '%ld'\n", OPT_2_HTML_EXPORT, BIT_OPT_2_ROZNE_MOZNOSTI);
 				cfg_option_default[OPT_2_HTML_EXPORT][j] += BIT_OPT_2_ROZNE_MOZNOSTI;
 			}
+			/*
+			// 2017-09-12, JUV: commented
 			if((cfg_option_default[OPT_2_HTML_EXPORT][j] & BIT_OPT_2_HIDE_NAVIG_BUTTONS) != BIT_OPT_2_HIDE_NAVIG_BUTTONS){
 				LogConfig("Pre option %d nastavujem bit pre '%ld'\n", OPT_2_HTML_EXPORT, BIT_OPT_2_HIDE_NAVIG_BUTTONS);
 				cfg_option_default[OPT_2_HTML_EXPORT][j] += BIT_OPT_2_HIDE_NAVIG_BUTTONS;
@@ -295,6 +295,7 @@ void readConfig(void)
 				LogConfig("Pre option %d nastavujem bit pre '%ld'\n", OPT_2_HTML_EXPORT, BIT_OPT_2_HIDE_KALENDAR);
 				cfg_option_default[OPT_2_HTML_EXPORT][j] += BIT_OPT_2_HIDE_KALENDAR;
 			}
+			*/
 			if((cfg_option_default[OPT_2_HTML_EXPORT][j] & BIT_OPT_2_HIDE_OPTIONS1) != BIT_OPT_2_HIDE_OPTIONS1){
 				LogConfig("Pre option %d nastavujem bit pre '%ld'\n", OPT_2_HTML_EXPORT, BIT_OPT_2_HIDE_OPTIONS1);
 				cfg_option_default[OPT_2_HTML_EXPORT][j] += BIT_OPT_2_HIDE_OPTIONS1;

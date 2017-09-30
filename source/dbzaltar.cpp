@@ -1137,9 +1137,12 @@ void file_name_litobd_pc(short int litobd){
 	sprintf(_file_pc, "%s", nazov_obd_htm_pc[litobd]);
 }
 
-void file_name_vlastny_kalendar(short int kalendar){
-	sprintf(_file, "%s", nazov_htm_kalendar[kalendar]);
-	sprintf(_file_pc, "%s", nazov_htm_kalendar[kalendar]);
+void file_name_vlastny_kalendar(short int kalendar) {
+	// do not use for JAZYK_CZ_OP even if called
+	if (_global_jazyk != JAZYK_CZ_OP) {
+		sprintf(_file, "%s", nazov_htm_kalendar[kalendar]);
+		sprintf(_file_pc, "%s", nazov_htm_kalendar[kalendar]);
+	}
 }
 
 void file_name_kompletorium(short int litobd){
@@ -4076,15 +4079,26 @@ void _set_zalmy_pc_45_87(short int modlitba){
 }// _set_zalmy_pc_45_87()
 
 // CZOP (07NOV)
-void _set_zalmy_vesp_110_116_ef(short int modlitba){
+void _set_zalmy_vesp_110_116_ef(short int modlitba) {
 	Log("_set_zalmy_vesp_110_116_ef(%s) -- begin\n", nazov_modlitby(modlitba));
-	if (modlitba == MODL_VESPERY){
+	if (modlitba == MODL_VESPERY) {
 		set_zalm(1, modlitba, "z110.htm", "ZALM110");
 		set_zalm(2, modlitba, "z116.htm", "ZALM116,10-19");
 		set_zalm(3, modlitba, "ch_ef1.htm", "CHVAL_EF1");
 	}
 	Log("_set_zalmy_vesp_110_116_ef(%s) -- end\n", nazov_modlitby(modlitba));
 }// _set_zalmy_vesp_110_116_ef()
+
+ // SK OFM (21JUL)
+void _set_zalmy_vesp_110_122_zjv15(short int modlitba) {
+	Log("_set_zalmy_vesp_110_122_zjv15(%s) -- begin\n", nazov_modlitby(modlitba));
+	if (modlitba == MODL_VESPERY) {
+		set_zalm(1, modlitba, "z110.htm", "ZALM110");
+		set_zalm(2, modlitba, "z122.htm", "ZALM122");
+		set_zalm(3, modlitba, "ch_zjv15.htm", "CHVAL_ZJV15");
+	}
+	Log("_set_zalmy_vesp_110_122_zjv15(%s) -- end\n", nazov_modlitby(modlitba));
+}// _set_zalmy_vesp_110_122_zjv15()
 
 // SK OP (07NOV)
 void _set_zalmy_vesp_89_98_kol(short int modlitba){
@@ -10446,6 +10460,10 @@ _struct_anchor_and_count pocet_citanie2_multi_anchor_count[] = {
 	{ JAZYK_SK, "15SEP_cCIT2", 2 },
 	{ JAZYK_UNDEF, "VPCHR_cCIT2", 2 },
 	{ JAZYK_SK, "25NOV_cCIT2", 2 },
+	{ JAZYK_CZ_OP, "15AUG_cCIT2", 2 },
+	{ JAZYK_SK, "16SEP_cCIT2", 2 },
+	{ JAZYK_LA, "16SEP_cCIT2", 2 },
+	{ JAZYK_HU, "16SEP_cCIT2", 2 },
 };
 
 _struct_anchor_and_count pocet_antifona_multi_anchor_count[] = {
@@ -10467,6 +10485,7 @@ _struct_anchor_and_count pocet_antifona_multi_anchor_count[] = {
 	{ JAZYK_UNDEF, "SCSMRH_rBENEDIKTUS", 2 },
 	{ JAZYK_UNDEF, "SCSZRH_vMAGNIFIKAT", 2 },
 	{ JAZYK_UNDEF, "SCSMRH_vMAGNIFIKAT", 2 },
+	{ JAZYK_CZ_OP, "15AUG_rBENEDIKTUS", 2 },
 };
 
 _struct_anchor_and_count pocet_modlitba_multi_anchor_count[] = {

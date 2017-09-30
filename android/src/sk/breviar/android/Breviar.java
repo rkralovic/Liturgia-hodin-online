@@ -125,6 +125,9 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
 
     public boolean tryOpenBible(String url) {
       try {
+        if (url.startsWith("https://")) {
+          url = "http://" + url.substring(8);
+        }
         UrlOptions opts = new UrlOptions(S.getOpts());
         startActivity(new Intent("sk.ksp.riso.svpismo.action.SHOW", Uri.parse(url))
                           .putExtra("nightmode", opts.isNightmode()));
@@ -205,7 +208,7 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
             startActivity(emailIntent);
             return true;
           }
-          if (url.startsWith("http://dkc.kbs.sk")) {
+          if (url.startsWith("http://dkc.kbs.sk") || url.startsWith("https://dkc.kbs.sk")) {
             if (tryOpenBible(url)) return true;
           }
           if (url.startsWith("svpismo:")) {

@@ -627,10 +627,19 @@ extern const char *ORDINARIUM[POCET_MODLITIEB + 1];
 #define PARAM_PSALM_FULL_TEXT_SOFT_BEGIN    "full-text-soft"
 #define PARAM_PSALM_FULL_TEXT_SOFT_END      SYMBOL_END "" PARAM_PSALM_FULL_TEXT_SOFT_BEGIN
 
-// zobrazovanie/nezobrazovanie hviezdičky v krátkych responzóriách, príp. v antifónach (červenou farbou)
-#define PARAM_RED_KRIZIK                    "†"
-#define PARAM_RED_HVIEZDICKA                "*"
-#define PARAM_RED_TROJUHOLNIK               "△" // uppercase delta: Δ
+// red stuff in antiphones etc. (red cross, red asterisk, red triangle)
+#define PARAM_RED_CROSS                     "†" // used as flexa | U+2020 DAGGER
+#define PARAM_RED_CROSS_TXT                 "CROSS" // alternative due to Unicode problem when interpreting template (2017-08-14)
+#define PARAM_RED_ASTERISK                  "*"
+#define PARAM_RED_TRIANGLE                  "△" // 'uppercase delta': Δ (used for doxology) | U+25B3 WHITE UP-POINTING TRIANGLE
+#define PARAM_RED_TRIANGLE_TXT              "TRIANGLE" // alternative due to Unicode problem when interpreting template (2017-08-14)
+/*
+// red stuff prepared (not yet used) as indication for singing
+#define PARAM_RED_SINGLE_BAR                "|" // used for pause in antiphons & responsories (when singing)
+#define PARAM_RED_DOUBLE_BAR                "||" // used for indication that chorus should join (when singing antiphons & responsories)
+#define PARAM_RED_CROSS_DOUBLE_BAR          "†||"
+#define PARAM_RED_SMALL_CIRCLE              "°" // used for elevation in prayer
+*/
 
 // zobrazovanie/nezobrazenie krížika (antifóna totožná s veršom žalmu/chválospevu)
 #define PARAM_KRIZIK                        "KRIZIK"
@@ -1039,6 +1048,7 @@ extern const char *nazov_slavenia_lokal[];
 #define LOKAL_SLAV_MINSK_PINSK_SPOMIENKA   130
 #define LOKAL_SLAV_VICEB_SL_MINSK_PINSK_SV 131
 #define LOKAL_SLAV_GRODZ_SL_PINSK_MINSK_SP 132
+#define LOKAL_SLAV_PRAHA_OFM               133
 
 // calendar
 #define KALENDAR_NEURCENY                   0 // undefined
@@ -1081,7 +1091,7 @@ const short int default_kalendar[POCET_JAZYKOV + 1] =
 	/* ToDo */ KALENDAR_VSEOBECNY,
 	/* ToDo */ KALENDAR_VSEOBECNY,
 	KALENDAR_NEURCENY,
-	KALENDAR_CZ_OP,
+	KALENDAR_VSEOBECNY_CZ,
 	KALENDAR_VSEOBECNY_HU,
 	KALENDAR_VSEOBECNY_RU,
 	KALENDAR_VSEOBECNY_BY,
@@ -1355,12 +1365,12 @@ extern long _global_force_opt[POCET_GLOBAL_OPT];
 #define USE_STR_OPT           -2
 #define USE_STR_FORCE_OPT     -1
 
-#define POCET_OPT_0_SPECIALNE              12 // jednotlivé komponenty option 0 -- bity pre force option 0
+#define POCET_OPT_0_SPECIALNE              13 // jednotlivé komponenty option 0 -- bity pre force option 0
 extern long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 // 2011-04-08: úprava významu (a interpretácie) option 0 ==  OPT_0_SPECIALNE (zobraziť/nezobraziť "pridanú hodnotu" oproti papierovej LH)
-#define BIT_OPT_0_VERSE                     1
-#define BIT_OPT_0_REFERENCIE                2
-#define BIT_OPT_0_CITANIA                   4
+#define BIT_OPT_0_VERSE                     1 // export also verse numbers
+#define BIT_OPT_0_REFERENCIE                2 // export Bible references as live URLs (default: proper webpage for given language; override: BIT_OPT_0_REF_BIBLE_COM, use bible.com)
+#define BIT_OPT_0_CITANIA                   4 // export also scripture readings for mass
 #define BIT_OPT_0_ZJAVENIE_PANA_NEDELA      8 // či sa Zjavenie Pána slávi v nedeľu (1) alebo nie (teda 6. januára; hodnota 0 == default)
 #define BIT_OPT_0_NANEBOVSTUPNENIE_NEDELA  16 // či sa Nanebovstúpenie Pána slávi v nedeľu (1) alebo nie (teda vo štvrtok, na 40.-ty deň po Veľkonočnej nedeli; hodnota 0 == default)
 #define BIT_OPT_0_TELAKRVI_NEDELA          32 // či sa Najsv. Kristovho tela a krvi slávi v nedeľu (1) alebo nie (teda vo štvrtok, 11.-ty deň po Zoslaní Ducha Sv.; hodnota 0 == default)
@@ -1370,6 +1380,7 @@ extern long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_FOOTNOTES               512 // display footnotes and footnote references
 #define BIT_OPT_0_TRANSPARENT_NAV        1024 // transparent navigation arrow in text
 #define BIT_OPT_0_ZALMY_FULL_TEXT        2048 // display full text of psalms (also with carets from official LH edition, e. g. verse 6 in psalm 110)
+#define BIT_OPT_0_REF_BIBLE_COM          4096 // precondition: BIT_OPT_0_REFERENCIE must be true; instead of standard URL, generates link to bible.com
 
 #define POCET_OPT_1_CASTI_MODLITBY         18 // jednotlivé komponenty option 1 -- bity pre force option 1
 extern long _global_opt_1_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
@@ -1526,6 +1537,7 @@ short int _deallocate_global_var(void);
 short int cislo_mesiaca(char *mesiac);
 char *mystr_UPPERCASE(const char *input);
 char *mystr_remove_diacritics(const char *input);
+char *mystr_bible_com(const char *input);
 char *convert_nonbreaking_spaces(const char *input);
 
 char *_vytvor_string_z_datumu_ext(short int den, short int mesiac, short int rok, short int _case, short int align);
@@ -1774,8 +1786,6 @@ extern const char *text_ZAKONCENIE_KTORY_JE_dlhe; // len SK
 extern const char *text_ZAKONCENIE_KTORY_JE_kratke; // len SK
 extern const char *text_ZAKONCENIE_O_TO_TA_PROSIME[POCET_JAZYKOV + 1];
 
-extern const char *text_PRO_OP[POCET_JAZYKOV + 1];
-
 extern const char *html_text_batch_Back[POCET_JAZYKOV + 1];
 extern const char *html_text_batch_Prev[POCET_JAZYKOV + 1];
 extern const char *html_text_batch_Next[POCET_JAZYKOV + 1];
@@ -1786,6 +1796,8 @@ struct _anchor_and_count {
 	short int count;
 };
 typedef struct _anchor_and_count _struct_anchor_and_count;
+
+extern const char *bible_version_id_default[POCET_JAZYKOV + 1];
 
 #endif // __LITURGIA_H_
 

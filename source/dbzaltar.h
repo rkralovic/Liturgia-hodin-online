@@ -155,6 +155,7 @@ extern void _set_zalmy_pc_15_66(short int modlitba);
 extern void _set_zalmy_pc_40_27(short int modlitba);
 extern void _set_zalmy_pc_45_87(short int modlitba);
 extern void _set_zalmy_vesp_110_116_ef(short int modlitba);
+extern void _set_zalmy_vesp_110_122_zjv15(short int modlitba);
 extern void _set_zalmy_vesp_89_98_kol(short int modlitba);
 extern void _set_zalmy_vesp_113_146_ef(short int modlitba);
 extern void _set_zalmy_vesp_127_111_kol(short int modlitba);
@@ -704,6 +705,15 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	if(modl == MODL_RANNE_CHVALY){_vlastna_cast_benediktus;}\
 	else if((modl == MODL_VESPERY) || (modl == MODL_PRVE_VESPERY)){_vlastna_cast_magnifikat;}\
 	else if(modl == MODL_POSV_CITANIE){_vlastna_cast_2citanie;}\
+	_vlastna_cast_modlitba;\
+}
+
+#define _vlastna_cast_full_okrem_antifon_a_kcit_kresp(modl) {\
+	_vlastna_cast_hymnus(modl, _global_den.litobd);\
+	if(modl == MODL_RANNE_CHVALY){_vlastna_cast_benediktus;}\
+	else if((modl == MODL_VESPERY) || (modl == MODL_PRVE_VESPERY)){_vlastna_cast_magnifikat;}\
+	else if(modl == MODL_POSV_CITANIE){_vlastna_cast_2citanie;}\
+	_vlastna_cast_prosby;\
 	_vlastna_cast_modlitba;\
 }
 
@@ -1782,13 +1792,14 @@ extern const char *text_NOV_26_SJ[POCET_JAZYKOV + 1];
 extern const char *text_DEC_01_SJ[POCET_JAZYKOV + 1];
 extern const char *text_DEC_03_SJ[POCET_JAZYKOV + 1];
 
-// --------------- OFM propriá ---------------
+// --------------- OFM + OFMCap propriá ---------------
 extern const char *text_JAN_04_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_05_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_12_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_14_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_16_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JAN_20_OFM[POCET_JAZYKOV + 1];
+extern const char *text_JAN_29_OFMCONV[POCET_JAZYKOV + 1];
 extern const char *text_JAN_30_OFM[POCET_JAZYKOV + 1];
 extern const char *text_FEB_04_OFM[POCET_JAZYKOV + 1];
 extern const char *text_FEB_06_OFM[POCET_JAZYKOV + 1];
@@ -1799,6 +1810,7 @@ extern const char *text_MAR_02_OFM[POCET_JAZYKOV + 1];
 extern const char *text_MAR_12_OFM[POCET_JAZYKOV + 1];
 extern const char *text_MAR_18_OFM[POCET_JAZYKOV + 1];
 extern const char *text_APR_21_OFM[POCET_JAZYKOV + 1];
+extern const char *text_APR_22_OFM[POCET_JAZYKOV + 1];
 extern const char *text_APR_23_OFM[POCET_JAZYKOV + 1];
 extern const char *text_APR_24_OFM[POCET_JAZYKOV + 1];
 extern const char *text_APR_28_OFM[POCET_JAZYKOV + 1];
@@ -1820,6 +1832,7 @@ extern const char *text_MAJ_24_OFM[POCET_JAZYKOV + 1];
 extern const char *text_MAJ_28_OFM[POCET_JAZYKOV + 1];
 extern const char *text_MAJ_30_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JUN_02_OFM[POCET_JAZYKOV + 1];
+extern const char *text_JUN_07_OFMCONV[POCET_JAZYKOV + 1];
 extern const char *text_JUN_08_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JUN_12_OFM[POCET_JAZYKOV + 1];
 extern const char *text_JUN_12_2_OFM[POCET_JAZYKOV + 1];
@@ -1867,6 +1880,7 @@ extern const char *text_SEP_18_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_19_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_22_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_23_OFM[POCET_JAZYKOV + 1];
+extern const char *text_SEP_24_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_25_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_26_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_28_OFM[POCET_JAZYKOV + 1];
@@ -1900,6 +1914,7 @@ extern const char *text_DEC_02_1_OFM[POCET_JAZYKOV + 1];
 extern const char *text_DEC_02_2_OFM[POCET_JAZYKOV + 1];
 
 // --------------- OP propriá ---------------
+extern const char *text_JAN_03_OP[POCET_JAZYKOV + 1];
 extern const char *text_JAN_10_1_OP[POCET_JAZYKOV + 1];
 extern const char *text_JAN_10_2_OP[POCET_JAZYKOV + 1];
 extern const char *text_JAN_11_OP[POCET_JAZYKOV + 1];
@@ -1977,6 +1992,8 @@ extern const char *text_AUG_26_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_02_1_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_02_2_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_04_OP[POCET_JAZYKOV + 1];
+extern const char *text_SEP_05_1_OP[POCET_JAZYKOV + 1];
+extern const char *text_SEP_05_2_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_06_1_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_06_2_OP[POCET_JAZYKOV + 1];
 extern const char *text_SEP_18_OP[POCET_JAZYKOV + 1];
