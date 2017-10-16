@@ -1042,6 +1042,19 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 /* ---------------------------------------------------------------------------------------------------- */
 
+// _anchor_head pre spoločné časti obsahuje už aj underscore; spoločné časti používajú súbor _file (nie _file_pc)
+#define _spolocna_cast_set_vig_ant(vlastny_anchor) { \
+	sprintf(_anchor, "%s%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG); \
+	_set_antifona_vig(modlitba, _file, _anchor); \
+	set_LOG_litobd_pc; \
+}
+
+#define _spolocna_cast_set_vig_ev(vlastny_anchor) { \
+	sprintf(_anchor, "%s%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_EVANJELIUM); \
+	_set_evanjelium(modlitba, _file, _anchor); \
+	set_LOG_litobd_pc; \
+}
+
 #define _vlastne_slavenie_set_vig_ant(vlastny_anchor) { \
 	sprintf(_anchor, "%s_%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA_VIG); \
 	_set_antifona_vig(modlitba, _file_pc, _anchor); \
@@ -1897,7 +1910,7 @@ extern const char *text_OKT_23_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_25_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_26_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_30_HU_OFM[POCET_JAZYKOV + 1];
-extern const char *text_OKT_31_OFM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_31_OFMCAP[POCET_JAZYKOV + 1];
 extern const char *text_NOV_03_OFM[POCET_JAZYKOV + 1];
 extern const char *text_NOV_06_OFM[POCET_JAZYKOV + 1];
 extern const char *text_NOV_08_OFM[POCET_JAZYKOV + 1];

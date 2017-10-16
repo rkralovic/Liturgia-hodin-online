@@ -1100,11 +1100,17 @@ void _set_chvalospev_vig_tk(short int modlitba){
 	_set_chvalospev3(modlitba, "ch_mud16.htm", "CHVAL_MUD16VG");
 }// _set_chvalospev_vig_tk()
 
-void _set_chvalospev_vig_srdca(short int modlitba){
+void _set_chvalospev_vig_srdca(short int modlitba) {
 	_set_chvalospev1(modlitba, "ch_iz12.htm", "CHVAL_IZ12VG");
 	_set_chvalospev2(modlitba, "ch_1sam2.htm", "CHVAL_1SAM2VG1");
 	_set_chvalospev3(modlitba, "ch_1sam2.htm", "CHVAL_1SAM2VG2");
 }// _set_chvalospev_vig_srdca()
+
+void _set_chvalospev_vig_krkrala(short int modlitba) {
+	_set_chvalospev1(modlitba, "ch_1krn29.htm", "CHVAL_1KRN29VG");
+	_set_chvalospev2(modlitba, "ch_iz12.htm", "CHVAL_IZ12VG2");
+	_set_chvalospev3(modlitba, "ch_iz61.htm", "CHVAL_IZ61VG");
+}// _set_chvalospev_vig_krkrala()
 
 void _set_chvalospev_vig_post(short int modlitba){
 	_set_chvalospev1(modlitba, "ch_jer14.htm", "CHVAL_JER14VG");
@@ -1112,11 +1118,17 @@ void _set_chvalospev_vig_post(short int modlitba){
 	_set_chvalospev3(modlitba, "ch_nar5.htm", "CHVAL_NAR5VG");
 }// _set_chvalospev_vig_post()
 
-void _set_chvalospev_vig_vn(short int modlitba){
+void _set_chvalospev_vig_vn(short int modlitba) {
 	_set_chvalospev1(modlitba, "ch_iz63.htm", "CHVAL_IZ63VG");
 	_set_chvalospev2(modlitba, "ch_oz6.htm", "CHVAL_OZ6VG");
 	_set_chvalospev3(modlitba, "ch_sof3.htm", "CHVAL_SOF3VG");
 }// _set_chvalospev_vig_vn()
+
+void _set_chvalospev_vig_sc_vpchr(short int modlitba) {
+	_set_chvalospev1(modlitba, "ch_tob13.htm", "CHVAL_TOB13,8-11VG");
+	_set_chvalospev2(modlitba, "ch_iz2.htm", "CHVAL_IZ2VG");
+	_set_chvalospev3(modlitba, "ch_jer7.htm", "CHVAL_JER7VG");
+}// _set_chvalospev_vig_sc_vpchr()
 
 // files - nazvy suborov pre zaltar styroch tyzdnov
 char _file[SMALL]; // nazov súboru, napr. _1ne.htm
@@ -4134,23 +4146,28 @@ void _set_zalmy_vesp_127_111_kol(short int modlitba){
 }// _set_zalmy_vesp_127_111_kol()
 
 // OFM (04OKT)
-void _set_zalmy_ofm_frantisek(short int modlitba){
+void _set_zalmy_ofm_frantisek(short int modlitba) {
 	Log("_set_zalmy_ofm_frantisek(%s) -- begin\n", nazov_modlitby(modlitba));
-	if (modlitba == MODL_VESPERY){
+	if (modlitba == MODL_VESPERY) {
 		set_zalm(1, modlitba, "z113.htm", "ZALM113");
 		set_zalm(2, modlitba, "z146.htm", "ZALM146");
 		set_zalm(3, modlitba, "ch_ef1.htm", "CHVAL_EF1");
 	}
-	else if (modlitba == MODL_PRVE_VESPERY){
+	else if (modlitba == MODL_PRVE_VESPERY) {
 		set_zalm(1, modlitba, "z112.htm", "ZALM112");
 		set_zalm(2, modlitba, "z147.htm", "ZALM147,12-20");
 		set_zalm(3, modlitba, "z142.htm", "ZALM142"); // !!! sic, p. 512
 	}
-	else if (modlitba == MODL_RANNE_CHVALY){
+	else if (modlitba == MODL_RANNE_CHVALY) {
 		_set_zalmy_1nedele_rch();
 	}
-	else if (modlitba == MODL_POSV_CITANIE){
-		_set_zalmy_pc_1_8_16(modlitba);
+	else if (modlitba == MODL_POSV_CITANIE) {
+		if (_global_jazyk == JAZYK_CZ) {
+			_set_zalmy_pc_1_8_15(modlitba); // Žl 15 (14) (CZ)
+		}
+		else {
+			_set_zalmy_pc_1_8_16(modlitba); // Ž 16 (SK, HU)
+		}
 	}
 	Log("_set_zalmy_ofm_frantisek(%s) -- end\n", nazov_modlitby(modlitba));
 }// _set_zalmy_ofm_frantisek()
@@ -6638,6 +6655,7 @@ label_24_DEC:
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 					// predĺžené slávenie vigílií v rámci posvätných čítaní | modlitba = MODL_POSV_CITANIE;
 					_vlastne_slavenie_set_vig_ant(_anchor_vlastne_slavenie);
+					// ToDo chválospevy
 					_vlastne_slavenie_set_vig_ev(_anchor_vlastne_slavenie);
 
 					modlitba = MODL_PREDPOLUDNIM;
@@ -6728,7 +6746,8 @@ label_24_DEC:
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 
 				}// pre redemptoristov: 3. nedeľa v júli
-				else if(tyzden == 34){
+
+				else if (tyzden == 34) {
 					// krista krala -- 34. nedela obdobia `cez rok'
 					mystrcpy(_file, FILE_KRISTA_KRALA, MAX_STR_AF_FILE);
 					mystrcpy(_anchor, ANCHOR_KRISTA_KRALA, MAX_STR_AF_ANCHOR);
@@ -6769,6 +6788,11 @@ label_24_DEC:
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
+					// posvätné čítanie -- predĺžené slávenie vigílie
+					modlitba = MODL_POSV_CITANIE;
+					_vlastne_slavenie_set_vig_ant(_anchor_vlastne_slavenie);
+					_set_chvalospev_vig_krkrala(modlitba);
+					_vlastne_slavenie_set_vig_ev(_anchor_vlastne_slavenie);
 
 					modlitba = MODL_VESPERY;
 					_set_zalmy_krista_krala(modlitba);
@@ -6809,6 +6833,7 @@ label_24_DEC:
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				}// krista krala
 			}// nedeľa v období cez rok (cezročnom období)
+
 			// féria v Cezročnom období
 			else{
 				// nie je nedela, ale len bezny den - feria - v obdobi cez rok
@@ -10131,6 +10156,10 @@ void __set_spolocna_cast(short int a, short int poradie_svaty, _struct_sc sc, in
 		// - II. zväzok (veľká noc),
 		// - III. a IV. zväzok (obdobie cez rok).
 		_spolocna_cast_1cit_zvazok(modlitba, _anchor_pom, _anchor_zvazok, _anchor_head, _file, force);
+		// predĺžené slávenie vigílií
+		_spolocna_cast_set_vig_ant(_anchor_head);
+		_set_chvalospev_vig_sc_vpchr(modlitba);
+		_spolocna_cast_set_vig_ev(_anchor_head);
 
 		// ranné chvály
 		modlitba = MODL_RANNE_CHVALY;

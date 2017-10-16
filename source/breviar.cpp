@@ -1504,7 +1504,10 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 #endif
 
 	// nastavenie toho, či sa má zobrazovať myšlienka k žalmom/chválospevom | doplnené aj nastavenie pre zobrazenie nadpisu pre žalm/chválospev (zatiaľ rovnako ako pre myšlienku)
-	if ((isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) || _je_global_den_slavnost || _je_global_den_sviatok || (_global_den.typslav == SLAV_VLASTNE) || (_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || (_global_den.smer == 1) /* && (_global_den.spolcast != _encode_spol_cast(MODL_SPOL_CAST_NEURCENA)) */) {
+	// orig: if ((isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) || _je_global_den_slavnost || _je_global_den_sviatok || (_global_den.typslav == SLAV_VLASTNE) || (_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || (_global_den.smer == 1) && (_global_den.spolcast != _encode_spol_cast(MODL_SPOL_CAST_NEURCENA))) {
+	// last part was commented
+	// 2017-10-13: nevidím dôvod, prečo by sa to nemalo zobrazovať vždy OKREM blind-friendly režimu (voice output)
+	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_BLIND_FRIENDLY)) {
 		je_myslienka = NIE;
 		je_nadpis = NIE;
 	}
@@ -2024,28 +2027,12 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 
 						if (EXPORT_REFERENCIA) {
 							if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) {
-								Export(HTML_A_HREF_BEGIN "\"https://www.bible.com/bible/");
-#if defined(IO_ANDROID) || defined(__APPLE__)
-								// nothing to add here
-#else
-								// for web, add default version id
-								Export("%s" STR_SLASH, bible_version_id_default[_global_jazyk]);
-#endif // IO_ANDROID || __APPLE__
-
+								Export(HTML_A_HREF_BEGIN "\"%s", cfg_http_bible_com_references_default[_global_jazyk]);
+								// add default version id
+								Export("%s" STR_SLASH, cfg_bible_com_version_id_default[_global_jazyk]);
 							}
 							else {
-
-								// ToDo: to be moved as default to config file (URL for default bible translation)
-
-								if (_global_jazyk == JAZYK_HU) {
-									Export(HTML_A_HREF_BEGIN "\"http://www.szentiras.hu/SZIT/");
-								}
-								else if (_global_jazyk == JAZYK_SK) {
-									Export(HTML_A_HREF_BEGIN "\"https://dkc.kbs.sk/?in=");
-								}
-								else {
-									Export(HTML_A_HREF_BEGIN "\"#");
-								}
+								Export(HTML_A_HREF_BEGIN "\"%s", cfg_http_bible_references_default[_global_jazyk]);
 							}
 						}
 
@@ -2080,16 +2067,16 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 						}
 
 						if (EXPORT_REFERENCIA) {
-#ifdef IO_ANDROID
-							Export("%s", mystr_remove_diacritics(reference));
-#else
 							if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) {
-								Export("%s", mystr_bible_com(reference));
+								Export("%s", mystr_bible_com(reference)); // no need to remove diacritics for bible.com even on Android
 							}
 							else {
+#ifdef IO_ANDROID
+								Export("%s", mystr_remove_diacritics(reference));
+#else
 								Export("%s", reference); // diacritics removal left only for Android
-							}
 #endif
+							}
 						}
 
 						if (EXPORT_REFERENCIA) {
@@ -3310,7 +3297,9 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 		}
 		else if (equals(paramname, PARAM_VIGILIA)) {
 			bit = BIT_OPT_1_PC_VIGILIA;
+			Log("podmienka == %d; _global_modlitba == %d; ant_chval.anchor == %s; ant_chval.file == %s\n", podmienka, _global_modlitba, _global_modl_posv_citanie.ant_chval.anchor, _global_modl_posv_citanie.ant_chval.file);
 			podmienka &= (je_vigilia);
+			Log("podmienka after & je_vigilia == %d\n", podmienka);
 			specific_string = HTML_SEQUENCE_PARAGRAPH; // HTML_P_BEGIN
 			sprintf(popis_show, "%s %s", html_text_option_skryt[_global_jazyk], html_text_opt_1_vigilia[_global_jazyk]);
 			sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_1_vigilia[_global_jazyk]);
@@ -7214,7 +7203,6 @@ void xml_export_options(void){
 }// xml_export_options()
 
 // predpokoladam, ze pred jeho volanim bolo pouzite analyzuj_rok(rok); ktore da vysledok do _global_r
-// ak poradie_svateho == 5, znamena to, ze analyzujem nasledujuci den.
 // dostane {den, mesiac} a rok
 short int _rozbor_dna_s_modlitbou(_struct_den_mesiac datum, short int rok, short int modlitba, short int poradie_svateho){
 	short int ret;
@@ -9677,18 +9665,18 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		_export_main_formular_checkbox(OPT_1_CASTI_MODLITBY, BIT_OPT_1_ZOBRAZ_SPOL_CAST, STR_FORCE_BIT_OPT_1_ZOBRAZ_SPOL_CAST, html_text_opt_1_spolc_svaty[_global_jazyk], html_text_opt_1_spolc_svaty_explain[_global_jazyk]);
 #endif
 
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV
+		_export_main_formular_checkbox(OPT_1_CASTI_MODLITBY, BIT_OPT_1_OVERRIDE_STUP_SLAV, STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV, html_text_opt_1_override_stupen_slavenia[_global_jazyk], html_text_opt_1_override_stupen_slavenia_explain[_global_jazyk]);
+
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST
+		Export(HTML_CRLF_LINE_BREAK);
+		Export(HTML_NONBREAKING_SPACE_LOOONG);
+		_export_main_formular_checkbox_slash(OPT_1_CASTI_MODLITBY, BIT_OPT_1_STUP_SVIATOK_SLAVNOST, STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST, html_text_opt_1_slavit_ako_sviatok[_global_jazyk], html_text_opt_1_slavit_ako_slavnost[_global_jazyk], NIE);
+
 		if(!isGlobalOptionForce(OPT_2_HTML_EXPORT, BIT_OPT_2_ROZNE_MOZNOSTI)){ // len ak NIE JE táto možnosť (zobrazovanie všeličoho) zvolená
 
 			// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_SPOMIENKA_SPOL_CAST
 			_export_main_formular_checkbox(OPT_1_CASTI_MODLITBY, BIT_OPT_1_SPOMIENKA_SPOL_CAST, STR_FORCE_BIT_OPT_1_SPOMIENKA_SPOL_CAST, html_text_opt_1_spomienka_spolcast[_global_jazyk], html_text_opt_1_spomienka_spolcast_explain[_global_jazyk]);
-
-			// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV
-			_export_main_formular_checkbox(OPT_1_CASTI_MODLITBY, BIT_OPT_1_OVERRIDE_STUP_SLAV, STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV, html_text_opt_1_override_stupen_slavenia[_global_jazyk], html_text_opt_1_override_stupen_slavenia_explain[_global_jazyk]);
-
-			// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST
-			Export(HTML_CRLF_LINE_BREAK);
-			Export(HTML_NONBREAKING_SPACE_LOOONG);
-			_export_main_formular_checkbox_slash(OPT_1_CASTI_MODLITBY, BIT_OPT_1_STUP_SVIATOK_SLAVNOST, STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST, html_text_opt_1_slavit_ako_sviatok[_global_jazyk], html_text_opt_1_slavit_ako_slavnost[_global_jazyk], NIE);
 
 			// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_1_SKRY_POPIS
 			_export_main_formular_checkbox(OPT_1_CASTI_MODLITBY, BIT_OPT_1_SKRY_POPIS, STR_FORCE_BIT_OPT_1_SKRY_POPIS, html_text_opt_1_skryt_popis_svaty[_global_jazyk], html_text_opt_1_skryt_popis_svaty_explain[_global_jazyk]);
@@ -9899,15 +9887,10 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_REF
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_REFERENCIE, STR_FORCE_BIT_OPT_0_REF, html_text_opt_0_referencie[_global_jazyk], html_text_opt_0_referencie_explain[_global_jazyk]);
 
-#ifdef OS_Windows_Ruby
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_REF_BIBLE_COM
 		Export(HTML_CRLF_LINE_BREAK);
 		Export(HTML_NONBREAKING_SPACE_LOOONG);
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM, STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, html_text_opt_0_ref_bible_com[_global_jazyk], html_text_opt_0_ref_bible_com_explain[_global_jazyk], NIE);
-#else
-		// else: treba nastaviť hidden pre všetky options pre _global_force_opt
-		Export(HTML_FORM_INPUT_HIDDEN " name=\"%s\" value=\"%d\"" HTML_FORM_INPUT_END "\n", STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, (isGlobalOptionForce(OPT_0_SPECIALNE, BIT_OPT_0_REF_BIBLE_COM)) ? ANO : NIE);
-#endif
 
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_FOOTNOTES
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_FOOTNOTES, STR_FORCE_BIT_OPT_0_FOOTNOTES, html_text_opt_0_footnotes[_global_jazyk], html_text_opt_0_footnotes_explain[_global_jazyk]);
@@ -11887,6 +11870,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 #define _local_modl_kompletorium (*_local_modl_kompletorium_ptr)
 
 	short int _local_spol_cast = MODL_SPOL_CAST_NEURCENA;
+	short int _local_opt_3_spol_cast = MODL_SPOL_CAST_NEURCENA;
 
 	Log("Allocating memory...\n");
 	// _local_modl_prve_vespery_ptr
@@ -11948,22 +11932,22 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 	short int svaty_dalsi_den = UNKNOWN_PORADIE_SVATEHO;
 
-	if ((modlitba == MODL_VESPERY) || (modlitba == MODL_KOMPLETORIUM)){
+	if ((modlitba == MODL_VESPERY) || (modlitba == MODL_KOMPLETORIUM)) {
 		// najprv analyzujem nasledujuci den - kvoli prvym vesperam resp. kompletoriu
 		Log("kedze modlitba je vespery alebo kompletorium, robim tuto cast... (naplnenie _local_den)\n");
 		_local_rok = rok;
 		// do premennej datum dame datum nasledujuceho dna
-		if (den == pocet_dni[mesiac - 1]){
+		if (den == pocet_dni[mesiac - 1]) {
 			datum.den = 1;
-			if (mesiac == 12){
+			if (mesiac == 12) {
 				datum.mesiac = 1;
 				_local_rok = rok + 1;
 			}
-			else{
+			else {
 				datum.mesiac = mesiac + 1;
 			}
 		}
-		else{
+		else {
 			datum.den = den + 1;
 			datum.mesiac = mesiac;
 		}
@@ -11973,28 +11957,34 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 
 		Log("spustam analyzu nasledujuceho dna (%d. %s %d), poradie_svaty == %d...\n", datum.den, nazov_mesiaca(datum.mesiac - 1), _local_rok, svaty_dalsi_den);
 		ret = _rozbor_dna_s_modlitbou(datum, _local_rok, modlitba, svaty_dalsi_den);
-		if (ret == FAILURE){
+		if (ret == FAILURE) {
 			Log("_rozbor_dna_s_modlitbou() pre nasledujuci den returned FAILURE, so...\n");
 			Log("-- rozbor_dna_s_modlitbou(int, int, int, int): uncomplete end\n");
 			goto LABEL_s_modlitbou_DEALLOCATE;
 		}// ret == FAILURE
 		Log("analyza nasledujuceho dna (%d. %s %d) skoncila.\n", datum.den, nazov_mesiaca(datum.mesiac - 1), rok);
-		LOG_ciara;
 
 		_local_den = _global_den;
-		_local_spol_cast = (short int)_global_opt[OPT_3_SPOLOCNA_CAST];
+		_local_spol_cast = _global_den.spolcast;
+		_local_opt_3_spol_cast = (short int)_global_opt[OPT_3_SPOLOCNA_CAST];
 		_local_modl_prve_vespery = _global_modl_prve_vespery;
 		_local_modl_prve_kompletorium = _global_modl_prve_kompletorium;
 		_local_modl_vespery = _global_modl_vespery;
 		_local_modl_kompletorium = _global_modl_kompletorium;
 
+		mystrcpy(_local_string, _global_string, MAX_GLOBAL_STR); // veľkosť 2011-09-27 opravená podľa _global_string
+
+		Log("_local_spol_cast obsahuje: %d\n", _local_spol_cast);
+		Log("_local_opt_3_spol_cast obsahuje: %d\n", _local_opt_3_spol_cast);
+		Log("_local_string obsahuje: %s\n", _local_string);
 		// Log("_local_modl_vespery obsahuje:\n"); Log(_local_modl_vespery);
 		// Log("_local_modl_prve_vespery obsahuje:\n"); Log(_local_modl_prve_vespery);
 		// Log("_global_modl_kompletorium obsahuje:\n"); Log(_global_modl_kompletorium);
 		// Log("_global_modl_prve_kompletorium obsahuje:\n"); Log(_global_modl_prve_kompletorium);
 		// Log("_local_modl_prve_kompletorium obsahuje:\n"); Log(_local_modl_prve_kompletorium);
 
-		mystrcpy(_local_string, _global_string, MAX_GLOBAL_STR); // veľkosť 2011-09-27 opravená podľa _global_string
+		LOG_ciara;
+
 	}// kompletorium alebo vespery
 
 	// teraz analyzujem dnesny den
@@ -12114,6 +12104,9 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 			Log("nastavujem _global_string_podnadpis... if((_global_den.smer < 5) || ...\n");
 			init_global_string_podnadpis(modlitba);
 
+			// this is not necessary (in fact, it causes problems: wrong description for http://localhost:2000/cgi-bin/l.cgi?qt=pdt&d=25&m=10&r=2015&p=mv&ds=1&j=cz&o0=134&o1=5376&o2=29432&o3=6)
+			// introduced by commit # c48527f0d3 but now hopefully not necessary
+			/*
 			Log("kontrolujem _global_opt[OPT_3_SPOLOCNA_CAST]... if((_global_den.smer < 5) || : ");
 			if (_local_spol_cast != MODL_SPOL_CAST_NEURCENA){
 				_global_opt[OPT_3_SPOLOCNA_CAST] = _local_spol_cast;
@@ -12122,6 +12115,7 @@ void rozbor_dna_s_modlitbou(short int den, short int mesiac, short int rok, shor
 			else{
 				Log("bez úpravy.\n");
 			}
+			*/
 
 			Log("nastavujem _global_string_spol_cast... if((_global_den.smer < 5) || ...\n");
 			ret_sc = init_global_string_spol_cast(odfiltrujSpolCast(modlitba, _global_opt[OPT_3_SPOLOCNA_CAST]), poradie_svaty);
@@ -17523,24 +17517,27 @@ END_parseQueryString:
 
 short int counter_setConfigDefaults = 0;
 
-void setConfigDefaults(short int jazyk){
+void setConfigDefaults(short int jazyk) {
 	long sk_default;
 	short int i;
 	counter_setConfigDefaults++;
 	Log("setConfigDefaults(%d) -- začiatok (%d. volanie)...\n", jazyk, counter_setConfigDefaults);
 
-	for (i = 0; i < POCET_GLOBAL_OPT; i++){
-		if (jazyk != JAZYK_SK){
+	for (i = 0; i < POCET_GLOBAL_OPT; i++) {
+		if (jazyk != JAZYK_SK) {
 			sk_default = cfg_option_default[i][JAZYK_SK];
 		}
-		else{
+		else {
 			sk_default = GLOBAL_OPTION_NULL;
 		}
-		if (cfg_option_default[i][jazyk] == GLOBAL_OPTION_NULL){
+		if (cfg_option_default[i][jazyk] == GLOBAL_OPTION_NULL) {
 			cfg_option_default[i][jazyk] = (sk_default == GLOBAL_OPTION_NULL) ? cfg_option_default_PROG[i] : sk_default;
 			Log("keďže cfg_option_default[%d][%d] bolo GLOBAL_OPTION_NULL, nastavujem podľa program defaults na %ld...\n", i, jazyk, cfg_option_default[i][jazyk]);
 		}
 	}// for i
+
+	setConfigDefaultsOther(_global_jazyk);
+
 	Log("setConfigDefaults(%d) -- koniec (%d. volanie).\n", jazyk, counter_setConfigDefaults);
 }// setConfigDefaults()
 
