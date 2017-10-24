@@ -47,9 +47,9 @@ LOCK=/tmp/breviar-nightlies.lck
   fi
 
   COMMIT=`git branch -v --no-abbrev | egrep "^. master" | sed "s/. master *//;s/ .*//"`
-  echo $COMMIT >$ROOT/$DATE/commit
+  echo $COMMIT >$ROOT/$DATE/commit.txt
 
-  echo "Build. Log file is at <a href=\"https://breviar.kralovic.org/nightlies/$DATE/log\">https://breviar.kralovic.org/nightlies/$DATE/log</a>"
+  echo "Build. Log file is at <a href=\"https://breviar.kralovic.org/nightlies/$DATE/log.txt\">https://breviar.kralovic.org/nightlies/$DATE/log.txt</a>"
   if (./build-assets && gradle clean && gradle assembleDebug && \
       gradle assembleRelease) >>$LOG 2>&1; then
     echo "Build finished successfully."
