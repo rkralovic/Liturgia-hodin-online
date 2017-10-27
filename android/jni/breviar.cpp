@@ -159,6 +159,11 @@ static int my_putenv(char *s) {
 #endif /* LIBC_BIONIC */
 #endif /* unix */
 
+#ifdef IO_ANDROID
+#define putenv android_putenv
+#define getenv android_getenv
+#endif
+
 short int query_type; // premenna obsahujuca PRM_..., deklarovana v mydefs.h
 
 // globalna premenna, do ktorej sa ukladaju info o analyzovanom dni

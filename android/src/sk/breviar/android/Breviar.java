@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,16 +37,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import sk.breviar.android.Alarms;
 import sk.breviar.android.CompatibilityHelper11;
 import sk.breviar.android.CompatibilityHelper19;
+import sk.breviar.android.HeadlessWebview;
 import sk.breviar.android.LangSelect;
 import sk.breviar.android.Server;
 import sk.breviar.android.UrlOptions;
 import sk.breviar.android.Util;
 
-public class Breviar extends Activity implements View.OnLongClickListener, ScaleGestureDetector.OnScaleGestureListener, NavigationView.OnNavigationItemSelectedListener {
+public class Breviar extends Activity implements View.OnLongClickListener,
+                                                 ScaleGestureDetector.OnScaleGestureListener,
+                                                 NavigationView.OnNavigationItemSelectedListener,
+                                                 TextToSpeech.OnInitListener,
+                                                 TextToSpeech.OnUtteranceCompletedListener {
     static String scriptname = "l.cgi";
     static final int DIALOG_ABOUT = 1;
     static final int DIALOG_NEWS = 2;
@@ -63,12 +70,41 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
     float scroll_to = -1;
     NavigationView navigationView = null;
 
+    HeadlessWebview headless;
+
     int appEventId = -1;
     PowerManager.WakeLock lock;
 
     int ringMode = -1;
 
     ScaleGestureDetector gesture_detector;
+
+    TextToSpeech tts;
+    enum TTSState {
+      UNINITIALIZED,
+      READY,
+      SPEAKING
+    }
+    TTSState tts_state = TTSState.UNINITIALIZED;
+    String tts_to_speak = "";
+
+    @Override
+    public void onInit(int status) {
+      if (status == TextToSpeech.SUCCESS) {
+        tts_state = TTSState.READY;
+        tts.setOnUtteranceCompletedListener(this);
+        setTTSLanguage();
+        updateTTSState();
+      } else {
+        Log.v("breviar", "TTS engine failed to initialize");
+      }
+    }
+
+    @Override
+    public void onUtteranceCompleted(String utteranceId) {
+      Log.v("breviar", "speaking completed");
+      speakChunk();
+    }
 
     void goHome() {
       Log.v("breviar", "goHome");
@@ -101,6 +137,7 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
 
     void resetLanguage() {
       S.setLanguage(language);
+      setTTSLanguage();
       clearHistory = true;
 
       // Povodne sme zahadzovali cele nastavenia:
@@ -153,7 +190,12 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
     public void onCreate(Bundle savedInstanceState) {
       Log.v("breviar", "onCreate");
 
+      tts_state = TTSState.UNINITIALIZED;
+      tts = new TextToSpeech(this, this);
+
       appEventId = BreviarApp.getEventId();
+
+      headless = new HeadlessWebview(this);
 
       // Restore preferences
       SharedPreferences settings = getSharedPreferences(Util.prefname, 0);
@@ -505,6 +547,7 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
     @Override
     public void onDestroy() {
       Log.v("breviar", "onDestroy");
+      tts.shutdown();
       stopServer();
       super.onDestroy();
     }
@@ -571,6 +614,98 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
       }
     }
 
+    void stopSpeaking() {
+      tts.stop();
+      tts_to_speak = "";
+      tts_state = TTSState.READY;
+    }
+
+    void speakChunk() {
+      if (tts_to_speak.isEmpty()) {
+        Log.v("breviar", "speak chunk: finished");
+        tts_state = TTSState.READY;
+        runOnUiThread(new Runnable() {
+          public void run() {
+            updateTTSState();
+          }
+        });
+      } else {
+        String chunk;
+        if (tts_to_speak.length() <= 1024) {
+          chunk = tts_to_speak;
+          tts_to_speak = "";
+          Log.v("breviar", "speak chunk: last chunk");
+        } else {
+          int pos = tts_to_speak.indexOf(" ", 1000);
+          if (pos < 0) {
+            chunk = tts_to_speak;
+            tts_to_speak = "";
+            Log.v("breviar", "speak chunk: last chunk, but maybe too long");
+          } else {
+            chunk = tts_to_speak.substring(0, pos);
+            tts_to_speak = tts_to_speak.substring(pos);
+            Log.v("breviar", "speak chunk: speaking " + pos + " characters, " +
+                              tts_to_speak.length() + " still left");
+          }
+        }
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
+        Log.v("breviar", "speak chunk: speaking " + chunk);
+        tts.speak(chunk, TextToSpeech.QUEUE_FLUSH, params);
+      }
+    }
+
+    void startSpeaking() {
+      tts_state = TTSState.SPEAKING;
+      UrlOptions opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
+      opts.setBlindFriendly(true);
+
+      String url = opts.getBuilder().encodedAuthority("127.0.0.1:" + S.port_nonpersistent)
+                       .build().toString();
+      Log.v("breviar", "Loading nonpersistent url " + url);
+
+      headless.LoadAndExecute(url,
+          "var x = document.querySelectorAll(\"h2,form\"); " +
+          "for (var i = 0; i < x.length; ++i) { " +
+          "  x[i].style.display = \"none\"; " +
+          "}; " +
+          "bridge.callback(document.getElementById(\"contentRoot\").innerText);",
+          new HeadlessWebview.Callback() {
+            public void run(String result) {
+              Log.v("breviar", "Got callback result");
+              if (tts_state == TTSState.SPEAKING) {
+                tts_to_speak = result;
+                speakChunk();
+              }
+            }
+          });
+    }
+
+    void setTTSLanguage() {
+      if (tts_state == TTSState.UNINITIALIZED) return;
+      if (tts_state == TTSState.SPEAKING) {
+        stopSpeaking();
+      }
+      int ret = tts.setLanguage(BreviarApp.appLanguageToLocale(language));
+      Log.v("breviar", "setTTSLanguage: " + ret);
+    }
+
+    void updateTTSState() {
+      Log.v("breviar", "updating speak toggle menu label");
+      MenuItem item = navigationView.getMenu().findItem(R.id.speak_toggle);
+      switch (tts_state) {
+        case UNINITIALIZED:
+          item.setTitle(R.string.tts_uninitialized);
+          break;
+        case READY:
+          item.setTitle(R.string.tts_ready);
+          break;
+        case SPEAKING:
+          item.setTitle(R.string.tts_speaking);
+          break;
+      }
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
       UrlOptions opts;
@@ -581,11 +716,13 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
           Intent selectLang = new Intent(this, LangSelect.class);
           startActivityForResult(selectLang, 0);
           break;
+
         case R.id.fullscreen_toggle:
           fullscreen = !fullscreen;
           updateFullscreen();
           syncPreferences();
           break;
+
         case R.id.nightmode_toggle:
           opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
           opts.setNightmode(!opts.isNightmode());
@@ -593,8 +730,8 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
           scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
           S.setOpts(opts.build(true));
           wv.loadUrl(opts.build());
-
           break;
+
         case R.id.only_non_bold_font_toggle:
           opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
           opts.setOnlyNonBoldFont(!opts.isOnlyNonBoldFont());
@@ -602,10 +739,19 @@ public class Breviar extends Activity implements View.OnLongClickListener, Scale
           scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
           S.setOpts(opts.build(true));
           wv.loadUrl(opts.build());
-
           break;
+
         case R.id.menu_about:
           showDialog(DIALOG_ABOUT);
+          break;
+
+        case R.id.speak_toggle:
+          if (tts_state == TTSState.SPEAKING) {
+            stopSpeaking();
+          } else if (tts_state == TTSState.READY) {
+            startSpeaking();
+          }
+          updateTTSState();
           break;
       }
       updateMenu();
