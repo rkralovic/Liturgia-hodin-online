@@ -3,6 +3,7 @@ package sk.breviar.android;
 import java.io.*;
 import java.lang.InterruptedException;
 import java.lang.Thread;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -48,7 +49,7 @@ public class Server extends Thread {
           lo[1] = 0;
           lo[2] = 0;
           lo[3] = 1;
-          listener.bind(new java.net.InetSocketAddress(java.net.Inet4Address.getByAddress(lo), i), 50);
+          listener.socket().bind(new java.net.InetSocketAddress(java.net.Inet4Address.getByAddress(lo), i), 50);
         } catch (IOException e) {
           if (listener != null) {
             listener.close();
@@ -73,7 +74,7 @@ public class Server extends Thread {
           lo[1] = 0;
           lo[2] = 0;
           lo[3] = 1;
-          listener_nonpersistent.bind(new java.net.InetSocketAddress(java.net.Inet4Address.getByAddress(lo), i), 50);
+          listener_nonpersistent.socket().bind(new java.net.InetSocketAddress(java.net.Inet4Address.getByAddress(lo), i), 50);
         } catch (IOException e) {
           listener_nonpersistent.close();
           listener_nonpersistent = null;

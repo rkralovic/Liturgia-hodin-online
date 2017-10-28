@@ -29,6 +29,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import sk.breviar.android.Alarms;
+import sk.breviar.android.ClearProxy;
 import sk.breviar.android.CompatibilityHelper11;
 import sk.breviar.android.CompatibilityHelper19;
 import sk.breviar.android.HeadlessWebview;
@@ -60,6 +62,7 @@ public class Breviar extends Activity implements View.OnLongClickListener,
     // Server singleton
     static Server S = null;
 
+    DrawerLayout drawer;
     WebView wv;
     int scale;
     String language;
@@ -185,6 +188,33 @@ public class Breviar extends Activity implements View.OnLongClickListener,
       BreviarApp.applyCustomLocale(this);
     }
 
+    class Bridge {
+      Breviar parent;
+
+      public Bridge(Breviar parent_) {
+        parent = parent_;
+      }
+
+      @JavascriptInterface
+      public void pageUp() {
+        parent.runOnUiThread(new Runnable() {
+          public void run() {
+            parent.wv.pageUp(false);
+          }
+        });
+      }
+
+      @JavascriptInterface
+      public void pageDown() {
+        parent.runOnUiThread(new Runnable() {
+          public void run() {
+            parent.wv.pageDown(false);
+          }
+        });
+      }
+    }
+
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,10 +249,13 @@ public class Breviar extends Activity implements View.OnLongClickListener,
       navigationView = (NavigationView) findViewById(R.id.navigation);
       navigationView.setNavigationItemSelectedListener(this);
 
+      drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       wv = (WebView)findViewById(R.id.wv);
+      ClearProxy.clearProxy(wv);
       wv.clearCache(true);
       wv.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
       wv.getSettings().setJavaScriptEnabled(true);
+      wv.addJavascriptInterface(new Bridge(this), "bridge");
       // TODO(riso): replace constants by symbolic values after sdk upgrade
       if (Build.VERSION.SDK_INT < 19) {  // pre-KitKat
         wv.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
@@ -439,10 +472,12 @@ public class Breviar extends Activity implements View.OnLongClickListener,
         UrlOptions opts = new UrlOptions(url, true);
         opts.override(new UrlOptions(BreviarApp.getUrlOptions(
               getApplicationContext()).replaceAll("&amp;", "&")));
+        S.setOpts(opts.build(true));
 
         String new_url = opts.build();
         Log.v("breviar", "Reloading preferences; new url = " + new_url);
         wv.loadUrl(new_url);
+        updateMenu();  // nightmode setting may have changed.
       }
       if (!resumed) {
         resumed = true;
@@ -615,12 +650,15 @@ public class Breviar extends Activity implements View.OnLongClickListener,
     }
 
     void stopSpeaking() {
-      tts.stop();
       tts_to_speak = "";
       tts_state = TTSState.READY;
+      tts.stop();
     }
 
     void speakChunk() {
+      if (tts_state != TTSState.SPEAKING) {
+        return;
+      }
       if (tts_to_speak.isEmpty()) {
         Log.v("breviar", "speak chunk: finished");
         tts_state = TTSState.READY;
@@ -755,8 +793,6 @@ public class Breviar extends Activity implements View.OnLongClickListener,
           break;
       }
       updateMenu();
-
-      DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       drawer.closeDrawer(GravityCompat.START);
 
       /*
@@ -774,9 +810,16 @@ public class Breviar extends Activity implements View.OnLongClickListener,
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-      if ((keyCode == KeyEvent.KEYCODE_BACK) && wv.canGoBack()) {
-        wv.goBack();
-        return true;
+      if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+          drawer.closeDrawer(GravityCompat.START, true);
+          return true;
+        } else if (wv.canGoBack()) {
+          wv.goBack();
+          return true;
+        } else {
+          return super.onKeyDown(keyCode, event);
+        }
       }
       if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) && BreviarApp.getVolButtons(this)) {
         wv.pageUp(false);
@@ -784,6 +827,14 @@ public class Breviar extends Activity implements View.OnLongClickListener,
       }
       if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) && BreviarApp.getVolButtons(this)) {
         wv.pageDown(false);
+        return true;
+      }
+      if (keyCode == KeyEvent.KEYCODE_MENU) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+          drawer.closeDrawer(GravityCompat.START, true);
+        } else {
+          drawer.openDrawer(GravityCompat.START, true);
+        }
         return true;
       }
       return super.onKeyDown(keyCode, event);
