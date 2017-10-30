@@ -67,6 +67,10 @@
     <string name="onlyNonBoldFontOn">No bold font</string>
     <string name="onlyNonBoldFontOff">Allow bold font</string>
 
+    <!-- TODO(riso): Translate these //-->
+    <string name="navigation_drawer_open" translatable="false">Open menu</string>
+    <string name="navigation_drawer_close" translatable="false">Close menu</string>
+
     <string name="inv">Invitatory</string>
     <string name="rch">Lauds</string>
     <string name="vesp">Vespers</string>

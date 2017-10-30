@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 import sk.breviar.android.AlarmReceiver;
 import sk.breviar.android.CompatibilityHelper8;
+import sk.breviar.android.DialogActivity;
 
 public class Util {
   static final String prefname = "BreviarPrefs";
@@ -142,30 +143,18 @@ public class Util {
     new EventInfo(R.id.kompl_check, "alarm-kompl", "mk",    R.string.kompl, R.string.kompl_notify, 22, 00)
   };
 
-  static public Dialog createHtmlDialog(Activity act, String content) {
-    if (content == null) return null;
-    WebView wv = new WebView(act);
-    if (Build.VERSION.SDK_INT < 8) {
-      wv.loadData(content, "text/html; charset=utf-8", "utf-8");
-    } else {
-      
-      try {
-        wv.loadData(CompatibilityHelper8.Base64EncodeToString(
-                        content.getBytes("UTF-8")),
-                    "text/html; charset=utf-8", "base64");
-      } catch (java.io.UnsupportedEncodingException e) {
-        wv.loadData("unsupported encoding utf-8", "text/html", null);
-      }
-    }
-    return new AlertDialog.Builder(act)
-           .setView(wv)
-           .setCancelable(false)
-           .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-               }
-           })
-           .create();
+  static void startDialogActivity(Activity act, int title_id, String content) {
+    act.startActivity(new Intent(act, DialogActivity.class)
+                              .putExtra("title", title_id)
+                              .putExtra("content", content));
+  }
+
+  static void showChangelog(Activity act) {
+    startDialogActivity(act, R.string.btn_news, act.getString(R.string.news));
+  }
+
+  static void showAbout(Activity act) {
+    startDialogActivity(act, R.string.about, getAboutText(act));
   }
 
   static public String streamToString(java.io.InputStream stream) {
