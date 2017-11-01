@@ -367,7 +367,7 @@ public class Breviar extends AppCompatActivity
 
           String title = wv.getTitle();
           // Hack: CGI module does not set title for some pages. Revert to app name then.
-          if (title.contains("127.0.0.1")) {
+          if (title == null || title.contains("127.0.0.1")) {
             title = getString(R.string.app_name);
           }
           getSupportActionBar().setTitle(title);
