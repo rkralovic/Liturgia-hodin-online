@@ -3,7 +3,7 @@
     <string name="app_name">Zsolozsma</string>
     <string name="back">Vissza</string>
     <string name="forward">Előre</string>
-    <string name="menu">Menü</string>
+    <string name="menu">Zsolozsma</string>
     <string name="today">Ma</string>
     <string name="pgup">Fel</string>
     <string name="pgdn">Le</string>
@@ -88,6 +88,10 @@
 
     <string name="tts_ready">Olvas</string>
     <string name="tts_speaking">Hagyja abba az olvasást</string>
+
+    <!-- TODO: translate //-->
+    <string name="channel_name">Breviary</string>
+    <string name="channel_description">Notifications about prayer times</string>
 
     <string name="menu_about">Névjegy...</string>
     <string name="about_title">Névjegy</string>
