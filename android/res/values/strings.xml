@@ -99,7 +99,7 @@
     <string name="about_url">include/about.htm</string>
 
     <string name="news_title">Changelog</string>
-    <string name="news_url">include/android-version.htm</string>
+    <string name="news_url">include/version-android.htm</string>
 
     <string name="about_PROJECT_URL">breviar.sk</string>
     <string name="about_E_MAIL">android@breviar.sk</string>

@@ -98,7 +98,7 @@
     <string name="about_url">include_hu/about.htm</string>
 
     <string name="news_title">Újdonságok</string>
-    <string name="news_url">include_hu/android-version.htm</string>
+    <string name="news_url">include_hu/version-android.htm</string>
 
     <string name="about_PROJECT_URL">zsolozsma.katolikus.hu</string>
     <string name="about_E_MAIL">android@breviar.sk</string>

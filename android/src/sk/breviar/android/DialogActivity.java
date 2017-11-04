@@ -30,19 +30,24 @@ public class DialogActivity extends AppCompatActivity {
       return;
     }
     int title = intent.getIntExtra("title", -1);
-    String content = intent.getStringExtra("content");
+    String url = intent.getStringExtra("url");
+    if (url == null) {
+      String content = intent.getStringExtra("content");
 
-    if (Build.VERSION.SDK_INT < 8) {
-      wv.loadData(content, "text/html; charset=utf-8", "utf-8");
-    } else {
-      
-      try {
-        wv.loadData(CompatibilityHelper8.Base64EncodeToString(
-                        content.getBytes("UTF-8")),
-                    "text/html; charset=utf-8", "base64");
-      } catch (java.io.UnsupportedEncodingException e) {
-        wv.loadData("unsupported encoding utf-8", "text/html", null);
+      if (Build.VERSION.SDK_INT < 8) {
+        wv.loadData(content, "text/html; charset=utf-8", "utf-8");
+      } else {
+
+        try {
+          wv.loadData(CompatibilityHelper8.Base64EncodeToString(
+                          content.getBytes("UTF-8")),
+                      "text/html; charset=utf-8", "base64");
+        } catch (java.io.UnsupportedEncodingException e) {
+          wv.loadData("unsupported encoding utf-8", "text/html", null);
+        }
       }
+    } else {
+      wv.loadUrl(url);
     }
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.dialog_activity_toolbar);

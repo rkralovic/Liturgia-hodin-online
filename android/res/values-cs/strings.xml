@@ -98,7 +98,7 @@
     <string name="about_url">include_cz/about.htm</string>
 
     <string name="news_title">Změny ve verzích</string>
-    <string name="news_url">include_cz/android-version.htm</string>
+    <string name="news_url">include_cz/version-android.htm</string>
 
     <string name="about_PROJECT_URL">breviar.cz</string>
     <string name="about_E_MAIL">android@breviar.sk</string>

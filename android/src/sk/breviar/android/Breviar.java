@@ -74,6 +74,7 @@ public class Breviar extends AppCompatActivity
     boolean save_instance_enabled = true;
     float scroll_to = -1;
     NavigationView navigationView = null;
+    Toolbar toolbar = null;
 
     HeadlessWebview headless;
 
@@ -270,7 +271,7 @@ public class Breviar extends AppCompatActivity
 
       setContentView(R.layout.breviar);
 
-      Toolbar toolbar = (Toolbar) findViewById(R.id.breviar_toolbar);
+      toolbar = (Toolbar) findViewById(R.id.breviar_toolbar);
       setSupportActionBar(toolbar);
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setTitle(getString(R.string.app_name));
@@ -359,6 +360,12 @@ public class Breviar extends AppCompatActivity
           super.onPageStarted(view, url, favicon);
         }
 
+        String capitalize(String s) {
+          s = s.trim();
+          if (s.length() < 1) return s;
+          return s.substring(0, 1).toUpperCase() + s.substring(1);
+        }
+
         @Override
         public void onPageFinished(WebView view, String url) {
           Log.v("breviar", "onPageFinished " + url);
@@ -366,12 +373,24 @@ public class Breviar extends AppCompatActivity
           parent.clearHistory = false;
           super.onPageFinished(view, url);
 
-          String title = wv.getTitle();
+          String title = null;
+          String subtitle = "";
+          String wv_title = wv.getTitle();
           // Hack: CGI module does not set title for some pages. Revert to app name then.
-          if (title == null || title.contains("127.0.0.1")) {
+          if (wv_title != null && !wv_title.contains("127.0.0.1")) {
+            String[] split_title = wv_title.split(" *\\| *", 2);
+            if (split_title.length == 1) {
+              title = split_title[0];
+            } else if (split_title.length == 2) {
+              title = split_title[1];
+              subtitle = split_title[0];
+            }
+          }
+          if (title == null) {
             title = getString(R.string.app_name);
           }
-          getSupportActionBar().setTitle(title);
+          getSupportActionBar().setTitle(capitalize(title));
+          getSupportActionBar().setSubtitle(subtitle);
 
           // Ugly hack. But we have no reliable notification when is webview scrollable.
           if (parent.scroll_to < 0) return;
@@ -444,6 +463,15 @@ public class Breviar extends AppCompatActivity
         case R.id.todayBtn:
           syncScale();
           goHome();
+          return true;
+
+        case R.id.speakBtn:
+          toggleSpeakState();
+          return true;
+
+        case R.id.nightmodeBtn:
+          toggleNightMode();
+          updateMenu();
           return true;
 
         default:
@@ -653,10 +681,21 @@ public class Breviar extends AppCompatActivity
       }
 
       UrlOptions opts = new UrlOptions(S.getOpts());
+      MenuItem drawer_item = menu.findItem(R.id.nightmode_toggle);
+      MenuItem action_item = toolbar.getMenu().findItem(R.id.nightmodeBtn);
+
       if (opts.isNightmode()) {
-        menu.findItem(R.id.nightmode_toggle).setTitle(R.string.nightmodeOff);
+        drawer_item.setTitle(R.string.nightmodeOff);
+        if (action_item != null) {
+          action_item.setTitle(R.string.nightmodeOff);
+          action_item.setIcon(R.drawable.ic_brightness_5_white_24dp);
+        }
       } else {
-        menu.findItem(R.id.nightmode_toggle).setTitle(R.string.nightmodeOn);
+        drawer_item.setTitle(R.string.nightmodeOn);
+        if (action_item != null) {
+          action_item.setTitle(R.string.nightmodeOn);
+          action_item.setIcon(R.drawable.ic_brightness_3_white_24dp);
+        }
       }
 
       if (opts.isOnlyNonBoldFont()) {
@@ -727,15 +766,39 @@ public class Breviar extends AppCompatActivity
 
     void updateTTSState() {
       Log.v("breviar", "updating speak toggle menu label");
-      MenuItem item = navigationView.getMenu().findItem(R.id.speak_toggle);
+      MenuItem drawer_item = navigationView.getMenu().findItem(R.id.speak_toggle);
+      MenuItem action_item = toolbar.getMenu().findItem(R.id.speakBtn);
       switch (tts_state) {
         case READY:
-          item.setTitle(R.string.tts_ready);
+          drawer_item.setTitle(R.string.tts_ready);
+          action_item.setTitle(R.string.tts_ready);
+          action_item.setIcon(R.drawable.ic_action_volume_on);
           break;
         case SPEAKING:
-          item.setTitle(R.string.tts_speaking);
+          drawer_item.setTitle(R.string.tts_speaking);
+          action_item.setTitle(R.string.tts_speaking);
+          action_item.setIcon(R.drawable.ic_action_volume_muted);
           break;
       }
+    }
+
+    void toggleSpeakState() {
+      if (tts_state == TTSState.SPEAKING) {
+        stopSpeaking();
+      } else if (tts_state == TTSState.READY) {
+        startSpeaking();
+      }
+      updateTTSState();
+    }
+
+    void toggleNightMode() {
+      UrlOptions opts;
+      opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
+      opts.setNightmode(!opts.isNightmode());
+
+      scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
+      S.setOpts(opts.build(true));
+      wv.loadUrl(opts.build());
     }
 
     @Override
@@ -756,12 +819,7 @@ public class Breviar extends AppCompatActivity
           break;
 
         case R.id.nightmode_toggle:
-          opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
-          opts.setNightmode(!opts.isNightmode());
-
-          scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
-          S.setOpts(opts.build(true));
-          wv.loadUrl(opts.build());
+          toggleNightMode();
           break;
 
         case R.id.only_non_bold_font_toggle:
@@ -778,12 +836,7 @@ public class Breviar extends AppCompatActivity
           break;
 
         case R.id.speak_toggle:
-          if (tts_state == TTSState.SPEAKING) {
-            stopSpeaking();
-          } else if (tts_state == TTSState.READY) {
-            startSpeaking();
-          }
-          updateTTSState();
+          toggleSpeakState();
           break;
       }
       updateMenu();
