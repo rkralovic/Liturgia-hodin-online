@@ -18,6 +18,7 @@ import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,6 +39,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -45,15 +47,15 @@ import java.util.HashMap;
 
 import sk.breviar.android.Alarms;
 import sk.breviar.android.ClearProxy;
-import sk.breviar.android.CompatibilityHelper11;
 import sk.breviar.android.CompatibilityHelper19;
+import sk.breviar.android.DialogActivity;
 import sk.breviar.android.HeadlessWebview;
 import sk.breviar.android.LangSelect;
 import sk.breviar.android.Server;
 import sk.breviar.android.UrlOptions;
 import sk.breviar.android.Util;
 
-public class Breviar extends AppCompatActivity 
+public class Breviar extends AppCompatActivity
                      implements View.OnLongClickListener,
                                 ScaleGestureDetector.OnScaleGestureListener,
                                 NavigationView.OnNavigationItemSelectedListener,
@@ -140,7 +142,7 @@ public class Breviar extends AppCompatActivity
 
     void goHome() {
       Log.v("breviar", "goHome");
-      wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname + 
+      wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname +
                  "?qt=pdnes" + Html.fromHtml(S.getOpts()));
     }
 
@@ -157,6 +159,21 @@ public class Breviar extends AppCompatActivity
         return;
       }
       S.start();
+    }
+
+    void startDialogActivity(int title_id, String query) {
+      startActivity(new Intent(this, DialogActivity.class)
+          .putExtra("title", title_id)
+          .putExtra("url", "http://127.0.0.1:" + S.port_nonpersistent + "/" +
+                           scriptname + "?" + query + Html.fromHtml(S.getOpts())));
+    }
+
+    void showAbout() {
+      startDialogActivity(R.string.about_title, "qt=pst&st=i&p=0");
+    }
+
+    void showChangelog() {
+      startDialogActivity(R.string.news_title, "qt=pst&st=i&p=1");
     }
 
     synchronized void stopServer() {
@@ -279,6 +296,48 @@ public class Breviar extends AppCompatActivity
       navigationView = (NavigationView) findViewById(R.id.navigation);
       navigationView.setNavigationItemSelectedListener(this);
 
+      Menu menu = navigationView.getMenu();
+      try {
+        ((CompoundButton)MenuItemCompat.getActionView(menu.findItem(R.id.nightmode_toggle)))
+            .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override public void onCheckedChanged(CompoundButton button,
+                                                           boolean isChecked) {
+                      if (isChecked == new UrlOptions(S.getOpts()).isNightmode()) {
+                        return;
+                      }
+                      toggleNightMode();
+                      updateMenu();
+                    }
+                });
+
+        ((CompoundButton)MenuItemCompat.getActionView(menu.findItem(R.id.only_non_bold_font_toggle)))
+            .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override public void onCheckedChanged(CompoundButton button,
+                                                           boolean isChecked) {
+                      if (isChecked == !(new UrlOptions(S.getOpts()).isOnlyNonBoldFont())) {
+                        return;
+                      }
+                      toggleOnlyNonBoldFont();
+                      updateMenu();
+                    }
+                });
+
+        ((CompoundButton)MenuItemCompat.getActionView(menu.findItem(R.id.fullscreen_toggle)))
+            .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override public void onCheckedChanged(CompoundButton button,
+                                                           boolean isChecked) {
+                      if (isChecked == fullscreen) {
+                        return;
+                      }
+                      toggleFullscreen();
+                      updateMenu();
+                    }
+                });
+
+      } catch (java.lang.NullPointerException e) {
+        Log.v("breviar", "Cannot setup navigation view!");
+      }
+
       drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
           this,  drawer, toolbar,
@@ -302,9 +361,7 @@ public class Breviar extends AppCompatActivity
       } else {
         CompatibilityHelper19.SetLayoutAlgorithmTextAutosizing(wv);
       }
-      if (Build.VERSION.SDK_INT >= 11) {
-        CompatibilityHelper11.hideZoomControls(wv.getSettings());
-      }
+      wv.getSettings().setDisplayZoomControls(false);
       wv.getSettings().setUseWideViewPort(false);
       initialized = false;
       Log.v("breviar", "setting scale = " + scale);
@@ -413,7 +470,7 @@ public class Breviar extends AppCompatActivity
       wv.setLongClickable(true);
 
       if (!getResources().getString(R.string.version).equals(settings.getString("version", ""))) {
-        Util.showChangelog(this);
+        showChangelog();
         markVersion();
       }
 
@@ -431,7 +488,7 @@ public class Breviar extends AppCompatActivity
       Log.v("breviar", "onCreate: intent id = " + id);
 
       if (id >=0 && id < Util.events.length) {
-        wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname + 
+        wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname +
                    "?qt=pdnes&p=" + Util.events[id].p + Html.fromHtml(S.getOpts()));
       } else {
         if (savedInstanceState == null) {
@@ -511,16 +568,14 @@ public class Breviar extends AppCompatActivity
 
     @Override
     public boolean dispatchTouchEvent(android.view.MotionEvent e) {
-      gesture_detector.onTouchEvent(e);  
+      gesture_detector.onTouchEvent(e);
       return super.dispatchTouchEvent(e);
     }
 
     void recreateIfNeeded() {
       appEventId = BreviarApp.getEventId();
-      if (Build.VERSION.SDK_INT >= 11) {
-        save_instance_enabled = false;
-        new CompatibilityHelper11().recreate(this);
-      }
+      save_instance_enabled = false;
+      recreate();
     }
 
     boolean resumed = false;
@@ -583,7 +638,7 @@ public class Breviar extends AppCompatActivity
       Log.v("breviar", "onNewIntent: id = " + id);
 
       if (id >=0 && id < Util.events.length) {
-        wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname + 
+        wv.loadUrl("http://127.0.0.1:" + S.port + "/" + scriptname +
                    "?qt=pdnes&p=" + Util.events[id].p + Html.fromHtml(S.getOpts()));
       }
     }
@@ -669,40 +724,41 @@ public class Breviar extends AppCompatActivity
       getWindow().setAttributes(params);
     }
 
+    void updateMenuItemSwitch(MenuItem item, boolean value) {
+      if (item == null) return;
+      CompoundButton s = (CompoundButton)MenuItemCompat.getActionView(item);
+      if (s == null) return;
+      s.setChecked(value);
+    }
+
     public void updateMenu() {
       if (navigationView == null) return;
       Menu menu = navigationView.getMenu();
       if (menu == null) return;
-
-      if (fullscreen) {
-        menu.findItem(R.id.fullscreen_toggle).setTitle(R.string.fullscreenOff);
-      } else {
-        menu.findItem(R.id.fullscreen_toggle).setTitle(R.string.fullscreenOn);
-      }
 
       UrlOptions opts = new UrlOptions(S.getOpts());
       MenuItem drawer_item = menu.findItem(R.id.nightmode_toggle);
       MenuItem action_item = toolbar.getMenu().findItem(R.id.nightmodeBtn);
 
       if (opts.isNightmode()) {
-        drawer_item.setTitle(R.string.nightmodeOff);
+        updateMenuItemSwitch(drawer_item, true);
         if (action_item != null) {
           action_item.setTitle(R.string.nightmodeOff);
           action_item.setIcon(R.drawable.ic_brightness_5_white_24dp);
         }
       } else {
-        drawer_item.setTitle(R.string.nightmodeOn);
+        updateMenuItemSwitch(drawer_item, false);
         if (action_item != null) {
           action_item.setTitle(R.string.nightmodeOn);
           action_item.setIcon(R.drawable.ic_brightness_3_white_24dp);
         }
       }
 
-      if (opts.isOnlyNonBoldFont()) {
-        menu.findItem(R.id.only_non_bold_font_toggle).setTitle(R.string.onlyNonBoldFontOff);
-      } else {
-        menu.findItem(R.id.only_non_bold_font_toggle).setTitle(R.string.onlyNonBoldFontOn);
-      }
+      drawer_item = menu.findItem(R.id.only_non_bold_font_toggle);
+      updateMenuItemSwitch(drawer_item, !opts.isOnlyNonBoldFont());
+
+      drawer_item = menu.findItem(R.id.fullscreen_toggle);
+      updateMenuItemSwitch(drawer_item, fullscreen);
     }
 
     void stopSpeaking() {
@@ -801,6 +857,22 @@ public class Breviar extends AppCompatActivity
       wv.loadUrl(opts.build());
     }
 
+    void toggleOnlyNonBoldFont() {
+      UrlOptions opts;
+      opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
+      opts.setOnlyNonBoldFont(!opts.isOnlyNonBoldFont());
+
+      scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
+      S.setOpts(opts.build(true));
+      wv.loadUrl(opts.build());
+    }
+
+    void toggleFullscreen() {
+      fullscreen = !fullscreen;
+      updateFullscreen();
+      syncPreferences();
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
       UrlOptions opts;
@@ -813,9 +885,7 @@ public class Breviar extends AppCompatActivity
           break;
 
         case R.id.fullscreen_toggle:
-          fullscreen = !fullscreen;
-          updateFullscreen();
-          syncPreferences();
+          toggleFullscreen();
           break;
 
         case R.id.nightmode_toggle:
@@ -823,16 +893,19 @@ public class Breviar extends AppCompatActivity
           break;
 
         case R.id.only_non_bold_font_toggle:
-          opts = new UrlOptions(wv.getUrl() + S.getOpts().replaceAll("&amp;", "&"), true);
-          opts.setOnlyNonBoldFont(!opts.isOnlyNonBoldFont());
-
-          scroll_to = wv.getScrollY() / (float)wv.getContentHeight();
-          S.setOpts(opts.build(true));
-          wv.loadUrl(opts.build());
+          toggleOnlyNonBoldFont();
           break;
 
         case R.id.menu_about:
-          Util.showAbout(this);
+          showAbout();
+          break;
+
+        case R.id.menu_news:
+          showChangelog();
+          break;
+
+        case R.id.menu_alarms:
+          startActivity(new Intent("sk.breviar.android.ALARMS"));
           break;
 
         case R.id.speak_toggle:
@@ -841,17 +914,6 @@ public class Breviar extends AppCompatActivity
       }
       updateMenu();
       drawer.closeDrawer(GravityCompat.START);
-
-      /*
-      if (getSupportActionBar() != null)
-          getSupportActionBar().setTitle(mTitle);
-       
-      FragmentManager fragmentManager = getSupportFragmentManager();
-      fragmentManager.beginTransaction()
-              .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-              .commit();
-      */
-       
       return true;
     }
 
