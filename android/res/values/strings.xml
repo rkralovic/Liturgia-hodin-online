@@ -10,7 +10,8 @@
     <string name="pgup">PgUp</string>
     <string name="pgdn">PgDn</string>
 
-    <string name="lang_select">Settings</string>
+    <string name="lang_select">Language</string>
+    <string name="settings">Settings</string>
 
     <string name="lang_select_title">Language:</string>
     <string name="lang_cz">Czech</string>

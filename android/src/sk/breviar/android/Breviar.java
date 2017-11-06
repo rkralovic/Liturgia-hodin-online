@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -882,6 +881,12 @@ public class Breviar extends AppCompatActivity
           need_to_reload_preferences = true;
           Intent selectLang = new Intent(this, LangSelect.class);
           startActivityForResult(selectLang, 0);
+          break;
+
+        case R.id.settings:
+          syncPreferences();
+          need_to_reload_preferences = true;
+          startActivity(new Intent(this, MainSettings.class));
           break;
 
         case R.id.fullscreen_toggle:

@@ -8,7 +8,8 @@
     <string name="pgup">Hore</string>
     <string name="pgdn">Ďalej</string>
 
-    <string name="lang_select">Nastavenia</string>
+    <string name="lang_select">Jazyk</string>
+    <string name="settings">Nastavenia</string>
 
     <string name="lang_select_title">Jazyk:</string>
     <string name="lang_cz">Čeština</string>

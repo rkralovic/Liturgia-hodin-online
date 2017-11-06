@@ -8,7 +8,8 @@
     <string name="pgup">Nahoru</string>
     <string name="pgdn">Dál</string>
 
-    <string name="lang_select">Nastavení</string>
+    <string name="lang_select">Jazyk</string>
+    <string name="settings">Nastavení</string>
 
     <string name="lang_select_title">Jazyk:</string>
     <string name="lang_cz">Čeština</string>

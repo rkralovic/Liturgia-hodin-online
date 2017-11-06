@@ -8,7 +8,9 @@
     <string name="pgup">Fel</string>
     <string name="pgdn">Le</string>
 
-    <string name="lang_select">Beállítások</string>
+    <!-- TODO: translate //-->
+    <string name="lang_select">Language</string>
+    <string name="settings">Beállítások</string>
 
     <string name="lang_select_title">Nyelv:</string>
     <string name="lang_cz">Cseh</string>
