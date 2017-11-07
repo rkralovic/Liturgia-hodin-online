@@ -28,7 +28,7 @@
                   android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sk.breviar.android.LangSelect" />
+                android:value="sk.breviar.android.Breviar" />
             <intent-filter>
                 <action android:name="sk.breviar.android.ALARMS" />
                 <category android:name="android.intent.category.DEFAULT" />

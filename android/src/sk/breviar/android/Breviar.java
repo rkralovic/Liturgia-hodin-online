@@ -929,6 +929,7 @@ public class Breviar extends AppCompatActivity
           drawer.closeDrawer(GravityCompat.START, true);
           return true;
         } else if (wv.canGoBack()) {
+          S.forceOptsForNextRequest();
           wv.goBack();
           return true;
         } else {

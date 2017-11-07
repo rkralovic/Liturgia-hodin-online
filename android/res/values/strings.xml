@@ -37,7 +37,7 @@
     <string name="bible_ref_bible_com">bible references (YouVersion)</string>
     <string name="footnotes">notes and footnotes</string>
     <string name="liturgical_readings">mass readings</string>
-    <string name="psalms_omisions">omissions from psalms</string>
+    <string name="psalms_omissions">omissions from psalms</string>
 
     <string name="display_settings_title">Display settings:</string>
     <string name="first_vespers_buttons">display button for first vespers for Sundays and solemnitas for the day of celebration</string>

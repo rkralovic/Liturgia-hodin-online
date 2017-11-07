@@ -36,7 +36,7 @@
     <string name="bible_ref_bible_com">a bibliai hivatkozások (YouVersion)</string>
     <string name="footnotes">jegyzetek, lábjegyzetek</string>
     <string name="liturgical_readings">a liturgikus olvasmányok</string>
-    <string name="psalms_omisions">zsoltárok kihagyott részei</string>
+    <string name="psalms_omissions">zsoltárok kihagyott részei</string>
 
     <string name="display_settings_title">Megjelenés beállításai:</string>
     <string name="first_vespers_buttons">vasárnapok és főünnepek esetén az I. Esti dicséret gombja az ünneplés napján jelenjen meg</string>

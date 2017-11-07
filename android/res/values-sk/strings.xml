@@ -35,7 +35,7 @@
     <string name="bible_ref_bible_com">biblické odkazy (appka YouVersion)</string>
     <string name="footnotes">poznámky (v texte, pod čiarou)</string>
     <string name="liturgical_readings">čítania v omši</string>
-    <string name="psalms_omisions">vynechané pasáže zo žalmov</string>
+    <string name="psalms_omissions">vynechané pasáže zo žalmov</string>
 
     <string name="display_settings_title">Ďalšie zobrazenia:</string>
     <string name="first_vespers_buttons">zobraziť tlačidlo pre prvé vešpery pre nedele a slávnosti v deň slávenia</string>
