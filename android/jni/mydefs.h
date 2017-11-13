@@ -132,42 +132,42 @@ extern short int query_type; // contains constants PRM_...
 	#define STR_PRM_TABULKA "ptab"
 #endif
 
-#define PRM_DATUM   	0 // dotaz na konkretny datum
+#define PRM_DATUM   	0
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_DATUM "PRM_DATUM"
 #else
 	#define STR_PRM_DATUM "pdt"
 #endif
 
-#define PRM_CEZ_ROK 	1    // dotaz na napr. piatok v tretom tyzdni
+#define PRM_CEZ_ROK 	1
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_CEZ_ROK "PRM_CEZ_ROK"
 #else
 	#define STR_PRM_CEZ_ROK "pcr"
 #endif
 
-#define PRM_SVIATOK 	2    // dotaz na konkretny sviatok
+#define PRM_SVIATOK 	2
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_SVIATOK "PRM_SVIATOK"
 #else
 	#define STR_PRM_SVIATOK "psv"
 #endif
 
-#define PRM_ANALYZA_ROKU	3   // dotaz na sviatky v roku
+#define PRM_ANALYZA_ROKU	3
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_ANALYZA_ROKU "PRM_ANALYZA_ROKU"
 #else
 	#define STR_PRM_ANALYZA_ROKU "par"
 #endif
 
-#define PRM_DNES		4 // to, co bolo kedysi bez parametra - info o dnesnom dni
+#define PRM_DNES		4
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_DNES "PRM_DNES"
 #else
 	#define STR_PRM_DNES "pdnes"
 #endif
 
-#define PRM_LIT_OBD 	5    // podľa pôvodného PRM_CEZ_ROK
+#define PRM_LIT_OBD 	5
 #ifdef LONG_PARAM_NAMES
 	#define STR_PRM_CEZ_ROK "PRM_LIT_OBD"
 #else
@@ -1144,6 +1144,7 @@ extern short int query_type; // contains constants PRM_...
 
 // element XML_DAY with sub-elements
 #define XML_DAY              "CalendarDay"
+
 #define XML_CELEBRATION      "Celebration"
 #define XML_CELEBRATION_ID   "Id"
 #define XML_DATE_ISO         "DateISO"
@@ -1171,10 +1172,27 @@ extern short int query_type; // contains constants PRM_...
 
 // element XML_INFO with sub-elements
 #define XML_INFO             "Info"
+
 #define XML_COPYRIGHT        "Copyright"
 #define XML_ADDRESS          "Address"
 #define XML_BUILD_DATE       "BuildDate"
 #define XML_GENERATED        "Generated"
+
+// element XML_SUPPORTED_VALUES with sub-elements
+#define XML_SUPPORTED_VALUES "SupportedValues"
+
+#define XML_LIT_YEAR_LETTER_VALUES  "LiturgicalYearLetterValues"
+#define XML_LIT_SEASON_VALUES       "LiturgicalSeasonValues"
+#define XML_LIT_WEEK_VALUES         "LiturgicalWeekValues"
+#define XML_LIT_WEEK_PSALT_VALUES   "LiturgicalWeekOfPsalterValues"
+#define XML_LIT_TYPE_VALUES         "LiturgicalCelebrationTypeValues"
+#define XML_LIT_TYPE_LOCAL_VALUES   "LiturgicalCelebrationTypeLocalValues"
+#define XML_LIT_LEVEL_VALUES        "LiturgicalCelebrationLevelValues"
+#define XML_LIT_REQUIRED_VALUES     "LiturgicalCelebrationRequiredValues"
+#define XML_LIT_COMMUNIA_VALUES     "LiturgicalCelebrationCommuniaValues"
+#define XML_LIT_NAME_VALUES         "LiturgicalCelebrationNameValues"
+#define XML_LIT_COLOR_VALUES        "LiturgicalCelebrationColorValues"
+#define XML_LIT_CALENDAR_VALUES     "LiturgicalCalendarValues"
 
 // element XML_OPTIONS with sub-elements
 #define XML_OPTIONS          "Options"
@@ -1275,10 +1293,14 @@ extern short int query_type; // contains constants PRM_...
 #define ELEM_BEGIN(elem)     "<" elem ">"
 #define ELEM_END(elem)       "</" elem ">"
 
-#define ELEMID_BEGIN(elem)   "<" elem " Id=\"%d\">"
-#define ELEMVAL_BEGIN(elem)  "<" elem " Value=\"%d\" Name=\"%s\" ForceName=\"%s\" Text=\"%s\">"
-#define ELEMOPT_BEGIN(elem)  "<" elem " Id=\"%d\" ForceName=\"%s\" Text=\"%s\">" // Id napr. BIT_OPT_0_VERSE; Name napr. STR_FORCE_BIT_OPT_0_VERSE
-#define ELEMOPT_SLASH_BEGIN(elem)  "<" elem " Id=\"%d\" ForceName=\"%s\" Text=\"%s/%s\">"
+#define ELEM_BEGIN_ID(elem)   "<" elem " Id=\"%d\">"
+#define ELEM_BEGIN_VALUE(elem)   "<" elem " Value=\"%s\">"
+#define ELEM_BEGIN_ID_VALUE(elem)   "<" elem " Id=\"%d\" Value=\"%s\">"
+#define ELEM_BEGIN_ID_CHARVALUE(elem)   "<" elem " Id=\"%d\" Value=\"%c\">"
+#define ELEM_BEGIN_NAME(elem)   "<" elem " Name=\"%s\">"
+#define ELEM_BEGIN_VALUE_NAME_FORCENAME_TEXT(elem)  "<" elem " Value=\"%d\" Name=\"%s\" ForceName=\"%s\" Text=\"%s\">"
+#define ELEM_BEGIN_ID_FORCENAME_TEXT(elem)  "<" elem " Id=\"%d\" ForceName=\"%s\" Text=\"%s\">" // Id napr. BIT_OPT_0_VERSE; Name napr. STR_FORCE_BIT_OPT_0_VERSE
+#define ELEM_BEGIN_ID_FORCENAME_TEXT_SLASH(elem)  "<" elem " Id=\"%d\" ForceName=\"%s\" Text=\"%s/%s\">"
 
 #endif // __MYDEFS_H_
 

@@ -553,11 +553,82 @@ void _xml_patka(FILE * expt) {
 	dnes.tm_year = dnes.tm_year + 1900;
 	dnes.tm_yday = dnes.tm_yday + 1;
 
+	// element XML_SUPPORTED_VALUES with sub-elements
+	Export_to_file(expt, ELEM_BEGIN(XML_SUPPORTED_VALUES) "\n");
+
+	short int c;
+
+	// sub-element XML_LIT_CALENDAR_VALUES
+	Export_to_file(expt, ELEM_BEGIN_NAME(XML_LIT_CALENDAR_VALUES) "\n", STR_KALENDAR);
+	
+	for (c = 0; c < supported_calendars_count[_global_jazyk]; c++) {
+		if (equalsi(skratka_kalendara[c], STR_EMPTY)) {
+			Export_to_file(expt, ELEM_BEGIN_ID(XML_LIT_CALENDAR) "%s" ELEM_END(XML_LIT_CALENDAR) "\n", c, nazov_kalendara_vyber[supported_calendars(c)]);
+		}
+		else {
+			Export_to_file(expt, ELEM_BEGIN_ID_VALUE(XML_LIT_CALENDAR) "%s" ELEM_END(XML_LIT_CALENDAR) "\n", c, skratka_kalendara[c], nazov_kalendara_vyber[supported_calendars(c)]);
+		}
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_CALENDAR_VALUES) "\n\n");
+
+	// sub-element XML_LIT_YEAR_LETTER_VALUES
+	Export_to_file(expt, ELEM_BEGIN_NAME(XML_LIT_YEAR_LETTER_VALUES) "\n", STR_LIT_ROK);
+
+	for (c = 0; c < POCET_NEDELNY_CYKLUS; c++) {
+		Export_to_file(expt, ELEM_BEGIN_ID_CHARVALUE(XML_LIT_YEAR_LETTER) "%s" ELEM_END(XML_LIT_YEAR_LETTER) "\n", c, char_nedelny_cyklus[c], string_nedelny_cyklus[alphabet_jayzka[_global_jazyk]][c]);
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_YEAR_LETTER_VALUES) "\n\n");
+
+	// sub-element XML_LIT_SEASON_VALUES
+	Export_to_file(expt, ELEM_BEGIN_NAME(XML_LIT_SEASON_VALUES) "\n", STR_LIT_OBD);
+
+	for (c = 0; c <= POCET_OBDOBI; c++) {
+		Export_to_file(expt, ELEM_BEGIN_ID_VALUE(XML_LIT_SEASON) "%s" ELEM_END(XML_LIT_SEASON) "\n", c, nazov_obdobia_ext(c), nazov_obdobia(c));
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_SEASON_VALUES) "\n\n");
+
+	// sub-element XML_LIT_COMMUNIA_VALUES
+	Export_to_file(expt, ELEM_BEGIN_NAME(XML_LIT_COMMUNIA_VALUES) "\n", STR_FORCE_OPT_3);
+
+	for (c = 0; c <= POCET_SPOL_CASTI; c++) {
+		Export_to_file(expt, ELEM_BEGIN_ID(XML_LIT_COMMUNIA) "%s" ELEM_END(XML_LIT_COMMUNIA) "\n", c, nazov_spolc(c));
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_COMMUNIA_VALUES) "\n\n");
+
+	// sub-element XML_LIT_TYPE_VALUES
+	Export_to_file(expt, ELEM_BEGIN(XML_LIT_TYPE_VALUES) "\n");
+
+	for (c = 0; c <= POCET_SLAVENI; c++) {
+		Export_to_file(expt, ELEM_BEGIN_ID(XML_LIT_TYPE) "%s" ELEM_END(XML_LIT_TYPE) "\n", c, nazov_slavenia(c));
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_TYPE_VALUES) "\n\n");
+
+	// sub-element XML_LIT_COLOR_VALUES
+	Export_to_file(expt, ELEM_BEGIN(XML_LIT_COLOR_VALUES) "\n");
+
+	for (c = 1; c <= POCET_FARIEB_REALNYCH; c++) {
+		// do not export color "0" = N/A
+		Export_to_file(expt, ELEM_BEGIN_ID(XML_LIT_COLOR) "%s" ELEM_END(XML_LIT_COLOR) "\n", c, nazov_farby(c));
+	}
+
+	Export_to_file(expt, ELEM_END(XML_LIT_COLOR_VALUES) "\n\n");
+
+	// end of element XML_SUPPORTED_VALUES
+	Export_to_file(expt, ELEM_END(XML_SUPPORTED_VALUES) "\n\n");
+
+	// element XML_INFO with sub-elements
 	Export_to_file(expt, ELEM_BEGIN(XML_INFO) "\n");
+
 	Export_to_file(expt, ELEM_BEGIN(XML_COPYRIGHT) "%s" ELEM_END(XML_COPYRIGHT) "\n", TEXT_COPYRIGHT);
 	Export_to_file(expt, ELEM_BEGIN(XML_ADDRESS) "%s" ELEM_END(XML_ADDRESS) "\n", TEXT_EMAIL);
 	Export_to_file(expt, ELEM_BEGIN(XML_GENERATED) "" HTML_ISO_FORMAT "" ELEM_END(XML_GENERATED) "\n", dnes.tm_year, dnes.tm_mon + 1, dnes.tm_mday);
 	Export_to_file(expt, ELEM_BEGIN(XML_BUILD_DATE) "%s" ELEM_END(XML_BUILD_DATE) "\n", BUILD_DATE);
+
 	Export_to_file(expt, ELEM_END(XML_INFO) "\n\n");
 
 	Export_to_file(expt, ELEM_END(XML_MAIN) "\n\n");

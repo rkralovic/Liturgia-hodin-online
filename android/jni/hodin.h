@@ -153,10 +153,10 @@ const char *html_button_nazov_modlitby_jazyk[POCET_MODLITIEB + 1][POCET_JAZYKOV 
 	, { "Vešpery", "Nešpory", "Vesperae", "Vesperæ", "", "Večerní chv.", "Esti dics.", "Вечерня", "Нешпары", /* STRING_1_FOR_NEW_LANGUAGE */ }
 	, { "Kompl.", "Kompl.", "Compl.", "Compl.", "", "Kompl.", "Befejező i.", "Повеч.", "Кампл.", /* STRING_1_FOR_NEW_LANGUAGE */ }
 	, { "neurčená", "neurčena", "not-defined", "no data", "", "neurčena", "nem azonosított", "ru_text", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ } // táto sa pre HTML buttony nepoužíva
-	, { "Prvé vešp.", "První nešp.", "1st Vesperae", "I vesperæ", "", "První v. chv.", "I. esti dics.", "ru_text", "I Нешпары", /* STRING_1_FOR_NEW_LANGUAGE */ }
-	, { "Prvé kompl.", "První kompl.", "Compl.", "Compl.", "", "První kompl.", "Bef. i. I. e. d. után", "ru_text", "Кампл. пас. І Нешп.", /* STRING_1_FOR_NEW_LANGUAGE */ }
-	, { "Druhé vešp.", "Druhé nešpory", "2nd Vesperae", "II vesperæ", "", "Druhé večerní chv.", "II. esti dics.", "ru_text", "II Нешпары", /* STRING_1_FOR_NEW_LANGUAGE */ }
-	, { "Druhé kompl.", "Druhý kompl.", "2nd Completary", "II completorium", "", "Druhý kompl.", "Bef. i. II. e. d. után", "ru_text", "Кампл. пас. IІ Нешп.", /* STRING_1_FOR_NEW_LANGUAGE */ }
+	, { "Prvé vešp.", "První nešp.", "1st Vesperae", "I vesperæ", "", "1. večerní chv.", "I. esti dics.", "ru_text", "I Нешпары", /* STRING_1_FOR_NEW_LANGUAGE */ }
+	, { "Prvé kompl.", "První kompl.", "Compl.", "Compl.", "", "1. kompl.", "Bef. i. I. e. d. után", "ru_text", "Кампл. пас. І Нешп.", /* STRING_1_FOR_NEW_LANGUAGE */ }
+	, { "Druhé vešp.", "Druhé nešpory", "2nd Vesperae", "II vesperæ", "", "2. večerní chv.", "II. esti dics.", "ru_text", "II Нешпары", /* STRING_1_FOR_NEW_LANGUAGE */ }
+	, { "Druhé kompl.", "Druhý kompl.", "2nd Completary", "II completorium", "", "2. kompl.", "Bef. i. II. e. d. után", "ru_text", "Кампл. пас. IІ Нешп.", /* STRING_1_FOR_NEW_LANGUAGE */ }
 	// JUV: temporarily disabled due to lack of colspan functionality in display: table etc. elements | , { "výber spoločnej časti...", "výběr společné části...", "common texts...", "optiónes...", "", "výběr společné části...", "közös rész kiválasztása...", "ru_text", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ }
 	, { "výber...", "výběr...", "common texts...", "optiónes...", "", "výběr...", "közös...", "ru_text", "by_text", /* STRING_1_FOR_NEW_LANGUAGE */ }
 	, { "všetky", "všechny", "all", "omnia", "", "všechny", "összes", "ru_text", "усе", /* STRING_1_FOR_NEW_LANGUAGE */ }
@@ -480,7 +480,7 @@ const char *nazov_slavenia_na_spomienku_jazyk[POCET_JAZYKOV + 1] =
 
 // calendar codes; internal usage for HTTP requests
 const char *skratka_kalendara[POCET_KALENDAROV + 1] =
-{ "??", "la", "sk", "cz", "czop", "cssr", "hu", "svd", "sj", "sdb", "ofm", "op", "cm", "opraem", "ofmcap", "czcssr", "czsdb", "ru", "huofm", "ocd", "husvd", "by", "czofm", /* ADD_VALUE_FOR_NEW_CALENDAR */ };
+{ "", "la", "sk", "cz", "czop", "cssr", "hu", "svd", "sj", "sdb", "ofm", "op", "cm", "opraem", "ofmcap", "czcssr", "czsdb", "ru", "huofm", "ocd", "husvd", "by", "czofm", /* ADD_VALUE_FOR_NEW_CALENDAR */ };
 
 // filenames for special calendars / názov súbora pre kalendáre -- "pro" == propriá
 const char *nazov_htm_kalendar[POCET_KALENDAROV + 1] =
@@ -601,12 +601,6 @@ const char *nazov_kalendara_smart[POCET_KALENDAROV + 1] =
 	, "pro františkány (OFM)"
 	, /* ADD_VALUE_FOR_NEW_CALENDAR */
 };
-
-#if defined(OS_Windows_Ruby) || defined(IO_ANDROID)
-#define nazov_kalendara_vyber nazov_kalendara_smart
-#else
-#define nazov_kalendara_vyber nazov_kalendara_long
-#endif
 
 // special "local" or "partial" characteristics of various celebrations - each in one language; no need to translate; special strings will be added
 const char *nazov_slavenia_lokal[] =
@@ -12749,7 +12743,7 @@ const char *text_OKT_22_OP[POCET_JAZYKOV + 1] =
 	"",
 	"",
 	"",
-	"Výročí posvěcení klášterního kostela",
+	"Výročí posvěcení klášterního kostela, " HTML_LINE_BREAK "jehož den dedikace není známý",
 	"",
 	"ru_text",
 	"by_text",
