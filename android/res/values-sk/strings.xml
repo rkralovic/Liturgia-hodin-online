@@ -102,4 +102,41 @@
     <string name="about_PLATFORM_ANDROID">Android</string>
     <string name="about_PLATFORM_IOS">iOS</string>
 
+    <string name="tts_settings_title">Hlasový výstup</string>
+    <string name="tts_settings_content"><![CDATA[
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+body { background-color: #000000; color: #cccccc; }
+</style>
+</head>
+<body>
+
+<h1>Ako si nastaviť hlasový výstup</h1>
+
+<p>
+Ak ste ešte nepoužívali hlasový výstup, je potrebné nainštalovať si aplikáciu
+pre syntézu hlasu a nastaviť ju ako predvolenú v systémových nastaveniach.
+
+<p>
+Pre slovenčinu existuje napr. aplikácia Espeak, ktorá je k dispozícii zdarma.
+Existujú aj platené aplikácie s lepšou kvalitou hlasového výstupu. V aplikácii
+je ešte potrebné stianuť si podporu pre slovenčinu.
+
+<p>
+<button onclick="bridge.openIntent('https://play.google.com/store/apps/details?id=com.redzoc.ramees.tts.espeak')">Nainštalovať Espeak z Google Play"</button>
+
+<p>
+<button onclick="bridge.openTTSSettings()">Nastaviť predvolenú aplikáciu pre syntézu hlasu"</button>
+
+<p>
+Po nastavení hlasového výstupu môzeťe v aplikácii spustiť čítanie aktuálne
+zobrazených modlitieb z menu (vľavo) alebo z aplikačnej lišty (hore).
+
+</body>
+</html>
+    ]]></string>
+
+
 </resources>

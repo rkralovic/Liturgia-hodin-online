@@ -102,4 +102,37 @@
     <string name="about_PLATFORM_ANDROID">Android</string>
     <string name="about_PLATFORM_IOS">iOS</string>
 
+    <string name="tts_settings_title">Hlasový výstup</string>
+    <string name="tts_settings_content"><![CDATA[
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+body { background-color: #000000; color: #cccccc; }
+</style>
+</head>
+<body>
+
+<h1>Ako si nastaviť hlasový výstup</h1>
+
+<p>
+Ak ste ešte nepoužívali hlasový výstup, je potrebné nainštalovať si aplikáciu
+pre syntézu hlasu a nastaviť ju ako predvolenú v systémových nastaveniach.
+
+<p> Niektoré jazyky, vrátane češtiny, majú dobrú podporu vo vstavanej
+androidovej syntéze hlasu (prinajmenšom v novších verziách Androidu). Ak ju
+chcete použiť, odporúčame Vám stiahnuť si podporu pre jazyk, ktorý plánujete
+používať, do Vášho telefónu.
+
+<p> <button onclick="bridge.openTTSSettings()">Nastaviť predvolenú aplikáciu
+pre syntézu hlasu"</button>
+
+<p>
+Po nastavení hlasového výstupu môzeťe v aplikácii spustiť čítanie aktuálne
+zobrazených modlitieb z menu (vľavo) alebo z aplikačnej lišty (hore).
+
+</body>
+</html>
+    ]]></string>
+
 </resources>
