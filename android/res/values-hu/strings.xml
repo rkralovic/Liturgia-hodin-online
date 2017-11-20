@@ -43,7 +43,7 @@
     <string name="wrapping_printed">Hosszú sorok tördelése, mint a nyomtatott kiadásban (versrészek)</string>
     <string name="smart_buttons">Az imaórák gombjainak gazdaságos elhelyezése</string>
     <string name="night_mode">Éjszakai mód</string>
-    <string name="background_override">Fehér/fekete háttér (vetítő/AMOLED kijelző)</string>
+    <string name="background_override">Alternative colors (yellow background)</string>
     <string name="normal_font">Normál betűtípus használata (félkövér tiltása)</string>
     <string name="buttons_order">Dátumválasztó gombok megjelenítése az imaóraválasztó gombok után</string>
 
@@ -102,34 +102,26 @@
     <string name="about_PLATFORM_ANDROID">Android</string>
     <string name="about_PLATFORM_IOS">iOS</string>
 
-    <string name="tts_settings_title">Voice output</string>
+    <string name="tts_settings_title">Hang kimenet</string>
     <string name="tts_settings_content"><![CDATA[
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
-body { background-color: #000000; color: #cccccc; }
+body { background-color: #303030; color: #dddddd; }
 </style>
 </head>
 <body>
 
-<h1>How to set up voice output</h1>
+<h3>A hangkimenet beállítása</h3>
 
-<p> If you have not used voice output yet, you need to install an application
-for speech synthesis and set it as preferred in your system settings.
+<p>Ha még nem használta a hangkimeneteket, akkor telepítenie kell egy beszédszintézis (TTS, text-to-speech) alkalmazást, és a rendszer beállításaiban preferáltatnia kell.</p>
 
-<p> Some languages (e.g. Czech, English, and Hungarian) are well supported by
-native Android speech synthesis (at least on recent versions of Android). If
-you want to use those, we recommend you to download the languages you plan to
-use for offline use.
+<p>Néhány nyelvet (például a cseh, az angol és a magyar nyelvet) a natív Android beszédszintézis támogatja (legalábbis az Android legújabb verzióiban). Ha használni szeretné ezeket, javasoljuk, hogy töltse le azokat a nyelveket, amelyeket használni szeretne offline használatra. </ P>
 
-<p>
-<button onclick="bridge.openTTSSettings()">Open settings for speech synthesis"</button>
+<p><button onclick="bridge.openTTSSettings()">A TTS beállításainak megnyitása</button></p>
 
-<p>
-After configuring the speech synthesis, you may start voice output for the
-currently displayed prayers from the menu (left) or the action bar (top) in the
-application.
+<p>A beszédszintézis konfigurálása után elindíthatja a megjelenített imákat a menüben (baloldalt) vagy az alkalmazásban lévő cselekvéssávon (fent).</p>
 
 </body>
 </html>

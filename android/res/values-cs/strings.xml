@@ -43,7 +43,7 @@
     <string name="wrapping_printed">Zalomit dlouhé řádky poetických textů jako v tištěném vydání</string>
     <string name="smart_buttons">Tlačítka pro modlitby zobrazit úsporně</string>
     <string name="night_mode">Noční režim</string>
-    <string name="background_override">Bílé/černé pozadí (projektor/AMOLED)</string>
+    <string name="background_override">Alternativní barvy (žluté pozadí)</string>
     <string name="normal_font">Všude použít obyčejné písmo (ne tučné)</string>
     <string name="buttons_order">Navigační tlačítka pro datum zobrazit až pod tlačítky pro modlitby</string>
 
@@ -108,28 +108,20 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <style type="text/css">
-body { background-color: #000000; color: #cccccc; }
+body { background-color: #303030; color: #dddddd; }
 </style>
 </head>
 <body>
 
-<h1>Ako si nastaviť hlasový výstup</h1>
+<h3>Jak nastavit hlasový výstup</h3>
 
-<p>
-Ak ste ešte nepoužívali hlasový výstup, je potrebné nainštalovať si aplikáciu
-pre syntézu hlasu a nastaviť ju ako predvolenú v systémových nastaveniach.
+<p>Pokud jste dosud nepoužívali hlasový výstup, je třeba si nainstalovat aplikaci pro syntézu řeči (TTS, text-to-speech) a nastavit ji jako předvolenou v systémových nastaveních.</p>
 
-<p> Niektoré jazyky, vrátane češtiny, majú dobrú podporu vo vstavanej
-androidovej syntéze hlasu (prinajmenšom v novších verziách Androidu). Ak ju
-chcete použiť, odporúčame Vám stiahnuť si podporu pre jazyk, ktorý plánujete
-používať, do Vášho telefónu.
+<p>Některé jazyky, také čeština, mají dobrou podporu ve vstavané androidové syntéze řeči (určitě to platí pro novější verze Androidu). Pokud ji chcete použít, doporučujeme stáhnout si podporu pro jazyk, který plánujete používat, do Vašeho zařízení.</p>
 
-<p> <button onclick="bridge.openTTSSettings()">Nastaviť predvolenú aplikáciu
-pre syntézu hlasu"</button>
+<p><button onclick="bridge.openTTSSettings()">Nastavit předvolenou aplikaci pro TTS"</button></p>
 
-<p>
-Po nastavení hlasového výstupu môzeťe v aplikácii spustiť čítanie aktuálne
-zobrazených modlitieb z menu (vľavo) alebo z aplikačnej lišty (hore).
+<p>Po nastavení hlasového výstupu můzete v aplikaci spustit předčítání aktuálních modliteb z menu (vysouvací zleva) nebo z aplikační lišty (nahoru).</p>
 
 </body>
 </html>
