@@ -88,6 +88,8 @@
     <string name="tts_ready">Speak prayers</string>
     <string name="tts_speaking">Stop speaking</string>
 
+    <string name="notification_not_allowed">You have not allowed the app to change ring mode.</string>
+
     <string name="channel_name">Breviary</string>
     <string name="channel_description">Notifications about prayer times</string>
 
@@ -128,5 +130,8 @@ body { background-color: #303030; color: #dddddd; }
 </html>
     ]]></string>
 
+    <!-- We have some crashes on Android 5.1 in creation of the headless webview,
+    because of missing this resource. //-->
+    <string name = "accessibility_content_view" translatable="false">Content</string>
 
 </resources>
