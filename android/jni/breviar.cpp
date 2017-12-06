@@ -15584,7 +15584,7 @@ short int getQueryTypeFrom_WWW(void) {
 // vracia: on success, returns SUCCESS
 //         on error,   returns FAILURE
 // popritom: nastavi do query_type to, co by malo byt po switchi -q
-short int getArgv(int argc, char **argv) {
+short int getArgv(int argc, const char **argv) {
 	short int c;
 	optind = 0; // pokial tu toto nebolo, tak getopt sa neinicializovala pri dalsich volaniach
 	char *option_string;
@@ -17781,7 +17781,7 @@ void normalize_calendar_for_language() {
 }
 
 // main
-int breviar_main(int argc, char **argv) {
+int breviar_main(int argc, const char **argv) {
 	short int i;
 	short int local_den, local_mesiac, local_rok, local_modlitba;
 
@@ -18649,7 +18649,7 @@ _main_end:
 }// breviar_main()
 
 #ifndef SKIP_MAIN
-int main(int argc, char **argv) {
+int main(int argc, const char **argv) {
 	int ret = breviar_main(argc, argv);
 
 #ifdef EXPORT_TO_STRING
