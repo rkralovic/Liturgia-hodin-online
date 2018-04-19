@@ -1,7 +1,3 @@
-.appeal {
-	font-weight: bold;
-}
-
 .comment, p.comment, .hymn p.comment { 
 	font-size: 80%; 
 	font-weight: normal; 
@@ -96,11 +92,11 @@
 	font-weight: bold; 
 }
 
-.respons .redsmall, .responsory .redsmall { 
+.respons .redsmall { 
 	font-weight: normal;
 }
 
-div.hymn, div.responsory, div.readings {
+div.hymn {
 	font-weight: bold;
 }
 
@@ -118,10 +114,6 @@ div.navd p {
 
 div.navm p {
 	text-align: center;
-}
-
-div.responsory {
-	margin: 1em 0;
 }
 
 .reading-source { 
@@ -370,13 +362,6 @@ div.responsory {
 	text-align: center; 
 }
 
-.psalm .titlehu {
-	color: #ff0000;
-	font-size: 80%;
-	font-weight: normal;
-	margin-top: 1em;
-}
-
 .psalm p.bold, .psalm p.strong { 
 	font-weight: bold; 
 }
@@ -416,14 +401,6 @@ div.responsory {
 
 .psalm p.emptyline { 
 	-webkit-margin-after: 1em; 
-}
-
-p.title, .hymn .title, .psalm .title, .readings .title , .responsory .title, .canticle .title, .prayers .title, .appeal .title , .tedeum .title { 
-	margin-top: 2em;
-	color: #ff0000; 
-	font-size: 80%; 
-	font-weight: normal;
-	/* text-align: left; */
 }
 
 .antiphon { 

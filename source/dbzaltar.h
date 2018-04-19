@@ -31,18 +31,17 @@ short int sviatky_svatych(short int, short int, short int, short int); // spusta
 extern short int modlitba;
 
 // anchors - nazvy kotiev pre zaltar styroch tyzdnov
-extern char _anchor[SMALL];
-
-extern char _anchor_head[SMALL];
+extern char _anchor[MAX_STR_AF_ANCHOR];
+extern char _anchor_head[MAX_STR_AF_ANCHOR];
 
 extern char pismenko_modlitby(short int modlitba);
 extern void anchor_name_zaltar(short int den, short int tyzzal, short int modlitba, const char *anchor);
 extern void anchor_name_zaltar_alt(short int den, short int tyzzal, short int modlitba, const char *anchor, short int alt);
 
-extern char _file[SMALL]; // nazov súboru, napr. _1ne.htm
-extern char _file_pc[SMALL]; // nazov fajlu pre posvatne citania
-extern char _file_pc_tyzden[SMALL]; // nazov fajlu pre posvatne citania v zavislosti od tyzdna (obdobie cez rok)
-extern char _file_orig[SMALL]; // nazov súboru, do ktorého sa v prípade kompletória dočasne odloží pôvodný súbor
+extern char _file[MAX_STR_AF_FILE]; // nazov súboru, napr. _1ne.htm
+extern char _file_pc[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania
+extern char _file_pc_tyzden[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania v zavislosti od tyzdna (obdobie cez rok)
+extern char _file_orig[MAX_STR_AF_FILE]; // nazov súboru, do ktorého sa v prípade kompletória dočasne odloží pôvodný súbor
 
 // "funkcie" na store/restore pôvodného filename
 #define file_name_zapamataj()	strcpy(_file_orig, _file);

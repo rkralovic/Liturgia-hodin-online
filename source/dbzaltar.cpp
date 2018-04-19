@@ -20,7 +20,7 @@
 #include "mystring.h"
 #include "breviar.h"
 
-char _anchor_head[SMALL];
+char _anchor_head[MAX_STR_AF_ANCHOR];
 
 // has celebration its own psalmody? cf. General Instrucions, n. 134
 short int su_zalmy_vlastne(short int m){
@@ -1154,10 +1154,10 @@ void _set_chvalospev_vig_sc_vpchr(short int modlitba) {
 } // _set_chvalospev_vig_sc_vpchr()
 
 // files - nazvy suborov pre zaltar styroch tyzdnov
-char _file[SMALL]; // nazov súboru, napr. _1ne.htm
-char _file_pc[SMALL]; // nazov fajlu pre posvatne citania
-char _file_pc_tyzden[SMALL]; // nazov fajlu pre posvatne citania v zavislosti od tyzdna (obdobie cez rok)
-char _file_orig[SMALL]; // nazov súboru, do ktorého sa v prípade kompletória dočasne odloží pôvodný súbor
+char _file[MAX_STR_AF_FILE]; // nazov súboru, napr. _1ne.htm
+char _file_pc[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania
+char _file_pc_tyzden[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania v zavislosti od tyzdna (obdobie cez rok)
+char _file_orig[MAX_STR_AF_FILE]; // nazov súboru, do ktorého sa v prípade kompletória dočasne odloží pôvodný súbor
 
 // tyzzal == 1 .. 4, den == 0 (DEN_NEDELA) .. 6 (DEN_SOBOTA)
 void file_name_zaltar(short int den, short int tyzzal) {
@@ -1194,7 +1194,7 @@ void file_name_litobd_pc_tyzden(short int litobd, short int tyzden) {
 }
 
 // anchors - nazvy kotiev pre zaltar styroch tyzdnov
-char _anchor[SMALL];
+char _anchor[MAX_STR_AF_ANCHOR];
 
 // tyzzal == 1 .. 4, den == 0 (DEN_NEDELA) .. 6 (DEN_SOBOTA), modlitba == MODL_..., anchor == ANCHOR_...
 char pismenko_modlitby(short int modlitba) {
@@ -1314,7 +1314,7 @@ void set_hymnus_kompletorium_obd(short int den, short int tyzzal, short int modl
 
 	// úprava kotvy pre český breviář, VN1 (HVV obsahujú o jeden viac ako v mezidobí)
 	if ((_global_jazyk == JAZYK_CZ) && (pom_litobd == OBD_VELKONOCNE_I)) {
-		mystrcpy(_anchor_pom, _anchor, SMALL);
+		mystrcpy(_anchor_pom, _anchor, MAX_STR_AF_ANCHOR);
 		sprintf(_anchor, "%s" STR_UNDERSCORE "%s", nazov_OBD[pom_litobd], _anchor_pom);
 	}
 
@@ -1815,13 +1815,13 @@ void set_maria_ant(short int modlitba) {
 
 void set_popis(short int modlitba, char *file, char *anchor) {
 	_set_popis(modlitba, file, anchor);
-	Log("   set(popis): %s: súbor `%s', kotva `%s'\n", nazov_modlitby(modlitba), _file, _anchor);
+	Log("   set(popis): %s: súbor `%s', kotva `%s'\n", nazov_modlitby(modlitba), file, anchor);
 } // set_popis();
 
 void set_popis_dummy(void) {
 	Log("  teraz nastavujem POPIS (dummy)...\n");
-	char _file[SMALL];
-	char _anchor[SMALL];
+	char _file[MAX_STR_AF_FILE];
+	char _anchor[MAX_STR_AF_ANCHOR];
 	mystrcpy(_file, STR_UNDEF, MAX_STR_AF_FILE);
 	mystrcpy(_anchor, STR_UNDEF, MAX_STR_AF_ANCHOR);
 	set_popis(MODL_RANNE_CHVALY, _file, _anchor);
@@ -1838,8 +1838,8 @@ void set_popis_dummy(void) {
 
 void set_popis_dummy_except_vespers(void) {
 	Log("  teraz nastavujem POPIS (dummy) okrem vešpier...\n");
-	char _file[SMALL];
-	char _anchor[SMALL];
+	char _file[MAX_STR_AF_FILE];
+	char _anchor[MAX_STR_AF_ANCHOR];
 	mystrcpy(_file, STR_UNDEF, MAX_STR_AF_FILE);
 	mystrcpy(_anchor, STR_UNDEF, MAX_STR_AF_ANCHOR);
 	set_popis(MODL_RANNE_CHVALY, _file, _anchor);
@@ -4663,7 +4663,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 	file_name_litobd_pc(litobd);
 	Log("  _file_pc == %s\n", _file_pc);
 
-	mystrcpy(_file_pc_tyzden, STR_EMPTY, SMALL);
+	mystrcpy(_file_pc_tyzden, STR_EMPTY, MAX_STR_AF_FILE);
 	Log("  _file_pc_tyzden bude nastavene na prislusnom mieste (teraz == `%s').\n", _file_pc_tyzden);
 
 	char c; // používa sa vo výnimočných prípadoch: napr. druha velkonocna nedela
@@ -6413,6 +6413,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				// krst krista pana -- 1. nedela obdobia `cez rok'
 				// niekedy môže padnúť aj na pondelok (ak sa Zjavenie Pána slávi v nedeľu, ktorá padne na 7. alebo 8. januára)
 				mystrcpy(_file, FILE_KRST_PANA, MAX_STR_AF_FILE);
+				mystrcpy(_file_pc, FILE_KRST_PANA, MAX_STR_AF_FILE); // kvôli vigílii
 				// _file_pc ostáva nastavené pre OCR | kvôli define _vlastne_slavenie_set_vig_ant()
 				mystrcpy(_anchor, ANCHOR_KRST_PANA, MAX_STR_AF_ANCHOR);
 				mystrcpy(_anchor_vlastne_slavenie, ANCHOR_KRST_PANA, MAX_STR_AF_ANCHOR);
@@ -8161,6 +8162,12 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_set_hymnus_alternativy(MODL_RANNE_CHVALY, litobd);
 				_set_hymnus_alternativy(MODL_VESPERY, litobd);
 			}
+			else {
+				// kvôli vešperám, keď sa najprv potenciálne nastaví pre predchádzajúci deň
+				_set_hymnus_alternativy_NO(MODL_POSV_CITANIE, litobd);
+				_set_hymnus_alternativy_NO(MODL_RANNE_CHVALY, litobd);
+				_set_hymnus_alternativy_NO(MODL_VESPERY, litobd);
+			}
 
 			t = tyzden MOD 2;
 
@@ -9217,11 +9224,11 @@ void __set_spolocna_cast(short int a, short int poradie_svaty, _struct_sc sc, in
 	// 2013-07-04: upravené poradie modlitieb na správne; technicky potrebné kvôli tomu, že niektoré nastavenia psalmódie (pre posv. čítanie) musia prebehnúť prv, ako sa nastavuje modlitba cez deň | kvôli použitiu Ž 129 resp. Ž 131 namiesto Ž 122, 126 resp. 127 pre doplnkovú psalmódiu
 
 	// anchors - nazvy kotiev pre zaltar styroch tyzdnov
-	char _anchor[SMALL];
-	char _anchor_head[SMALL];
-	char _anchor_pom[SMALL]; // ďalší pomocný anchor, ktorý pojednáva o zväzku breviára kvôli posv. čítaniam
-	char _anchor_zvazok[SMALL]; // files - nazvy suborov pre zaltar styroch tyzdnov
-	char _file[SMALL]; // nazov fajlu, napr. _1ne.htm
+	char _anchor[MAX_STR_AF_ANCHOR];
+	char _anchor_head[MAX_STR_AF_ANCHOR];
+	char _anchor_pom[MAX_STR_AF_ANCHOR]; // ďalší pomocný anchor, ktorý pojednáva o zväzku breviára kvôli posv. čítaniam
+	char _anchor_zvazok[MAX_STR_AF_ANCHOR]; // files - nazvy suborov pre zaltar styroch tyzdnov
+	char _file[MAX_STR_AF_FILE]; // nazov fajlu, napr. _1ne.htm
 	short int b; // pre ucitelov cirkvi, odkial sa maju brat ine casti
 	short int podmienka = NIE;
 

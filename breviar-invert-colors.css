@@ -107,15 +107,7 @@
 	color: #FF3333;
 }
 
-.psalm .titlehu {
-	color: #FF3333;
-}
-
 .psalm p.last:after { 
-	color: #FF3333;
-}
-
-p.title, .hymn .title, .psalm .title, .readings .title , .responsory .title, .canticle .title, .prayers .title, .appeal .title , .tedeum .title { 
 	color: #FF3333;
 }
 

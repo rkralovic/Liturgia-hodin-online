@@ -2547,8 +2547,11 @@ short int sviatky_svatych_02_februar(short int den, short int poradie_svaty, _st
 			_vlastna_cast_full(modlitba);
 			_set_zalmy_1nedele_rch();
 
-			// MCD: antifóny a žalmy sú z bežného dňa
-			if ((_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP)) {
+			// MCD: antifóny a žalmy sú z bežného dňa; special case for OPraem added
+			if ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OPRAEM)) {
+				_vlastna_cast_mcd_full;
+			}
+			else if ((_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP)) {
 				_vlastna_cast_mcd_hymnus_kcitresp_modl;
 			}
 			else {
@@ -31165,7 +31168,7 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 	}// srdca panny marie
 
 	 // spomienka panny marie matky cirkvi
-	if ((_global_den.denvr == MARIE_MATKY_CIRKVI) && ((_global_pocet_svatych == 0) || ((_global_svaty1.smer >= 10) && !MIESTNE_SLAVENIE_LOKAL_SVATY(1)))) {
+	if ((_global_den.denvr == MARIE_MATKY_CIRKVI) && ((_global_pocet_svatych == 0) || (poradie_svaty == 0) || ((_global_svaty1.smer >= 10) && !MIESTNE_SLAVENIE_LOKAL_SVATY(1)))) {
 		// spomienka panny marie matky cirkvi | "berie sa v takom pripade, ked nie je slavenie s vyssou prioritou, teda smer < 10"
 		Log(" panny marie matky cirkvi: \n");
 		Log(" ...berie sa len v takom pripade, ked to nekoliduje\n");
@@ -31178,7 +31181,7 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 				set_spolocna_cast(sc, poradie_svaty);
 			}
 
-			Log("vo funkcii sviatky_svatych() spustam set_popis_dummy(); - kvoli spomienke neposkvrneneho srdca panny marie...\n");
+			Log("vo funkcii sviatky_svatych() spustam set_popis_dummy(); - kvoli spomienke panny marie matky cirkvi...\n");
 			set_popis_dummy();
 			Log("set_popis_dummy() skoncila.\n");
 
@@ -31256,9 +31259,8 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 	}
 
 	Log("_global_svaty[1...%d] som nemenil, lebo poradie_svaty == %d\n", MAX_POCET_SVATY, poradie_svaty);
-	Log("teraz priradim do _global_den vsetko z _global_svaty(%d)...\n", poradie_svaty);
-	Log("    (tato cast bola povodne v sviatky_svatych s 3 vstupmi, ale teraz je tu)\n");
 	if ((poradie_svaty > 0) && (poradie_svaty < PORADIE_PM_SOBOTA)) {
+		Log("teraz priradim do _global_den vsetko z _global_svaty(%d)...\n", poradie_svaty);
 		// 0: všetko je nastavené v _global_den
 		_global_den = _global_svaty(poradie_svaty);
 		// PORADIE_PM_SOBOTA: všetko je nastavené v _global_pm_sobota;
