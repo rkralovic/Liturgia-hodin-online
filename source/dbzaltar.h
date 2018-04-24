@@ -847,16 +847,6 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	}\
 }
 
-// pre invitatórium, ak je antifón viacero, napr. pre PM, ofícium na posviacku chrámu a pod.
-#define _spolocna_cast_antifona_inv_viac(m, kolko) {\
-	if(su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(m) || ((force & FORCE_BRAT_ANTIFONY_INV) == FORCE_BRAT_ANTIFONY_INV)){\
-		sprintf(_anchor, "%s%c%s%d", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_ANTIFONA1, (_global_den.den MOD kolko) + 1);\
-		if(modlitba == MODL_POSV_CITANIE){_set_antifona1(modlitba, _file_pc, _anchor);}\
-		else{_set_antifona1(modlitba, _file, _anchor);}\
-		set_LOG_svsv;\
-	}\
-}
-
 // 1. čítanie
 #define _spolocna_cast_1citanie {\
 	sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_CITANIE1);\

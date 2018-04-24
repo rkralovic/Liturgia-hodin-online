@@ -497,23 +497,24 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 	char local_str[SMALL];
 	long local_opt_default;
 	short int podmienka;
-	for (i = 0; i < POCET_GLOBAL_OPT; i++){
+	for (i = 0; i < POCET_GLOBAL_OPT; i++) {
 		Log("i == %d...\n", i);
 		local_opt_default = CFG_OPTION_DEFAULT(i);
-#if defined(IO_ANDROID) || defined(BEHAVIOUR_WEB)
+#if defined(IO_ANDROID)
 		// Export all options in android, so that the UI can parse and modify their values correctly.
 		podmienka = 1;
+// #elif defined(BEHAVIOUR_WEB)
 #else
-		if (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE){
+		if (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) {
 			Log("_global_opt[%d] == %ld; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, local_opt_default);
 			podmienka = (_global_opt[i] != local_opt_default);
 		}
-		else{
+		else {
 			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
 			podmienka = (_global_force_opt[i] != local_opt_default);
 		}
 #endif
-		if(podmienka){
+		if (podmienka) {
 			strcpy(local_str, STR_EMPTY);
 
 			strcat_str_opt_bit_order(local_str, i, USE_STR_OPT);
@@ -524,13 +525,13 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int fo
 		}
 	}// for i
 
-	if (force_opt == PRILEP_REQUEST_OPTIONS_AJ_FORCE){
+	if (force_opt == PRILEP_REQUEST_OPTIONS_AJ_FORCE) {
 		Log("prilepujem aj force options...\n");
-		for (i = 0; i < POCET_GLOBAL_OPT; i++){
+		for (i = 0; i < POCET_GLOBAL_OPT; i++) {
 			Log("i == %d...\n", i);
 			local_opt_default = CFG_OPTION_DEFAULT(i);
 			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
-			if ((_global_opt[i] != _global_force_opt[i]) && (_global_opt[i] != local_opt_default)){
+			if ((_global_opt[i] != _global_force_opt[i]) && (_global_opt[i] != local_opt_default)) {
 				strcpy(local_str, STR_EMPTY);
 
 				strcat_str_opt_bit_order(local_str, i, USE_STR_FORCE_OPT);

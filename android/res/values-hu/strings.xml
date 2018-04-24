@@ -109,7 +109,7 @@
     <string name="about_PLATFORM_IOS">iOS</string>
 
     <string name="tts_settings_title">Hang kimenet</string>
-    <string name="tts_use_pause_in_psalms">Make pauses when reading psalms</string>
+    <string name="tts_use_pause_in_psalms">A zsoltározás és kantikumok olvasásánál szüneteket tartani (csillagok, keresztek)</string>
     <string name="tts_settings_help">Hang kimenet</string>
     <string name="tts_settings_help_title">Hang kimenet</string>
     <string name="tts_settings_help_content"><![CDATA[
@@ -126,7 +126,7 @@ body { background-color: #303030; color: #dddddd; }
 
 <p>Ha még nem használta a hangkimeneteket, akkor telepítenie kell egy beszédszintézis (TTS, text-to-speech) alkalmazást, és a rendszer beállításaiban preferáltatnia kell.</p>
 
-<p>Néhány nyelvet (például a cseh, az angol és a magyar nyelvet) a natív Android beszédszintézis támogatja (legalábbis az Android legújabb verzióiban). Ha használni szeretné ezeket, javasoljuk, hogy töltse le azokat a nyelveket, amelyeket használni szeretne offline használatra. </ P>
+<p>Néhány nyelvet (például a cseh, az angol és a magyar nyelvet) a natív Android beszédszintézis támogatja (legalábbis az Android legújabb verzióiban). Ha használni szeretné ezeket, javasoljuk, hogy töltse le azokat a nyelveket, amelyeket használni szeretne offline használatra.</p>
 
 <p><button onclick="bridge.openTTSSettings()">A TTS beállításainak megnyitása</button></p>
 

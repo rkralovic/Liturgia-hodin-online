@@ -5777,13 +5777,15 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 
 		// narodenie Pana -- 1. jan.
 		case OBD_OKTAVA_NARODENIA:
+
+			// tu v skutočnosti začína VIANOČNÁ OKTÁVA = OKTÁVA NARODENIA PÁNA
+
 			Log("OBD_OKTAVA_NARODENIA - nastavujem kompletórium z nedele po 1. resp. 2. vešperách...\n");
-
-			// tu v skutočnosti začína VIANOČNÁ OKTÁVA
-
-			// kompletórium vo vianočnej oktáve - podobne ako vo veľkonočnej oktáve - je z nedele po prvých resp. druhých vešperách
+			// kompletórium vo vianočnej aj veľkonočnej oktáve je z nedele po prvých resp. druhých vešperách
 			modlitba = MODL_KOMPLETORIUM;
-			_set_kompletorium_slavnost_oktava(modlitba, litobd, /* ktore = 1 alebo 2 */ (_global_den.den MOD 2) + 1);
+			// možnosť použiť prvé alebo druhé nedeľné kompletórium podľa toho, či používať alternatívy; ináč použité napevno podľa modula dňa
+			_set_kompletorium_slavnost_oktava(modlitba, litobd, (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_ROZNE_MOZNOSTI) ? isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_KOMPLETORIUM_OKTAVA) : (_global_den.den MOD 2)) + 1);
+
 			Log("OBD_OKTAVA_NARODENIA - pokračujeme ako vianočné obdobie I...\n");
 			// a pokracujeme ako vianocne obdobie I
 
@@ -8694,10 +8696,11 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 
 			t = tyzden MOD 2;
 
-			// kompletórium vo veľkonočnej oktáve je z nedele po prvých resp. druhých vešperách
+			Log("OBD_VELKONOCNA_OKTAVA - nastavujem kompletórium z nedele po 1. resp. 2. vešperách...\n");
+			// kompletórium vo vianočnej aj veľkonočnej oktáve je z nedele po prvých resp. druhých vešperách
 			modlitba = MODL_KOMPLETORIUM;
-			// ToDo: zapracovať možnosť použiť prvé alebo druhé nedeľné kompletórium; teraz použité napevno podľa modula dňa
-			_set_kompletorium_slavnost_oktava(modlitba, litobd, /* ktore = 1 alebo 2 */ (_global_den.den MOD 2) + 1);
+			// možnosť použiť prvé alebo druhé nedeľné kompletórium podľa toho, či používať alternatívy; ináč použité napevno podľa modula dňa
+			_set_kompletorium_slavnost_oktava(modlitba, litobd, (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_ROZNE_MOZNOSTI) ? isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_KOMPLETORIUM_OKTAVA) : (_global_den.den MOD 2)) + 1);
 
 			if (_global_jazyk == JAZYK_CZ){
 				set_hymnus_kompletorium_obd((_global_den.den MOD 2) == 0 ? DEN_SOBOTA : DEN_NEDELA, tyzzal, modlitba, litobd); // den nastavený na DEN_NEDELA; kvôli JAZYK_CZ -- v oktáve sa berie nedeľný hymnus

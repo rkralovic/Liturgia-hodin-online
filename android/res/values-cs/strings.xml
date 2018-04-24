@@ -109,7 +109,7 @@
     <string name="about_PLATFORM_IOS">iOS</string>
 
     <string name="tts_settings_title">Hlasový výstup</string>
-    <string name="tts_use_pause_in_psalms">V psalmódii použiť pauzu (hviezdičky, krížiky)</string>
+    <string name="tts_use_pause_in_psalms">Pro žalmy a kantika použít pauzu (hvězdičky, křížky)</string>
     <string name="tts_settings_help">Návod pro hlasový výstup</string>
     <string name="tts_settings_help_title">Návod pro hlasový výstup</string>
     <string name="tts_settings_help_content"><![CDATA[

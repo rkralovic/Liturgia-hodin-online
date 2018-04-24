@@ -1,7 +1,14 @@
-.comment, p.comment, .hymn p.comment { 
+.comment, p.comment { 
 	font-size: 80%; 
 	font-weight: normal; 
 	padding-left: 1.2em !important;
+}
+
+.hymn p.comment { 
+	font-size: 80%; 
+	font-weight: normal; 
+	padding-left: -1.2em; 
+	text-indent: 0; 
 }
 
 .textnote, p.textnote, .hymn p.textnote { 
@@ -173,13 +180,18 @@ div.navm p {
 	font-weight: bold; 
 }
 
-.preces p.partR, p.partV, p.intro { 
+.preces p.partR, .preces p.partV, .preces p.intro { 
 	font-weight: bold; 
 	margin: 0; 
 	padding-left: 1.2em; 
 	text-indent: -1.2em; 
 	-webkit-margin-after: 0em; 
 	-webkit-margin-before: 0em; 
+}
+
+.preces p.partR.comment, .preces p.partV.comment, .preces p.intro.comment { 
+	font-weight: normal; 
+	text-indent: 0em; 
 }
 
 .preces p.partR { 

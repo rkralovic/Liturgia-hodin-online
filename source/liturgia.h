@@ -500,6 +500,7 @@ extern const char *FILE_INFO[POCET_INFO_TEXTOV + 1];
 #define PARAM_ZALM150                  "ZALM150"
 #define PARAM_INVITATORIUM_ANT(i)      "ANT-INVITAT" i
 #define PARAM_MARIANSKE_ANTIFONY       "MARIANSKE-ANTIFONY" // Maria antiphones at the end of compline
+#define PARAM_OKTAVA_PRVE_DRUHE_KOMPL  "OKTAVA-PRVE-DRUHE-KOMPLETORIUM"
 
 // these are used in template for invitatory (m_invitat.htm) for hyperlinks
 #define PARAM_INVITAT_PSALM_24        "INVITAT-PS-24"
@@ -1550,7 +1551,7 @@ extern long _global_opt_4_offline_export[POCET_OPT_4_OFFLINE_EXPORT];
 #define BIT_OPT_4_EXCLUDE_MCD_KOMPLET        4 // či sa pri generovaní tlačidla pre predchádzajúcu/nasledujúcu modlitbu majú preskočiť odkazy na MCD a kompletórium v metóde _buttons_prev_up_next() [default: 0 = nie; treba nastavovať kvôli ľubovoľným spomienkam do batch módu]
 #define BIT_OPT_4_DO_NOT_USE_BUTTON          8 // whether do not use HTML_BUTTON_BEGIN..HTML_BUTTON_END for offline HTML export
 
-#define POCET_OPT_5_ALTERNATIVES            18 // jednotlivé komponenty option 5 -- bity pre force option 5
+#define POCET_OPT_5_ALTERNATIVES            19 // jednotlivé komponenty option 5 -- bity pre force option 5
 extern long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_HYMNUS_KOMPL               1 // hymnus na kompletórium (Cezročné obdobie, A/B)
 #define BIT_OPT_5_HYMNUS_PC                  2 // hymnus pre posvätné čítanie (Cezročné obdobie, I./II.)
@@ -1570,6 +1571,7 @@ extern long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_ZAVER_KNAZ_DIAKON      32768 // prayer conclusions for morning and evening prayer: whether take when priest/diacon is present (default: 0, no)
 #define BIT_OPT_5_INVITATORIUM_ANT       65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.)
 #define BIT_OPT_5_OCR_34_HYMNS          131072 // different (special) hymns for 34th week per annum
+#define BIT_OPT_5_KOMPLETORIUM_OKTAVA   262144 // prvé alebo druhé nedeľné kompletórium (pre Veľkonočnú oktávu a Oktávu Narodenia Pána)
 
 #define POCET_OPT_6_ALTERNATIVES_MULTI       10 // count equals to the highest PLACE_OPT_6_... used
 extern long _global_opt_6_alternatives_multi[POCET_OPT_6_ALTERNATIVES_MULTI]; // this is not bitwise long, but simply decimal number; each decimal place representing one value (max. possibly 0--9)

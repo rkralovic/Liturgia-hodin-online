@@ -3392,6 +3392,7 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 		|| (equals(paramname, PARAM_STUPEN_SLAVENIA_SVI_SLAV))
 		|| (equals(paramname, PARAM_MARIANSKE_ANTIFONY))
 		|| (equals(paramname, PARAM_INVITATORIUM_ANT("1")) || equals(paramname, PARAM_INVITATORIUM_ANT("2")) || equals(paramname, PARAM_INVITATORIUM_ANT("3")) || equals(paramname, PARAM_INVITATORIUM_ANT("4")))
+		|| (equals(paramname, PARAM_OKTAVA_PRVE_DRUHE_KOMPL))
 		) {
 		Log("(if((equals(paramname == %s)): _global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_ROZNE_MOZNOSTI == %ld: \n", paramname, _global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_ROZNE_MOZNOSTI);
 
@@ -3540,6 +3541,14 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 			Log("podmienka == %d [_global_poradie_svaty == %d, PORADIE_PM_SOBOTA == %d]\n", podmienka, _global_poradie_svaty, PORADIE_PM_SOBOTA);
 			sprintf(popis_show, "%s", html_text_opt_1_slavit_ako_sviatok[_global_jazyk]);
 			sprintf(popis_hide, "%s", html_text_opt_1_slavit_ako_slavnost[_global_jazyk]);
+		}
+		else if (equals(paramname, PARAM_OKTAVA_PRVE_DRUHE_KOMPL)) {
+			opt = OPT_5_ALTERNATIVES;
+			bit = BIT_OPT_5_KOMPLETORIUM_OKTAVA;
+			podmienka &= ((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || (_global_den.litobd == OBD_OKTAVA_NARODENIA));
+			Log("podmienka == %d [_global_den.litobd == %d]\n", podmienka, _global_den.litobd);
+			sprintf(popis_show, "%s %s", html_text_option_pouzit[_global_jazyk], html_text_opt_5_KomplOkt1[_global_jazyk]);
+			sprintf(popis_hide, "%s %s", html_text_option_pouzit[_global_jazyk], html_text_opt_5_KomplOkt2[_global_jazyk]);
 		}
 		else if (equals(paramname, PARAM_VIGILIA)) {
 			bit = BIT_OPT_1_PC_VIGILIA;
@@ -7417,7 +7426,7 @@ void xml_export_options(void) {
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_1_STUP_SVIATOK_SLAVNOST)"%ld" ELEM_END(XML_BIT_OPT_1_STUP_SVIATOK_SLAVNOST) "\n", BIT_OPT_1_STUP_SVIATOK_SLAVNOST, STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST, html_text_opt_1_slavit_ako_slavnost[_global_jazyk], (isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_STUP_SVIATOK_SLAVNOST)));
 					break;
 				case 18: // BIT_OPT_1_KOMPL_MARIA_ANT
-					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_1_KOMPL_MARIA_ANT)"%ld" ELEM_END(XML_BIT_OPT_1_KOMPL_MARIA_ANT) "\n", BIT_OPT_1_KOMPL_MARIA_ANT, FORCE_BIT_OPT_1_KOMPL_MARIA_ANT, html_text_opt_1_maria_ant[_global_jazyk], (isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_KOMPL_MARIA_ANT)));
+					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_1_KOMPL_MARIA_ANT)"%ld" ELEM_END(XML_BIT_OPT_1_KOMPL_MARIA_ANT) "\n", BIT_OPT_1_KOMPL_MARIA_ANT, STR_FORCE_BIT_OPT_1_KOMPL_MARIA_ANT, html_text_opt_1_maria_ant[_global_jazyk], (isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_KOMPL_MARIA_ANT)));
 					break;
 				} // switch(j)
 			}// for j
@@ -7546,6 +7555,9 @@ void xml_export_options(void) {
 					break;
 				case 17: // BIT_OPT_5_OCR_34_HYMNS
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_5_OCR_34_HYMNS)"%ld" ELEM_END(XML_BIT_OPT_5_OCR_34_HYMNS) "\n", BIT_OPT_5_OCR_34_HYMNS, STR_FORCE_BIT_OPT_5_OCR_34_HYMNS, html_text_opt_5_OCR34Hymns[_global_jazyk], (isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_OCR_34_HYMNS)));
+					break;
+				case 18: // BIT_OPT_5_KOMPLETORIUM_OKTAVA
+					Export(ELEM_BEGIN_ID_FORCENAME_TEXT_SLASH(XML_BIT_OPT_5_KOMPLETORIUM_OKTAVA)"%ld" ELEM_END(XML_BIT_OPT_5_KOMPLETORIUM_OKTAVA) "\n", BIT_OPT_5_KOMPLETORIUM_OKTAVA, STR_FORCE_BIT_OPT_5_KOMPLETORIUM_OKTAVA, html_text_opt_5_KomplOkt1[_global_jazyk], html_text_opt_5_KomplOkt2[_global_jazyk], (isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_KOMPLETORIUM_OKTAVA)));
 					break;
 				} // switch(j)
 			}// for j
@@ -9766,6 +9778,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 	ExportHtmlComment("language selection combobox");
 
+	Export(HTML_DIV_BEGIN);
+
 	Export("<" HTML_SPAN_TOOLTIP ">%s:" HTML_SPAN_END, html_text_jazyk_explain[_global_jazyk], html_text_jazyk_verzia[_global_jazyk]);
 
 	Export(HTML_LINE_BREAK);
@@ -9782,14 +9796,14 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 	}
 	Export("</select>");
 
-	Export(HTML_LINE_BREAK);
-
 	ExportHtmlComment("submit button (language)");
 
 	// button Nastaviť/Potvrdiť
 	Export(HTML_FORM_INPUT_SUBMIT" value=\"");
 	Export((char *)HTML_BUTTON_DNES_APPLY_SETTINGS);
 	Export("\"" HTML_FORM_INPUT_END "\n");
+
+	Export(HTML_DIV_END);
 
 	Export("</form>\n");
 
@@ -9812,6 +9826,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 		ExportHtmlComment("calendar selection combobox");
 
+		Export(HTML_DIV_BEGIN);
+
 		Export("<" HTML_SPAN_TOOLTIP ">%s%s" HTML_SPAN_END, html_text_kalendar_miestny_explain[_global_jazyk], html_text_kalendar_miestny[_global_jazyk], (equals(html_text_kalendar_miestny_text_after_combo[_global_jazyk], STR_EMPTY) ? ": " : ""));
 
 		Export(HTML_LINE_BREAK);
@@ -9833,13 +9849,10 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 		Export("</select>\n");
 
-		Export(HTML_LINE_BREAK);
-
 		// for HU: 
 		if (!equals(html_text_kalendar_miestny_text_after_combo[_global_jazyk], STR_EMPTY))
 		{
 			Export(html_text_kalendar_miestny_text_after_combo[_global_jazyk]);
-			Export(HTML_LINE_BREAK);
 		}
 
 		ExportHtmlComment("submit button (calendar)");
@@ -9848,6 +9861,8 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		Export(HTML_FORM_INPUT_SUBMIT" value=\"");
 		Export((char *)HTML_BUTTON_DNES_APPLY_SETTINGS);
 		Export("\"" HTML_FORM_INPUT_END "\n");
+
+		Export(HTML_DIV_END);
 
 		Export("</form>\n");
 
@@ -10120,6 +10135,13 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 				// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_5_HYMNUS_KOMPL
 				_export_main_formular_checkbox_slash(OPT_5_ALTERNATIVES, BIT_OPT_5_HYMNUS_KOMPL, STR_FORCE_BIT_OPT_5_HYMNUS_KOMPL, html_text_opt_5_KomplHymnusA[_global_jazyk], html_text_opt_5_KomplHymnusB[_global_jazyk]);
+
+				// kompletórium v oktávach
+				Export(HTML_CRLF_LINE_BREAK);
+				Export("<" HTML_SPAN_BOLD_TOOLTIP ">%s (%s, %s)" HTML_SPAN_END, nazov_modlitby(MODL_KOMPLETORIUM), nazov_modlitby(MODL_KOMPLETORIUM), nazov_obdobia(OBD_VELKONOCNA_OKTAVA), nazov_obdobia(OBD_OKTAVA_NARODENIA));
+
+				// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_5_KOMPLETORIUM_OKTAVA
+				_export_main_formular_checkbox_slash(OPT_5_ALTERNATIVES, BIT_OPT_5_KOMPLETORIUM_OKTAVA, STR_FORCE_BIT_OPT_5_KOMPLETORIUM_OKTAVA, html_text_opt_5_KomplOkt1[_global_jazyk], html_text_opt_5_KomplOkt2[_global_jazyk]);
 
 				// hymny vo Veľkonočnom období
 

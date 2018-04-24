@@ -3630,6 +3630,34 @@ const char *html_text_opt_5_KomplHymnusB[POCET_JAZYKOV + 1] =
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
+const char *html_text_opt_5_KomplOkt1[POCET_JAZYKOV + 1] =
+{
+	"prvé nedeľné kompletórium",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"ru_text",
+	"by_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char *html_text_opt_5_KomplOkt2[POCET_JAZYKOV + 1] =
+{
+	"druhé nedeľné kompletórium",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"ru_text",
+	"by_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
 const char *html_text_opt_5_PCHymnusI[POCET_JAZYKOV + 1] =
 {
 	"hymnus I. [Ak je posvätné čítanie v noci alebo včasráno]",

@@ -133,84 +133,89 @@ public class TtsService extends Service
     if (new_public_state != old_public_state) {
       broadcastUpdate();
 
-      if (new_public_state == TtsState.READY) {
-        stopForeground(true);
-      } else {
-        String title;
-        if (url_title == null) {
-          title = getString(R.string.channel_name);
+      // TODO(riso): Android 5.1 crashes due to notifications in the following
+      // code. I do not know what is missing there; it is not reproducible in
+      // emulator and other versions of Android work well.
+      if (Build.VERSION.SDK_INT != Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (new_public_state == TtsState.READY) {
+          stopForeground(true);
         } else {
-          title = url_title;
-        }
+          String title;
+          if (url_title == null) {
+            title = getString(R.string.channel_name);
+          } else {
+            title = url_title;
+          }
 
-        int icon;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-          icon = R.drawable.icon;
-        } else {
-          icon = R.drawable.icon_transparent;
-        }
+          int icon;
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            icon = R.drawable.icon;
+          } else {
+            icon = R.drawable.icon_transparent;
+          }
 
-        PendingIntent open_activity = PendingIntent.getActivity(this, 0,
-          new Intent("sk.breviar.android.action.SHOW"), PendingIntent.FLAG_UPDATE_CURRENT);
+          PendingIntent open_activity = PendingIntent.getActivity(this, 0,
+            new Intent("sk.breviar.android.action.SHOW"), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        PendingIntent stop = PendingIntent.getService(this, 0,
-            new Intent().setClass(this, TtsService.class)
-                        .setAction(TtsService.TTS_STOP), 0);
-
-        PendingIntent forward = PendingIntent.getService(this, 0,
-            new Intent().setClass(this, TtsService.class)
-                        .setAction(TtsService.TTS_FORWARD), 0);
-
-        PendingIntent back = PendingIntent.getService(this, 0,
-            new Intent().setClass(this, TtsService.class)
-                        .setAction(TtsService.TTS_BACK), 0);
-
-        if (Build.VERSION.SDK_INT >= 26) {
-          CompatibilityHelper26.updateChannel(this, false);
-        }
-
-        int priority;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-          priority = NotificationCompat.PRIORITY_LOW;
-        } else {
-          priority = NotificationCompat.PRIORITY_HIGH;
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default")
-              .setContentText(getString(R.string.channel_name))
-              .setContentTitle(title)
-              .setSmallIcon(icon)
-              .setContentIntent(open_activity)
-              .setColor(getResources().getColor(R.color.colorPrimary))
-              .setPriority(priority)
-              .setOnlyAlertOnce(true)
-              .setStyle(new MediaStyle().setShowActionsInCompactView(0, 2, 3));
-
-        if (new_public_state == TtsState.SPEAKING) {
-          PendingIntent pause = PendingIntent.getService(this, 0,
+          PendingIntent stop = PendingIntent.getService(this, 0,
               new Intent().setClass(this, TtsService.class)
-                          .setAction(TtsService.TTS_PAUSE), 0);
-          builder.addAction(R.drawable.ic_pause_white_24dp, getString(R.string.tts_pause), pause);
-        } else {
-          PendingIntent resume = PendingIntent.getService(this, 0,
+                          .setAction(TtsService.TTS_STOP), 0);
+
+          PendingIntent forward = PendingIntent.getService(this, 0,
               new Intent().setClass(this, TtsService.class)
-                          .setAction(TtsService.TTS_RESUME), 0);
-          builder.addAction(R.drawable.ic_play_arrow_white_24dp, getString(R.string.tts_resume), resume);
-        }
+                          .setAction(TtsService.TTS_FORWARD), 0);
 
-        builder.addAction(R.drawable.ic_volume_off_white_24dp, getString(R.string.tts_speaking), stop)
-               .addAction(R.drawable.ic_fast_rewind_white_24dp, getString(R.string.tts_back), back)
-               .addAction(R.drawable.ic_fast_forward_white_24dp, getString(R.string.tts_forward), forward)
-               .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
-               .setVibrate(new long[]{0l, 0l});
+          PendingIntent back = PendingIntent.getService(this, 0,
+              new Intent().setClass(this, TtsService.class)
+                          .setAction(TtsService.TTS_BACK), 0);
 
-        if (old_public_state == TtsState.READY) {
-          startForeground(
-              BreviarApp.NOTIFY_TTS_ID,
-              builder.build());
-        } else {
-          ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(
-              BreviarApp.NOTIFY_TTS_ID, builder.build());
+          if (Build.VERSION.SDK_INT >= 26) {
+            CompatibilityHelper26.updateChannel(this, false);
+          }
+
+          int priority;
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            priority = NotificationCompat.PRIORITY_LOW;
+          } else {
+            priority = NotificationCompat.PRIORITY_HIGH;
+          }
+
+          NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default")
+                .setContentText(getString(R.string.channel_name))
+                .setContentTitle(title)
+                .setSmallIcon(icon)
+                .setContentIntent(open_activity)
+                .setColor(getResources().getColor(R.color.colorPrimary))
+                .setPriority(priority)
+                .setOnlyAlertOnce(true)
+                .setStyle(new MediaStyle().setShowActionsInCompactView(0, 2, 3));
+
+          if (new_public_state == TtsState.SPEAKING) {
+            PendingIntent pause = PendingIntent.getService(this, 0,
+                new Intent().setClass(this, TtsService.class)
+                            .setAction(TtsService.TTS_PAUSE), 0);
+            builder.addAction(R.drawable.ic_pause_white_24dp, getString(R.string.tts_pause), pause);
+          } else {
+            PendingIntent resume = PendingIntent.getService(this, 0,
+                new Intent().setClass(this, TtsService.class)
+                            .setAction(TtsService.TTS_RESUME), 0);
+            builder.addAction(R.drawable.ic_play_arrow_white_24dp, getString(R.string.tts_resume), resume);
+          }
+
+          builder.addAction(R.drawable.ic_volume_off_white_24dp, getString(R.string.tts_speaking), stop)
+                 .addAction(R.drawable.ic_fast_rewind_white_24dp, getString(R.string.tts_back), back)
+                 .addAction(R.drawable.ic_fast_forward_white_24dp, getString(R.string.tts_forward), forward)
+                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
+                 .setVibrate(new long[]{0l, 0l});
+
+          if (old_public_state == TtsState.READY) {
+            startForeground(
+                BreviarApp.NOTIFY_TTS_ID,
+                builder.build());
+          } else {
+            ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(
+                BreviarApp.NOTIFY_TTS_ID, builder.build());
+          }
         }
       }
     }

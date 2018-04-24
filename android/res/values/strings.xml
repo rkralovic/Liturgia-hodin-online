@@ -111,7 +111,7 @@
     <string name="about_PLATFORM_IOS">iOS</string>
 
     <string name="tts_settings_title">Voice output</string>
-    <string name="tts_use_pause_in_psalms">Make pauses when reading psalms</string>
+    <string name="tts_use_pause_in_psalms">Make pauses when reading psalms &amp; canticles</string>
     <string name="tts_settings_help">Voice output help</string>
     <string name="tts_settings_help_title">Voice output help</string>
     <string name="tts_settings_help_content"><![CDATA[
