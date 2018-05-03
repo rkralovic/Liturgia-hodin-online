@@ -12292,6 +12292,19 @@ const char *text_OKT_05_OP[POCET_JAZYKOV + 1] =
 	"by_text",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
+const char *text_OKT_05_OFM[POCET_JAZYKOV + 1] =
+{
+	"Sv. Anny Schäffer",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"ru_text",
+	"by_text",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
 const char *text_OKT_06[POCET_JAZYKOV + 1] =
 {
 	"Sv. Bruna, kňaza",

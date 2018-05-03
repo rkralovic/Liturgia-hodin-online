@@ -176,7 +176,7 @@ div.navm p {
 	font-weight: bold; 
 }
 
-.preces p.partR, p.partV, p.intro { 
+.preces p.partR, .preces p.partV, .preces p.intro { 
 	font-weight: bold; 
 	margin: 0; 
 	padding-left: 1.2em; 

@@ -280,6 +280,17 @@ div.navm p {
 	text-indent: 0em; 
 }
 
+.reading .comment, .reading p.comment { 
+	font-weight: normal; 
+	padding-left: 0em !important;
+	text-indent: 0em; 
+}
+
+.reading p.respR.comment, .reading p.respV.comment, .reading p.respO.comment , .reading p.respF.comment { 
+	font-weight: normal; 
+	padding-left: 0em !important;
+}
+
 .reading p.heading { 
 	padding-bottom: 1em;
 	padding-left: 0em; 

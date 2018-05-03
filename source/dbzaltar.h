@@ -1944,6 +1944,7 @@ extern const char *text_SEP_25_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_26_OFM[POCET_JAZYKOV + 1];
 extern const char *text_SEP_28_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_04_OFM[POCET_JAZYKOV + 1];
+extern const char *text_OKT_05_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_06_HU_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_10_HU_OFM[POCET_JAZYKOV + 1];
 extern const char *text_OKT_11_OFM[POCET_JAZYKOV + 1];

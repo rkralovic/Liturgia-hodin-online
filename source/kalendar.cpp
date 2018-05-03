@@ -23620,6 +23620,40 @@ short int sviatky_svatych_10_oktober(short int den, short int poradie_svaty, _st
 			_global_svaty(pom_poradie).kalendar = _global_kalendar;
 		}// CZOP only, kalendár pre KALENDAR_SK_OP
 
+		if ((_global_jazyk == JAZYK_SK) && (_global_kalendar == KALENDAR_SK_OFM)) {
+			if (poradie_svaty == pom_poradie) {
+
+				file_name_vlastny_kalendar(_global_kalendar);
+
+				// definovanie parametrov pre modlitbu
+				if (query_type != PRM_DETAILY)
+					set_spolocna_cast(sc, poradie_svaty);
+
+				modlitba = MODL_RANNE_CHVALY;
+				// _vlastna_cast_benediktus;
+				_vlastna_cast_modlitba;
+
+				modlitba = MODL_POSV_CITANIE;
+				_vlastna_cast_modlitba;
+				_vlastna_cast_2citanie;
+
+				modlitba = MODL_VESPERY;
+				// _vlastna_cast_magnifikat;
+				_vlastna_cast_modlitba;
+
+				break;
+			}
+
+			pocet = pom_poradie;
+
+			_set_slavenie_typslav_smer(pom_poradie, SLAV_LUB_SPOMIENKA, 12); // ľubovoľné spomienky
+			_global_svaty(pom_poradie).typslav_lokal = LOKAL_SLAV_SPOMIENKA_OFS;
+			mystrcpy(_global_svaty(pom_poradie).meno, text_OKT_05_OFM[_global_jazyk], MENO_SVIATKU);
+			_global_svaty(pom_poradie).spolcast = _encode_spol_cast(MODL_SPOL_CAST_SV_ZENA);
+			_global_svaty(pom_poradie).farba = LIT_FARBA_BIELA;
+			_global_svaty(pom_poradie).kalendar = _global_kalendar;
+		}// kalendár pre KALENDAR_SK_OFM
+
 		if (((_global_jazyk == JAZYK_SK) && (_global_kalendar == KALENDAR_SK_SDB)) || ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_SDB))) {
 			if (poradie_svaty == pom_poradie) {
 
@@ -31193,17 +31227,23 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 			// _vlastne_slavenie_popis(_anchor_vlastne_slavenie);
 
 			modlitba = MODL_RANNE_CHVALY;
-			_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			if (_global_jazyk == JAZYK_SK) {
+				_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			}
 			_vlastne_slavenie_benediktus(_anchor_vlastne_slavenie);
 			_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 
 			modlitba = MODL_POSV_CITANIE;
-			_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			if (_global_jazyk == JAZYK_SK) {
+				_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			}
 			_vlastne_slavenie_2citanie(_anchor_vlastne_slavenie);
 			_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 
 			modlitba = MODL_VESPERY;
-			_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ)) {
+				_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
+			}
 			_vlastne_slavenie_magnifikat(_anchor_vlastne_slavenie);
 			_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 		}

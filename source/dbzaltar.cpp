@@ -10698,7 +10698,7 @@ _struct_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_01NOV_vHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_13NOV_rHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_13NOV_vHYMNUS", 2 },
-	{ JAZYK_UNDEF, "PMMC_vHYMNUS", 2 },
+	{ JAZYK_SK, "PMMC_vHYMNUS", 2 },
 	// CZ mezidobí, modlitba uprostřed dne, hymny ze žaltáře
 		// liché týdny
 	{ JAZYK_CZ, "9_HYMNUS_LICHY_NE", 2 },
