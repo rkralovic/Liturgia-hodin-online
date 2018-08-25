@@ -1173,8 +1173,8 @@ void file_name_litobd_pc(short int litobd) {
 }
 
 void file_name_vlastny_kalendar(short int kalendar) {
-	// do not use for JAZYK_CZ_OP even if called
-	if (_global_jazyk != JAZYK_CZ_OP) {
+	// do not use for JAZYK_CZ_OP even if called; do not use for general calendars even if called
+	if ((_global_jazyk != JAZYK_CZ_OP) && (_global_kalendar != default_kalendar[_global_jazyk])) {
 		sprintf(_file, "%s", nazov_htm_kalendar[kalendar]);
 		sprintf(_file_pc, "%s", nazov_htm_kalendar[kalendar]);
 	}
@@ -4210,6 +4210,17 @@ void _set_zalmy_pc_1_21_92(short int modlitba) {
 	Log("_set_zalmy_pc_1_21_92(%s) -- end\n", nazov_modlitby(modlitba));
 }// _set_zalmy_pc_1_21_92()
 */
+
+// HU 05NOV
+void _set_zalmy_pc_24_61_84(short int modlitba) {
+	Log("_set_zalmy_pc_24_61_84(%s) -- begin\n", nazov_modlitby(modlitba));
+	if (modlitba == MODL_POSV_CITANIE) {
+		set_zalm(1, modlitba, "z24.htm", "ZALM24");
+		set_zalm(2, modlitba, "z61.htm", "ZALM61");
+		set_zalm(3, modlitba, "z84.htm", "ZALM84");
+	}
+	Log("_set_zalmy_pc_24_61_84(%s) -- end\n", nazov_modlitby(modlitba));
+}// _set_zalmy_pc_24_61_84()
 
 // HU OFM (19NOV)
 void _set_zalmy_pc_45_87(short int modlitba){
@@ -10839,6 +10850,7 @@ _struct_anchor_and_count pocet_citanie2_multi_anchor_count[] = {
 	{ JAZYK_CZ, "17SEP2_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "16SEP2_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "17SEP2_cCIT2", 2 },
+	{ JAZYK_HU, "24OKT2_cCIT2", 2 },
 };
 
 _struct_anchor_and_count pocet_antifona_multi_anchor_count[] = {
