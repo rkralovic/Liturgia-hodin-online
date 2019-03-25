@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* breviar.h                                                   */
-/* (c)1999-2018 | Juraj Vidéky | videky@breviar.sk             */
+/* (c)1999-2019 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | contains declarations of global variables     */
 /*                                                             */
@@ -262,9 +262,10 @@ extern void setGlobalOption(short opt_i, long bit_opt_i_component_j, short value
 ) \
 ))
 
-// predĺžené slávenie vigílií v rámci posvätných čítaní | is vigily (for office with readings)?
+// predĺžené slávenie vigílií v rámci posvätných čítaní | is vigily (for office with readings)? | VSLH, č. 73: slávnosť, sviatok alebo nedeľa
 #define je_vigilia \
 (_global_modlitba == MODL_POSV_CITANIE &&  \
+	(_je_global_den_slavnost || _je_global_den_sviatok || _global_den.denvt == DEN_NEDELA || _global_den.litobd == OBD_OKTAVA_NARODENIA || _global_den.litobd == OBD_VELKONOCNA_OKTAVA || _global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && \
 	(_global_modl_posv_citanie.ant_chval.anchor != NULL) && (_global_modl_posv_citanie.ant_chval.file != NULL) && \
 	(strcmp(_global_modl_posv_citanie.ant_chval.anchor, STR_EMPTY) != 0) && (strcmp(_global_modl_posv_citanie.ant_chval.anchor, STR_UNDEF) != 0) &&  \
 	(strcmp(_global_modl_posv_citanie.ant_chval.file, STR_EMPTY) != 0) && (strcmp(_global_modl_posv_citanie.ant_chval.file, STR_UNDEF) != 0) && \
