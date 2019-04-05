@@ -6742,6 +6742,17 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 					sprintf(pom, "%s %s %s", pom2, nazov_Obdobia_aka(_local_den.litobd), nazov_Dna(_local_den.denvt));
 				}
 			}// BY only
+			else if (_global_jazyk == JAZYK_LA) {
+				if (_local_den.litobd == OBD_CEZ_ROK) {
+					// Dominica II per annum (LA LH, vol. III, p. 60)
+					convertToRoman(_local_den.tyzden, pom2);
+					sprintf(pom, "%s %s %s", nazov_Dna(_local_den.denvt), pom2, nazov_Obdobia_aka(_local_den.litobd));
+				}
+				else {
+					// Dominica quinta Quadragesimae
+					sprintf(pom, "%s %s %s", nazov_Dna(_local_den.denvt), poradie_Slovom(_local_den.tyzden - 1), nazov_Obdobia_aka(_local_den.litobd));
+				}
+			}// LA only
 			else if (
 				(_local_den.litobd == OBD_ADVENTNE_I) || (_local_den.litobd == OBD_ADVENTNE_II)
 				|| (_local_den.litobd == OBD_POSTNE_I)
@@ -6751,7 +6762,11 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 					sprintf(pom, "%s %s %s", poradie_Slovom(_local_den.tyzden - 1), nazov_Dna(_local_den.denvt), nazov_Obdobia_aka(_local_den.litobd));
 				}
 				else if (_global_jazyk == JAZYK_HU) {
-					sprintf(pom, "%s %s %s%s", nazov_Obdobia_aka(_local_den.litobd), poradie_Slovom(_local_den.tyzden - 1), nazov_Dna(_local_den.denvt), KONCOVKA_DNA_HU);
+					sprintf(pom, "%s %s %s%s", nazov_Obdobia_aka(_local_den.litobd), poradie_Slovom(_local_den.tyzden - 1), nazov_dna(_local_den.denvt), KONCOVKA_DNA_HU_SMALL);
+				}
+				else if (_global_jazyk == JAZYK_LA) {
+					// Dominica quinta Quadragesimae
+					sprintf(pom, "%s %s %s", nazov_Dna(_local_den.denvt), poradie_Slovom(_local_den.tyzden - 1), nazov_Obdobia_aka(_local_den.litobd));
 				}
 				else {
 					// úprava názvov nedieľ v štýle "3. NEDEĽA V ADVENTNOM OBDOBÍ" -> "Tretia adventná nedeľa"
@@ -6761,7 +6776,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			else {
 				// _local_den.litobd == OBD_CEZ_ROK; pre cezročné ostáva poradové číslo
 				if (_global_jazyk == JAZYK_HU) {
-					sprintf(pom, "%s %d. %s", nazov_Obdobia_aka(_local_den.litobd), _local_den.tyzden, nazov_Dna(_local_den.denvt));
+					sprintf(pom, "%s %d. %s", nazov_Obdobia_aka(_local_den.litobd), _local_den.tyzden, nazov_dna(_local_den.denvt));
 				}
 				else {
 					sprintf(pom, "%d. %s %s", _local_den.tyzden, nazov_Dna(_local_den.denvt), nazov_obdobia_v(_local_den.litobd));

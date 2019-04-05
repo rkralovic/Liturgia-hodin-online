@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="sk.breviar.android"
-      android:versionCode="96"
-      android:versionName="2.9"
+      android:versionCode="97"
+      android:versionName="3.0"
       android:installLocation="auto">
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="26"/>
     <supports-screens android:xlargeScreens="true"/>
@@ -13,7 +13,8 @@
         <meta-data android:name="android.max_aspect" android:value="47.7" />
         <activity android:name="Breviar"
                   android:configChanges="orientation|screenSize"
-                  android:launchMode="singleTask">
+                  android:launchMode="singleTask"
+                  android:resizeableActivity="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -22,6 +23,7 @@
                 <action android:name="sk.breviar.android.action.SHOW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
         <activity android:name="Alarms"
                   android:configChanges="orientation|screenSize"
