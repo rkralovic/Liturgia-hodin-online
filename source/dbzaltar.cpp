@@ -24,27 +24,27 @@ char _anchor_head[MAX_STR_AF_ANCHOR];
 char _anchor_head_without_underscore[MAX_STR_AF_ANCHOR];
 
 // has celebration its own psalmody? cf. General Instrucions, n. 134
-short int su_zalmy_vlastne(short int m){
+short int su_zalmy_vlastne(short int m) {
 	Log("su_zalmy_vlastne(%d): ", m);
 	short int ret;
 	ret = FALSE;
-	if (!(je_modlitba_cez_den(m))){
-		if (_global_poradie_svaty == 0){
-			if (_je_global_den_slavnost || _je_global_den_sviatok){
+	if (!(je_modlitba_cez_den(m))) {
+		if (_global_poradie_svaty == 0) {
+			if (_je_global_den_slavnost || _je_global_den_sviatok) {
 				ret = TRUE;
 			}
 		}
-		else if (_global_poradie_svaty != PORADIE_PM_SOBOTA){
-			if ((_je_global_svaty_i_slavnost(_global_poradie_svaty)) || (_je_global_svaty_i_sviatok(_global_poradie_svaty))){
+		else if (_global_poradie_svaty != PORADIE_PM_SOBOTA) {
+			if ((_je_global_svaty_i_slavnost(_global_poradie_svaty)) || (_je_global_svaty_i_sviatok(_global_poradie_svaty))) {
 				ret = TRUE;
 			}
 		}
-		if (_global_den.denvt == DEN_NEDELA){
+		if (_global_den.denvt == DEN_NEDELA) {
 			ret = TRUE;
 		}// DEN_NEDELA
 	}// nie mcd
 	// pre 2.11. sa berú žalmy vlastné
-	if ((_global_den.den == 2) && (_global_den.mesiac - 1 == MES_NOV)){
+	if ((_global_den.den == 2) && (_global_den.mesiac - 1 == MES_NOV)) {
 		ret = TRUE;
 	}// NOV02 == 02NOV
 	Log("%d\n", ret);
@@ -8926,6 +8926,37 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_vtroj_antifony;
 				_vtroj_kresponz;
 			}// nedeľa
+
+			// override hymnov v prípade je_CZ_hymny_k_volnemu_vyberu
+			if ((_global_jazyk == JAZYK_CZ) && (je_CZ_hymny_k_volnemu_vyberu)) {
+
+				file_name_litobd(OBD_VELKONOCNE_I);
+				mystrcpy(_file_pc, nazov_obd_htm_pc[OBD_VELKONOCNE_I], MAX_STR_AF_FILE);
+					
+				// ranné chvály
+				modlitba = MODL_RANNE_CHVALY;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+
+				// vešpery
+				modlitba = MODL_VESPERY;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+
+				// modlitba cez deň a posvätné čítania
+				modlitba = MODL_POSV_CITANIE;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+				modlitba = MODL_PREDPOLUDNIM;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+				modlitba = MODL_NAPOLUDNIE;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+				modlitba = MODL_POPOLUDNI;
+				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+
+				// prvé vešpery
+				if (den == DEN_NEDELA) {
+					modlitba = MODL_PRVE_VESPERY;
+					_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
+				}// nedeľa
+			}
 
 			break;
 // switch(litobd), case OBD_VELKONOCNA_OKTAVA -- end ------------------------------------------
