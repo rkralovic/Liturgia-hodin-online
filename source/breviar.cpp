@@ -1605,7 +1605,7 @@ void export_div_to_continue_tts_voice_output(short int export_comment_begin = AN
 #define EXPORT_RED_TRIANGLE ((!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VOICE_OUTPUT))) && (!(isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_SLAVA_OTCU))))
 #define EXPORT_VERSE_NUMBER (useWhenGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VERSE) && (EXPORT_FULL_TEXT))
 #define EXPORT_TTS_PAUSES (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_VOICE_OUTPUT))
-#define EXPORT_TTS_SECTIONS ANO
+#define EXPORT_TTS_SECTIONS (_global_skip_in_prayer == NIE)
 
 #define je_velkonocna_nedela_posv_cit (((equals(paramname, PARAM_CITANIE1)) || (equals(paramname, PARAM_CITANIE2))) && (_global_den.denvr = VELKONOCNA_NEDELA) && (_global_modlitba == MODL_POSV_CITANIE))
 
@@ -2052,6 +2052,29 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 				// !equalsi(rest, modlparam)
 				// write = NIE; -- aby mohli byt nestovane viacere :-)
 				DetailLog("parameter does not match: %s != %s; vnutri_inkludovaneho == %d\n", rest, modlparam, vnutri_inkludovaneho);
+
+// stuff in texts: TTS pause
+				if ((equals(strbuff, PARAM_PAUSE)
+					|| equals(strbuff, PARAM_PAUSE_SHORT)
+					) && (vnutri_inkludovaneho == ANO))
+				{
+					DetailLog("exporting TTS pause...\n");
+
+					if (equals(strbuff, PARAM_PAUSE)) {
+						if (EXPORT_TTS_PAUSES) {
+							Export("<" HTML_SPAN_TTS_PAUSE ">");
+						}
+					}
+					else if (equals(strbuff, PARAM_PAUSE_SHORT)) {
+						if (EXPORT_TTS_PAUSES) {
+							Export("<" HTML_SPAN_TTS_PAUSE_SHORT ">");
+						}
+					}
+
+					if (EXPORT_TTS_PAUSES) {
+						Export(HTML_SPAN_END "\n");
+					}
+				}// normal (black) stuff
 
 // normal (black) stuff in psalmody (cross, asterisk)
 				if ((equals(strbuff, PARAM_NORMAL_ASTERISK)
@@ -3102,6 +3125,30 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 		}
 	}// zobraziť/nezobraziť krížik: should be used in invitatory prayer, Psalm 95, only
 
+	// stuff in texts: TTS pause
+	else if (equals(paramname, PARAM_PAUSE)
+		|| equals(paramname, PARAM_PAUSE_SHORT))
+	{
+		if (_global_skip_in_prayer == NIE) {
+			DetailLog("exporting TTS pause...\n");
+
+			if (equals(paramname, PARAM_PAUSE)) {
+				if (EXPORT_TTS_PAUSES) {
+					Export("<" HTML_SPAN_TTS_PAUSE ">");
+				}
+			}
+			else if (equals(paramname, PARAM_PAUSE_SHORT)) {
+				if (EXPORT_TTS_PAUSES) {
+					Export("<" HTML_SPAN_TTS_PAUSE_SHORT ">");
+				}
+			}
+
+			if (EXPORT_TTS_PAUSES) {
+				Export(HTML_SPAN_END "\n");
+			}
+		}
+	}// stuff in texts: TTS pause
+
 	// normal (black) stuff in psalmody (cross, asterisk)
 	else if (equals(paramname, PARAM_NORMAL_ASTERISK)
 		|| equals(paramname, PARAM_NORMAL_CROSS))
@@ -3939,7 +3986,7 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 					podmienka = NIE;
 				}
 			}
-			// kontrola na prvé resp. druhé nedeľné kompletórium, aby hymnus bolo v Cezročnom období možno voliť aj pre nedele
+			// kontrola na prvé resp. druhé nedeľné kompletórium, aby hymnus bolo v Cezročnom období možné voliť aj pre nedele
 			else if ((_global_modlitba == MODL_KOMPLETORIUM) || (_global_modlitba == MODL_PRVE_KOMPLETORIUM) || (_global_modlitba == MODL_DRUHE_KOMPLETORIUM)) {
 				bit = BIT_OPT_5_HYMNUS_KOMPL;
 				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_KomplHymnusA[_global_jazyk]);
@@ -3975,20 +4022,23 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_RChHymnusVNferia[_global_jazyk]);
 				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_RChHymnusVNnedela[_global_jazyk]);
 			}
-			else if (_global_modlitba == MODL_VESPERY) {
-				// nie je potrebné, aby tu bolo explicitne kontrolované, či ide o MODL_PRVE_VESPERY || MODL_DRUHE_VESPERY, pretože tie vždy patria nedeli; alternatívny hymnus len pre férie
-				bit = BIT_OPT_5_HYMNUS_VN_VESP;
-				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_VespHymnusVNferia[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_VespHymnusVNnedela[_global_jazyk]);
-			}
-			else if (_global_modlitba == MODL_PRVE_VESPERY) {
-				bit = BIT_OPT_5_HYMNUS_1VESP;
-				sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_1VHymnusNe[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_1VHymnusPC[_global_jazyk]);
+			else if ((_global_modlitba == MODL_PRVE_VESPERY) || (_global_modlitba == MODL_VESPERY)) {
+				if ((je_alternativa_hymnus_vn) && (_global_den.litobd == OBD_VELKONOCNE_I)) {
+					bit = BIT_OPT_5_HYMNUS_VN_VESP;
+					sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_VespHymnusVNferia[_global_jazyk]);
+					sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_VespHymnusVNnedela[_global_jazyk]);
+				}
+				else if (je_alternativa_hymnus_ocr) {
+					bit = BIT_OPT_5_HYMNUS_1VESP;
+					sprintf(popis_show, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_1VHymnusNe[_global_jazyk]);
+					sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_5_1VHymnusPC[_global_jazyk]);
+				}
 			}
 			else {
 				podmienka = NIE;
 			}
+
+			Log("podmienka == %d po kontrole _global_modlitba == %s; bit == %ld...\n", podmienka, nazov_modlitby(_global_modlitba), bit);
 		}
 		else if (equals(paramname, PARAM_PSALMODIA)) {
 			bit = BIT_OPT_5_POPOL_STREDA_PSALMODIA;
@@ -4097,9 +4147,13 @@ void interpretParameter(short int type, char paramname[MAX_BUFFER], short int aj
 		if (EXPORT_TTS_SECTIONS) {
 			Export("tts:section:begin-->\n");
 
-			Export("<" HTML_DIV_TTS_SECTION ">");
+			if (EXPORT_TTS_PAUSES) {
+				Export("<" HTML_SPAN_TTS_PAUSE ">");
 
-			// Export("XXX");
+				Export(HTML_SPAN_END "\n");
+			}
+
+			Export("<" HTML_DIV_TTS_SECTION ">");
 
 			Export(HTML_DIV_END "\n");
 
@@ -7031,7 +7085,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	}// _local_den.meno != STR_EMPTY
 
 	// teraz typ slávenia; nevypisuje sa, ak ide o ľubovoľnú spomienku na blahoslaveného (napr. SK OP), kedy sa zobrazí názov kurzívou
-	if ((_local_den.typslav != SLAV_NEURCENE) && ((_local_den.prik != VOLNA_LUBOVOLNA_SPOMIENKA) /* || (typ != EXPORT_DNA_VIAC_DNI) */)) {
+	if ((_local_den.typslav != SLAV_NEURCENE) && (_local_den.typslav != SLAV_VLASTNE) && ((_local_den.prik != VOLNA_LUBOVOLNA_SPOMIENKA) /* || (typ != EXPORT_DNA_VIAC_DNI) */)) {
 		// možnosť zalomenia (Igor Galád)
 		if (typ != EXPORT_DNA_VIAC_DNI_TXT) {
 #define TYPSLAV_NOVY_RIADOK
@@ -7080,6 +7134,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 			if ((_local_den.typslav != SLAV_VLASTNE) && (_local_den.typslav != SLAV_NEURCENE)) {
 				sprintf(pom2, "%s", nazov_slavenia(_local_den.typslav));
 			}
+			// v podstate netreba túto podmienku, lebo je to vylúčené už vyššie
 			else {
 				sprintf(pom2, "%s", (char *)STR_EMPTY);
 			}

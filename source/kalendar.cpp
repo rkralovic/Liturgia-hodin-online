@@ -191,6 +191,7 @@ short int sviatky_svatych_01_januar(short int den, short int poradie_svaty, _str
 					modlitba = MODL_VESPERY;
 					_set_zalmy_najsv_mena_jezisovho_czop(modlitba);
 					_vlastna_cast_full_okrem_prosieb(modlitba);
+					_vlastna_cast_modlitba_ina;
 
 					modlitba = MODL_POSV_CITANIE;
 					_vlastna_cast_hymnus(modlitba, _global_den.litobd);
@@ -477,6 +478,7 @@ short int sviatky_svatych_01_januar(short int den, short int poradie_svaty, _str
 
 					modlitba = MODL_VESPERY;
 					_vlastna_cast_full_okrem_antifon_a_prosieb(modlitba);
+					_vlastna_cast_modlitba_ina;
 
 					break;
 				}
@@ -1243,6 +1245,7 @@ short int sviatky_svatych_01_januar(short int den, short int poradie_svaty, _str
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_antifon_a_prosieb(modlitba);
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -2114,6 +2117,7 @@ short int sviatky_svatych_01_januar(short int den, short int poradie_svaty, _str
 					modlitba = MODL_VESPERY;
 					_vlastna_cast_full(modlitba);
 					_set_zalmy_vesp_127_111_kol(modlitba);
+					_vlastna_cast_modlitba_ina;
 
 					break;
 				}
@@ -8361,6 +8365,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 				_vlastna_cast_kresponz_ve_obd;
 				_vlastna_cast_kcitanie_ve_obd;
 				_set_zalmy_op_utrpenie(modlitba);
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -8460,6 +8465,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_antifon_a_prosieb(modlitba);
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -8976,6 +8982,9 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_prosieb(modlitba);
+				if (_global_jazyk == JAZYK_CZ_OP) {
+					_vlastna_cast_modlitba_ina;
+				}
 
 				break;
 			}
@@ -9514,6 +9523,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_antifon_a_prosieb(modlitba);
 				_vlastna_cast_kresponz_ve_obd;
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -10285,7 +10295,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFM))
 					) {
 					_vlastna_cast_kcitanie;
-					_vlastna_cast_kresponz;
+					_vlastna_cast_kresponz_ve_obd;
 				}
 
 				modlitba = MODL_VESPERY;
@@ -10296,7 +10306,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFM))
 					) {
 					_vlastna_cast_kcitanie;
-					_vlastna_cast_kresponz;
+					_vlastna_cast_kresponz_ve_obd;
 				}
 
 				break;
@@ -10839,6 +10849,7 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 				modlitba = MODL_VESPERY;
 				if (_global_jazyk == JAZYK_CZ_OP) {
 					_vlastna_cast_full_okrem_antifon_a_prosieb(modlitba);
+					_vlastna_cast_modlitba_ina;
 				}
 				else {
 					_vlastna_cast_full(modlitba);
@@ -11937,6 +11948,7 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 				modlitba = MODL_VESPERY;
 				if (_global_jazyk == JAZYK_CZ_OP) {
 					_vlastna_cast_full_okrem_kresp_a_prosieb(modlitba);
+					_vlastna_cast_modlitba_ina;
 				}
 				else {
 					_vlastna_cast_full_okrem_prosieb(modlitba);
@@ -15683,6 +15695,9 @@ short int sviatky_svatych_07_jul(short int den, short int poradie_svaty, _struct
 
 				modlitba = MODL_POSV_CITANIE;
 				_vlastna_cast_full(modlitba);
+				_vlastna_cast_vig_ant(_anchor_head);
+				_set_chvalospev_vig_sc_pm_ocd(modlitba);
+				_vlastna_cast_vig_ev(_anchor_head);
 
 				_vlastna_cast_mcd_ant_kcitresp_modl;
 
@@ -16203,6 +16218,9 @@ short int sviatky_svatych_07_jul(short int den, short int poradie_svaty, _struct
 				modlitba = MODL_POSV_CITANIE;
 				_vlastna_cast_full(modlitba);
 				_set_zalmy_ocd_elias(modlitba);
+				_vlastna_cast_vig_ant(_anchor_head);
+				_set_chvalospev_vig_sc_sm_ocd(modlitba);
+				_vlastna_cast_vig_ev(_anchor_head);
 
 				_vlastna_cast_mcd_full_okrem_hymnu;
 
@@ -16830,8 +16848,13 @@ short int sviatky_svatych_07_jul(short int den, short int poradie_svaty, _struct
 				break;
 			}
 
-			_set_slavenie_typslav_smer(1, SLAV_SPOMIENKA, 10); // povinné spomienky podľa všeobecného kalendára
-			// kedysi pre CZ: _global_svaty1.typslav_lokal = LOKAL_SLAV_MORAVA_SPOMIENKA;
+			if (_global_jazyk == JAZYK_SK) {
+				_set_slavenie_typslav_smer(1, SLAV_SPOMIENKA, 10); // povinné spomienky podľa všeobecného kalendára
+			}
+			else {
+				_set_slavenie_typslav_smer(1, SLAV_LUB_SPOMIENKA, 12); // ľubovoľné spomienky
+				_global_svaty1.typslav_lokal = LOKAL_SLAV_MORAVA_SPOMIENKA;
+			}
 
 			mystrcpy(_global_svaty1.meno, text_JUL_27[_global_jazyk], MENO_SVIATKU);
 			if (_global_jazyk == JAZYK_SK) {
@@ -18977,6 +19000,9 @@ short int sviatky_svatych_08_august(short int den, short int poradie_svaty, _str
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_prosieb(modlitba);
+				if (_global_jazyk == JAZYK_CZ_OP) {
+					_vlastna_cast_modlitba_ina;
+				}
 
 				break;
 			}
@@ -22991,6 +23017,7 @@ short int sviatky_svatych_09_september(short int den, short int poradie_svaty, _
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_prosieb(modlitba);
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -25171,6 +25198,9 @@ short int sviatky_svatych_10_oktober(short int den, short int poradie_svaty, _st
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_ocd_terezia(modlitba);
 				_vlastna_cast_full(modlitba);
+				_vlastna_cast_vig_ant(_anchor_head);
+				_set_chvalospev_vig_sc_pm_ocd(modlitba);
+				_vlastna_cast_vig_ev(_anchor_head);
 
 				modlitba = MODL_RANNE_CHVALY;
 				_set_zalmy_ocd_terezia(modlitba);
@@ -27075,10 +27105,10 @@ short int sviatky_svatych_11_november(short int den, short int poradie_svaty, _s
 
 		// ak padne toto slávenie na nedeľu, berie sa nedeľné ofícium
 		if (_global_den.denvt != DEN_NEDELA) {
-			_set_slavenie_typslav_smer(1, SLAV_SPOMIENKA, 3); // slávnosti Pána, preblahoslavenej Panny Márie a svätých, uvedené vo všeobecnom kalendári | všetkých verných zosnulých (podľa Tabuľky liturgických dní usporiadaných podľa prednosti) - typslav je spomienka!
+			_set_slavenie_typslav_smer(1, SLAV_VLASTNE, 3); // slávnosti Pána, preblahoslavenej Panny Márie a svätých, uvedené vo všeobecnom kalendári | všetkých verných zosnulých (podľa Tabuľky liturgických dní usporiadaných podľa prednosti) - typslav je spomienka!
 		}
 		else {
-			_set_slavenie_typslav_smer(1, SLAV_SPOMIENKA, 10); // povinné spomienky podľa všeobecného kalendára
+			_set_slavenie_typslav_smer(1, SLAV_VLASTNE, 10); // povinné spomienky podľa všeobecného kalendára
 		}
 		mystrcpy(_global_svaty1.meno, text_NOV_02[_global_jazyk], MENO_SVIATKU);
 		_global_svaty1.spolcast = _encode_spol_cast(MODL_SPOL_CAST_ZA_ZOSNULYCH);
@@ -29495,6 +29525,7 @@ short int sviatky_svatych_11_november(short int den, short int poradie_svaty, _s
 
 				modlitba = MODL_VESPERY;
 				_vlastna_cast_full_okrem_prosieb(modlitba);
+				_vlastna_cast_modlitba_ina;
 
 				break;
 			}
@@ -31583,14 +31614,14 @@ short int sviatky_svatych(short int den, short int mesiac, short int poradie_sva
 			Log("  ide o spomienku panny marie matky cirkvi: _file = `%s', _anchor = %s...\n", _file, _anchor);
 
 			modlitba = MODL_RANNE_CHVALY;
-			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ_OP)) {
+			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP)) {
 				_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
 			}
 			_vlastne_slavenie_benediktus(_anchor_vlastne_slavenie);
 			_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 
 			modlitba = MODL_POSV_CITANIE;
-			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ_OP)) {
+			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP)) {
 				_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, OBD_CEZ_ROK);
 			}
 			_vlastne_slavenie_2citanie(_anchor_vlastne_slavenie);

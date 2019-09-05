@@ -1197,6 +1197,18 @@ void _set_chvalospev_vig_sviatok_obetovania(short int modlitba) {
 	_set_chvalospev3(modlitba, "ch_iz66.htm", "CHVAL_IZ66VG");
 } // _set_chvalospev_vig_sviatok_obetovania()
 
+void _set_chvalospev_vig_sc_pm_ocd(short int modlitba) {
+	_set_chvalospev1(modlitba, "ch_iz2.htm", "CHVAL_IZ2VG1");
+	_set_chvalospev2(modlitba, "ch_iz61.htm", "CHVAL_IZ61VG2");
+	_set_chvalospev3(modlitba, "ch_iz61.htm", "CHVAL_IZ62VG3");
+} // _set_chvalospev_vig_sc_pm()
+
+void _set_chvalospev_vig_sc_sm_ocd(short int modlitba) {
+	_set_chvalospev1(modlitba, "ch_jer17.htm", "CHVAL_JER17VG");
+	_set_chvalospev2(modlitba, "ch_sir14.htm", "CHVAL_SIR14VG");
+	_set_chvalospev3(modlitba, "ch_sir51.htm", "CHVAL_SIR51VG");
+} // _set_chvalospev_vig_sc_sm_ocd()
+
 // files - nazvy suborov pre zaltar styroch tyzdnov
 char _file[MAX_STR_AF_FILE]; // nazov súboru, napr. _1ne.htm
 char _file_pc[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania
@@ -10889,7 +10901,9 @@ _struct_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_13NOV_rHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_13NOV_vHYMNUS", 2 },
 	{ JAZYK_SK, "PMMC_vHYMNUS", 2 },
-	// CZ mezidobí, modlitba uprostřed dne, hymny ze žaltáře
+	{ JAZYK_CZ, "PMMC_vHYMNUS", 2 },
+	{ JAZYK_CZ_OP, "PMMC_vHYMNUS", 2 },
+		// CZ mezidobí, modlitba uprostřed dne, hymny ze žaltáře
 		// liché týdny
 	{ JAZYK_CZ, "9_HYMNUS_LICHY_NE", 2 },
 	{ JAZYK_CZ, "2_HYMNUS_LICHY_NE", 2 },
