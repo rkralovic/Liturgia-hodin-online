@@ -97,8 +97,9 @@ public class TtsService extends Service
     Handler handler = new Handler(getMainLooper());
     handler.post(new Runnable() {
       public void run() {
-        Toast.makeText(parent, R.string.tts_language_not_available,
-                       Toast.LENGTH_LONG).show();
+        CharSequence message = BreviarApp.getContextForCustomLocale(parent)
+            .getResources().getText(R.string.tts_language_not_available);
+        Toast.makeText(parent, message, Toast.LENGTH_LONG).show();
       }
     });
   }
