@@ -59,6 +59,8 @@
 
     <string name="fullscreenOn">Teljes képernyő</string>
 
+    <string name="no_zoom">Disable zoom gesture</string>
+
     <string name="nightmodeOn">Éjszakai mód</string>
     <string name="nightmodeOff">Nappali mód</string>
 
