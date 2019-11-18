@@ -546,7 +546,7 @@ extern short int query_type; // contains constants PRM_...
 	#define STR_FORCE_BIT_OPT_0_BUTTONS_ORDER "of0bo"
 #endif
 
-// blind-friendly mode
+// voice output
 #define FORCE_BIT_OPT_0_VOICE_OUTPUT 69
 #ifdef LONG_PARAM_NAMES
 #define STR_FORCE_BIT_OPT_0_VOICE_OUTPUT "FORCE_BIT_OPT_0_VOICE_OUTPUT"
@@ -1128,7 +1128,7 @@ extern short int query_type; // contains constants PRM_...
 	char pom3[MAX_STR];\
 	mystrcpy(pom3, STR_EMPTY, MAX_STR);\
 	prilep_request_options(pom2, pom3);\
-	_export_rozbor_dna_buttons_dni_dnes(2 /* dnes_dnes */, NIE /* som_v_tabulke */, pom2, NIE /* zobraz_odkaz_na_skrytie */);\
+	_export_rozbor_dna_buttons_dni_dnes(EXPORT_DNES_DNES_ANO_SPEC, NIE /* som_v_tabulke */, pom2, NIE /* zobraz_odkaz_na_skrytie */);\
 	}
 
 // used in interpretParameter()
@@ -1248,7 +1248,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_TELAKRVI_NEDELA           "BitOpt0CorpusChristiOnSunday"
 #define XML_BIT_OPT_0_FONT_NORMAL               "BitOpt0ForceNormalFontWeight"
 #define XML_BIT_OPT_0_BUTTONS_ORDER             "BitOpt0ButtonsOrder"
-#define XML_BIT_OPT_0_VOICE_OUTPUT            "BitOpt0BlindFriendly"
+#define XML_BIT_OPT_0_VOICE_OUTPUT              "BitOpt0VoiceOutput"
 #define XML_BIT_OPT_0_FOOTNOTES                 "BitOpt0Footnotes"
 #define XML_BIT_OPT_0_TRANSPARENT_NAV           "BitOpt0TransparentNav"
 #define XML_BIT_OPT_0_ZALMY_FULL_TEXT           "BitOpt0PsalmsFullText"

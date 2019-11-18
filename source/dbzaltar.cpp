@@ -1161,7 +1161,7 @@ void _set_chvalospev_vig_vn(short int modlitba) {
 } // _set_chvalospev_vig_vn()
 
 void _set_chvalospev_vig_sc_vpchr(short int modlitba) {
-	_set_chvalospev1(modlitba, "ch_tob13.htm", "CHVAL_TOB13,8-11VG");
+	_set_chvalospev1(modlitba, "ch_tob13.htm", "CHVAL_TOB13,8-16VG");
 	_set_chvalospev2(modlitba, "ch_iz2.htm", "CHVAL_IZ2VG");
 	_set_chvalospev3(modlitba, "ch_jer7.htm", "CHVAL_JER7VG");
 } // _set_chvalospev_vig_sc_vpchr()
@@ -2953,7 +2953,7 @@ void zaltar_zvazok(short int den, short int tyzzal, short int obdobie, short int
 
 		case DEN_PIATOK: // 4
 			// ranné chvály
-			set_zalm(2, MODL_RANNE_CHVALY, "ch_tob13.htm", "CHVAL_TOB13,8-11");
+			set_zalm(2, MODL_RANNE_CHVALY, "ch_tob13.htm", "CHVAL_TOB13,8-16");
 			set_zalm(3, MODL_RANNE_CHVALY, "z147.htm", "ZALM147,12-20");
 			// modlitba cez deň
 			set_zalmy_mcd_zaltar(den, tyzzal);
@@ -9898,7 +9898,20 @@ void __set_spolocna_cast(short int a, short int poradie_svaty, _struct_sc sc, in
 		Log("  _anchor_pom == %s\n", _anchor_pom);
 
 		// ďalší pomocný anchor, ktorý pojednáva o zväzku breviára kvôli posv. čítaniam
-		sprintf(_anchor_zvazok, "%s_", zvazok_OBD[OBD_CEZ_ROK]); // LA LH (vol. I, p. 1242-1244; vol. II, p. 1733-1735; vol. III, p. 1616-1619; vol. IV, p. 1606-1609) have the same two readings; no need for _global_den.litobd
+		if (a == MODL_SPOL_CAST_SV_ZENA_MANZ) {
+			// mulierum: LA LH (vol. I, p. 1242-1244; vol. II, p. 1733-1735; vol. III, p. 1616-1619; vol. IV, p. 1606-1609) have the same two readings; no need for _global_den.litobd
+			sprintf(_anchor_zvazok, "%s_", zvazok_OBD[OBD_CEZ_ROK]);
+		}
+		else {
+			// virorum: different readings for vol. I+II and vol. III+IV
+			sprintf(_anchor_zvazok, "%s_", zvazok_OBD[_global_den.litobd]);
+			/*
+			// we do not take reading from LA LH, vol. II, p. 1706-1708, because there is special rubric "pro sancto qui in matrimonio vixit" on p. 1708-1709, also with special case for T. P. (allelúia)
+			if ((_global_den.litobd == OBD_VELKONOCNE_I) || (_global_den.litobd == OBD_VELKONOCNE_II)) {
+				strcat(_anchor_zvazok, VELKONOCNA_PRIPONA);
+			}
+			*/
+		}
 		Log("  _anchor_zvazok == %s\n", _anchor_zvazok);
 
 		_spolocna_cast_1cit_zvazok(modlitba, STR_EMPTY, _anchor_zvazok, _anchor_pom, _file, force);
