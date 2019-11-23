@@ -142,7 +142,7 @@
  { "04BVyrocie posviacky chramov, ktorych den posviacky je neznamy", "Iz 56,1.6-7; Ž 84,3.4.5+10.11; 1Kor 3,9c<vy*>-11.16-17; Jn 2,13-22", "Hľa, Boží stánok je medzi ľuďmi!", "Vyvolil som si toto miesto a posvätil som ho, hovorí Pán; aby tam bolo moje meno naveky." }, /* (slávnosť), Výročie posviacky chrámov, ktorých deň posviacky je neznámy - len v konsekrovaných kostoloch, 2009-10-26 */
  { "04CVyrocie posviacky chramov, ktorych den posviacky je neznamy", "1Kr 8,22-23.27-30; Ž 84,3-11; 1Kor 3,90-11.16-17; Mt 16,13-19", "Aké milé sú tvoje chrámy, Pane.", "" }, /* (slávnosť), Výročie posvätenia chrámov, ktorých deň posviacky je neznámy [1], 2007-10-26 */
  { "05AKrst Krista Pana", "Iz 42,1-4.6-7; Ž 29,1-4.9-10; Sk 10,34-38; Mt 3,13-17", "Pán požehná svoj ľud pokojom", "Otvorilo sa nebo a zaznel Otcov hlas: Toto je môj milovaný Syn, počúvajte ho." },  /* 2020-01-12 Krst Krista Pána */
- { "05AObetovanie Pana", "Mal 3,1-4; Ž 24,7-10; Hebr 2,14-18; Lk 2,22-40 /kr./ Lk 2,22-32", "Príď, Pane, do svojho svätého chrámu", "" },  /* 2014-02-02 Obetovanie Pána TODO: ak nepadne na nedelu, je asi len jedno citanie*/
+ { "05AObetovanie Pana", "Mal 3,1-4; Ž 24,7-10; Hebr 2,14-18; Lk 2,22-40 /kr./ Lk 2,22-32", "Príď, Pane, do svojho svätého chrámu.", "Pán je svetlo národov, Pán je sláva svojho ľudu." },  /* 2020-02-02 Obetovanie Pána */
  { "05APovysenie svateho kriza", "Nm 21,4c<Ces*>-9; Ž 78,1-2. 34-35. 36-37. 38; Flp 2,6-11; Jn 3,13-17", "Pane, ty buď našou spásou", "" }, /* (sviatok), Povýšenie Svätého Kríža, 2008-09-14 */
  { "05APremenenie Pana", "Dan 7,9-10. 13-14 /al./ 2Pt 1,16-19; Ž 97,1-2. 5-6. 9; Mt 17,1-9", "Pánovu slávu uvidia všetky národy", "" }, /* (sviatok), Premenenie Pána, 2008-08-06 */
  { "05ASvatej rodiny Jezisa, Marie a Jozefa", "Sir 3,3-7.14-17a; Ž 128,1-5; Kol 3,12-21; Mt 2,13-15.19-23", "Blažení všetci, čo sa boja Pána a kráčajú po jeho cestách.", "Vo vašich srdciach nech vládne Kristov pokoj. Kristovo slovo nech vo vás bohato prebýva." },  /* 2019-12-29 Svätej rodiny Ježiša, Márie a Jozefa */
@@ -160,12 +160,12 @@
  { "05CSvatej rodiny Jezisa, Marie a Jozefa", "Sir 3,3-7.14-16; Ž 128,1-2. 3. 4-5; Kol 3,12-21; Mt 2,13-15.19-23", "Blažení všetci, čo sa boja Pána a kráčajú po jeho cestách.", "" }, /* 2015-12-27 Svätej rodiny Ježiša, Márie a Jozefa */
  { "05CVyrocie posviacky Lateranskej baziliky", "Ez 47,1-2.8-9.12 /al./ 1Kor 3,9c<vy*>-11.16-17; Ž 46,2-9; Jn 2,13-22", "Riečne ramená obveseľujú Božie mesto, posvätný stánok Najvyššieho.", "" }, /* (sviatok), Výročie posviacky Lateránskej baziliky, 2007-11-09 */
  { "06A0302", "Sir 24,1b-2.12-16; Ž 147,12-15.19-20; Ef 1,3-6.15-18; Jn 1,1-18 /al./ Jn 1,1-5.9-14", "Slovo sa telom stalo a prebývalo medzi nami.", "Sláva ti Kriste, teba zvestovali národom; sláva ti Kriste, v teba uverili na svete." },  /* 2020-01-05 2. nedeľa po Narodení Pána */
- { "06A0502", "Iz 49,3.5-6; Ž 40,2.4. 7-10; 1Kor 1,1-3; Jn 1,29-34", "Hľa, prichádzam, Pane, chcem plniť  tvoju vôľu", "" },  /* 2014-01-19  */
- { "06A0503", "Iz 8,23b-9,3; Ž 27,1.4.13-14; 1Kor 1,10-13.17; Mt 4,12-23 /kr./ Mt 4,12-17", "Pán je moje svetlo a moja spása", "" },  /* 2014-01-26  */
+ { "06A0502", "Iz 49,3.5-6; Ž 40,2.4. 7-10; 1Kor 1,1-3; Jn 1,29-34", "Hľa, prichádzam, Pane, chcem plniť  tvoju vôľu", "Slovo sa telom stalo a prebývalo medzi nami. Tým, ktorí ho prijali, dalo moc stať sa Božími deťmi." },  /* 2020-01-19  */
+ { "06A0503", "Iz 8,23b-9,3; Ž 27,1.4.13-14; 1Kor 1,10-13.17; Mt 4,12-23 /kr./ Mt 4,12-17", "Pán je moje svetlo a moja spása.", "Ježiš hlásal evanjelium o kráľovstve a uzdravoval každú chorobu medzi ľudom." },  /* 2020-01-26  */
  { "06A0504", "Sof 2,3. 3,12-13; Ž 146,6c<On z*>-7. 8-9a. 9b-10; 1Kor 1,26-31; Mt 5,1-12a<*nebi.>", "Blahoslavení chudobní v duchu, lebo ich je nebeské kráľovstvo", "" }, /* , 4. nedeľa v období cez rok, 2008-02-03 */
- { "06A0505", "Iz 58,7-10; Ž 112; 1Kor 2,1-5; Mt 5,13-16", "Spravodlivým žiari svetlo v temnotách", "" },  /* 2014-02-09  */
- { "06A0506", "Sir 15,16-21; Ž 119,1-34; 1Kor 2,6-10; Mt 5,17-37", "Blažení tí, čo kráčajú podľa zákona Pánovho", "" },  /* 2014-02-16  */
- { "06A0507", "Lev 19,1-2.17-18; Ž 103,1-13; 1Kor 3,16-23; Mt 5,38-48", "Milostivý a milosrdný je Pán", "" },  /* 2014-02-23  */
+ { "06A0505", "Iz 58,7-10; Ž 112,4-9; 1Kor 2,1-5; Mt 5,13-16", "Spravodlivým žiari svetlo v temnotách.", "Ja som svetlo sveta, hovorí Pán; kto mňa nasleduje, bude mať svetlo života." },  /* 2020-02-09  */
+ { "06A0506", "Sir 15,16-21; Ž 119,1-2.4-5.17-18.33-34; 1Kor 2,6-10; Mt 5,17-37 /al./ Mt 5, 20-22a. 27-28. 33-34a. 37", "Blažení tí, čo kráčajú podľa zákona Pánovho.", "Zvelebujem ťa, Otče, Pán neba i zeme, že si zjavil maličkým tajomstvá Božieho kráľovstva." },  /* 2020-02-16  */
+ { "06A0507", "Lv 19,1-2.17-18; Ž 103,1-4.8.10.12-13; 1Kor 3,16-23; Mt 5,38-48", "Milostivý a milosrdný je Pán.", "Kto zachováva Kristovo slovo, v tom je Božia láska naozaj dokonalá." },  /* 2020-02-23  */
  { "06A0508", "Iz 49,14-15; Ž 62,2-3.6-9; 1Kor 4,1-5; Mt 6,24-34", "Iba v Bohu spočiň, duša moja", "" },  /* 2014-03-02  */
  { "06A0509", "Dt 11,18. 26-28. 32; Ž 31,2-3b. 3c-4. 17+25; Rim 3,21-25a<*ry.>. 28; Mt 7,21-27", "Ty, Pane, buď mojím útočišťom", "" }, /* , 9. nedeľa v období cez rok, 2008-06-01 */
  { "06A0510", "Oz 6,3-6; Ž 50,1+8. 12-13. 14-15; Rim 4,18-25; Mt 9,9-13", "Prijmi od nás, Pane, obetu chvály", "" }, /* , 10. nedeľa v období cez rok, 2008-06-08 */
@@ -247,10 +247,10 @@
  { "06C0531", "Múd 11,22-12,2; Ž 145,1-14; 2Sol 1,11-2,2; Lk 19,1-10", "Oslavovať ťa chcem naveky, Bože, môj kráľ.", "" }, /* , 31. nedeľa v období cez rok, 2007-11-04 */
  { "06C0532", "2Mach 7,1-2.9-14; Ž 17,1-15; 2Sol 2,16-3,5; Lk 20,27-38", "Až raz vstanem zo sna, uzriem tvoju tvár, Pane.", "" }, /* , 32. nedeľa v období cez rok, 2007-11-11 */
  { "06C0533", "Mal 3,19-20a<*nie.>; Ž 98,5-9; 2Sol 3,7-12; Lk 21,5-19", "Pán príde súdiť živých i mŕtvych.", "Vzpriamte sa, zodvihnite hlavu, lebo sa blíži vaše vykúpenie." },  /* 2019-11-17  */
- { "07Katedra sv. Petra, apostola", "1Pt 5,1-4; Ž 23,1-6; Mt 16,13-19", "Pán je môj pastier, nič mi nechýba.", "" },  /* 2014-02-22 Katedra sv. Petra, apoštola */
+ { "07Katedra sv. Petra, apostola", "1Pt 5,1-4; Ž 23,1-6; Mt 16,13-19", "Pán je môj pastier, nič mi nechýba.", "Ty si Peter a na tejto skale postavím svoju Cirkev a pekelné brány ju nepremôžu." },  /* 2020-02-22 Katedra sv. Petra, apoštola */
  { "07Narodenie prebl. Panny Marie", "Mich 5,1-4a<*koj.> /al./ Rim 8,28-30; Ž 13,6ab. 6cd; Mt 1,1-16.18-23 /kr./ Mt 1,18-23", "Duša mi jasá v mojom Bohu.", "Šťastná si naozaj, svätá Panna Mária, a všetkej chvály najhodnejšia, lebo z teba vyšlo slnko spravodlivosti, Kristus, náš Boh." }, /* (sviatok), Narodenie Panny Márie, 2009-09-08 */
  { "07Navstivenie prebl. Panny Marie", "Sof 3,14-18 /al./ Rim 12,9-16b<*kym.>; (Ž) Iz 12,2-3. 4b-d. 5-6; Lk 1,39-56", "Plesajme a jasajme, lebo uprostred nás je svätý, Boh", "" }, /* (sviatok), Návšteva Panny Márie, 2008-07-02 */
- { "07Obratenie svateho Pavla, apostola", "Sk 22,3-16 /al./ Sk 9,1-22; Ž 117,1-2; Mk 16,15-18", "Choďte do celého sveta a hlásajte evanjelium", "" },  /* 2014-01-25 Obrátenie svätého Pavla, apoštola */
+ { "07Obratenie svateho Pavla, apostola", "Sk 22,3-16 /al./ Sk 9,1-22; Ž 117,1-2; Mk 16,15-18", "Choďte do celého sveta a hlásajte evanjelium.", "Ja som si vás vyvolil, aby ste išli a prinášali ovocie a aby vaše ovocie zostalo, hovorí Pán." },  /* 2020-01-25 Obrátenie svätého Pavla, apoštola */
  { "07Sv. Bartolomeja, apostola", "Zjv 21,9b<a po*>-14; Ž 145,10-11.12-13b<*nia.>.17-18; Jn 1,45-51", "Tvoji svätí, Pane, oznamujú slávu tvojho kráľovstva.", "Rabbi, ty si Boží Syn, ty si kráľ Izraela!" }, /* (sviatok), Svätého Bartolomeja, apoštola, 2009-08-24 */
  { "07Sv. Benedikta, opata, patrona Europy", "Prís 2,1-9; Ž 34,2-11; Mt 19,27-29", "Pána chcem velebiť v každom čase.", "" }, /* (sviatok), Svätého Benedikta, opáta, patróna Európy, 2007-07-11 */
  { "07Sv. Filipa a Jakuba, apostolov", "1Kor 15,1-8; Ž 19,2-3. 4-5; Jn 14,6-14", "Po celej zemi rozlieha sa ich hlas", "" }, /* (sviatok), Svätých. Filipa a Jakuba, apoštolov, 2008-05-03 */
@@ -268,6 +268,7 @@
  { "07Sv. Tomasa, apostola", "Ef 2,19-22; Ž 117,1-2; Jn 20,24-29", "Choďte do celého sveta a hlásajte evanjelium.", "" }, /* (sviatok), Svätého Tomáša, apoštola, 2007-07-03 */
  { "07Sv. Vavrinca, diakona a mucenika", "2Kor 9,6-10; Ž 112,1-2.5-6.7-8.9; Jn 12,24-26", "V obľube je človek, čo sa zľutúva a rád pomáha.", "Kto mňa nasleduje, nebude chodiť v tmách, ale bude mať svetlo života, hovorí Pán." }, /* (sviatok), Svätého Vavrinca, diakona, mučeníka, 2009-08-10 */
  { "07Svatych Neviniatok, mucenikov", "1Jn 1,5-2,2; Ž 124,2-5.7c-8; Mt 2,13-18", "Naša duša unikla ako vtáča zo siete poľovníkov.", "Teba, Bože, chválime, teba, Pane, velebíme. Teba, Pane, chváli vznešený zástup mučeníkov." },  /* 2019-12-28 Svätých Neviniatok, mučeníkov */
+ { "08Sv. Cyrila, mnicha, a sv. Metoda, biskupa", "Iz 52, 7-10; Ž 96, 1-3.7-8a.10; Mk 16,15-20", "Pán zvestoval svoju spásu.", "Božie kráľovstvo je medzi vami, hovorí Pán; prinášajte posolstvo pokoja všetkým ľuďom." },  /* 2020-02-14 Sv. Cyrila, mnícha, a sv. Metoda, biskupa */
  { "08Vyrocie posviacky katedralneho chramu v Banskej Bystrici", "1Kr 8,22-23.27-30; Ž 84,3-11; 1Kor 3,90-11.16-17; Mt 16,13-19", "Aké milé sú tvoje chrámy, Pane.", "" }, /* (sviatok), Výročie posvätenia katedrálneho chrámu v Banskej Bystrici [1], 2007-09-24 */
  { "08Vyrocie posviacky katedralneho chramu v Kosiciach", "1Kr 8,22-23.27-30; Ž 84,3-11; 1Kor 3,90-11.16-17; Mt 16,13-19", "Aké milé sú tvoje chrámy, Pane.", "" }, /* (sviatok), Výročie posvätenia katedrálneho chrámu v Košiciach [1], 2007-09-06 */
  { "08Vyrocie posviacky katedralneho chramu v Nitre", "1Kr 8,22-23.27-30; Ž 84,3-11; 1Kor 3,90-11.16-17; Mt 16,13-19", "Aké milé sú tvoje chrámy, Pane.", "" }, /* (sviatok), Výročie posvätenia katedrálneho chrámu v Nitre [1], 2007-11-20 */
@@ -356,7 +357,7 @@
  { "092060505", "Jer 20,10-13; Ž 18,2-7; Jn 10,31-42", "V úzkosti som ťa vzýval, Pane, zachráň ma", "" },  /* 2014-04-11  */
  { "092060506", "Ez 37,21-28; (Ž) Jer 31,10-13; Jn 11,45-56", "Pán nás bude strážiť ako pastier svoje stádo", "" },  /* 2014-04-12  */
  { "10Neposkvrneneho Srdca Panny Marie", "Iz 61,9-11; (Ž) 1Sam 2,1-8; Lk 2,41-52", "Srdce mi plesá v mojom Bohu.", "" }, /* (spomienka), Nepoškvrneného Srdca Panny Márie, 2007-06-16 */
- { "10Obetovanie Panny Marie", "Zach 2, 14-17; (Ž) Lk 1,46-47.48-49.50-51.52-53.54-55", "Blahoslavená si, Panna Mária, lebo si nosila Syna večného Otca.  ", "Blahoslavení sú tí, čo počúvajú Božie slovo a zachovávajú ho." },  /* 2019-11-21 Obetovanie Panny Márie */
+ { "10Obetovanie Panny Marie", "Zach 2, 14-17; (Ž) Lk 1,46-47.48-49.50-51.52-53.54-55; Mt 12,46-50", "Blahoslavená si, Panna Mária, lebo si nosila Syna večného Otca.  ", "Blahoslavení sú tí, čo počúvajú Božie slovo a zachovávajú ho." },  /* 2019-11-21 Obetovanie Panny Márie */
  { "10Obetovanie prebl. Panny Marie", "Zach 2,14-17; (Ž) Lk 1,46-47. 48-49. 50-51. 52-53. 54-55; Mt 12,46-50", "Blahoslavená si, Panna Mária, lebo si nosila Syna večného Otca", "" }, /* , /al./ o Panne Márii, 2008-11-21 */
  { "10Prebl. Panny Marie Kralovnej", "Iz 9,1-3. 5-6; Ž 113,1-2. 3-4. 5-6. 7-8; Lk 1,26-38", "Pánovo meno chváľme, zvelebujme", "" }, /* , /al./ o Panne Márii, 2008-08-22 */
  { "10Ruzencovej prebl. Panny Marie", "Sk 1,12-14; (Ž) Lk 1,46-47. 48-49. 50-51. 52-53. 54-55; Lk 1,26-38", "Blahoslavená si Panna Mária, lebo si nosila Syna večného Otca", "" }, /* , /al./, 2008-10-07 */
@@ -386,7 +387,7 @@
  { "12Sv. Jozefa, robotnika", "Gn 1,26-2,3 /al./ Kol 3,14-15.17.23-24; Ž 90,2-16; Mt 13,54-58", "Požehnaj, Pane, námahu našich rúk.", "" }, /* , (alebo zo spomienky), 2007-05-01 */
  { "12Sv. Nerea a Achila, mucenikov", "Gal 5,16-17. 22-23a. 24-25; Ž 117,1. 2; Jn 14,23-26", "Budete mi svedkami až po samý kraj zeme", "" }, /* , /al./ Svätodušný pondelok, 2008-05-12 */
  { "12Sv. Petra Chryzologa, biskupa a ucitela Cirkvi", "", "", "" }, /* (ľubovoľná spomienka), /al./ (pre rehoľné sestry sv. Kríža) blahoslavenej Zdenky, panny a mučenice, 2008-07-30 */
- { "12Sv. Sebastiana, mucenika", "1 Pt 3,14-17; Ž 50,8-23; Mk 2,18-22", "Pán ma vyslobodil zo všetkej hrôzy", "" },  /* 2014-01-20 Sv. Šebastiána, mučeníka */
+ { "12Sv. Sebastiana, mucenika", "1 Pt 3,14-17; Ž 34,2-9; Mt 10,28-33", "", "Blahoslavený muž, ktorý vydrží skúšku, lebo keď sa osvedčí, dostane veniec života." },  /* 2020-01-20 Sv. Šebastiána, mučeníka */
  { "12Vyrocie posviacky bazilik <br/>\nsv. Petra a sv. Pavla, apostolov", "Sk 28,11-16.30-31; Ž 98,1.2-3b.3c-4.5-6; Mt 14, 22-33", "Pred očami pohanov vyjavil Pán svoju spásu.", "Teba, Bože, chválime, teba, Pane, velebíme. Teba, Pane, oslavuje slávny zbor apoštolov." },  /* 2019-11-18 Výročie posviacky bazilík <br/>\nsv. Petra a sv. Pavla, apoštolov */
  { "12Vyrocie posviacky bazilik sv. Petra a sv. Pavla, apostolov", "Sk 28,11-16. 30-31; Ž 98,1. 2-3b. 3c-4. 5-6; Mt 14,22-33", "Pred očami pohanov vyjavil Pán svoju spásu", "" }, /* , /al./ v omši o posviacke bazilík, 2008-11-18 */
  { "12Vyrocie posviacky hlavnej marianskej baziliky v Rime", "Zjv 21,1-5a; (Ž) Jdt 13,18b-e. 19; Lk 11,27-28", "Požehnaná si, Panna Mária, nad všetky ženy na svete", "" }, /* , /al./ v omši o Panne Márii, 2008-08-05 */
@@ -677,44 +678,44 @@
  { "132040901", "1Jn 4,11-18; Ž 72,1-2.10-13; Mk 6,45-52", "Budú sa ti klaňať, Pane, všetky národy sveta.", "Sláva ti Kriste, teba zvestovali národom; sláva ti Kriste, v teba uverili na svete." },  /* 2014-01-09  */
  { "132041001", "1Jn 4,19-5,4; Ž 72,1-2.14-15.17; Lk 4,14-22a", "Budú sa ti klaňať, Pane, všetky národy sveta", "Pán ma poslal hlásať evanjelium chudobným, oznámiť zajatým, že budú prepustení." },  /* 2014-01-10  */
  { "132041101", "1Jn 5,5-13; Ž 147,12-15.19-20; Lk 5,12-16", "Chváľ, Jeruzalem Pána, oslavuj, Sion, svojho Boha", "Ježiš hlásal evanjelium o kráľovstve a uzdravoval každú chorobu medzi ľudom." },  /* 2020-01-11  */
- { "132050101", "1Sam 1,1-8; Ž 116,12-19; Mk 1,14-20", "Prinesiem ti, Pane, obetu chvály", "" },  /* 2014-01-13  */
- { "132050102", "1Sam 1,9-20; (Ž) 1Sam 2,1.4-8; Mk 1,21-28", "Srdce mi plesá v mojom Bohu", "" },  /* 2014-01-14  */
- { "132050103", "1Sam 3,1-10.19-20; Ž 40,2.5.7-10; Mk 1,29-39", "Hľa, prichádzam, Pane, chcem plniť tvoju vôľu", "" },  /* 2014-01-15  */
- { "132050104", "1Sam 4,1-11; Ž 44,10-11.14-15.24-25; Mk 1,40-45", "Vykúp nás, Pane, veď si milosrdný", "" },  /* 2014-01-16  */
- { "132050105", "1Sam 8,4-7. 10-22a; Ž 89,16-19; Mk 2,1-12", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky", "" },  /* 2014-01-17  */
- { "132050106", "1Sam 9,1-4.10b.17-19; 10,1a; Ž 21,2-7; Mk 2,13-17", "Pane, z tvojej sily sa kráľ raduje", "" },  /* 2014-01-18  */
- { "132050201", "1Sam 15,16-23; Ž 50,8-9.16b-17.21ab.23; Mk 2,18-22", "Ukáž nám, Pane cestu spásy", "" },  /* 2014-01-20  */
- { "132050202", "1Sam 16,1-13; Ž 89,20-22.27-28; Mk 2,23-28", "Našiel si, Pane, svojho služobníka Dávida", "" },  /* 2014-01-21  */
- { "132050203", "1Sam 17,32-33.37.40-51; Ž 144,1.2.9-10; Mk 3,1-6", "Nech je zvelebený Pán, môj ochranca", "" },  /* 2014-01-22  */
- { "132050204", "1Sam 18,6-9; 19,1-7; Ž 56,2-3.9-13; Mk 3,7-12", "Na Boha sa ja spolieham a nebojím sa", "" },  /* 2014-01-23  */
- { "132050205", "1Sam 24,3-21; Ž 57,2-11; Mk 3,13-19", "Zmiluj sa, Bože, nado mnou, zmiluj sa nado mnou", "" },  /* 2014-01-24  */
+ { "132050101", "1Sam 1,1-8; Ž 116,12-14+17-9; Mk 1,14-20", "Prinesiem ti, Pane, obetu chvály", "Priblížilo sa Božie kráľovstvo, hovorí Pán; kajajte sa a verte evanjeliu." },  /* 2020-01-13  */
+ { "132050102", "1Sam 1,9-20; (Ž) 1Sam 2,1.4-8; Mk 1,21-28", "Srdce mi plesá v mojom Bohu", "Prijmite Božie slovo, nie ako ľudské slovo, ale – aké naozaj je – ako slovo Božie." },  /* 2020-01-14  */
+ { "132050103", "1Sam 3,1-10.19-20; Ž 40,2.5.7-10; Mk 1,29-39", "Hľa, prichádzam, Pane, chcem plniť tvoju vôľu", "Moje ovce počúvajú môj hlas, hovorí Pán; ja ich poznám a ony idú za mnou." },  /* 2020-01-15  */
+ { "132050104", "1Sam 4,1-11; Ž 44,10-11.14-15.24-25; Mk 1,40-45", "Vykúp nás, Pane, veď si milosrdný", "Ježiš hlásal evanjelium o kráľovstve a uzdravoval každú chorobu medzi ľudom." },  /* 2020-01-16  */
+ { "132050105", "1Sam 8,4-7. 10-22a; Ž 89,16-19; Mk 2,1-12", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky", "Veľký prorok povstal medzi nami a Boh navštívil svoj ľud." },  /* 2020-01-17  */
+ { "132050106", "1Sam 9,1-4.10b.17-19.10,1a; Ž 21,2-7; Mk 2,13-17", "Pane, z tvojej sily sa kráľ raduje", "Pán ma poslal hlásať evanjelium chudobným, oznámiť zajatým, že budú prepustení." },  /* 2020-01-18  */
+ { "132050201", "1Sam 15,16-23; Ž 50,8-9.16b-17.21ab.23; Mk 2,18-22", "Ukáž nám, Pane cestu spásy", "Živé a účinné je Božie slovo; rozsudzuje myšlienky a úmysly srdca." },  /* 2020-01-20  */
+ { "132050202", "1Sam 16,1-13; Ž 89,20-22.27-28; Mk 2,23-28", "Našiel si, Pane, svojho služobníka Dávida", "Otec nášho Pána Ježiša Krista nech osvieti oči nášho srdca, aby sme vedeli, aká je nádej z nášho povolania." },  /* 2020-01-21  */
+ { "132050203", "1Sam 17,32-33.37.40-51; Ž 144,1.2.9-10; Mk 3,1-6", "Nech je zvelebený Pán, môj ochranca", "Ježiš hlásal evanjelium o kráľovstve a uzdravoval každú chorobu medzi ľudom." },  /* 2020-01-22  */
+ { "132050204", "1Sam 18,6-9; 19,1-7; Ž 56,2-3.9-13; Mk 3,7-12", "Na Boha sa ja spolieham a nebojím sa", "Náš Spasiteľ Ježiš Kristus zničil smrť a evanjeliom zjavil život." },  /* 2020-01-23  */
+ { "132050205", "1Sam 24,3-21; Ž 57,2-4.6+11; Mk 3,13-19", "Zmiluj sa, Bože, nado mnou, zmiluj sa nado mnou", "V Kristovi Boh zmieril svet so sebou a nám odovzdal slovo zmierenia." },  /* 2020-01-24  */
  { "132050206", "2Sam 1,1-4.11-12.17.19.23-27; Ž 80,2-7; Mk 3,20-21", "Rozjasni, Pane, svoju tvár a budeme spasení.", "" },  /* 2016-01-23  */
- { "132050301", "2Sam 5,1-7.10; Ž 89,20-22.25-26; Mk 3,22-30", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky", "" },  /* 2014-01-27  */
- { "132050302", "2Sam 6,12b-15.17-19; Ž 24,7-10; Mk 3,31-35", "Hľa, prichádza Pán, on je Kráľ slávy", "" },  /* 2014-01-28  */
- { "132050303", "2Sam 7,4-17; Ž 89,4-5.27-30; Mk 4,1-20", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky", "" },  /* 2014-01-29  */
- { "132050304", "2Sam 7,18-19.24-29; Ž 132,1-5. 11-14; Mk 4,21-25", "Pán Boh mu dá trón jeho otca Dávida", "" },  /* 2014-01-30  */
- { "132050305", "2Sam 11,1-4a.5-10a.13-17; Ž 51,3-7.10-11; Mk 4,26-34", "Zmiluj sa, Pane, lebo sme zhrešili", "" },  /* 2014-01-31  */
- { "132050306", "2Sam 12,1-7a.10-17; Ž 132,1-5.11-14; Mk 4,21-25", "Pán Boh mu dá trón jeho otca Dávida", "" },  /* 2014-02-01  */
- { "132050401", "2Sam 15,13-14.30; 16,5-13a; Ž 3,2-7; Mk 5,1-20", "Povstaň, Pane; zachráň ma, Bože môj", "" },  /* 2014-02-03  */
- { "132050402", "2Sam 18,9-10.14b.24-25a.30 - 19,3; Ž 86,1-6; Mk 5,21-43", "Skloň sa ku mne, Pane, a vyslyš ma", "" },  /* 2014-02-04  */
- { "132050403", "2Sam 24,2.9-17; Ž 32,1-7; Mk 6,1-6", "Odpusť mi, Pane, vinu môjho hriechu.", "" },  /* 2014-02-05  */
- { "132050404", "1Kr 2,1-4.10-12; (Ž) 1Krn 29,10b-12; Mk 6,7-13", "Pane, ty panuješ nad všetkými; v tvojej ruke je moc a sila", "" },  /* 2014-02-06  */
- { "132050405", "Sir 47,2-13; Ž 18,31-51; Mk 6,14-29", "Velebím Ťa, Bože, ty moja spása.", "" },  /* 2014-02-07  */
- { "132050406", "1Kr 3,4-13; Ž 119,9-14; Mk 6,30-34", "Nauč ma, Pane, svoje ustanovenia.", "" },  /* 2014-02-08  */
- { "132050501", "1Kr 8,1-7.9-13; Ž 132,6-10; Mk6,53-56", "Vstaň, Pane, zaujmi svoje miesto, ty a tvoja vznešená archa.", "" },  /* 2014-02-10  */
- { "132050502", "1Kr 8,22-23.27-30; Ž 84,3-11; Mk 7,1-13", "Aké milé sú tvoje chrámy, Pane", "" },  /* 2014-02-11  */
- { "132050503", "1Kr 10,1-10; Ž 37,5-6.30-40; Mk 7,14-23", "Z úst spravodlivého zaznieva múdrosť", "" },  /* 2014-02-12  */
- { "132050504", "1Kr 11,4-13; Ž 106,3-4.35-40; Mk 7,24-30", "Pamätaj na nás, Pane, z lásky k svojmu ľudu", "" },  /* 2014-02-13  */
- { "132050505", "1Kr 11,29-32; 12,19; Ž 81,10-15; Mk 7,31-37", "Pane, daj, aby sme počúvali tvoj hlas.", "" },  /* 2014-02-14  */
- { "132050506", "1Kr 12,26-32; 13,33-34; Ž 106,6-22; Mk 8,1-10", "Pamätaj na nás, Pane, z lásky k svojmu ľudu", "" },  /* 2014-02-15  */
- { "132050601", "Jak 1,1-11; Ž 119,67-68.71-72.75-76; Mk 8,11-13", "Nech zostúpi na mňa tvoje zľutovanie, Pane, a budem žiť", "" },  /* 2014-02-17  */
- { "132050602", "Jak 1,12-18; Ž 94,12-15.18-19; Mk 8,14-21", "Blažený človek, ktorého ty, Pane, vzdelávaš", "" },  /* 2014-02-18  */
- { "132050603", "Jak 1,19-27; Ž 15,2-5; Mk 8,22-26", "Pane, kto môže nájsť odpočinok na tvojom svätom vrchu?", "" },  /* 2014-02-19  */
- { "132050604", "Jak 2,1-9; Ž 34,2-7; Mk 8,27-33", "Úbožiak zavolal a Pán ho vyslyšal", "" },  /* 2014-02-20  */
- { "132050605", "Jak 2,14-24.26; Ž 112,1-6; Mk 8,34-9,1", "Blažený muž, ktorý sa bojí Pána", "" },  /* 2014-02-21  */
+ { "132050301", "2Sam 5,1-7.10; Ž 89,20-22.25-26; Mk 3,22-30", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky.", "Náš Spasiteľ Ježiš Kristus zničil smrť a evanjeliom zjavil život." },  /* 2020-01-27  */
+ { "132050302", "2Sam 6,12b-15.17-19; Ž 24,7-10; Mk 3,31-35", "Hľa, prichádza Pán, on je Kráľ slávy.", "Zvelebujem ťa, Otče, Pán neba i zeme, že si zjavil maličkým tajomstvá Božieho kráľovstva." },  /* 2020-01-28  */
+ { "132050303", "2Sam 7,4-17; Ž 89,4-5.27-30; Mk 4,1-20", "Tvoje milosrdenstvo, Pane, ospevovať budem naveky.", "Semeno je Božie slovo, rozsievač je Kristus. Každý, kto ho nájde, bude žiť naveky." },  /* 2020-01-29  */
+ { "132050304", "2Sam 7,18-19.24-29; Ž 132,1-5. 11-14; Mk 4,21-25", "Pán Boh mu dá trón jeho otca Dávida.", "Tvoje slovo je svetlo pre moje nohy a pochodeň na mojich chodníkoch." },  /* 2020-01-30  */
+ { "132050305", "2Sam 11,1-4a.5-10a.13-17; Ž 51,3-7.10-11; Mk 4,26-34", "Zmiluj sa, Pane, lebo sme zhrešili.", "Zvelebujem ťa, Otče, Pán neba i zeme, že si zjavil maličkým tajomstvá Božieho kráľovstva." },  /* 2020-01-31  */
+ { "132050306", "2Sam 12,1-7a.10-17; Ž 51,12-17; Mk 4,35-41", "Bože, stvor vo mne srdce čisté.", "Boh tak miloval svet, že dal svojho jednorodeného Syna; každý, kto v neho verí, má večný život." },  /* 2020-02-01  */
+ { "132050401", "2Sam 15,13-14.30.16,5-13a; Ž 3,2-7; Mk 5,1-20", "Povstaň, Pane; zachráň ma, Bože môj.", "Veľký prorok povstal medzi nami a Boh navštívil svoj ľud." },  /* 2020-02-03  */
+ { "132050402", "2Sam 18,9-10.14b.24-25a.30-19,3; Ž 86,1-6; Mk 5,21-43", "Skloň sa ku mne, Pane, a vyslyš ma.", "On vzal na seba naše slabosti a niesol naše choroby." },  /* 2020-02-04  */
+ { "132050403", "2Sam 24,2.9-17; Ž 32,1-2.5-7; Mk 6,1-6", "Odpusť mi, Pane, vinu môjho hriechu.", "Moje ovce počúvajú môj hlas, hovorí Pán; ja ich poznám a ony idú za mnou." },  /* 2020-02-05  */
+ { "132050404", "1Kr 2,1-4.10-12; (Ž) 1Krn 29,10b-12; Mk 6,7-13", "Pane, ty panuješ nad všetkými; v tvojej ruke je moc a sila.", "Priblížilo sa Božie kráľovstvo; kajajte sa a verte evanjeliu." },  /* 2020-02-06  */
+ { "132050405", "Sir 47,2-13; Ž 18,31.47+50.51; Mk 6,14-29", "Velebím Ťa, Bože, ty moja spása.", "Blahoslavení sú tí, čo zachovávajú Božie slovo v dobrom a šľachetnom srdci a s vytrvalosťou prinášajú úrodu." },  /* 2020-02-07  */
+ { "132050406", "1Kr 3,4-13; Ž 119,9-14; Mk 6,30-34", "Nauč ma, Pane, svoje ustanovenia.", "Moje ovce počúvajú môj hlas, hovorí Pán; ja ich poznám a ony idú za mnou." },  /* 2020-02-08  */
+ { "132050501", "1Kr 8,1-7.9-13; Ž 132,6-10; Mk6,53-56", "Vstaň, Pane, zaujmi svoje miesto, ty a tvoja vznešená archa.", "Ježiš hlásal evanjelium o kráľovstve a uzdravoval každú chorobu medzi ľudom." },  /* 2020-02-10  */
+ { "132050502", "1Kr 8,22-23.27-30; Ž 84,3-5+10.11; Mk 7,1-13", "Aké milé sú tvoje chrámy, Pane.", "Bože, nakloň mi srdce k svojej náuke a milostivo mi daj svoj zákon." },  /* 2020-02-11  */
+ { "132050503", "1Kr 10,1-10; Ž 37,5-6.30-31.39-40; Mk 7,14-23", "Z úst spravodlivého zaznieva múdrosť.", "Tvoje slovo, Pane, je pravda; posväť nás pravdou." },  /* 2020-02-12  */
+ { "132050504", "1Kr 11,4-13; Ž 106,3-4.35-37.40; Mk 7,24-30", "Pamätaj na nás, Pane, z lásky k svojmu ľudu.", "V tichosti prijmime zasiate slovo, ktoré má moc spasiť vaše duše." },  /* 2020-02-13  */
+ { "132050505", "1Kr 11,29-32.12,19; Ž 81,10-15; Mk 7,31-37", "Pane, daj, aby sme počúvali tvoj hlas.", "Pane, otvor naše srdce, aby sme porozumeli slovám tvojho Syna." },  /* 2020-02-14  */
+ { "132050506", "1Kr 12,26-32; 13,33-34; Ž 106,6-7a.19-22; Mk 8,1-10", "Pamätaj na nás, Pane, z lásky k svojmu ľudu.", "Nielen z chleba žije človek, ale z každého slova, ktoré vychádza z Božích úst." },  /* 2020-02-15  */
+ { "132050601", "Jak 1,1-11; Ž 119,67-68.71-72.75-76; Mk 8,11-13", "Nech zostúpi na mňa tvoje zľutovanie, Pane, a budem žiť.", "Ja som cesta, pravda a život, hovorí Pán; nik nepríde k Otcovi, iba cezo mňa." },  /* 2020-02-17  */
+ { "132050602", "Jak 1,12-18; Ž 94,12-15.18-19; Mk 8,14-21", "Blažený človek, ktorého ty, Pane, vzdelávaš.", "Kto ma miluje, bude zachovávať moje slovo, hovorí Pán; a môj Otec ho bude milovať a prídeme k nemu." },  /* 2020-02-18  */
+ { "132050603", "Jak 1,19-27; Ž 15,2-5; Mk 8,22-26", "Pane, kto môže nájsť odpočinok na tvojom svätom vrchu?", "Otec nášho Pána Ježiša Krista nech osvieti oči nášho srdca, aby sme vedeli, aká je nádej z nášho povolania." },  /* 2020-02-19  */
+ { "132050604", "Jak 2,1-9; Ž 34,2-7; Mk 8,27-33", "Úbožiak zavolal a Pán ho vyslyšal.", "Tvoje slová, Pane, sú Duch a život. Ty máš slová večného života." },  /* 2020-02-20  */
+ { "132050605", "Jak 2,14-24.26; Ž 112,1-6; Mk 8,34-9,1", "Blažený muž, ktorý sa bojí Pána.", "Nazval som vás priateľmi, hovorí Pán; pretože som vám oznámil všetko, čo som počul od svojho otca." },  /* 2020-02-21  */
  { "132050606", "Jak 3,1-10; Ž 12,2-3. 4-5. 7-8b<*veky.>; Mk 9,2-14", "Pane, ty nás zachováš a ochrániš", "" }, /* , , 2008-05-17 */
- { "132050701", "Jak 3,13-18; Ž 19,8-10.15; Mk 9,14-29", "Rozhodnutia Pánove sú správne, potešujú srdce", "" },  /* 2014-02-24  */
- { "132050702", "Jak 4,1-10; Ž 55,7-11.23; Mk 9,30-37", "Zlož svoju starosť na Pána a on ťa zachová", "" },  /* 2014-02-25  */
+ { "132050701", "Jak 3,13-18; Ž 19,8-10.15; Mk 9,14-29", "Rozhodnutia Pánove sú správne, potešujú srdce.", "Náš Spasiteľ Ježiš Kristus zničil smrť a evanjeliom zjavil život." },  /* 2020-02-24  */
+ { "132050702", "Jak 4,1-10; Ž 55,7-11.23; Mk 9,30-37", "Zlož svoju starosť na Pána a on ťa zachová.", "Ja sa nechcem chváliť ničím iným, iba krížom nášho Pána Ježiša Krista, cez ktorý je svet ukrižovaný pre mňa a ja pre svet." },  /* 2020-02-25  */
  { "132050703", "Jak 4,13-17; Ž 49,2-3.6-11; Mk 9,38-40", "Blahoslavení chudobní v duchu, lebo ich je nebeské kráľovstvo", "" },  /* 2014-02-26  */
  { "132050704", "Jak 5,1-6; Ž 49,14-20; Mk 9,41-43.45.47-50", "Blahoslavení chudobní v duchu, lebo ich je nebeské kráľovstvo", "" },  /* 2014-02-27  */
  { "132050705", "Jak 5,9-12; Ž 103,1-4.8-9.11-12; Mk 10,1-12", "Milostivý a milosrdný je Pán", "" },  /* 2014-02-28  */
