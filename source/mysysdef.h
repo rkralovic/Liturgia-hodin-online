@@ -1,7 +1,7 @@
 /***************************************************************/
 /*                                                             */
 /* mysysdef.h                                                  */
-/* (c)1999-2019 | Juraj Vidéky | videky@breviar.sk             */
+/* (c)1999-2020 | Juraj Vidéky | videky@breviar.sk             */
 /*                                                             */
 /* description | contains #defines for various systems         */
 /*                                                             */
@@ -137,6 +137,7 @@
 	#define BEHAVIOUR_CMDLINE
 	#define OS_Windows
 	#undef LOGGING
+	#undef EXPORT_HTML_SPECIALS
 	#define EXPORT_TO_FILE
 	#define EXPORT_CMDLINE_CSS
 // debugging in Windows/command-line -- all output is written into log file

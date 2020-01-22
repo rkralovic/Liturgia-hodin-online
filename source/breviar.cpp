@@ -1,7 +1,7 @@
 /***************************************************************************/
 /*                                                                         */
 /* breviar.cpp                                                             */
-/* (c)1999-2019 | Juraj Vidéky | videky@breviar.sk                         */
+/* (c)1999-2020 | Juraj Vidéky | videky@breviar.sk                         */
 /*                                                                         */
 /*                http://www.breviar.sk                                    */
 /*                                                                         */
@@ -54,6 +54,7 @@ Examples:
 #ifndef __BREVIAR_CPP_
 #define __BREVIAR_CPP_
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -111,6 +112,7 @@ char *_global_buf2;
 #define ishex(x) (((x) >= '0' && (x) <= '9') || ((x) >= 'a' && (x) <= 'f') || ((x) >= 'A' && (x) <= 'F'))
 
 #define MAX_BUFFER 256
+#define READ_BUFFER 4096
 
 #define ANCHOR_VYSVETLIVKY "VYSVETLIVKY"
 #define FILE_VYSVETLIVKY "vysvetl.htm"
@@ -1578,7 +1580,7 @@ void _export_link_communia(short int spol_cast, char html_tag_begin[SMALL], char
 // vypise hlasky o tom, ze je prazdny formular resp. skript bol spusteny bez vstupnych hodnot
 void _main_prazdny_formular(void) {
 	ALERT;
-	Export("Programu neboli zadané argumenty.\n");
+	Export("Neboli zadané vstupné argumenty.\n");
 } // _main_prazdny_formular()
 
 #define DetailLog emptyLog
@@ -1630,6 +1632,30 @@ short int antifona_pocet = 0; // počet antifón (ant1, ant2, ant3 pre psalmódi
 char rest_krizik[MAX_BUFFER] = STR_EMPTY; // pre to, čo je za krížikom v antifóne
 char rest_zakoncenie[MAX_BUFFER] = STR_EMPTY;
 short int ant_invitat_krizik = 0; // antifóna pre invitatórium s krížikom
+
+struct ReadBuffer {
+	size_t pos = 0;
+	size_t size = 0;
+	char data[READ_BUFFER];
+};
+
+bool LoadToBuffer(FILE* stream, struct ReadBuffer* buffer) {
+	while (buffer->pos >= buffer->size) {
+		size_t new_size = fread(buffer->data, 1, sizeof(buffer->data), stream);
+		if (new_size <= 0) {
+			if (errno == EINTR) continue;
+			return false;
+		}
+		buffer->pos = 0;
+		buffer->size = new_size;
+	}
+	return true;
+}
+
+// Assumes that buffer is loaded.
+char ConsumeFromBuffer(struct ReadBuffer* buffer) {
+  return buffer->data[buffer->pos++];
+}
 
 void includeFile(short int type, const char *paramname, const char *fname, const char *modlparam) {
 	int c, buff_index = 0, fnref_index = 0, fn_index = 0, ref_index = 0, kat_index = 0, z95_index = 0;
@@ -1760,12 +1786,13 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 	}
 	*/
 
-	int b;
+	struct ReadBuffer readbuff;
 	struct Utf8DecoderState state;
 	InitUtf8DecoderState(&state);
 
-	while ((b = fgetc(body)) != EOF) {
-		if (!Utf8StreamingDecoder(b, &state)) continue;
+	while (1) {
+		if (!LoadToBuffer(body, &readbuff)) break;
+		if (!Utf8StreamingDecoder(ConsumeFromBuffer(&readbuff), &state)) continue;
 		c = state.result;
 		// Export("inside[%c]...", c);
 		switch (c) {
@@ -2566,15 +2593,25 @@ void includeFile(short int type, const char *paramname, const char *fname, const
 				// zobraziť/nezobraziť zalomenie veršov podľa tlačenej LH | ignore this switch (as if it would OFF) for mobile OS (Android, iOS) and voice output
 				if (equals(strbuff, PARAM_ZALOMENIE) && (vnutri_inkludovaneho == 1)) {
 #if defined(EXPORT_HTML_SPECIALS)
+					if (!write) {
+						// kvôli vnutri_full_text == ANO
+						Export("<!--");
+					}
+
 					Export("[%s:%s|rest=%s]", strbuff, modlparam, (rest == NULL) ? STR_EMPTY : rest);
 #endif
-					if (useWhenGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_TEXT_WRAP) && (isMobileOS == 0)) {
+					if (useWhenGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_TEXT_WRAP) && (isMobileOS == 0) && EXPORT_FULL_TEXT) {
 						// MAX_BUFFER bol zvýšený, lebo strbuff bol v tomto prípade veľmi dlhý
 						Export("zalomenie-->%s<!--zalomenie", rest);
 					}
 					else {
 #if defined(EXPORT_HTML_SPECIALS)
 						Export("zalomenie-nie");
+
+						if (!write) {
+							// kvôli vnutri_full_text == ANO
+							Export("-->");
+						}
 #endif
 					}
 				}// zobraziť/nezobraziť zalomenie veršov podľa tlačenej LH -- PARAM_ZALOMENIE
@@ -5226,12 +5263,13 @@ void interpretTemplate(short int type, char *tempfile, short int aj_navigacia = 
 		return;
 	}// chyba -- šablóna sa nenašla
 
-	int b;
+	struct ReadBuffer readbuff;
 	Utf8DecoderState c;
 	InitUtf8DecoderState(&c);
 
-	while ((b = fgetc(ftemplate)) != EOF) {
-		if (!Utf8StreamingDecoder(b, &c)) continue;
+	while (1) {
+		if (!LoadToBuffer(ftemplate, &readbuff)) break;
+		if (!Utf8StreamingDecoder(ConsumeFromBuffer(&readbuff), &c)) continue;
 		switch (c.result) {
 		case CHAR_KEYWORD_BEGIN:
 			isbuff = 1;
