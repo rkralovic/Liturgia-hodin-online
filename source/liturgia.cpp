@@ -428,6 +428,10 @@ char *convert_nonbreaking_spaces(const char *input){
 			strcpy(out, HTML_NONBREAKING_SPACE);
 			out += strlen(HTML_NONBREAKING_SPACE);
 		}// c == CHAR_NONBREAKING_SPACE
+		else if (c == CHAR_NONBREAKING_THIN_SPACE) {
+			strcpy(out, HTML_NONBREAKING_THIN_SPACE);
+			out += strlen(HTML_NONBREAKING_THIN_SPACE);
+		}// c == CHAR_NONBREAKING_THIN_SPACE
 		else {
 			EncodeWchar(c, &out);
 		}
@@ -505,7 +509,7 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int sp
 	}// change opt1 value
 
 	char local_str[SMALL];
-	long local_opt_default;
+	unsigned long long local_opt_default;
 	short int podmienka;
 	for (i = 0; i < POCET_GLOBAL_OPT; i++) {
 		Log("i == %d...\n", i);
@@ -516,11 +520,11 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int sp
 		// #elif defined(BEHAVIOUR_WEB)
 #else
 		if (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) {
-			Log("_global_opt[%d] == %ld; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, local_opt_default);
+			Log("_global_opt[%d] == %llu; CFG_OPTION_DEFAULT(%d) == %llu;\n", i, _global_opt[i], i, local_opt_default);
 			podmienka = (_global_opt[i] != local_opt_default);
 		}
 		else {
-			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
+			Log("_global_opt[%d] == %llu; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %llu;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
 			podmienka = (_global_force_opt[i] != local_opt_default);
 		}
 #endif
@@ -529,7 +533,7 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int sp
 
 			strcat_str_opt_bit_order(local_str, i, USE_STR_OPT);
 
-			sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_force_opt[i]);
+			sprintf(pom3, HTML_AMPERSAND"%s=%llu", local_str, (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? _global_opt[i] : _global_force_opt[i]);
 			strcat(pom2, pom3);
 			Log("\tPrilepil som aj opt%c %d: `%s'\n", (force_opt != PRILEP_REQUEST_OPTIONS_LEN_FORCE) ? CHAR_SPACE : 'f', i, pom3);
 		}
@@ -540,13 +544,13 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int sp
 		for (i = 0; i < POCET_GLOBAL_OPT; i++) {
 			Log("i == %d...\n", i);
 			local_opt_default = CFG_OPTION_DEFAULT(i);
-			Log("_global_opt[%d] == %ld; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %ld;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
+			Log("_global_opt[%d] == %llu; _global_force_opt[%d] == %d; CFG_OPTION_DEFAULT(%d) == %llu;\n", i, _global_opt[i], i, _global_force_opt[i], i, local_opt_default);
 			if ((_global_opt[i] != _global_force_opt[i]) && (_global_opt[i] != local_opt_default)) {
 				strcpy(local_str, STR_EMPTY);
 
 				strcat_str_opt_bit_order(local_str, i, USE_STR_FORCE_OPT);
 
-				sprintf(pom3, HTML_AMPERSAND"%s=%ld", local_str, _global_force_opt[i]);
+				sprintf(pom3, HTML_AMPERSAND"%s=%llu", local_str, _global_force_opt[i]);
 				strcat(pom2, pom3);
 				Log("\tPrilepil som aj force_opt %d: `%s'\n", i, pom3);
 			}
@@ -1751,6 +1755,7 @@ void Log(struct tmodlitba1 t){
 	Log_struktura_tm1("   modlitba              file `%s', anchor `%s'\n", t.modlitba.file, t.modlitba.anchor);
 	Log_struktura_tm1("   ant_spomprivileg      file `%s', anchor `%s'\n", t.ant_spomprivileg.file, t.ant_spomprivileg.anchor);
 	Log_struktura_tm1("   modlitba_spomprivileg file `%s', anchor `%s'\n", t.modlitba_spomprivileg.file, t.modlitba_spomprivileg.anchor);
+	Log_struktura_tm1("   otcenas_uvod          file `%s', anchor `%s'\n", t.otcenas_uvod.file, t.otcenas_uvod.anchor);
 }
 
 void Log(struct tmodlitba2 t){
@@ -1900,6 +1905,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 10: mystrcpy(str, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV
 			case 11: mystrcpy(str, STR_FORCE_BIT_OPT_0_ZALMY_FULL_TEXT, SMALL); break; // BIT_OPT_0_ZALMY_FULL_TEXT
 			case 12: mystrcpy(str, STR_FORCE_BIT_OPT_0_REF_BIBLE_COM, SMALL); break; // BIT_OPT_0_REF_BIBLE_COM
+			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL, SMALL); break; // BIT_OPT_0_ITALICS_CONDITIONAL
 			}
 		}
 		break;

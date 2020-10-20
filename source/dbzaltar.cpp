@@ -965,7 +965,7 @@ void _set_prosby(short int modlitba, const char *file, const char *anchor) {
 	} // switch(modlitba)
 } // _set_prosby()
 
-void _set_maria_ant(short int modlitba, const char *file, const char *anchor) {
+void _set_maria_ant(short int modlitba, const char* file, const char* anchor) {
 	switch (modlitba) {
 	case MODL_KOMPLETORIUM:
 		mystrcpy(_global_modl_kompletorium.maria_ant.file, file, MAX_STR_AF_FILE);
@@ -976,7 +976,24 @@ void _set_maria_ant(short int modlitba, const char *file, const char *anchor) {
 		mystrcpy(_global_modl_prve_kompletorium.maria_ant.anchor, anchor, MAX_STR_AF_ANCHOR);
 		break;
 	} // switch(modlitba)
-} // _set_prosby()
+} // _set_maria_ant()
+
+void _set_otcenas_uvod(short int modlitba, const char* file, const char* anchor) {
+	switch (modlitba) {
+	case MODL_RANNE_CHVALY:
+		mystrcpy(_global_modl_ranne_chvaly.otcenas_uvod.file, file, MAX_STR_AF_FILE);
+		mystrcpy(_global_modl_ranne_chvaly.otcenas_uvod.anchor, anchor, MAX_STR_AF_ANCHOR);
+		break;
+	case MODL_VESPERY:
+		mystrcpy(_global_modl_vespery.otcenas_uvod.file, file, MAX_STR_AF_FILE);
+		mystrcpy(_global_modl_vespery.otcenas_uvod.anchor, anchor, MAX_STR_AF_ANCHOR);
+		break;
+	case MODL_PRVE_VESPERY:
+		mystrcpy(_global_modl_prve_vespery.otcenas_uvod.file, file, MAX_STR_AF_FILE);
+		mystrcpy(_global_modl_prve_vespery.otcenas_uvod.anchor, anchor, MAX_STR_AF_ANCHOR);
+		break;
+	} // switch(modlitba)
+} // _set_otcenas_uvod()
 
 void _set_modlitba(short int modlitba, const char *file, const char *anchor) {
 	switch (modlitba) {
@@ -1879,7 +1896,16 @@ void set_maria_ant(short int modlitba) {
 	_set_maria_ant(modlitba, _file, _anchor);
 	set_LOG_zaltar;
 	file_name_obnov();
-} // set_ukonkaj();
+} // set_maria_ant();
+
+void set_otcenas_uvod(short int modlitba) {
+	file_name_zapamataj();
+	sprintf(_file, "%s", FILE_OTCENAS_UVOD);
+	sprintf(_anchor, "_%s", ANCHOR_OTCENAS_UVOD);
+	_set_otcenas_uvod(modlitba, _file, _anchor);
+	set_LOG_zaltar;
+	file_name_obnov();
+} // set_otcenas_uvod();
 
 void set_popis(short int modlitba, char *file, char *anchor) {
 	_set_popis(modlitba, file, anchor);
@@ -6917,18 +6943,27 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 
 					modlitba = MODL_PREDPOLUDNIM;
 					_set_zalmy_najsv_trojice(modlitba);
+					if (je_CZ_nie_hymny_k_volnemu_vyberu) {
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd);
+					}
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 					modlitba = MODL_NAPOLUDNIE;
 					_set_zalmy_najsv_trojice(modlitba);
+					if (je_CZ_nie_hymny_k_volnemu_vyberu) {
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd);
+					}
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 					modlitba = MODL_POPOLUDNI;
 					_set_zalmy_najsv_trojice(modlitba);
+					if (je_CZ_nie_hymny_k_volnemu_vyberu) {
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd);
+					}
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
@@ -7801,6 +7836,20 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			_post2_kresponz;
 			_post2_modlitba;
 
+			// špeciálne pre Zelený štvrtok
+			if (_global_den.denvr == ZELENY_STVRTOK) {
+
+				Log("liturgicke_obdobie(): ZELENY_STVRTOK\n...");
+				// Log("_global_den.denvt == %d\n", _global_den.denvt);
+
+				if (isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA)) {
+					set_antifony(DEN_PIATOK, 3, zvazok_breviara[litobd], MODL_POSV_CITANIE);
+					set_zalm(1, MODL_POSV_CITANIE, "z69.htm", "ZALM69_I");
+					set_zalm(2, MODL_POSV_CITANIE, "z69.htm", "ZALM69_II");
+					set_zalm(3, MODL_POSV_CITANIE, "z69.htm", "ZALM69_III");
+				}
+			}
+
 			// modlitba cez deň MODL_PREDPOLUDNIM + MODL_NAPOLUDNIE + MODL_POPOLUDNI
 			modlitba = MODL_PREDPOLUDNIM;
 			_post2_hymnus;
@@ -7871,19 +7920,36 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 	_set_antifona1(modlitba, _file, _anchor);\
 	set_LOG_litobd;\
 }
-// pre Trojdnie nie je použitý _special_anchor_prefix pre CZ (nie sú hymny k volnému výběru)
+// pre Trojdnie nie je použitý _special_anchor_prefix pre CZ (nie sú hymny k volnému výběru) -- okrem nedele, kedy môžeme vziať z OBD_VELKONOCNE_I (treba zmeniť _file resp. _file_pc a potom vrátiť späť)
 #define _vtroj_hymnus {\
-	c = pismenko_modlitby(modlitba);\
-	if(modlitba == MODL_PRVE_VESPERY)\
-		c = pismenko_modlitby(MODL_VESPERY);\
-	sprintf(_anchor, "%s_%c%s%s", nazov_OBD[OBD_VELKONOCNE_TROJDNIE], c, nazov_DN_asci[den], ANCHOR_HYMNUS);\
-	if(modlitba == MODL_POSV_CITANIE){\
-		_set_hymnus(modlitba, _file_pc, _anchor);\
-		set_LOG_litobd_pc;\
+	if((den == DEN_NEDELA) && (je_CZ_hymny_k_volnemu_vyberu)){\
+		if(modlitba == MODL_POSV_CITANIE){\
+			file_name_litobd_pc(OBD_VELKONOCNE_I);\
+		}\
+		else{\
+			file_name_litobd(OBD_VELKONOCNE_I);\
+		}\
+		_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);\
+		if(modlitba == MODL_POSV_CITANIE){\
+			file_name_litobd_pc(litobd);\
+		}\
+		else{\
+			file_name_litobd(litobd);\
+		}\
 	}\
 	else{\
-		_set_hymnus(modlitba, _file, _anchor);\
-		set_LOG_litobd;\
+		c = pismenko_modlitby(modlitba);\
+		if(modlitba == MODL_PRVE_VESPERY)\
+			c = pismenko_modlitby(MODL_VESPERY);\
+		sprintf(_anchor, "%s_%c%s%s", nazov_OBD[OBD_VELKONOCNE_TROJDNIE], c, nazov_DN_asci[den], ANCHOR_HYMNUS);\
+		if(modlitba == MODL_POSV_CITANIE){\
+			_set_hymnus(modlitba, _file_pc, _anchor);\
+			set_LOG_litobd_pc;\
+		}\
+		else{\
+			_set_hymnus(modlitba, _file, _anchor);\
+			set_LOG_litobd;\
+		}\
 	}\
 }
 #define _vtroj_kcitanie {\
@@ -10865,9 +10931,9 @@ _struct_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "VTROJ_9NEHYMNUS", 2 },
 	{ JAZYK_CZ, "VTROJ_2NEHYMNUS", 2 },
 	{ JAZYK_CZ, "VTROJ_3NEHYMNUS", 2 },
-	{ JAZYK_CZ, "VN1_9HYMNUS", 3 },
-	{ JAZYK_CZ, "VN1_2HYMNUS", 3 },
-	{ JAZYK_CZ, "VN1_3HYMNUS", 3 },
+	{ JAZYK_CZ, "VN1_9HYMNUS", 2 },
+	{ JAZYK_CZ, "VN1_2HYMNUS", 2 },
+	{ JAZYK_CZ, "VN1_3HYMNUS", 2 },
 	{ JAZYK_CZ, "p_HYMNUS_NE", 2 },
 	{ JAZYK_CZ, "k_HYMNUS_SO", 2 },
 	{ JAZYK_CZ, "k_HYMNUS_NE", 2 },
@@ -10934,6 +11000,9 @@ _struct_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_ZDS_1HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_ZDS_vHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_TK_rHYMNUS", 2 },
+	{ JAZYK_CZ, "TROJ_9HYMNUS", 2 }, // nedáváme možnost vzít hymny podle sudého/lichého týdne
+	{ JAZYK_CZ, "TROJ_2HYMNUS", 2 },
+	{ JAZYK_CZ, "TROJ_3HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_SRDCA_cHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_SRDCA_rHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_SRDCA_1HYMNUS", 2 },
@@ -11131,6 +11200,14 @@ _struct_anchor_and_count pocet_modlitba_multi_anchor_count[] = {
 	{ JAZYK_UNDEF, "SPMVSr_MODLITBA", 6 },
 };
 
+_struct_anchor_and_count pocet_otcenas_uvod_multi_anchor_count[] = {
+	{ JAZYK_SK, "_OTCENAS-UVOD", 10 },
+	{ JAZYK_LA, "_OTCENAS-UVOD", 10 },
+	{ JAZYK_CZ_OP, "_OTCENAS-UVOD", 10 },
+	{ JAZYK_CZ, "_OTCENAS-UVOD", 7 },
+	{ JAZYK_HU, "_OTCENAS-UVOD", 10 }, // they have 12 intros (according to vol. I & II of first Latin editio but technically we can support max. 10 options
+};
+
 _struct_anchor_and_count pocet_prosby_multi_anchor_count[] = {
 	{ JAZYK_UNDEF, "SPMVSr_PROSBY", 2 },
 	{ JAZYK_UNDEF, "SCPM_1PROSBY", 2 },
@@ -11150,7 +11227,7 @@ _struct_anchor_and_count pocet_kcit_resp_multi_anchor_count[] = {
 	{ JAZYK_UNDEF, "OZZ_vRESP", 2 },
 };
 
-short int pocet_multi(char *_anchor, long type) {
+short int pocet_multi(char *_anchor, unsigned long long type) {
 	short int count = 0;
 	short int i = 0;
 	short int lng = JAZYK_UNDEF;
@@ -11184,6 +11261,10 @@ short int pocet_multi(char *_anchor, long type) {
 	else if (type == BASE_OPT_6_PROSBY_MULTI) {
 		ptr = pocet_prosby_multi_anchor_count;
 		size = sizeof(pocet_prosby_multi_anchor_count);
+	}
+	else if (type == BASE_OPT_6_OTCENAS_UVOD_MULTI) {
+		ptr = pocet_otcenas_uvod_multi_anchor_count;
+		size = sizeof(pocet_otcenas_uvod_multi_anchor_count);
 	}
 	else if (type == BASE_OPT_6_MARIA_ANT_MULTI) {
 		ptr = pocet_maria_ant_multi_anchor_count;

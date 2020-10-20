@@ -139,9 +139,9 @@ extern _struct_lrok *_global_r_ptr;
 extern short int _global_pocet_svatych;
 
 // globálna premenná -- pole -- obsahujúca options; pôvodne to boli globálne premenné _global_opt 1..9 atď., obsahujú pom_OPT...
-extern long _global_opt[POCET_GLOBAL_OPT];
+extern unsigned long long _global_opt[POCET_GLOBAL_OPT];
 // globálna premenná -- pole -- obsahujúca force options; pôvodne to boli globálne premenné _global_force_opt 1..9 atď., obsahujú pom_FORCE_OPT...
-extern long _global_force_opt[POCET_GLOBAL_OPT];
+extern unsigned long long _global_force_opt[POCET_GLOBAL_OPT];
 
 // globalna premenna, co obsahuje string vypisany na obsazovku
 extern char *_global_string;
@@ -188,10 +188,10 @@ extern short int _global_opt_export_date_format;
 #define isGlobalOptionForce(opt_i, bit_opt_i_component_j) ((opt_i == OPT_6_ALTERNATIVES_MULTI) ? ((_global_force_opt[opt_i] DIV bit_opt_i_component_j) MOD 10) : (((_global_force_opt[opt_i] & bit_opt_i_component_j) == bit_opt_i_component_j) ? ANO : NIE))
 
 // method for checking whether option 'i' should be applied (may be different from real setting - use isGlobalOption() for exact querying from parameters; difference caused e. g. by override for voice output)
-extern short int useWhenGlobalOption(short opt_i, long bit_opt_i_component_j);
+extern short int useWhenGlobalOption(short opt_i, unsigned long long bit_opt_i_component_j);
 
 // for setting option's 'i' 'j'-th bit-component to value (TRUE/FALSE); OPT 6 uses decimal-place logic
-extern void setGlobalOption(short opt_i, long bit_opt_i_component_j, short value);
+extern void setGlobalOption(short opt_i, unsigned long long bit_opt_i_component_j, short value);
 
 #define odfiltrujSpolCast(modlitba, opt3) ((short int)(((modlitba == MODL_DETAILY) || (modlitba == MODL_NEURCENA)) ? MODL_SPOL_CAST_NULL : opt3))
 
@@ -386,6 +386,7 @@ extern void setGlobalOption(short opt_i, long bit_opt_i_component_j, short value
 
 // for JAZYK_CZ, is chosen alternative for hymns of supplement?
 #define je_CZ_hymny_k_volnemu_vyberu ((_global_jazyk == JAZYK_CZ) && (isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_CZ_HYMNY_VYBER)))
+#define je_CZ_nie_hymny_k_volnemu_vyberu ((_global_jazyk == JAZYK_CZ) && (!isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_CZ_HYMNY_VYBER)))
 
 // ToDo: before replacing anchor from file with HTML scratch, try to remove _special_anchor_prefix/postfix!!!
 #define specialne_dni_bez_hymnov_k_volnemu_vyberu_CZ ((_global_den.denvr == VELKONOCNA_NEDELA) || (_global_den.denvr == SV_RODINY))

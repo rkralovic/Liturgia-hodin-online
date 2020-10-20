@@ -498,6 +498,14 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_0_REF_BIBLE_COM "of0bc"
 #endif
 
+// podmienečné zobrazenie textu kurzívou
+#define FORCE_BIT_OPT_0_ITALICS_CONDITIONAL 142
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL "FORCE_BIT_OPT_0_ITALICS_CONDITIONAL"
+#else
+#define STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL "of0ic"
+#endif
+
 // liturgické čítania
 #define FORCE_BIT_OPT_0_CIT 63
 #ifdef LONG_PARAM_NAMES
@@ -698,6 +706,14 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_1_KOMPL_MARIA_ANT "FORCE_BIT_OPT_1_KOMPL_MARIA_ANT"
 #else
 #define STR_FORCE_BIT_OPT_1_KOMPL_MARIA_ANT "of1cma"
+#endif
+
+// intro for Pater noster
+#define FORCE_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD 143
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD "FORCE_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD"
+#else
+#define STR_FORCE_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD "of1zou"
 #endif
 
 // žalmy zo sviatku
@@ -1027,6 +1043,13 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_5_POPOL_STREDA_PSALMODIA "of5psps"
 #endif
 
+#define FORCE_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA 144
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA "FORCE_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA"
+#else
+#define STR_FORCE_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA "of5zsps"
+#endif
+
 #define FORCE_BIT_OPT_5_CZ_HYMNY_VYBER 116
 #ifdef LONG_PARAM_NAMES
 #define STR_FORCE_BIT_OPT_5_CZ_HYMNY_VYBER "FORCE_BIT_OPT_5_CZ_HYMNY_VYBER"
@@ -1264,6 +1287,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_TRANSPARENT_NAV           "BitOpt0TransparentNav"
 #define XML_BIT_OPT_0_ZALMY_FULL_TEXT           "BitOpt0PsalmsFullText"
 #define XML_BIT_OPT_0_REF_BIBLE_COM             "BitOpt0ReferencesBibleDotCom"
+#define XML_BIT_OPT_0_ITALICS_CONDITIONAL       "BitOpt0ItalicsConditional"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"
@@ -1285,6 +1309,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_1_OVERRIDE_STUP_SLAV        "BitOpt1OverrideCelebrationLevel"
 #define XML_BIT_OPT_1_STUP_SVIATOK_SLAVNOST     "BitOpt1CelebrationLevelForOverride"
 #define XML_BIT_OPT_1_KOMPL_MARIA_ANT           "BitOpt1ComplineMaryAnt"
+#define XML_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD       "BitOpt1IntroPaterNoster"
 
 // POCET_OPT_2_HTML_EXPORT
 #define XML_BIT_OPT_2_ISO_DATUM                 "BitOpt2ISOFormat"
@@ -1324,6 +1349,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_5_INVITATORIUM_ANT          "BitOpt5InvitatoryAnt"
 #define XML_BIT_OPT_5_OCR_34_HYMNS              "BitOpt5PerAnnum34Hymns"
 #define XML_BIT_OPT_5_KOMPLETORIUM_OKTAVA       "BitOpt5ComplOctaves"
+#define XML_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  "BitOpt5MaundyThursPsalmody"
 
 // POCET_OPT_6_ALTERNATIVES_MULTI
 #define XML_PLACE_OPT_6_HYMNUS_MULTI            "PlaceOpt6HymnusMulti"
