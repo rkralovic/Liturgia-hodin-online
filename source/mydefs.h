@@ -31,7 +31,7 @@
 
 // number of supported languages | Warning: for all string constants we use arrays [POCET_JAZYKOV + 1] => be careful when incrementing POCET_JAZYKOV!
 /* INCREMENT_FOR_NEW_LANGUAGE */
-#define	POCET_JAZYKOV	     8
+#define	POCET_JAZYKOV	     9
 
 // when adding new language, the following comments MUST BE replaced:
 // 
@@ -59,6 +59,8 @@
 // /* STRING_2_FOR_NEW_LANGUAGE */
 //
 // 4. string arrays: STRING_ARRAY_FOR_NEW_LANGUAGE to be replaced manually
+//
+// 5. technical strings for new language: STRING_3_FOR_NEW_LANGUAGE (usually suffices to copy from previous languages; mostly are the same for all languages)
 
 #define POCET_GLOBAL_OPT     7
 
@@ -504,6 +506,30 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL "FORCE_BIT_OPT_0_ITALICS_CONDITIONAL"
 #else
 #define STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL "of0ic"
+#endif
+
+// zobrazenie textu podľa tlačeného vydania
+#define FORCE_BIT_OPT_0_PRINTED_EDITION 145
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_0_PRINTED_EDITION "FORCE_BIT_OPT_0_PRINTED_EDITION"
+#else
+#define STR_FORCE_BIT_OPT_0_PRINTED_EDITION "of0pe"
+#endif
+
+// použiť dvojročný cyklus pre posvätné čítania?
+#define FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE 146
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE "FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE"
+#else
+#define STR_FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE "of0u2rc"
+#endif
+
+// ktorý rok použiť pre dvojročný cyklus pre posvätné čítania?
+#define FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID 147
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID "FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID"
+#else
+#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID "of02rcid"
 #endif
 
 // liturgické čítania
@@ -1288,6 +1314,9 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_ZALMY_FULL_TEXT           "BitOpt0PsalmsFullText"
 #define XML_BIT_OPT_0_REF_BIBLE_COM             "BitOpt0ReferencesBibleDotCom"
 #define XML_BIT_OPT_0_ITALICS_CONDITIONAL       "BitOpt0ItalicsConditional"
+#define XML_BIT_OPT_0_PRINTED_EDITION           "BitOpt0PrintedEdition"
+#define XML_BIT_OPT_0_USE_TWO_YEARS_CYCLE       "BitOpt0UseTwoYearsCycle"
+#define XML_BIT_OPT_0_TWO_YEARS_CYCLE_ID        "BitOpt0TwoYearsCycleId"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"
