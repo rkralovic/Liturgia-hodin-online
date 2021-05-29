@@ -1,7 +1,7 @@
 /**************************************************************/
 /*                                                            */
 /* dbzaltar.cpp                                               */
-/* (c)1999-2020 | Juraj Vidéky | videky@breviar.sk            */
+/* (c)1999-2021 | Juraj Vidéky | videky@breviar.sk            */
 /*                                                            */
 /* description | contains 'database' of liturgical calendars  */
 /*                                                            */
@@ -6220,8 +6220,9 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_vian1_kresponz;
 				_vian1_2ne_modlitba;
 
-				// predĺžené slávenie vigílií v rámci posvätných čítaní | modlitba = MODL_POSV_CITANIE;
 				modlitba = MODL_POSV_CITANIE;
+				_vian1_2ne_modlitba;
+				// predĺžené slávenie vigílií v rámci posvätných čítaní | modlitba = MODL_POSV_CITANIE;
 				_liturgicke_obdobie_set_vig_ant(modlitba);
 				_set_chvalospev_vig_vian(modlitba);
 				_liturgicke_obdobie_set_vig_ev(modlitba);
@@ -7940,7 +7941,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 	_set_antifona1(modlitba, _file, _anchor);\
 	set_LOG_litobd;\
 }
-// pre Trojdnie nie je použitý _special_anchor_prefix pre CZ (nie sú hymny k volnému výběru) -- okrem nedele, kedy môžeme vziať z OBD_VELKONOCNE_I (treba zmeniť _file resp. _file_pc a potom vrátiť späť)
+// pre Trojdnie nie je použitý _special_anchor_prefix pre CZ (nie sú hymny k volnému výběru) -- okrem nedele, kedy môžeme vziať z OBD_VELKONOCNE_I (treba zmeniť _file resp. _file_pc a potom vrátiť späť: nepoužiť litobd, ale napevno OBD_VELKONOCNE_TROJDNIE, aj keď je volané s OBD_VELKONOCNA_OKTAVA -- kde sa to používa s nastavením DEN_NEDELA)
 #define _vtroj_hymnus {\
 	if((den == DEN_NEDELA) && (je_CZ_hymny_k_volnemu_vyberu)){\
 		if(modlitba == MODL_POSV_CITANIE){\
@@ -7951,16 +7952,17 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 		}\
 		_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);\
 		if(modlitba == MODL_POSV_CITANIE){\
-			file_name_litobd_pc(litobd);\
+			file_name_litobd_pc(OBD_VELKONOCNE_TROJDNIE);\
 		}\
 		else{\
-			file_name_litobd(litobd);\
+			file_name_litobd(OBD_VELKONOCNE_TROJDNIE);\
 		}\
 	}\
 	else{\
 		c = pismenko_modlitby(modlitba);\
-		if(modlitba == MODL_PRVE_VESPERY)\
+		if(modlitba == MODL_PRVE_VESPERY){\
 			c = pismenko_modlitby(MODL_VESPERY);\
+		}\
 		sprintf(_anchor, "%s_%c%s%s", nazov_OBD[OBD_VELKONOCNE_TROJDNIE], c, nazov_DN_asci[den], ANCHOR_HYMNUS);\
 		if(modlitba == MODL_POSV_CITANIE){\
 			_set_hymnus(modlitba, _file_pc, _anchor);\
@@ -9003,6 +9005,8 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			modlitba = MODL_POPOLUDNI;
 			_velk1_kcitanie;
 
+			// override hymnov v prípade je_CZ_hymny_k_volnemu_vyberu sa deje priamo v _vtroj_hymnus
+
 			// napokon nastavime hymnus, antifony a kratke resp. z velkonocnej nedele
 			file_name_litobd(OBD_VELKONOCNE_TROJDNIE); // aby bolo z velkonocnej nedele
 			mystrcpy(_file_pc, nazov_obd_htm_pc[OBD_VELKONOCNE_TROJDNIE], MAX_STR_AF_FILE); // aby bolo z velkonocnej nedele
@@ -9043,37 +9047,6 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_vtroj_antifony;
 				_vtroj_kresponz;
 			}// nedeľa
-
-			// override hymnov v prípade je_CZ_hymny_k_volnemu_vyberu
-			if (je_CZ_hymny_k_volnemu_vyberu) {
-
-				file_name_litobd(OBD_VELKONOCNE_I);
-				mystrcpy(_file_pc, nazov_obd_htm_pc[OBD_VELKONOCNE_I], MAX_STR_AF_FILE);
-					
-				// ranné chvály
-				modlitba = MODL_RANNE_CHVALY;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-
-				// vešpery
-				modlitba = MODL_VESPERY;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-
-				// modlitba cez deň a posvätné čítania
-				modlitba = MODL_POSV_CITANIE;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-				modlitba = MODL_PREDPOLUDNIM;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-				modlitba = MODL_NAPOLUDNIE;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-				modlitba = MODL_POPOLUDNI;
-				_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-
-				// prvé vešpery
-				if (den == DEN_NEDELA) {
-					modlitba = MODL_PRVE_VESPERY;
-					_velk1_hymnus(den, modlitba, OBD_VELKONOCNE_I);
-				}// nedeľa
-			}
 
 			break;
 // switch(litobd), case OBD_VELKONOCNA_OKTAVA -- end ------------------------------------------
@@ -9126,7 +9099,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 	// v ďalších častiach 'else' platí, že poradie_svateho == 0 (UNKNOWN_PORADIE_SVATEHO)
 	// ak poradie_svateho bolo UNKNOWN_PORADIE_SVATEHO, znamená to, že sa chcelo volanie možno pre nasledovný deň; problém sv. Jozefa - antifóny pre kompletórium nastavené pri prvom spustení volania "sviatky svätých" prekrylo nastavenie z liturgického obdobia...
 	else if ((poradie_svateho == UNKNOWN_PORADIE_SVATEHO) && (_global_pocet_svatych > 0)
-		&& (_global_den.smer >= _global_svaty1.smer) && (_je_global_svaty_i_slavnost(1))
+		&& (_global_den.smer >= _global_svaty(1).smer) && (_je_global_svaty_i_slavnost(1))
 		// a neplatí, že ide o lokálnu slávnosť: tá nesmie prebiť všedný deň
 		// 2010-10-06: upravené; nesmie ísť o lokálnu slávnosť (smer == 4) lebo nemá prebíjať "globálnu" v danom kalendári [napr. czop pre 22.10.]
 		// 2011-02-02: zadefinované MIESTNE_SLAVENIE_CZOP_SVATY(i), aby sa zjednodušila podmienka (platí len pre CZOP)
@@ -9136,9 +9109,9 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 		Log("poradie_svateho == UNKNOWN_PORADIE_SVATEHO...\n");
 		Log("_global_pocet_svatych == %d\n", _global_pocet_svatych);
 		Log("_global_den.smer == %d\n", _global_den.smer);
-		Log("_global_svaty1.smer == %d\n", _global_svaty1.smer);
+		Log("_global_svaty(1).smer == %d\n", _global_svaty(1).smer);
 		// do _local_den priradim dane slavenie
-		_local_den = _global_svaty1;
+		_local_den = _global_svaty(1);
 		poradie_svateho = 1;
 		Log("spustam druhykrat sviatky_svatych(), tentokrat pre %d. svateho\n", poradie_svateho);
 		sviatky_svatych(_local_den.den, _local_den.mesiac, poradie_svateho, 2 /* druhýkrát */);
@@ -9254,7 +9227,7 @@ short int modlitba;
 
 /* sviatky_svatych();
  *
- * nastavi do _global_svaty1 nasledovne udaje:
+ * nastavi do _global_svaty(1) nasledovne udaje:
  *
  *	   typslav;    // typ slavenia (1--5): SLAV_...
  *     smer;       // poradove cislo z c.59 Vseobecnych smernic
@@ -10778,7 +10751,7 @@ void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force /* = 0 
 	// tento POPIS nie je dobre nastaveny pre spomienku
 	// "Nepoškvrneného Srdca prebl. Panny Márie" -> "Nepoškvrneného Srdca Panny Márie", preto je tam nastaveny este raz na dummy, vid ZNOVUNASTAVENIE_POPISU_NA_DUMMY
 
-	// pokusne aj _global_svaty1.typslav
+	// pokusne aj _global_svaty(1).typslav
 	if (_je_global_den_slavnost || (_je_global_svaty_i_slavnost(1))) {
 		Log("	teraz nastavujem žalmy pre modlitbu cez deň slávností...\n");
 		if (_global_den.denvt != DEN_NEDELA) {
@@ -11175,15 +11148,18 @@ _struct_lang_anchor_and_count pocet_citanie2_multi_anchor_count[] = {
 	{ JAZYK_SK, "15SEP_cCIT2", 2 },
 	{ JAZYK_UNDEF, "VPCHR_cCIT2", 2 },
 	{ JAZYK_SK, "25NOV_cCIT2", 2 },
+	{ JAZYK_CZ_OP, "09JUL_cCIT2", 2 },
+	{ JAZYK_CZ_OP, "09JUL2_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "15AUG_cCIT2", 2 },
 	{ JAZYK_SK, "16SEP_cCIT2", 2 },
 	{ JAZYK_LA, "16SEP_cCIT2", 2 },
 	{ JAZYK_HU, "16SEP_cCIT2", 2 },
 	{ JAZYK_CZ, "16SEP2_cCIT2", 2 },
-	{ JAZYK_CZ, "17SEP2_cCIT2", 2 },
+	{ JAZYK_CZ, "17SEP3_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "16SEP2_cCIT2", 2 },
-	{ JAZYK_CZ_OP, "17SEP2_cCIT2", 2 },
+	{ JAZYK_CZ_OP, "17SEP3_cCIT2", 2 },
 	{ JAZYK_HU, "24OKT2_cCIT2", 2 },
+	{ JAZYK_LA, "29JUL_cCIT2", 2 }, // added new reading (old reading left as second alternative)
 };
 
 _struct_lang_anchor_and_count pocet_antifona_multi_anchor_count[] = {
@@ -11255,6 +11231,34 @@ _struct_lang_cal_type_anchor_and_count pocet_multi_lang_cal_type_anchor_count[] 
 	{ JAZYK_CZ, KALENDAR_CZ_OFMCAP, BASE_OPT_6_CITANIE2_MULTI, "25SEP_cCIT2", 2 },
 	{ JAZYK_CZ, KALENDAR_CZ_OFMCAP, BASE_OPT_6_CITANIE2_MULTI, "13OKT_cCIT2", 2 },
 	{ JAZYK_CZ, KALENDAR_CZ_OFMCAP, BASE_OPT_6_CITANIE2_MULTI, "08NOV_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_1HYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_rHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_vHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "16JUL_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "20JUL_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "09AUG_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "09AUG_vHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "01OKT_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "01OKT_rHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "01OKT_vHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "15OKT_cHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "15OKT_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "15OKT_vHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "14DEC_1HYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "14DEC_cHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_CITANIE2_MULTI, "14DEC_cCIT2", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "14DEC_rHYMNUS", 2 },
+	{ JAZYK_CZ, KALENDAR_CZ_OCD, BASE_OPT_6_HYMNUS_MULTI, "14DEC_vHYMNUS", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_1HYMNUS", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_rHYMNUS", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_HYMNUS_MULTI, "16JUL_vHYMNUS", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "16JUL_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE1_MULTI, "20JUL_cCIT1", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "21JUL2_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "24JUL2_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "09AUG_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_HYMNUS_MULTI, "14DEC_1HYMNUS", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "14DEC_cCIT2", 2 },
 	{ JAZYK_CZ, KALENDAR_CZ_SDB, BASE_OPT_6_CITANIE2_MULTI, "22JAN2_cCIT2", 2 },
 	{ JAZYK_CZ, KALENDAR_CZ_SDB, BASE_OPT_6_CITANIE2_MULTI, "24JAN_cCIT2", 3 },
 	{ JAZYK_CZ, KALENDAR_CZ_SDB, BASE_OPT_6_CITANIE2_MULTI, "31JAN_cCIT2", 3 },
@@ -11276,17 +11280,12 @@ _struct_lang_cal_type_anchor_and_count pocet_multi_lang_cal_type_anchor_count[] 
 	{ JAZYK_SK, KALENDAR_SK_SDB, BASE_OPT_6_CITANIE2_MULTI, "13MAJ_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_SDB, BASE_OPT_6_CITANIE2_MULTI, "24MAJ_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_SDB, BASE_OPT_6_CITANIE2_MULTI, "29OKT_cCIT2", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "16JUL_cCIT2", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE1_MULTI, "20JUL_cCIT1", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "21JUL2_cCIT2", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "24JUL2_cCIT2", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OCD, BASE_OPT_6_CITANIE2_MULTI, "14DEC_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OFM, BASE_OPT_6_CITANIE2_MULTI, "22JAN2_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_CM, BASE_OPT_6_CITANIE2_MULTI, "09MAJ_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_CM, BASE_OPT_6_CITANIE2_MULTI, "27NOV_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "07JAN_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "18JAN_cCIT2", 2 },
-	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "28JAN_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "28JAN_cCIT2", 3 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "04FEB_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "25MAR_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "20APR_cCIT2", 2 },
@@ -11299,6 +11298,7 @@ _struct_lang_cal_type_anchor_and_count pocet_multi_lang_cal_type_anchor_count[] 
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "10JUN_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "04JUL2_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "09JUL_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "09JUL2_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "18JUL_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "22JUL_cCIT2", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OP, BASE_OPT_6_CITANIE2_MULTI, "02AUG3_cCIT2", 2 },
