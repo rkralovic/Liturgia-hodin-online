@@ -3059,7 +3059,7 @@ short int sviatky_svatych_02_februar(short int den, short int poradie_svaty, _st
 				// antifóna na benediktus/magnifikat: vlastná sa berie iba na spomienku v pôstnom období 
 				// tak je to vo zväzku II (pôst+veľká noc); avak v III je to normálne, vlastná ant.; opravené
 				// LA LH, vol. III, p. 1194-1195, nemá vlastné antifóny; ani SK
-				// pre SK OFM resp. CZ OFMCap je vlastná antifóna
+				// pre SK OFM resp. CZ OFMCap. je vlastná antifóna
 				if (((_global_jazyk == JAZYK_SK) && (_global_kalendar == KALENDAR_SK_OFM))
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFM))
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFMCAP))
@@ -3077,7 +3077,7 @@ short int sviatky_svatych_02_februar(short int den, short int poradie_svaty, _st
 				// antifóna na benediktus/magnifikat: vlastná sa berie iba na spomienku v pôstnom období 
 				// tak je to vo zväzku II (pôst+veľká noc); avak v III je to normálne, vlastná ant.; opravené
 				// LA LH, vol. III, p. 1194-1195, nemá vlastné antifóny; ani SK
-				// pre SK OFM resp. CZ OFMCap je vlastná antifóna
+				// pre SK OFM resp. CZ OFMCap. je vlastná antifóna
 				if (((_global_jazyk == JAZYK_SK) && (_global_kalendar == KALENDAR_SK_OFM))
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFM))
 					|| ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFMCAP))
@@ -13887,7 +13887,7 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 
 		if ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_OFMCAP)) {
 			// SK OFM: poradie 1 je text_JUN_16_SK; poradie 2 text_JUN_16_1_OFM; poradie 3 text_JUN_16_2_OFM
-			// CZ OFMCap: poradie 1 je text_JUN_16_2_OFM
+			// CZ OFMCap.: poradie 1 je text_JUN_16_2_OFM
 			if (poradie_svaty == 1) {
 
 				file_name_vlastny_kalendar(_global_kalendar);
@@ -14277,7 +14277,6 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 			presunutie_slavnosti = ANO;
 			goto label_24_JUN;
 		}
-		break;
 
 		if (((_global_jazyk == JAZYK_SK) && (_global_kalendar == KALENDAR_SK_SDB)) || ((_global_jazyk == JAZYK_CZ) && (_global_kalendar == KALENDAR_CZ_SDB))) {
 			if (poradie_svaty == 1) {
@@ -14348,6 +14347,14 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 	case 24: // MES_JUN -- 24JUN
 
 	label_24_JUN:
+
+		if (/* (_global_den.denvt == DEN_PIATOK) && */(_global_den.denvr == SRDCA)) {
+			poradie_svaty = UNKNOWN_PORADIE_SVATEHO;
+
+			slavnost_srdca();
+
+			break;
+		}
 
 		if ((poradie_svaty == UNKNOWN_PORADIE_SVATEHO) || (poradie_svaty == 1)) {
 			// definovanie parametrov pre modlitbu
@@ -14718,7 +14725,6 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 			presunutie_slavnosti = ANO;
 			goto label_29_JUN;
 		}
-		break;
 
 		if (poradie_svaty == 1) {
 			// definovanie parametrov pre modlitbu
@@ -14748,6 +14754,13 @@ short int sviatky_svatych_06_jun(short int den, short int poradie_svaty, _struct
 	case 29: // MES_JUN -- 29JUN
 
 	label_29_JUN:
+
+		if (/* (_global_den.denvt == DEN_PIATOK) && */(_global_den.denvr == SRDCA)) {
+			poradie_svaty = UNKNOWN_PORADIE_SVATEHO;
+
+			slavnost_srdca();
+			break;
+		}
 
 		if ((poradie_svaty == UNKNOWN_PORADIE_SVATEHO) || (poradie_svaty == 1)) {
 
@@ -15425,11 +15438,15 @@ short int sviatky_svatych_07_jul(short int den, short int poradie_svaty, _struct
 				_set_zalmy_1nedele_rch();
 
 				modlitba = MODL_POSV_CITANIE;
-				if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_CZ)) {
+				if (_global_jazyk == JAZYK_SK) {
 					_vlastna_cast_full(modlitba);
 				}
-				else {
-					// pre CZOP sú antifóny a krátky responz pred 1. čítaním zo spoločnej časti
+				if ((_global_jazyk == JAZYK_CZ) || (_global_jazyk == JAZYK_CZ_OP)) {
+					// pre CZ + CZOP sú antifóny a krátky responz pred 1. čítaním zo spoločnej časti
+					if (_global_jazyk == JAZYK_CZ) {
+						// pre CZ hymnus vlastný
+						_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+					}
 					_vlastna_cast_1citanie;
 					_vlastna_cast_2citanie;
 					_vlastna_cast_modlitba;

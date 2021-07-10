@@ -639,10 +639,10 @@ const char* nazov_slavenia_lokal[] =
 , "v Bratislavskej arcidiecéze"                                                                                  // LOKAL_SLAV_BRATISLAVA
 , "pre FMA a VDB: ľubovoľná spomienka"                                                                           // LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB
 , "len pre Inštitút milosrdných sestier Sv. kríža"                                                               // LOKAL_SLAV_KONGREGACIA_SSK // 2013-08-12: pôvodne bolo: "len pre Kongregáciu milosrdných sestier Sv. kríža"
-, "pre OFMCap: spomienka"                                                                                        // LOKAL_SLAV_SPOMIENKA_OFMCAP
+, "pre OFMCap.: spomienka"                                                                                        // LOKAL_SLAV_SPOMIENKA_OFMCAP
 , "pre OFM: sviatok"                                                                                             // LOKAL_SLAV_SVIATOK_OFM
 , "pre OFM: spomienka"                                                                                           // LOKAL_SLAV_SPOMIENKA_OFM
-, "pre OFMCap: sviatok"                                                                                          // LOKAL_SLAV_SVIATOK_OFMCAP
+, "pre OFMCap.: sviatok"                                                                                          // LOKAL_SLAV_SVIATOK_OFMCAP
 , "pre FMA: spomienka"                                                                                           // LOKAL_SLAV_SPOMIENKA_FMA
 , "pre FMA: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_FMA
 , "pre SDB: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_SDB
@@ -691,7 +691,7 @@ const char* nazov_slavenia_lokal[] =
 , "pre OSC: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_OSC
 , "pre OFMConv.: sviatok"                                                                                        // LOKAL_SLAV_SVIATOK_OFMCONV
 , "pre OFS: sviatok"                                                                                             // LOKAL_SLAV_SVIATOK_OFS
-, "pre OFMConv., OFMCap: spomienka"                                                                              // LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP
+, "pre OFMConv., OFMCap.: spomienka"                                                                              // LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP
 , "pre OSC: slávnosť"                                                                                            // LOKAL_SLAV_SPOMIENKA_OSC
 , "pre Slovensko zatiaľ nedovolené slávenie"                                                                     // LOKAL_SLAV_NEDOVOLENE_SK
 , "Katonai Ordinariátus: " HTML_LINE_BREAK "Az Ordinariátus védőszentje; főünnep"                                // LOKAL_SLAV_KATONAI_ORDINARIAT
@@ -5144,7 +5144,7 @@ const char* text_ZAKONCENIE_SKRZE_dlhe[POCET_JAZYKOV + 1] =
 	"A mi Urunk, Jézus Krisztus, a te Fiad által, aki veled él és uralkodik a Szentlélekkel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Fyrir Drottin vorn Jesúm Krist, Son þinn, sem með þér lifir of ríkir í einingu Heilags Anda, Guð um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5159,7 +5159,7 @@ const char* text_ZAKONCENIE_SKRZE_kratke[POCET_JAZYKOV + 1] =
 	"Krisztus, a mi Urunk által.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Fyrir Krist, Drottin vorn.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5174,7 +5174,7 @@ const char* text_ZAKONCENIE_LEBO_ON_dlhe[POCET_JAZYKOV + 1] =
 	"Aki veled él és uralkodik a Szentlélekkel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Því að hann er Guð, sem með þér lifir og ríkir í einingu Heilags Anda, Guð, um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5189,7 +5189,7 @@ const char* text_ZAKONCENIE_LEBO_ON_kratke[POCET_JAZYKOV + 1] =
 	"Aki él és uralkodik mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Hann, sem lifir og ríkir um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5204,7 +5204,7 @@ const char* text_ZAKONCENIE_LEBO_TY_dlhe[POCET_JAZYKOV + 1] =
 	"Aki élsz és uralkodol az Atyaistennel és a Szentlélek­kel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Því að þú ert Guð, sem lifir og ríkir með Guði Föður, í einingu Heilags Anda, Guð, um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5219,7 +5219,7 @@ const char* text_ZAKONCENIE_LEBO_TY_kratke[POCET_JAZYKOV + 1] =
 	"Aki élsz és uralkodol mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"is_text",
+	"Þú sem lifir og ríkir um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -11247,7 +11247,7 @@ const char* text_JUL_27_OP[POCET_JAZYKOV + 1] =
 const char* text_JUL_27_OFM[POCET_JAZYKOV + 1] =
 {
 	"Bl. Márie Magdalény Martinengovej, panny, členky 2. rádu",
-	"Bl. Marie Magdalény Martinengo, panny", // CZ OFMCap: 28JUL
+	"Bl. Marie Magdalény Martinengo, panny", // CZ OFMCap.: 28JUL
 	"",
 	"",
 	"",
