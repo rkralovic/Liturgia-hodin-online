@@ -271,7 +271,7 @@ _struct_dm *_global_den_ptr;
 #define _global_den (*_global_den_ptr)
 
 // globalne premenne, do ktorych sa ukladaju info o analyzovanom dni o sviatkoch svatych
-_struct_dm *(_global_svaty_ptr[MAX_POCET_SVATY]); // an array of '_struct_dm' pointers
+_struct_dm* _global_svaty_ptr[MAX_POCET_SVATY]; // an array of '_struct_dm' pointers
 #define _global_svaty(i) (*(_global_svaty_ptr[i - 1]))
 
 // globalna premenna, ktora obsahuje data o spomienke panny marie v sobotu
@@ -382,6 +382,7 @@ short int _global_css;
 
 short int _global_font;
 short int _global_font_size;
+short int _global_font_size_pt;
 short int _global_style_margin;
 
 short int _global_pocet_zalmov_kompletorium;
@@ -448,24 +449,25 @@ char pom_FORCE_OPT_4_OFFLINE_EXPORT[POCET_OPT_4_OFFLINE_EXPORT][SMALL];
 char pom_FORCE_OPT_5_ALTERNATIVES[POCET_OPT_5_ALTERNATIVES][SMALL];
 char pom_FORCE_OPT_6_ALTERNATIVES_MULTI[POCET_OPT_6_ALTERNATIVES_MULTI][SMALL];
 
-char pom_OPT_APPEND  [SMALL] = STR_EMPTY;
+char pom_OPT_APPEND[SMALL] = STR_EMPTY;
 char pom_DALSI_SVATY[SMALL] = STR_EMPTY;
 
-char pom_ROK_FROM   [SMALL] = STR_EMPTY;
-char pom_ROK_TO     [SMALL] = STR_EMPTY;
+char pom_ROK_FROM[SMALL] = STR_EMPTY;
+char pom_ROK_TO[SMALL] = STR_EMPTY;
 
-char pom_LINKY		[SMALL] = STR_EMPTY;
+char pom_LINKY[SMALL] = STR_EMPTY;
 
-char pom_JAZYK		[SMALL] = STR_EMPTY;
-char pom_KALENDAR   [SMALL] = STR_EMPTY;
+char pom_JAZYK[SMALL] = STR_EMPTY;
+char pom_KALENDAR[SMALL] = STR_EMPTY;
 
-char pom_CSS		[SMALL] = STR_EMPTY;
+char pom_CSS[SMALL] = STR_EMPTY;
 
-char pom_FONT		[SMALL] = STR_EMPTY;
-char pom_FONT_SIZE	[VERY_SMALL] = STR_EMPTY;
-char pom_STYLE_MARGIN [VERY_SMALL] = STR_EMPTY;
+char pom_FONT[SMALL] = STR_EMPTY;
+char pom_FONT_SIZE[VERY_SMALL] = STR_EMPTY;
+char pom_FONT_SIZE_PT[VERY_SMALL] = STR_EMPTY;
+char pom_STYLE_MARGIN[VERY_SMALL] = STR_EMPTY;
 
-char pom_OPT_DATE_FORMAT [SMALL] = STR_EMPTY;
+char pom_OPT_DATE_FORMAT[SMALL] = STR_EMPTY;
 
 char pom_EXPORT_MONTHLY [SMALL] = STR_EMPTY;
 // pre batch mód po mesiacoch; 0 = doterajší spôsob (riadok s dátumom a potom linky na modlitby)
@@ -1157,6 +1159,16 @@ short int setForm(void) {
 		mystrcpy(local_str, ADD_WWW_PREFIX_(STR_FONT_SIZE), SMALL);
 		strcat(local_str, "=");
 		strcat(local_str, pom_FONT_SIZE);
+		LogParams("--- setForm: putenv(%s); ...\n", local_str);
+		ret = putenv(local_str);
+		LogParams("--- setForm: putenv returned %d.\n", ret);
+	}
+
+	mystrcpy(local_str, STR_EMPTY, SMALL);
+	if (!equals(pom_FONT_SIZE_PT, STR_EMPTY)) {
+		mystrcpy(local_str, ADD_WWW_PREFIX_(STR_FONT_SIZE_PT), SMALL);
+		strcat(local_str, "=");
+		strcat(local_str, pom_FONT_SIZE_PT);
 		LogParams("--- setForm: putenv(%s); ...\n", local_str);
 		ret = putenv(local_str);
 		LogParams("--- setForm: putenv returned %d.\n", ret);
@@ -8534,12 +8546,10 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 		// ToDo: doriešiť pre všelijaké špeciálne "konflikty", napr. 8. apríl 2013 (presunutá slávnosť Zvestovania Pána na pondelok po Veľkonočnej oktáve) -- má mať prvé vešpery? a pod.
 		if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_BUTTON_PRVE_VESPERY)) {
 
-			smer = _smer_override(_global_den.smer, _global_den.typslav);
+			smer = _global_den_smer_override;
 
 			if ((poradie_svateho >= 1) && (poradie_svateho < PORADIE_PM_SOBOTA)) {
-				smer = (smer > _smer_override(_global_svaty(poradie_svateho).smer, _global_svaty(poradie_svateho).typslav)) ?
-					_smer_override(_global_svaty(poradie_svateho).smer, _global_svaty(poradie_svateho).typslav) :
-					smer;
+				smer = (smer > _global_svaty_i_smer_override(poradie_svateho)) ? _global_svaty_i_smer_override(poradie_svateho) : smer;
 			}
 
 			if ((
@@ -8593,7 +8603,7 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 
 				su_prve_vespery = ANO; // aby sa pri normálnych vešperách (v ďalšom) vedelo, že to sú "druhé vešpery"
 
-			}// if(_global_den.smer < 5)...
+			}// if(_global_den.smer -> smer < 5)...
 			else {
 				// Log Export("nemôžu byť prvé vešpery (smer == %d, denvt == %d, denvr == %d, VELKONOCNA_NEDELA == %d, KVETNA_NEDELA == %d, POPOLCOVA_STREDA == %d)...\n", _global_den.smer, _global_den.denvt, _global_den.denvr, VELKONOCNA_NEDELA, KVETNA_NEDELA, POPOLCOVA_STREDA);
 				// oddelenie
@@ -12903,9 +12913,9 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 		// Log("_local_modl_prve_vespery obsahuje:\n"); Log(_local_modl_prve_vespery);
 		// Log("_local_modl_prve_kompletorium obsahuje:\n"); Log(_local_modl_prve_kompletorium);
 
-		Log("tento deň (%d.%d.): _global_den.smer == %d, _global_den.denvt == %s, _global_den.litobd == %s (%d)\n",
+		Log("tento deň (%d.%d.): _global_den.smer == %d, prípadný override: _global_den_smer_override == %d, _global_den.denvt == %s, _global_den.litobd == %s (%d/%d)\n",
 			_global_den.den, _global_den.mesiac,
-			_global_den.smer, nazov_dna(_global_den.denvt), nazov_obdobia_ext(_global_den.litobd), _global_den.smer);
+			_global_den.smer, _global_den_smer_override, nazov_dna(_global_den.denvt), nazov_obdobia_ext(_global_den.litobd), _global_den.smer, _global_den_smer_override);
 
 		// Log(_global_den);
 		// Log("(3) _global_modl_prve_vespery obsahuje:\n"); Log(_global_modl_prve_vespery);
@@ -12922,9 +12932,9 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 			label_zmena_vynimky = ANO;
 		}
 
-		// časť: test VYNIMKY
-		if ((_global_den.smer > _local_den.smer) ||
-			((_global_den.smer == _local_den.smer) && (label_zmena_vynimky == ANO))
+		// časť: test VYNIMKY; it is necessary for "current" day take into account potentially required override (celebration of higher level)
+		if ((/* _global_den.smer */ _global_den_smer_override > _local_den.smer) ||
+			((/* _global_den.smer */ _global_den_smer_override == _local_den.smer) && (label_zmena_vynimky == ANO))
 		) {
 			Log("jumping to LABEL_ZMENA...\n");
 			goto LABEL_ZMENA;
@@ -12932,9 +12942,9 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 
 		if (
 			// č. 11: slávnosti su zvlášť význačnými dňami. ich slávenie sa začína prvými vešperami v predchádzajúci deň
-			(_global_den.smer < 5)
+			(/* _global_den.smer */ _global_den_smer_override < 5)
 			// č. 13: sviatky sa slávia v rozsahu jedného dňa, a preto nemajú prvé vešpery, ak len nejde o sviatky Pána, ktoré pripadajú na Cezročnú neďelu a na nedeľu vo vianočnom období a nahradzujú nedeľňajšiu liturgiu hodín
-			|| ((_global_den.smer == 5) && (_global_den.denvt == DEN_NEDELA) && ((_global_den.litobd == OBD_CEZ_ROK) || je_vianocne(_global_den.litobd)))
+			|| ((/* _global_den.smer */ _global_den_smer_override == 5) && (_global_den.denvt == DEN_NEDELA) && ((_global_den.litobd == OBD_CEZ_ROK) || je_vianocne(_global_den.litobd)))
 			// nedeľa
 			|| (_global_den.denvt == DEN_NEDELA)
 			) {
@@ -12951,16 +12961,16 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 			}
 			// Spomienka vsetkych vernych zosnulych -- nevypisem, ze su druhe vespery -- zapracované do init_global_string_modlitba()
 
-			Log("nastavujem _global_string_modlitba... if((_global_den.smer < 5) || ...\n");
+			Log("nastavujem _global_string_modlitba... if((_global_den.smer -> _global_den_smer_override < 5) || ...\n");
 			init_global_string_modlitba(modlitba);
 
-			Log("nastavujem _global_string_podnadpis... if((_global_den.smer < 5) || ...\n");
+			Log("nastavujem _global_string_podnadpis... if((_global_den.smer -> _global_den_smer_override < 5) || ...\n");
 			init_global_string_podnadpis(modlitba);
 
 			// this is not necessary (in fact, it causes problems: wrong description for http://localhost:2000/cgi-bin/l.cgi?qt=pdt&d=25&m=10&r=2015&p=mv&ds=1&j=cz&o0=134&o1=5376&o2=29432&o3=6)
 			// introduced by commit # c48527f0d3 but now hopefully not necessary
 			/*
-			Log("kontrolujem _global_opt[OPT_3_SPOLOCNA_CAST]... if((_global_den.smer < 5) || : ");
+			Log("kontrolujem _global_opt[OPT_3_SPOLOCNA_CAST]... if((_global_den.smer -> _global_den_smer_override < 5) || : ");
 			if (_local_spol_cast != MODL_SPOL_CAST_NEURCENA) {
 				_global_opt[OPT_3_SPOLOCNA_CAST] = _local_spol_cast;
 				Log("upravené podľa _local_spol_cast na %s (%d)\n", nazov_spolc(_local_spol_cast), _local_spol_cast);
@@ -12970,7 +12980,7 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 			}
 			*/
 
-			Log("nastavujem _global_string_spol_cast... if((_global_den.smer < 5) || ...\n");
+			Log("nastavujem _global_string_spol_cast... if((_global_den.smer -> _global_den_smer_override < 5) || ...\n");
 			ret_sc = init_global_string_spol_cast(odfiltrujSpolCast(modlitba, _global_opt[OPT_3_SPOLOCNA_CAST]), poradie_svaty);
 		}// _global_den ma dvoje vespery/kompletorium, teda musime brat DRUHE
 
@@ -12988,10 +12998,10 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 			// č. 61: ak na ten isty den pripadnu vespery bezneho dna a prve vespery nasledujuceho dna, maju prednost vespery slavenia,
 			// ktore ma v tabulke liturgickych dni vyssi stupen. v pripade rovnosti sa beru vespery bezneho dna. sú tu špeciálne výnimky
 			// časť: test VYNIMKY
-			if ((_global_den.smer > _local_den.smer)
-				|| ((_global_den.smer == _local_den.smer) && (label_zmena_vynimky == ANO))
+			if ((/* _global_den.smer */ _global_den_smer_override > _local_den.smer)
+				|| ((/* _global_den.smer */ _global_den_smer_override == _local_den.smer) && (label_zmena_vynimky == ANO))
 			) {
-				if ((_global_den.smer == _local_den.smer) && (label_zmena_vynimky == ANO)) {
+				if ((/* _global_den.smer */ _global_den_smer_override == _local_den.smer) && (label_zmena_vynimky == ANO)) {
 					Log("slávenia síce majú rovnaký stupeň, ale ide o špeciálne výnimky... see: VYNIMKY\n");
 				}
 				else {
@@ -13237,14 +13247,12 @@ void showAllPrayers(short int typ, short int den, short int mesiac, short int ro
 
 	if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_BUTTON_PRVE_VESPERY)) {
 
-		short int smer = _smer_override(_global_den.smer, _global_den.typslav);
+		short int smer = _global_den_smer_override;
 
 		Log("showAllPrayers().smer == %d...\n", smer);
 
 		if ((poradie_svaty >= 1) && (poradie_svaty < PORADIE_PM_SOBOTA)) {
-			smer = (smer > _smer_override(_global_svaty(poradie_svaty).smer, _global_svaty(poradie_svaty).typslav)) ?
-				_smer_override(_global_svaty(poradie_svaty).smer, _global_svaty(poradie_svaty).typslav) :
-				smer;
+			smer = (smer > _global_svaty_i_smer_override(poradie_svaty)) ? _global_svaty_i_smer_override(poradie_svaty) : smer;
 
 			Log("showAllPrayers().smer == %d...\n", smer);
 		}
@@ -16656,9 +16664,10 @@ short int getArgv(int argc, const char** argv) {
 	// 2011-05-06: upravené (hodnota `F' ani `H' sa nepoužívali)
 	//            `F' (font): možnosť zvoliť font pre override CSS
 	// 2012-09-07: 'H' (header) disables header and footer
+	// 2021-07-13: 'T' (font size pT) force font size in pt
 
-	// 2015-06-02: 'v', 'w' and 'y' are still available :)
-	mystrcpy(option_string, "?q::d::m::r::p::x::s::t::0::1::2::3::4::5::a::h::e::f::g::l::i::\?::b::n::o::k::j::c::u::M::I::H::F::S::", MAX_STR);
+	// 2021-07-13: 'y', 'v' and 'w' are still available :)
+	mystrcpy(option_string, "?q::d::m::r::p::x::s::t::0::1::2::3::4::5::a::h::e::f::g::l::i::\?::b::n::o::k::j::c::u::M::I::H::F::S::T::", MAX_STR);
 	// tie options, ktore maju za sebou : maju povinny argument; ak maju :: tak maju volitelny
 
 	Log("-- getArgv(): begin\n");
@@ -16736,6 +16745,11 @@ short int getArgv(int argc, const char** argv) {
 			case 'S':
 				if (optarg != NULL) {
 					mystrcpy(pom_FONT_SIZE, optarg, VERY_SMALL);
+				}
+				Log("option %c with value `%s'\n", c, optarg); break;
+			case 'T':
+				if (optarg != NULL) {
+					mystrcpy(pom_FONT_SIZE_PT, optarg, VERY_SMALL);
 				}
 				Log("option %c with value `%s'\n", c, optarg); break;
 			case 'G':
@@ -17051,6 +17065,13 @@ short int getForm(void) {
 	if (ptr != NULL) {
 		if (strcmp(ptr, STR_EMPTY) != 0) {
 			mystrcpy(pom_FONT_SIZE, ptr, VERY_SMALL);
+		}
+	}
+
+	ptr = getenv(ADD_WWW_PREFIX_(STR_FONT_SIZE_PT));
+	if (ptr != NULL) {
+		if (strcmp(ptr, STR_EMPTY) != 0) {
+			mystrcpy(pom_FONT_SIZE_PT, ptr, VERY_SMALL);
 		}
 	}
 
@@ -17783,6 +17804,18 @@ short int parseQueryString(void) {
 			// ide o parameter STR_FONT_SIZE
 			mystrcpy(pom_FONT_SIZE, param[i].val, VERY_SMALL);
 			LogParams("font size zistená (%s).\n", pom_FONT_SIZE);
+		}
+	}
+
+	i = pocet;
+	LogParams("pokúšam sa zistiť font size pt (od posledného parametra k prvému, t. j. odzadu)...\n");
+	while ((equalsi(pom_FONT_SIZE_PT, STR_EMPTY)) && (i > 0)) {
+		--i;
+		LogParams("...parameter %d (meno: %s, hodnota: %s)\n", i, param[i].name, param[i].val);
+		if (equals(param[i].name, STR_FONT_SIZE_PT)) {
+			// ide o parameter STR_FONT_SIZE_PT
+			mystrcpy(pom_FONT_SIZE_PT, param[i].val, VERY_SMALL);
+			LogParams("font size zistená (%s).\n", pom_FONT_SIZE_PT);
 		}
 	}
 
@@ -18639,6 +18672,7 @@ END_parseQueryString:
 	_main_LOG_to_Export("\tparam  == %s (pom_CSS)\n", pom_CSS);\
 	_main_LOG_to_Export("\tparam  == %s (pom_FONT)\n", pom_FONT);\
 	_main_LOG_to_Export("\tparam  == %s (pom_FONT_SIZE)\n", pom_FONT_SIZE);\
+	_main_LOG_to_Export("\tparam  == %s (pom_FONT_SIZE_PT)\n", pom_FONT_SIZE_PT);\
 	_main_LOG_to_Export("\tparam  == %s (pom_STYLE_MARGIN)\n", pom_STYLE_MARGIN);\
 	_main_LOG_to_Export("\tparam  == %s (pom_OPT_DATE_FORMAT)\n", pom_OPT_DATE_FORMAT);\
 	_main_LOG_to_Export("\tparam  == %s (pom_EXPORT_MONTHLY)\n", pom_EXPORT_MONTHLY);\
@@ -18871,6 +18905,7 @@ int breviar_main(int argc, const char** argv) {
 	strcpy(pom_CSS, STR_EMPTY);
 	strcpy(pom_FONT, STR_EMPTY);
 	strcpy(pom_FONT_SIZE, STR_EMPTY);
+	strcpy(pom_FONT_SIZE_PT, STR_EMPTY);
 	strcpy(pom_STYLE_MARGIN, STR_EMPTY);
 	strcpy(pom_OPT_DATE_FORMAT, STR_EMPTY);
 	strcpy(pom_EXPORT_MONTHLY, STR_EMPTY); // 2009-08-03: Pridané kvôli rôznym spôsobom exportu po mesiacoch, prepínač -M
@@ -19133,6 +19168,15 @@ int breviar_main(int argc, const char** argv) {
 			}
 			_main_LOG_to_Export("...font size (%s) = %d, teda %s\n", pom_FONT_SIZE, _global_font_size, nazov_font_size(_global_font_size));
 
+			// načítanie veľkosti fontu v pt (override)
+			_main_LOG_to_Export("zisťujem font size pt...\n");
+			_global_font_size_pt = atoi(pom_FONT_SIZE_PT);
+			if (_global_font_size_pt == FONT_SIZE_UNDEF) {
+				_global_font_size_pt = FONT_SIZE_PT_DEFAULT;
+				_main_LOG_to_Export("\t(vzhľadom k neurčenej font size používam default)\n");
+			}
+			_main_LOG_to_Export("...font size pt (%s) = %d\n", pom_FONT_SIZE_PT, _global_font_size_pt);
+
 			// reading of style margin
 			_main_LOG_to_Export("zisťujem style margin...\n");
 			_global_style_margin = atoi(pom_STYLE_MARGIN);
@@ -19321,6 +19365,15 @@ int breviar_main(int argc, const char** argv) {
 		_main_LOG_to_Export("\t(vzhľadom k neurčenej font size používam default -- brať font size z CSS)\n");
 	}
 	_main_LOG_to_Export("...font size (%s) = %d, teda %s\n", pom_FONT_SIZE, _global_font_size, nazov_font_size(_global_font_size));
+
+	// reading of font size in pt (override)
+	_main_LOG_to_Export("zisťujem font size pt...\n");
+	_global_font_size_pt = atoi(pom_FONT_SIZE_PT);
+	if (_global_font_size_pt == FONT_SIZE_UNDEF) {
+		_global_font_size_pt = FONT_SIZE_PT_DEFAULT;
+		_main_LOG_to_Export("\t(vzhľadom k neurčenej font size pt používam default)\n");
+	}
+	_main_LOG_to_Export("...font size pt (%s) = %d\n", pom_FONT_SIZE_PT, _global_font_size_pt);
 
 	// reading of style margin
 	_main_LOG_to_Export("zisťujem style margin...\n");

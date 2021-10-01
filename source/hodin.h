@@ -5140,11 +5140,11 @@ const char* text_ZAKONCENIE_SKRZE_dlhe[POCET_JAZYKOV + 1] =
 	"",
 	"Per D&#243;minum nostrum Iesum Christum, F&#237;lium tuum, qui tecum vivit et regnat in unit&#225;te Sp&#237;ritus Sancti, Deus, per &#243;mnia s&#509;cula sæcul&#243;rum.",
 	"",
-	"Skrze tvého Syna Ježíše Krista, našeho Pána, neboť on s tebou v jednotě Ducha Svatého žije a kraluje po všechny věky věků.",
+	"Skrze tvého Syna Ježíše Krista, našeho Pána, neboť on s_tebou v_jednotě Ducha Svatého žije a kraluje po všechny věky věků.",
 	"A mi Urunk, Jézus Krisztus, a te Fiad által, aki veled él és uralkodik a Szentlélekkel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"Fyrir Drottin vorn Jesúm Krist, Son þinn, sem með þér lifir of ríkir í einingu Heilags Anda, Guð um aldir alda.",
+	"Fyrir Drottin vorn Jesúm Krist, Son þinn, sem með þér lifir og ríkir í einingu Heilags Anda, Guð um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -16250,11 +16250,11 @@ const char* text_DEC_09_OP[POCET_JAZYKOV + 1] =
 const char* text_DEC_10[POCET_JAZYKOV + 1] =
 {
 	"Prebl. Panny Márie Loretánskej",
-	"Panny Marie z Loreta",
+	"Panny Marie Loretánské",
 	"",
 	"Beatæ Mariæ Virginis de Loreto",
 	"",
-	"Panny Marie z Loreta",
+	"Panny Marie Loretánské",
 	"A Loretói Boldogságos Szűz Mária",
 	"ru_text",
 	"by_text",
