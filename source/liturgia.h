@@ -767,6 +767,8 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 #define PARAM_ZAKONCENIE_ON_JE              "ON_JE"
 // ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé
 #define PARAM_ZAKONCENIE_KTORY_JE           "KTORY_JE"
+// zakončenia modlitby pre IS
+#define PARAM_ZAKONCENIE_KTORY_ZIJES        "KTORY_ZIJES"
 // predslovy k zakončeniam, ktoré sa pre férie nemajú zobraziť, ak sa slávi spomienka v privilegovaných dňoch
 #define PARAM_ZAKONCENIE_O_TO_TA_PROSIME    "O_TO_TA_PROSIME"
 
@@ -1014,7 +1016,7 @@ extern const char* nazov_slavenia_na_spomienku_jazyk[POCET_JAZYKOV + 1];
 extern const char* nazov_slavenia_lokal[];
 
 #define LOKAL_SLAV_NEURCENE							0
-#define LOKAL_SLAV_ROZNAVA_KATEDRALA				1
+#define LOKAL_SLAV_ROZNAVA_KATEDRALA				1 // not used
 #define LOKAL_SLAV_TRNAVA_PATRON					2
 #define LOKAL_SLAV_TT_BB_KE_NR_RO					3 // not used
 #define LOKAL_SLAV_NITRA_PATRON						4
@@ -1083,7 +1085,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_VACI_PATRON						67
 #define LOKAL_SLAV_SZEGED_CSAN_PATRON2				68
 #define LOKAL_SLAV_VESZPREM_FOEGYH					69
-#define LOKAL_SLAV_free_6		70 // free
+#define LOKAL_SLAV_free_6							70 // free
 #define LOKAL_SLAV_SZEGED_CSAN_EGYH2				71
 #define LOKAL_SLAV_PECS_PATRON						72
 #define LOKAL_SLAV_SZOMBATHELYI_PATRON				73
@@ -1180,9 +1182,11 @@ extern const char* nazov_slavenia_lokal[];
 #define KALENDAR_VSEOBECNY_IS              26
 #define KALENDAR_CZ_SJ                     27
 #define KALENDAR_CZ_OCD                    28
+#define KALENDAR_CZ_OFMCONV                29
+#define KALENDAR_SK_OPRAEM                 30
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   28
+#define POCET_KALENDAROV                   30
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1234,18 +1238,19 @@ const short int supported_languages[POCET_JAZYKOV + 1] =
 };
 
 
-#define SUPPORTED_CALENDARS_COUNT_MAX 11
+#define SUPPORTED_CALENDARS_COUNT_MAX 12
 
 // count of supported calendars for specified language
 // note 1: KALENDAR_NEURCENY & KALENDAR_VSEOBECNY are always supported by default so these two do not count there
 // note 2: for calendars not yet published use '#if defined(DEBUG) || defined(OS_Windows_Ruby)' == code to be executed only for development (new calendars are added at the end of list supported_calendars_language[][])
+// note 3: ADD_VALUE_FOR_NEW_CALENDAR: change the number of supported calendars in proper language
 const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 {
-	11,
+	12,
 #if defined(DEBUG) || defined(OS_Windows_Ruby)
-	8,
+	9,
 #else
-	7,
+	8,
 #endif
 	/* ToDo */ 1,
 	/* ToDo */ 1,
@@ -1261,16 +1266,16 @@ const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 // array of supported calendars for specified language | note: pad with zeros
 const short int supported_calendars_language[POCET_JAZYKOV + 1][SUPPORTED_CALENDARS_COUNT_MAX] =
 {
-	{ KALENDAR_VSEOBECNY_SK, KALENDAR_SK_CSSR, KALENDAR_SK_SVD, KALENDAR_SK_OFM, KALENDAR_SK_SDB, KALENDAR_SK_OP, KALENDAR_SK_SJ, KALENDAR_SK_CM, KALENDAR_SK_OCD, KALENDAR_SK_CSA, KALENDAR_SK_OSU },
-	{ KALENDAR_VSEOBECNY_CZ, KALENDAR_CZ_OPRAEM, KALENDAR_CZ_OFMCAP, KALENDAR_CZ_SDB, KALENDAR_CZ_OFM, KALENDAR_CZ_SJ, KALENDAR_CZ_OCD, KALENDAR_CZ_CSSR, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_SK, KALENDAR_SK_CSSR, KALENDAR_SK_SVD, KALENDAR_SK_OFM, KALENDAR_SK_SDB, KALENDAR_SK_OP, KALENDAR_SK_SJ, KALENDAR_SK_CM, KALENDAR_SK_OCD, KALENDAR_SK_CSA, KALENDAR_SK_OSU, KALENDAR_SK_OPRAEM },
+	{ KALENDAR_VSEOBECNY_CZ, KALENDAR_CZ_OPRAEM, KALENDAR_CZ_OFMCAP, KALENDAR_CZ_SDB, KALENDAR_CZ_OFM, KALENDAR_CZ_SJ, KALENDAR_CZ_OCD, KALENDAR_CZ_OFMCONV, KALENDAR_CZ_CSSR, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/* ADD_VALUE_FOR_NEW_LANGUAGE */
 };
 
@@ -1962,18 +1967,6 @@ extern const char* text_V_OKTAVE_NARODENIA[POCET_JAZYKOV + 1];
 extern const char* text_DEC_08[POCET_JAZYKOV + 1];
 extern const char* text_AUG_15[POCET_JAZYKOV + 1];
 extern const char* text_NOV_01[POCET_JAZYKOV + 1];
-
-extern const char* text_ZAKONCENIE_SKRZE_dlhe[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_SKRZE_kratke[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_LEBO_ON_dlhe[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_LEBO_ON_kratke[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_LEBO_TY_dlhe[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_LEBO_TY_kratke[POCET_JAZYKOV + 1];
-extern const char* text_ZAKONCENIE_ON_JE_dlhe; // len SK
-extern const char* text_ZAKONCENIE_ON_JE_kratke; // len SK
-extern const char* text_ZAKONCENIE_KTORY_JE_dlhe; // len SK
-extern const char* text_ZAKONCENIE_KTORY_JE_kratke; // len SK
-extern const char* text_ZAKONCENIE_O_TO_TA_PROSIME[POCET_JAZYKOV + 1];
 
 extern const char* html_text_batch_Back[POCET_JAZYKOV + 1];
 
