@@ -18,7 +18,7 @@ allprojects {
 
   gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
-      // Using deprecated API is ok, since we want to support old andorid
+      // Using deprecated API is ok, since we want to support old Android
       // versions.
       // options.compilerArgs << "-Xlint:deprecation"
       options.compilerArgs << "-Xlint:unchecked"
