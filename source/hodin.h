@@ -639,7 +639,7 @@ const char* nazov_slavenia_lokal[] =
 , "v ostravsko-opavské diecézi"                                                                                  // LOKAL_SLAV_OSTRAVA_OPAVA
 , "v litoměřické diecézi"                                                                                        // LOKAL_SLAV_LITOMERICE
 , "v královéhradecké diecézi"                                                                                    // LOKAL_SLAV_HRADEC_KRALOVE
-, "free"                                                                                   // LOKAL_SLAV_free
+, "len pre SDB"																					                 // LOKAL_SLAV_SDB_ONLY
 , "v plzeňské diecézi"                                                                                           // LOKAL_SLAV_PLZEN 
 , "v ostravsko-opavské diecézi: slavnost"                                                                        // LOKAL_SLAV_OSTRAVA_OPAVA_SLAVNOST
 , "v českobudějovické diecézi: památka"                                                                          // LOKAL_SLAV_CESKE_BUDEJOVICE_PAMATKA
@@ -647,10 +647,10 @@ const char* nazov_slavenia_lokal[] =
 , "v Bratislavskej arcidiecéze"                                                                                  // LOKAL_SLAV_BRATISLAVA
 , "pre FMA a VDB: ľubovoľná spomienka"                                                                           // LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB
 , "len pre Inštitút milosrdných sestier Sv. kríža"                                                               // LOKAL_SLAV_KONGREGACIA_SSK // 2013-08-12: pôvodne bolo: "len pre Kongregáciu milosrdných sestier Sv. kríža"
-, "pre OFMCap.: spomienka"                                                                                        // LOKAL_SLAV_SPOMIENKA_OFMCAP
+, "pre OFMCap.: spomienka"                                                                                       // LOKAL_SLAV_SPOMIENKA_OFMCAP
 , "pre OFM: sviatok"                                                                                             // LOKAL_SLAV_SVIATOK_OFM
 , "pre OFM: spomienka"                                                                                           // LOKAL_SLAV_SPOMIENKA_OFM
-, "pre OFMCap.: sviatok"                                                                                          // LOKAL_SLAV_SVIATOK_OFMCAP
+, "pre OFMCap.: sviatok"                                                                                         // LOKAL_SLAV_SVIATOK_OFMCAP
 , "pre FMA: spomienka"                                                                                           // LOKAL_SLAV_SPOMIENKA_FMA
 , "pre FMA: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_FMA
 , "pre SDB: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_SDB
@@ -699,7 +699,7 @@ const char* nazov_slavenia_lokal[] =
 , "pre OSC: slávnosť"                                                                                            // LOKAL_SLAV_SLAVNOST_OSC
 , "pre OFMConv.: sviatok"                                                                                        // LOKAL_SLAV_SVIATOK_OFMCONV
 , "pre OFS: sviatok"                                                                                             // LOKAL_SLAV_SVIATOK_OFS
-, "pre OFMConv., OFMCap.: spomienka"                                                                              // LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP
+, "pre OFMConv., OFMCap.: spomienka"                                                                             // LOKAL_SLAV_SPOMIENKA_OFMCONV_OFMCAP
 , "pre OSC: slávnosť"                                                                                            // LOKAL_SLAV_SPOMIENKA_OSC
 , "pre Slovensko zatiaľ nedovolené slávenie"                                                                     // LOKAL_SLAV_NEDOVOLENE_SK
 , "Katonai Ordinariátus: " HTML_LINE_BREAK "Az Ordinariátus védőszentje; főünnep"                                // LOKAL_SLAV_KATONAI_ORDINARIAT
@@ -712,34 +712,34 @@ const char* nazov_slavenia_lokal[] =
 , "pro FMA a VDB nezávazná památka"                                                                              // LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB_CZ
 , "pro VDB svátek"                                                                                               // LOKAL_SLAV_SVIATOK_VDB_CZ
 , "pro FMA slavnost"                                                                                             // LOKAL_SLAV_SLAVNOST_FMA_CZ
-, "A Szeged-Csanádi egyházmegyében"                                                                             // LOKAL_SLAV_SZEGED_CSAN_EGYH3
-, "len pre Ordinariát ozbrojených síl a ozbrojených zborov SR"                                                  // LOKAL_SLAV_ORDINARIAT
-, "A Klarisszáknál: Emléknap"                                                                                   // LOKAL_SLAV_HU_KLARISSZAKNAL_EM
-, "A Klarisszáknál: Főünnep"                                                                                    // LOKAL_SLAV_HU_KLARISSZAKNAL_FOU
-, "jen na Moravě"                                                                                               // LOKAL_SLAV_LEN_MORAVA
-, "jen v Čechách"                                                                                               // LOKAL_SLAV_LEN_CECHY
-, "A Conceptionistáknál: Ünnep"                                                                                 // LOKAL_SLAV_HU_CONCEPTIONISTAK_UN
-, "v kláštoroch bosých karmelitánok – spomienka"                                                                // LOKAL_SLAV_OCD_BOSE_KARMEL_SPOM
-, "pro SDB: slavnost"                                                                                           // LOKAL_SLAV_SLAVNOST_SDB_CZ
-, "v dome sv. Lazára v Paríži: spomienka"                                                                       // LOKAL_SLAV_SPOMIENKA_CM_PARIZ
-, "у Віцебскай дыяцэзіі: успамін"                                                                               // LOKAL_SLAV_VICEB_SPOMIENKA
-, "у Мінска-Магілёўскай архідыяцэзіі"                                                                           // LOKAL_SLAV_POSV_K_CH_MINSK
-, "у Пінскай дыяцэзіі"                                                                                          // LOKAL_SLAV_POSV_K_CH_PINSK
+, "A Szeged-Csanádi egyházmegyében"                                                                              // LOKAL_SLAV_SZEGED_CSAN_EGYH3
+, "len pre Ordinariát ozbrojených síl a ozbrojených zborov SR"                                                   // LOKAL_SLAV_ORDINARIAT
+, "A Klarisszáknál: Emléknap"                                                                                    // LOKAL_SLAV_HU_KLARISSZAKNAL_EM
+, "A Klarisszáknál: Főünnep"                                                                                     // LOKAL_SLAV_HU_KLARISSZAKNAL_FOU
+, "jen na Moravě"                                                                                                // LOKAL_SLAV_LEN_MORAVA
+, "jen v Čechách"                                                                                                // LOKAL_SLAV_LEN_CECHY
+, "A Conceptionistáknál: Ünnep"                                                                                  // LOKAL_SLAV_HU_CONCEPTIONISTAK_UN
+, "v kláštoroch bosých karmelitánok – spomienka"                                                                 // LOKAL_SLAV_OCD_BOSE_KARMEL_SPOM
+, "pro SDB: slavnost"                                                                                            // LOKAL_SLAV_SLAVNOST_SDB_CZ
+, "v dome sv. Lazára v Paríži: spomienka"                                                                        // LOKAL_SLAV_SPOMIENKA_CM_PARIZ
+, "у Віцебскай дыяцэзіі: успамін"                                                                                // LOKAL_SLAV_VICEB_SPOMIENKA
+, "у Мінска-Магілёўскай архідыяцэзіі"                                                                            // LOKAL_SLAV_POSV_K_CH_MINSK
+, "у Пінскай дыяцэзіі"                                                                                           // LOKAL_SLAV_POSV_K_CH_PINSK
 , "у Пінскай дыяцэзіі: урачыстасць; " HTML_LINE_BREAK "у Мінска-Магілёўскай архідыяцэзіі і Віцебскай дыяцэзіі: успамін" // LOKAL_SLAV_PINSK_MINSK
-, "v královéhradecké diecézi: slavnost"                                                                         // LOKAL_SLAV_HRADEC_KRALOVE_SLAVNOST
-, "v českobudějovické diecézi: slavnost"                                                                        // LOKAL_SLAV_CESKE_BUDEJOV_SLAVNOST
-, "у Гродзенскай дыяцэзіі"                                                                                      // LOKAL_SLAV_GRODZENSK
-, "у Мінска-Магілёўскай архідыяцэзіі: урачыстасць; " HTML_LINE_BREAK "у Віцебскай дыяцэзіі: свята"              // LOKAL_SLAV_MINSK_MAG_VICEB
-, "у Мінска-Магілёўскай архідыяцэзіі: успамін"                                                                  // LOKAL_SLAV_MINSK_SPOMIENKA
-, "у Гродзенскай дыяцэзіі: свята"                                                                               // LOKAL_SLAV_GRODZENSK_SVIATOK
-, "У Мінска-Магілёўскай архідыяцэзіі, Пінскай дыяцэзіі і Гродзенскай дыяцэзіі"                                  // LOKAL_SLAV_MINSK_PINSK_GRODZENSK
-, "у Віцебскай дыяцэзіі"                                                                                        // LOKAL_SLAV_VICEB
-, "у Мінска-Магілёўскай архідыяцэзіі і Пінскай дыяцэзіі: успамін"                                               // LOKAL_SLAV_MINSK_PINSK_SPOMIENKA
+, "v královéhradecké diecézi: slavnost"                                                                          // LOKAL_SLAV_HRADEC_KRALOVE_SLAVNOST
+, "v českobudějovické diecézi: slavnost"                                                                         // LOKAL_SLAV_CESKE_BUDEJOV_SLAVNOST
+, "у Гродзенскай дыяцэзіі"                                                                                       // LOKAL_SLAV_GRODZENSK
+, "у Мінска-Магілёўскай архідыяцэзіі: урачыстасць; " HTML_LINE_BREAK "у Віцебскай дыяцэзіі: свята"               // LOKAL_SLAV_MINSK_MAG_VICEB
+, "у Мінска-Магілёўскай архідыяцэзіі: успамін"                                                                   // LOKAL_SLAV_MINSK_SPOMIENKA
+, "у Гродзенскай дыяцэзіі: свята"                                                                                // LOKAL_SLAV_GRODZENSK_SVIATOK
+, "У Мінска-Магілёўскай архідыяцэзіі, Пінскай дыяцэзіі і Гродзенскай дыяцэзіі"                                   // LOKAL_SLAV_MINSK_PINSK_GRODZENSK
+, "у Віцебскай дыяцэзіі"                                                                                         // LOKAL_SLAV_VICEB
+, "у Мінска-Магілёўскай архідыяцэзіі і Пінскай дыяцэзіі: успамін"                                                // LOKAL_SLAV_MINSK_PINSK_SPOMIENKA
 , "у Віцебскай дыяцэзіі: урачыстасць, " HTML_LINE_BREAK "у Мінска-Магілёўскай архідыяцэзіі і Пінскай дыяцэзіі: свята" // LOKAL_SLAV_VICEB_SL_MINSK_PINSK_SV
 , "у Гродзенскай дыяцэзіі: урачыстасць; " HTML_LINE_BREAK "у Мінска-Магілёўскай архідыяцэзіі і Пінскай дыяцэзіі: успамін" // LOKAL_SLAV_GRODZ_SL_PINSK_MINSK_SP
-, "v pražském klášteře u Panny Marie Sněžné: slavnost"                                                          // LOKAL_SLAV_PRAHA_OFM
-, "pro mnišky: památka"                                                                                         // LOKAL_SLAV_OP_MNISKY_PAMATKA
-, "pre OFS: spomienka"                                                                                          // LOKAL_SLAV_SPOMIENKA_OFS
+, "v pražském klášteře u Panny Marie Sněžné: slavnost"                                                           // LOKAL_SLAV_PRAHA_OFM
+, "pro mnišky: památka"                                                                                          // LOKAL_SLAV_OP_MNISKY_PAMATKA
+, "pre OFS: spomienka"                                                                                           // LOKAL_SLAV_SPOMIENKA_OFS
 };
 
 // names of liturgical colors
@@ -1147,6 +1147,9 @@ const char* nazov_css_normal_font_weight = "breviar-normal-font.css";
 
 // voice output CSS | includes ONLY ammendment to base css (breviar.css)
 const char* nazov_css_voice_output = "breviar-voice-output.css";
+
+// CSS for rounded corners of buttons | includes ONLY ammendment to base css (breviar.css)
+const char* nazov_css_rounded_corners = "breviar-rounded-corners.css";
 
 // language charset (encoding); used for HTML heading | use CHARSET_UTF_8
 const short int charset_jazyka[POCET_JAZYKOV + 1] =
@@ -3975,6 +3978,36 @@ const char* html_text_opt_2_nocny_rezim_explain[POCET_JAZYKOV + 1] =
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
+const char* html_text_opt_2_rounded_corners[POCET_JAZYKOV + 1] =
+{
+	"zaoblené rohy tlačidiel",
+	"zaoblené rohy tlačítek",
+	"rounded corners of buttons",
+	"angulis rotundatis",
+	"",
+	"zaoblené rohy tlačítek",
+	"lekerekített sarok",
+	"закругленные углы",
+	"закругленыя куты",
+	"ávöl horn",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char* html_text_opt_2_rounded_corners_explain[POCET_JAZYKOV + 1] =
+{
+	"Zobrazí zaoblené rohy tlačidiel.",
+	"Zobrazí zaoblené rohy tlačítek.",
+	"Displays rounded corners of buttons.",
+	"",
+	"",
+	"Zobrazí zaoblené rohy tlačítek.",
+	"",
+	"",
+	"",
+	"",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
 const char* html_text_opt_2_alternatives[POCET_JAZYKOV + 1] =
 {
 	"alternatívy",
@@ -5182,7 +5215,7 @@ const char* text_ZAKONCENIE_LEBO_ON_dlhe[POCET_JAZYKOV + 1] =
 	"Aki veled él és uralkodik a Szentlélekkel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"Því að hann er Guð, sem með þér lifir og ríkir í einingu Heilags Anda, Guð, um aldir alda.",
+	"Því að hann er Guð, sem með þér lifir og ríkir í einingu Heilags Anda, um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5212,7 +5245,7 @@ const char* text_ZAKONCENIE_LEBO_TY_dlhe[POCET_JAZYKOV + 1] =
 	"Aki élsz és uralkodol az Atyaistennel és a Szentlélek­kel egységben, Isten mindörökkön-örökké.",
 	"ru_text",
 	"by_text",
-	"Því að þú ert Guð, sem lifir og ríkir með Guði Föður, í einingu Heilags Anda, Guð, um aldir alda.",
+	"Því að þú ert Guð, sem lifir og ríkir með Guði Föður, í einingu Heilags Anda, um aldir alda.",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -5234,11 +5267,11 @@ const char* text_ZAKONCENIE_LEBO_TY_kratke[POCET_JAZYKOV + 1] =
 // SK only (POST1_MODLITBA5NE)
 const char* text_SK_ZAKONCENIE_ON_JE_dlhe = "On je Boh a s_tebou žije a kraľuje v_jednote Ducha Svätého po všetky veky vekov.";
 const char* text_SK_ZAKONCENIE_ON_JE_kratke = "On žije a kraľuje na veky vekov.";
-const char* text_SK_ZAKONCENIE_KTORY_JE_dlhe = "ktorý je Boh a s_tebou žije a kraľuje v_jednote Ducha Svätého po všetky veky vekov.";
-const char* text_SK_ZAKONCENIE_KTORY_JE_kratke = "ktorý žije a kraľuje na veky vekov.";
+const char* text_SK_ZAKONCENIE_KTORY_JE_dlhe = "ktorý je Boh a s_tebou žije a kraľuje v_jednote Ducha Svätého po všetky veky vekov."; // SK: == ZAKONCENIE_KTORY_JE_MALE
+const char* text_SK_ZAKONCENIE_KTORY_JE_kratke = "ktorý žije a kraľuje na veky vekov."; // SK: == ZAKONCENIE_KTORY_JE_MALE
 // IS only
-const char* text_IS_ZAKONCENIE_KTORY_JE_dlhe = "sem með þér lifir og ríkir í einingu Heilags Anda, Guð, um aldir alda.";
-const char* text_IS_ZAKONCENIE_KTORY_JE_kratke = "sem með þér lifir og ríkir um aldir alda.";
+const char* text_IS_ZAKONCENIE_KTORY_JE_dlhe = "Sem með þér lifir og ríkir í einingu Heilags Anda, Guð, um aldir alda.";
+const char* text_IS_ZAKONCENIE_KTORY_JE_kratke = "Sem með þér lifir og ríkir um aldir alda.";
 const char* text_IS_ZAKONCENIE_KTORY_ZIJES_dlhe = "Þú sem lifir og ríkir með Guði Föður, í einingu Heilags Anda, Guð, um aldir alda.";
 const char* text_IS_ZAKONCENIE_KTORY_ZIJES_kratke = "Þú sem lifir og ríkir um aldir alda.";
 
@@ -5378,13 +5411,13 @@ const char* text_JAN_04_OCD[POCET_JAZYKOV + 1] =
 };
 const char* text_JAN_04_OFM[POCET_JAZYKOV + 1] =
 {
-	"Bl. Angely z Foligna, rehoľníčky, členky 3. rádu",
-	"Bl. Anděly z Foligna, členky 3. řádu",
+	"Sv. Angely z Foligna, rehoľníčky, členky 3. rádu",
+	"Sv. Anděly z Foligna, členky 3. řádu",
 	"",
 	"",
 	"",
-	"Bl. Anděly z Foligna, členky 3. řádu",
-	"Folignói Boldog Angéla, szerzetesnő a III. Rendből",
+	"Sv. Anděly z Foligna, členky 3. řádu",
+	"Folignói Szent Angéla, szerzetesnő a III. Rendből",
 	"",
 	"",
 	"",
@@ -8725,7 +8758,7 @@ const char* text_MAJ_24_OP[POCET_JAZYKOV + 1] =
 };
 const char* text_MAJ_24_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"Sv. Hermanna Jozefa, kňaza z našej rehole",
+	"Sv. Hermana Jozefa, kňaza z našej rehole",
 	"Sv. Heřmana Josefa, kněze z premonstrátského řádu",
 	"",
 	"",
@@ -10262,16 +10295,16 @@ const char* text_JUN_27_CSSR[POCET_JAZYKOV + 1] =
 };
 const char* text_JUN_28[POCET_JAZYKOV + 1] =
 {
-	"Sv. Ireneja, biskupa a mučeníka",
-	"Sv. Ireneje, biskupa a mučedníka",
+	"Sv. Ireneja, biskupa a mučeníka, učiteľa Cirkvi",
+	"Sv. Ireneje, biskupa a mučedníka, učitele církve",
 	"",
-	"S. Irenæi, episcopi et martyris",
+	"S. Irenæi, episcopi et martyris, Ecclesiæ doctoris",
 	"",
-	"Sv. Ireneje, biskupa a mučedníka",
-	"Szent Iréneusz püspök és vértanú",
+	"Sv. Ireneje, biskupa a mučedníka, učitele církve",
+	"Szent Iréneusz püspök és vértanú, egyháztanító",
 	"ru_text",
-	"Св. Ірэнэя, біскупа і мучаніка",
-	"Hl. Íreneusar, biskups og píslarvotts",
+	"Св. Ірэнэя, біскупа і мучаніка, доктара Касцёла",
+	"Hl. Íreneusar, biskups og píslarvotts, kirkjufræðara",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 const char* text_JUN_29[POCET_JAZYKOV + 1] =
@@ -15333,10 +15366,10 @@ const char* text_NOV_08_OP[POCET_JAZYKOV + 1] =
 	"",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
-const char* text_NOV_08_OPRAEM[POCET_JAZYKOV + 1] =
+const char* text_NOV_13_OPRAEM[POCET_JAZYKOV + 1] =
 {
 	"Všetkých svätých vašej rehole " HTML_LINE_BREAK "a všetkých svätých rehoľných kanonikov",
-	"Všech svatých premonstrátského řádu " HTML_LINE_BREAK "a všech svatých z řádů řeholních kanovníků",
+	"Všech svatých premonstrátského řádu " HTML_LINE_BREAK "a všech svatých z řádů řeholních kanovníků", // CZ 08NOV
 	"",
 	"",
 	"",

@@ -694,6 +694,25 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	_vlastna_cast_modlitba;\
 }
 
+#define _vlastna_cast_full_okrem_benmagn_a_prosieb(modl) {\
+	_vlastna_cast_hymnus(modl, _global_den.litobd);\
+	_vlastna_cast_antifony;\
+	if(modl == MODL_POSV_CITANIE){_vlastna_cast_1citanie;}\
+	else {_vlastna_cast_kcitanie;}\
+	_vlastna_cast_kresponz;\
+	if(modl == MODL_POSV_CITANIE){_vlastna_cast_2citanie;}\
+	_vlastna_cast_modlitba;\
+}
+
+#define _vlastna_cast_full_okrem_kresp_benmagn_a_prosieb(modl) {\
+	_vlastna_cast_hymnus(modl, _global_den.litobd);\
+	_vlastna_cast_antifony;\
+	if(modl == MODL_POSV_CITANIE){_vlastna_cast_1citanie;}\
+	else {_vlastna_cast_kcitanie;}\
+	if(modl == MODL_POSV_CITANIE){_vlastna_cast_2citanie;}\
+	_vlastna_cast_modlitba;\
+}
+
 #define _vlastna_cast_full_okrem_hymnu_a_prosieb(modl) {\
 	_vlastna_cast_antifony;\
 	if(modl == MODL_POSV_CITANIE){_vlastna_cast_1citanie;}\
@@ -2299,7 +2318,7 @@ extern const char* text_OKT_10_OPRAEM[POCET_JAZYKOV + 1];
 extern const char* text_OKT_13_OPRAEM[POCET_JAZYKOV + 1];
 extern const char* text_OKT_20_OPRAEM[POCET_JAZYKOV + 1];
 extern const char* text_OKT_26_OPRAEM[POCET_JAZYKOV + 1];
-extern const char* text_NOV_08_OPRAEM[POCET_JAZYKOV + 1];
+extern const char* text_NOV_13_OPRAEM[POCET_JAZYKOV + 1];
 extern const char* text_NOV_14_OPRAEM[POCET_JAZYKOV + 1];
 extern const char* text_OPATSKY_KOSTOL_OPRAEM[POCET_JAZYKOV + 1];
 

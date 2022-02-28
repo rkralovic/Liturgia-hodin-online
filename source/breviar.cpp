@@ -2115,7 +2115,8 @@ void includeFile(short int typ, short int modlitba, const char* paramname, const
 								mystrcpy(zakoncenie, text_SK_ZAKONCENIE_ON_JE_dlhe, MAX_ZAKONCENIE);
 							}
 						} // SK: ZAKONCENIE_ON_JE
-						else if (equals(rest, PARAM_ZAKONCENIE_KTORY_JE) && (_global_jazyk == JAZYK_SK || _global_jazyk == JAZYK_IS)) {
+						else if ((equals(rest, PARAM_ZAKONCENIE_KTORY_JE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_KTORY_JE_MALE))
+							&& (_global_jazyk == JAZYK_SK || _global_jazyk == JAZYK_IS)) {
 							if (je_modlitba_cez_den(_global_modlitba) || je_kompletorium12(_global_modlitba) || (je_velkonocna_nedela_posv_cit)) {
 								mystrcpy(zakoncenie, (_global_jazyk == JAZYK_SK) ? text_SK_ZAKONCENIE_KTORY_JE_kratke : text_IS_ZAKONCENIE_KTORY_JE_kratke, MAX_ZAKONCENIE);
 							}
@@ -2135,7 +2136,7 @@ void includeFile(short int typ, short int modlitba, const char* paramname, const
 							mystrcpy(zakoncenie, text_ZAKONCENIE_O_TO_TA_PROSIME[_global_jazyk], MAX_ZAKONCENIE);
 						} // PARAM_ZAKONCENIE_O_TO_TA_PROSIME
 
-						if (equals(rest_zakoncenie, PARAM_ZAKONCENIE_SKRZE_MALE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_LEBO_TY_MALE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_LEBO_ON_MALE)) {
+						if (equals(rest_zakoncenie, PARAM_ZAKONCENIE_SKRZE_MALE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_LEBO_TY_MALE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_LEBO_ON_MALE) || equals(rest_zakoncenie, PARAM_ZAKONCENIE_KTORY_JE_MALE)) {
 							FirstToLower(zakoncenie, sizeof(zakoncenie));  // posun z veľkého písmena na malé
 						}
 						// nezlomiteľné medzery
@@ -7895,6 +7896,9 @@ void xml_export_options(void) {
 				case 15: // BIT_OPT_2_SHOW_DEFAULT_CALENDAR
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_SHOW_DEFAULT_CALENDAR)"%ld" ELEM_END(XML_BIT_OPT_2_SHOW_DEFAULT_CALENDAR) "\n", BIT_OPT_2_SHOW_DEFAULT_CALENDAR, STR_FORCE_BIT_OPT_2_SHOW_DEFAULT_CALENDAR, html_text_opt_2_show_defalut_calendar[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_SHOW_DEFAULT_CALENDAR)));
 					break;
+				case 16: // BIT_OPT_2_ROUNDED_CORNERS
+					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_ROUNDED_CORNERS)"%ld" ELEM_END(XML_BIT_OPT_2_ROUNDED_CORNERS) "\n", BIT_OPT_2_ROUNDED_CORNERS, STR_FORCE_BIT_OPT_2_SHOW_DEFAULT_CALENDAR, html_text_opt_2_rounded_corners[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_ROUNDED_CORNERS)));
+					break;
 				} // switch(j)
 			}// for j
 			Export(ELEM_END(XML_OPT_2_HTML_EXPORT) "\n");
@@ -10893,6 +10897,9 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_FONT_NORMAL
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_FONT_NORMAL, STR_FORCE_BIT_OPT_0_FONT_NORMAL, html_text_opt_0_font_normal[_global_jazyk], html_text_opt_0_font_normal_explain[_global_jazyk]);
+
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_2_ROUNDED_CORNERS
+		_export_main_formular_checkbox(OPT_2_HTML_EXPORT, BIT_OPT_2_ROUNDED_CORNERS, STR_FORCE_BIT_OPT_2_ROUNDED_CORNERS, html_text_opt_2_rounded_corners[_global_jazyk], html_text_opt_2_rounded_corners_explain[_global_jazyk]);
 #endif
 
 #if !defined(IO_ANDROID)

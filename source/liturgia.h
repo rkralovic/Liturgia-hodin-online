@@ -765,7 +765,8 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 #define PARAM_ZAKONCENIE_LEBO_ON_MALE       "LEBO_ON_MALE"
 // ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé (POST1_MODLITBA5NE)
 #define PARAM_ZAKONCENIE_ON_JE              "ON_JE"
-// ešte jedno zakončenie modlitby pre slovenčinu, krátke resp. dlhé
+// ešte jedno zakončenie modlitby pre slovenčinu resp. pre IS, krátke resp. dlhé
+#define PARAM_ZAKONCENIE_KTORY_JE_MALE      "KTORY_JE_MALE"
 #define PARAM_ZAKONCENIE_KTORY_JE           "KTORY_JE"
 // zakončenia modlitby pre IS
 #define PARAM_ZAKONCENIE_KTORY_ZIJES        "KTORY_ZIJES"
@@ -1050,7 +1051,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_OSTRAVA_OPAVA					32
 #define LOKAL_SLAV_LITOMERICE						33
 #define LOKAL_SLAV_HRADEC_KRALOVE					34
-#define LOKAL_SLAV_free_5		35 // free
+#define LOKAL_SLAV_SDB_ONLY		                    35
 #define LOKAL_SLAV_PLZEN 							36
 #define LOKAL_SLAV_OSTRAVA_OPAVA_SLAVNOST			37
 #define LOKAL_SLAV_CESKE_BUDEJOVICE_PAMATKA			38
@@ -1085,7 +1086,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_VACI_PATRON						67
 #define LOKAL_SLAV_SZEGED_CSAN_PATRON2				68
 #define LOKAL_SLAV_VESZPREM_FOEGYH					69
-#define LOKAL_SLAV_free_6							70 // free
+#define LOKAL_SLAV_free_6		70 // free
 #define LOKAL_SLAV_SZEGED_CSAN_EGYH2				71
 #define LOKAL_SLAV_PECS_PATRON						72
 #define LOKAL_SLAV_SZOMBATHELYI_PATRON				73
@@ -1580,7 +1581,7 @@ extern unsigned long long _global_opt_1_casti_modlitby[POCET_OPT_1_CASTI_MODLITB
 #define BIT_OPT_1_KOMPL_MARIA_ANT       262144 // pre kompletórium: či zobraziť mariánsku antifónu (jednu, ak BIT_OPT_2_ALTERNATIVES == 1)/mariánske antifóny na konci kompletória
 #define BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD   524288 // pre ranné chvály a vešpery: či zobraziť úvod k modlitbe Pána (Otčenás)
 
-#define POCET_OPT_2_HTML_EXPORT             16 // jednotlivé komponenty option 2 -- bity pre force option 2
+#define POCET_OPT_2_HTML_EXPORT             17 // jednotlivé komponenty option 2 -- bity pre force option 2
 extern unsigned long long _global_opt_2_html_export[POCET_OPT_2_HTML_EXPORT];
 // 2011-04-12: úprava významu (a interpretácie) option 2 (rozličné prepínače pre [online aj offline] export, napr. tlačidlá, zobrazenie dátumov a podobne)
 // 2012-10-01: doplnené ďalšie komponenty najmä pre vzhľad úvodnej obrazovky
@@ -1600,6 +1601,7 @@ extern unsigned long long _global_opt_2_html_export[POCET_OPT_2_HTML_EXPORT];
 #define BIT_OPT_2_HIDE_OPTIONS2           8192 // skryť html_text_dalsie_moznosti_2[] pre "dnes" (0 = zobraziť)
 #define BIT_OPT_2_ALTERNATIVES           16384 // ukázať iba jednu alternatívu (0 = ako doteraz; buď systém vyberie, alebo ukáže všetky možnosti)
 #define BIT_OPT_2_SHOW_DEFAULT_CALENDAR  32768 // ukázať v podnadpise, metódou init_global_string(), aj default regionálny kalendár (0 = po novom, neukazovať; 1 = po starom, ukázať)
+#define BIT_OPT_2_ROUNDED_CORNERS        65536 // use rounded corners for buttons in CSS
 
 #define POCET_OPT_4_OFFLINE_EXPORT           4 // jednotlivé komponenty option 4 -- bity pre force option 4
 extern unsigned long long _global_opt_4_offline_export[POCET_OPT_4_OFFLINE_EXPORT];
@@ -1701,8 +1703,7 @@ extern const char* skratka_css[POCET_CSS + 1];
 extern const char* nazov_css_invert_colors;
 extern const char* nazov_css_normal_font_weight;
 extern const char* nazov_css_voice_output;
-extern const char* nazov_css_background_override;
-extern const char* nazov_css_background_ov_invert;
+extern const char* nazov_css_rounded_corners;
 
 extern const short int charset_jazyka[POCET_JAZYKOV + 1];
 extern const char* nazov_charset[POCET_CHARSET + 1];

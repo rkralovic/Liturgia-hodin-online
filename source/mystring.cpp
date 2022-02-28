@@ -233,7 +233,7 @@ std::string mystr_replace(const char* string, const char* substr, const char* re
 	}
 	std::string val(newstr);
 	free(newstr);
-	return newstr;
+	return val;
 }// mystr_replace()
 
 std::string mystr_replace_char(const char* string, const char orig_char, const char replacement) {
