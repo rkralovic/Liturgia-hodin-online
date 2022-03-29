@@ -45,7 +45,7 @@ const char* html_header_css = "\t<link rel=\"stylesheet\" type=\"text/css\" href
 
 const char* xml_header = "<?xml version=\"1.0\" encoding=\"%s\"?>\n\n";
 
-const char* generated[POCET_JAZYKOV + 1] = { "Generované: ", "Generováno: ", "Generated: ", "Generated: ", "Generated: ", "Generováno: ", "Generálva: ", "ru_text", "by_text", "is_text", /* STRING_1_FOR_NEW_LANGUAGE */ };
+const char* generated[POCET_JAZYKOV + 1] = { "Generované: ", "Generováno: ", "Generated: ", "Generated: ", "Generated: ", "Generováno: ", "Generálva: ", "ru_text", "by_text", "Myndast: ", /* STRING_1_FOR_NEW_LANGUAGE */ };
 
 // Generované + dátum: "%d. %s %d, %02d:%02d:%02d" -- pôvodne to bolo v zátvorkách
 const char* datum_cas_template[POCET_JAZYKOV + 1] = { "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", "%d. %s %d, %02d:%02d", /* STRING_3_FOR_NEW_LANGUAGE */ };
@@ -212,10 +212,9 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec) {
 	Log("nazov_css_suboru == %s...\n", nazov_css_suboru);
 
 	// nastavenie font-family
-	// zatiaľ len pevné reťazce; časom možno bude premenná pre názov fontu
 	// najprv sa testuje nastavenie _global_font; následne sa prípadne nastavia defaulty
-	if ((_global_font == FONT_UNDEF) || (_global_font == FONT_CHECKBOX)) {
-		Log("(_global_font == FONT_UNDEF) || (_global_font == FONT_CHECKBOX)...\n");
+	if (_global_font == FONT_CHECKBOX) {
+		Log("_global_font == FONT_CHECKBOX...\n");
 		if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_FAMILY)) {
 			Log("_global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_FONT_FAMILY...\n");
 			mystrcpy(_global_css_font_family, DEFAULT_FONT_FAMILY_SANS_SERIF, SMALL);
@@ -224,13 +223,16 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec) {
 			Log("NOT _global_opt[OPT_2_HTML_EXPORT] & BIT_OPT_2_FONT_FAMILY...\n");
 			mystrcpy(_global_css_font_family, DEFAULT_FONT_FAMILY_SERIF, SMALL);
 		}
-	}// (_global_font == FONT_UNDEF)  || (_global_font == FONT_CHECKBOX)
+	}// (_global_font == FONT_CHECKBOX)
 	else if (_global_font == FONT_CSS) {
 		Log("_global_font == FONT_CSS...\n");
 		mystrcpy(_global_css_font_family, DEFAULT_FONT_FAMILY_INHERIT, SMALL);
 	}// (_global_font == FONT_CSS)
+	else if ((_global_font == FONT_CUSTOM) && (!equals(pom_FONT, STR_EMPTY))) {
+		mystrcpy(_global_css_font_family, pom_FONT, SMALL);
+	}
 	else {
-		Log("_global_font != FONT_CSS...\n");
+		Log("_global_font != FONT_CSS or _global_font == FONT_CUSTOM but font name not set...\n");
 		mystrcpy(_global_css_font_family, nazov_fontu[_global_font], SMALL);
 	}// else
 	Log("_global_css_font_family == %s...\n", _global_css_font_family);
@@ -298,7 +300,7 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec) {
 
 	if ((_global_font != FONT_CSS) || (_global_font_size != FONT_SIZE_CSS) || (_global_style_margin != 0) || (_global_font_size_pt != 0)) {
 		Export_to_file(expt, " style=\"");
-		if (_global_font != FONT_CSS) {
+		if (_global_font != FONT_CSS && strlen(_global_css_font_family) > 0) {
 			Export_to_file(expt, "font-family: %s; ", _global_css_font_family);
 		}
 		if ((_global_font_size_pt > 0) && (_global_font_size_pt != FONT_SIZE_PT_DEFAULT)) {

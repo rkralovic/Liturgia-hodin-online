@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="version" translatable="false">4.8</string>
+    <string name="version" translatable="false">4.9</string>
 
     <string name="app_name">Breviary</string>
     <string name="back">Back</string>
@@ -42,6 +42,7 @@
     <string name="liturgical_readings">Mass readings</string>
     <string name="psalms_omissions">Omissions from psalms</string>
     <string name="italics_conditional">Special text (elisions) in italics</string>
+    <string name="printed_edtition">Texts according to printed edition</string>
 
     <string name="display_settings_title">Display settings</string>
     <string name="first_vespers_buttons">Button for first vespers for Sundays and solemnitas for the day of celebration</string>
@@ -53,6 +54,7 @@
     <string name="buttons_rounded_corners">Rounded corners of buttons</string>
     <string name="buttons_order">Date buttons after buttons for prayers</string>
     <string name="transparent_nav">Navigation arrow in text</string>
+    <string name="font_select">Select font</string>
 
     <string name="calendar_settings_title">Liturgical calendar</string>
     <string name="epiphany_sunday">Celebrate Epiphany on Sunday between Jan 2nd &amp; 8th</string>

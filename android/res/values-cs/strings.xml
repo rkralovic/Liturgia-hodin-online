@@ -40,6 +40,7 @@
     <string name="liturgical_readings">Mešní čtení</string>
     <string name="psalms_omissions">Vynechávky ze žalmů a kantik</string>
     <string name="italics_conditional">Některé texty (elize) kurzívou</string>
+    <string name="printed_edtition">Texty podle tištěného vydání</string>
 
     <string name="display_settings_title">Zobrazení</string>
     <string name="first_vespers_buttons">Tlačítko pro první nešpory pro neděle a slavnosti v den slavení</string>
@@ -51,6 +52,7 @@
     <string name="buttons_rounded_corners">Zaoblené rohy pro tlačítka</string>
     <string name="buttons_order">Navigační tlačítka pro datum pod tlačítky pro modlitby</string>
     <string name="transparent_nav">Navigační šipka v textu</string>
+    <string name="font_select">Select font</string>
 
     <string name="calendar_settings_title">Liturgický kalendář</string>
     <string name="epiphany_sunday">Zjevení Páně slavit v neděli mezi 2. a 8. lednem</string>

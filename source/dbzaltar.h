@@ -1469,10 +1469,11 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 #define CZ_HYMNUS_PREFIX    "CZ_"
 
 // postfixes for special cases (anchors)
-#define CZ_HYMNUS_POSTFIX   "_CZ"
-#define VELKONOCNA_PRIPONA  "VE"
-#define POSTNA_PRIPONA      "PO"
-#define CEZROCNA_PRIPONA    "CR"
+#define CZ_HYMNUS_POSTFIX       "_CZ"
+#define VELKONOCNA_PRIPONA      "VE"
+#define POSTNA_PRIPONA          "PO"
+#define CEZROCNA_PRIPONA        "CR"
+#define PRINTED_EDITION_POSTFIX "_PRINTED"
 
 // anchor identifiers
 #define ANCHOR_POPIS         "POPIS"
@@ -1679,6 +1680,7 @@ extern const char* text_NANEBOVSTUPENIE_PANA[POCET_JAZYKOV + 1];
 extern const char* text_VELKONOCNA_NEDELA[POCET_JAZYKOV + 1];
 extern const char* text_NEDELA_PANOVHO_ZMRTVYCHVSTANIA[POCET_JAZYKOV + 1];
 extern const char* text_NEDELA_VO_VELKONOCNEJ_OKTAVE[POCET_JAZYKOV + 1];
+extern const char* text_VELKONOCNY_PONDELOK[POCET_JAZYKOV + 1];
 extern const char* text_DEN_VO_VELKONOCNEJ_OKTAVE[POCET_JAZYKOV + 1];
 extern const char* text_NAJSVATEJSEJ_TROJICE[POCET_JAZYKOV + 1];
 extern const char* text_KRISTA_KRALA[POCET_JAZYKOV + 1];
@@ -2406,5 +2408,6 @@ extern const char* text_OKT_21_OSU[POCET_JAZYKOV + 1];
 extern const char* text_OKT_23_OSU[POCET_JAZYKOV + 1];
 
 extern short int pocet_multi(char *_anchor, unsigned long long type);
+extern short int is_printed_edition_text(char* _anchor, char* _paramname);
 
 #endif // __DBZALTAR_H_

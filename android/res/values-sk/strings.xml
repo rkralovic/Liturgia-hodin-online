@@ -40,6 +40,7 @@
     <string name="liturgical_readings">Čítania v omši</string>
     <string name="psalms_omissions">Vynechané pasáže zo žalmov a chválospevov</string>
     <string name="italics_conditional">Niektoré texty (elízie) kurzívou</string>
+    <string name="printed_edtition">Texty podľa tlačeného vydania</string>
 
     <string name="display_settings_title">Zobrazenie</string>
     <string name="first_vespers_buttons">Tlačidlo pre prvé vešpery pre nedele a slávnosti v deň slávenia</string>
@@ -51,6 +52,7 @@
     <string name="buttons_rounded_corners">Zaoblené rohy tlačidiel</string>
     <string name="buttons_order">Dátumové navigačné tlačidlá pod tlačidlami pre modlitby</string>
     <string name="transparent_nav">Navigačná šípka v texte</string>
+    <string name="font_select">Výber písma</string>
 
     <string name="calendar_settings_title">Liturgický kalendár</string>
     <string name="epiphany_sunday">Zjavenie Pána sláviť v nedeľu medzi 2. a 8. januárom</string>

@@ -160,6 +160,15 @@ public class UrlOptions {
     setBit("o0", 13, value);
   }
 
+  // of0pe
+  public boolean isPrintedEdition() {
+    return hasBit("o0", 14);
+  }
+
+  public void setPrintedEdition(boolean value) {
+    setBit("o0", 14, value);
+  }
+
   // of0zjvne
   public boolean isEpiphanySunday() {
     return hasBit("o0", 3);
@@ -275,6 +284,17 @@ public class UrlOptions {
 
   public void setEmphasizeLocalCalendar(boolean value) {
     setBit("o2", 15, value);
+  }
+
+  public String getFont() {
+    return params.get("f");
+  }
+
+  public void setFont(String font) {
+    params.remove("f");
+    if (font != null) {
+      params.put("f", font);
+    }
   }
 
   int getInt(String key) {

@@ -40,6 +40,7 @@
     <string name="liturgical_readings">Lectiones ad Missam</string>
     <string name="psalms_omissions">Partes omissas ex psalmis et canticis</string>
     <string name="italics_conditional">Elisiones in hymnis italice notantur</string>
+    <string name="printed_edtition">Textus iuxta editionem typis impressam</string>
 
     <string name="display_settings_title">Præsentatio</string>
     <string name="first_vespers_buttons">Ostende pulsabulam pro I Vesp. dom. et sollemn. die celebrationis</string>
@@ -51,6 +52,7 @@
     <string name="buttons_rounded_corners">Angulis rotundatis bullarum</string>
     <string name="buttons_order">Ostende pulsabulas navigatorias sub pulsabulis pro Horas</string>
     <string name="transparent_nav">Sagitta navigatoria in textu</string>
+    <string name="font_select">Select font</string>
 
     <string name="calendar_settings_title">Calendarium liturgicum</string>
     <string name="epiphany_sunday">Epiphaniam ad dominicam transferre</string>
