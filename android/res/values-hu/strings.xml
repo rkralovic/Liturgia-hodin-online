@@ -53,6 +53,7 @@
     <string name="buttons_order">Dátumválasztó gombok megjelenítése az imaóraválasztó gombok után</string>
     <string name="transparent_nav">Navigációs nyilak mutatása</string>
     <string name="font_select">Select font</string>
+    <string name="default_font">&lt;default&gt;</string>
 
     <string name="calendar_settings_title">Liturgikus naptár</string>
     <string name="epiphany_sunday">Urunk megjelenését (Vízkeresztet) vasárnap ünnepelni, január 2. és 8. között</string>

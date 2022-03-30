@@ -53,6 +53,7 @@
     <string name="buttons_order">Ostende pulsabulas navigatorias sub pulsabulis pro Horas</string>
     <string name="transparent_nav">Sagitta navigatoria in textu</string>
     <string name="font_select">Select font</string>
+    <string name="default_font">&lt;default&gt;</string>
 
     <string name="calendar_settings_title">Calendarium liturgicum</string>
     <string name="epiphany_sunday">Epiphaniam ad dominicam transferre</string>

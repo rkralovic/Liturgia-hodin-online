@@ -53,6 +53,7 @@
     <string name="buttons_order">Dagsetninga leiðsagnahnappar undir hnöppum fyrir bænir</string>
     <string name="transparent_nav">Dagsetninga leiðsagnahnappar undir hnöppum fyrir bænir</string>
     <string name="font_select">Select font</string>
+    <string name="default_font">&lt;default&gt;</string>
 
     <string name="calendar_settings_title">Helgisiðadagatal</string>
     <string name="epiphany_sunday">Birting Drottins haldin á sunnudegi á milli 2. og 8. janúar</string>

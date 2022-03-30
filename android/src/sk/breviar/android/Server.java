@@ -118,9 +118,6 @@ public class Server extends Thread {
 
     public void run() {
       Log.v("breviar", "Server: run started");
-      if (Fonts.system_fonts == null) {
-        Fonts.InitializeSystemFonts();
-      }
       try {
         Selector selector = Selector.open();
         listener.configureBlocking(false);
@@ -325,7 +322,7 @@ public class Server extends Thread {
           try {
             if (is_css) {
               client.getOutputStream().write(
-                  Fonts.system_fonts.GetCss().getBytes("UTF-8"));
+                  Fonts.GetFonts(ctx).GetCss().getBytes("UTF-8"));
             }
           } catch (java.io.IOException e) {
             Log.v("Breviar:", "IOException " + e.getMessage());

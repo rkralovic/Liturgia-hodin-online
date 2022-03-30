@@ -64,10 +64,22 @@ public class DisplaySettings extends SettingsActivity {
     // Font select
     {
       try {
+        UrlOptions opts = new UrlOptions(BreviarApp.getUrlOptions(getApplicationContext()));
+        String current_font = opts.getFont();
+
         Spinner spinner = ((Spinner)MenuItemCompat.getActionView(
             navigationView.getMenu().findItem(R.id.font_select)));
         FontSelectAdapter adapter = new FontSelectAdapter(this);
         spinner.setAdapter(adapter);
+        if (current_font != null) {
+          for (int i = 0; i < adapter.getCount(); ++i) {
+            FontInfo fi = adapter.getItem(i);
+            if (fi != null && fi.name != null && fi.name.equals(current_font)) {
+              spinner.setSelection(i);
+              break;
+            }
+          }
+        }
         spinner.setOnItemSelectedListener(adapter);
       } catch (java.lang.NullPointerException e) {
         Log.v("breviar", "Cannot setup navigation view!");
@@ -93,10 +105,11 @@ public class DisplaySettings extends SettingsActivity {
     public FontSelectAdapter(Context ctx) {
       super(ctx, android.R.layout.simple_spinner_item);
       setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-      add(new FontInfo("<predvolený>", null));
+      add(new FontInfo(ctx.getString(R.string.default_font), null));
 
-      for (Map.Entry<String, Fonts.FontMap.Variants> e : Fonts.GetSystemFonts().families.entrySet()) {
-        Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().getFile());
+      Fonts.ResetFonts();
+      for (Map.Entry<String, Fonts.FontMap.Variants> e : Fonts.GetFonts(ctx).families.entrySet()) {
+        Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().filename);
         add(new FontInfo(e.getKey(), t));
       }
 

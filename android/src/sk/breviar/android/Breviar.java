@@ -252,7 +252,6 @@ public class Breviar extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
       Log.v("breviar", "onCreate");
 
-      Fonts.InitializeSystemFonts();
       tts_receiver = new TtsStateReceiver(this);
       appEventId = BreviarApp.getEventId();
 
