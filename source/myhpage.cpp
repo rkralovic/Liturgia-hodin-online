@@ -296,24 +296,31 @@ void _hlavicka(char *title, FILE * expt, short int level, short int spec) {
 	Export_to_file(expt, "</head>\n\n");
 
 	Log("element <body>...\n");
-	Export_to_file(expt, "<body");
+        Export_to_file(expt, "<body");
 
-	if ((_global_font != FONT_CSS) || (_global_font_size != FONT_SIZE_CSS) || (_global_style_margin != 0) || (_global_font_size_pt != 0)) {
-		Export_to_file(expt, " style=\"");
-		if (_global_font != FONT_CSS && strlen(_global_css_font_family) > 0) {
-			Export_to_file(expt, "font-family: %s; ", _global_css_font_family);
-		}
-		if ((_global_font_size_pt > 0) && (_global_font_size_pt != FONT_SIZE_PT_DEFAULT)) {
-			Export_to_file(expt, "font-size: %dpt; ", _global_font_size_pt);
-		}
-		else if (_global_font_size != FONT_SIZE_CSS) {
-			Export_to_file(expt, "font-size: %s; ", _global_css_font_size);
-		}// else nothing for font-size
-		if (_global_style_margin != 0) {
-			Export_to_file(expt, "margin-left: %dpx; margin-right: %dpx; ", _global_style_margin, _global_style_margin);
-		}
-		Export_to_file(expt, "\"");
-	}
+        {
+                bool has_font_family = _global_font != FONT_CSS && strlen(_global_css_font_family) > 0;
+                bool has_font_size = (_global_font_size_pt > 0) && (_global_font_size_pt != FONT_SIZE_PT_DEFAULT);
+                bool has_font_size_global = _global_font_size != FONT_SIZE_CSS;
+                bool has_font_margin = _global_style_margin != 0;
+
+                if (has_font_family || has_font_size || has_font_size_global || has_font_margin) {
+                        Export_to_file(expt, " style=\"");
+                        if (has_font_family) {
+                                Export_to_file(expt, "font-family: %s; ", _global_css_font_family);
+                        }
+                        if (has_font_size) {
+                                Export_to_file(expt, "font-size: %dpt; ", _global_font_size_pt);
+                        }
+                        else if (has_font_size_global) {
+                                Export_to_file(expt, "font-size: %s; ", _global_css_font_size);
+                        }// else nothing for font-size
+                        if (has_font_margin) {
+                                Export_to_file(expt, "margin-left: %dpx; margin-right: %dpx; ", _global_style_margin, _global_style_margin);
+                        }
+                        Export_to_file(expt, "\"");
+                }
+        }
 
 	// kvôli špeciálnemu "zoznam.htm"
 	if (spec == 1) {

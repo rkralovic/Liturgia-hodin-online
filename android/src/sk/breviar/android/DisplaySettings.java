@@ -74,7 +74,7 @@ public class DisplaySettings extends SettingsActivity {
         if (current_font != null) {
           for (int i = 0; i < adapter.getCount(); ++i) {
             FontInfo fi = adapter.getItem(i);
-            if (fi != null && fi.name != null && fi.name.equals(current_font)) {
+            if (fi != null && fi.family_name != null && fi.family_name.equals(current_font)) {
               spinner.setSelection(i);
               break;
             }
@@ -88,12 +88,14 @@ public class DisplaySettings extends SettingsActivity {
   }
 
   static class FontInfo {
-    public FontInfo(String name_, Typeface typeface_) {
+    public FontInfo(String name_, String family_name_, Typeface typeface_) {
       name = name_;
+      family_name = family_name_;
       typeface = typeface_;
     }
 
     String name;
+    String family_name;
     Typeface typeface;
 
     public String toString() {
@@ -105,12 +107,14 @@ public class DisplaySettings extends SettingsActivity {
     public FontSelectAdapter(Context ctx) {
       super(ctx, android.R.layout.simple_spinner_item);
       setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-      add(new FontInfo(ctx.getString(R.string.default_font), null));
+      add(new FontInfo(ctx.getString(R.string.default_font), null, null));
+      add(new FontInfo(ctx.getString(R.string.default_serif_font), "serif", Typeface.SERIF));
+      add(new FontInfo(ctx.getString(R.string.default_sans_serif_font), "sans-serif", Typeface.SANS_SERIF));
 
       Fonts.ResetFonts();
       for (Map.Entry<String, Fonts.FontMap.Variants> e : Fonts.GetFonts(ctx).families.entrySet()) {
         Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().filename);
-        add(new FontInfo(e.getKey(), t));
+        add(new FontInfo(e.getKey(), e.getKey(), t));
       }
 
       // todo: set current selection
@@ -122,9 +126,7 @@ public class DisplaySettings extends SettingsActivity {
 
       FontInfo fi = getItem(position);
       if (fi == null) return;
-
       if (fi.typeface == null) return;
-
       ((TextView)view).setTypeface(fi.typeface);
     }
 
@@ -148,12 +150,12 @@ public class DisplaySettings extends SettingsActivity {
       if (fi == null) return;
 
       UrlOptions opts = new UrlOptions(BreviarApp.getUrlOptions(getContext().getApplicationContext()));
-      if (fi.typeface == null || fi.name == null) {
+      if (fi.family_name == null) {
         Log.v("breviar", "Removing font selection");
         opts.setFont("");
       } else {
-        Log.v("breviar", "Setting font to " + fi.name);
-        opts.setFont(fi.name);
+        Log.v("breviar", "Setting font to " + fi.family_name);
+        opts.setFont(fi.family_name);
       }
       BreviarApp.setUrlOptions(getContext().getApplicationContext(), opts.build(true));
     }

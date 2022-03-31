@@ -198,20 +198,5 @@ public class Fonts {
     } catch (java.lang.Exception e) {
       Log.v("breviar", "io exception: " + e.getMessage());
     }
-
-    for(Font font : SystemFonts.getAvailableFonts()) {
-      if (!font.getLocaleList().isEmpty()) {
-        // ignore non-latin fonts.
-        continue;
-      }
-      java.io.File file = font.getFile();
-      if (file == null) {
-        Log.v("breviar", "font without file: " + font.toString());
-        continue;
-      }
-      fonts.Insert(new FontMap.Variant(
-            file.getAbsolutePath(),
-            font.getStyle().getWeight(), font.getStyle().getSlant()));
-    }
   }
 }

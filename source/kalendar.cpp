@@ -3932,13 +3932,16 @@ short int sviatky_svatych_02_februar(short int den, short int poradie_svaty, _st
 			_global_svaty(1).kalendar = KALENDAR_VSEOBECNY;
 		}// SK only
 
-		if ((_global_jazyk == JAZYK_HU) || (_global_jazyk == JAZYK_IS)) {
+		if ((_global_jazyk == JAZYK_HU) || (_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_IS)) {
 			if (poradie_svaty == 1) {
 				// definovanie parametrov pre modlitbu
 				if (query_type != PRM_DETAILY)
 					set_spolocna_cast(sc, poradie_svaty);
 
 				modlitba = MODL_RANNE_CHVALY;
+				if (_global_jazyk == JAZYK_IS) {
+					_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+				}
 				_vlastna_cast_benediktus;
 				_vlastna_cast_modlitba;
 
