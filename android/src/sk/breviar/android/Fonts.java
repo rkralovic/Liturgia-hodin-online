@@ -28,14 +28,17 @@ public class Fonts {
     }
 
     public static class Variants {
-      public Variants() {
+      public Variants(String family_name_) {
         variants = new Vector<Variant>();
+        family_name = family_name_;
         display_font = null;
+        css = null;
       }
 
       public void Add(Variant variant) {
         variants.add(variant);
         display_font = null;
+        css = null;
       }
 
       public Variant GetDisplayFont() {
@@ -54,13 +57,42 @@ public class Fonts {
         return display_font;
       }
 
+      public String GetCss() {
+        if (css == null) {
+          StringBuilder out = new StringBuilder();
+          for (Variant v : variants) {
+            out.append("@font-face {\n");
+
+            out.append("  font-family: \"");
+            out.append(family_name);
+            out.append("\";\n");
+            out.append("  src: url(\"/file");
+            // Todo: Escape unexpected characters
+            out.append(v.filename);
+            out.append("\");\n");
+            if (v.slant > 0) {
+              out.append("  font-style: italic;\n");
+            } else {
+              out.append("  font-style: normal;\n");
+            }
+            out.append("  font-weight: ");
+            out.append(v.weight);
+            out.append(";\n");
+
+            out.append("}\n");
+          }
+          css = out.toString();
+        }
+        return css;
+      }
+
+      String family_name;
       Vector<Variant> variants;
       Variant display_font;
+      String css;
     }
 
     public TreeMap<String, Variants> families;
-
-    private String cached_css = null;
 
     public FontMap() {
       families = new TreeMap<String, Variants>();
@@ -78,42 +110,9 @@ public class Fonts {
     public void Insert(Variant font) {
       String family = parseFamily(font.filename);
       if (!families.containsKey(family)) {
-        families.put(family, new Variants());
+        families.put(family, new Variants(family));
       }
       families.get(family).Add(font);
-      // Invalidate cache
-      cached_css = null;
-    }
-
-    public String GetCss() {
-      if (cached_css == null) {
-        StringBuilder out = new StringBuilder();
-        for (Map.Entry<String, Variants> e : families.entrySet()) {
-          for (Variant v : e.getValue().variants) {
-            out.append("@font-face {\n");
-
-            out.append("  font-family: \"");
-            out.append(e.getKey());
-            out.append("\";\n");
-            out.append("  src: url(\"/file");
-            // Todo: Escape unexpected characters
-            out.append(v.filename);
-            out.append("\");\n");
-            if (v.slant > 0) {
-              out.append("  font-style: italic;\n");
-            } else {
-              out.append("  font-style: normal;\n");
-            }
-            out.append("  font-weight: ");
-            out.append(v.weight);
-            out.append(";\n");
-
-            out.append("}\n");
-          }
-        }
-        cached_css = out.toString();
-      }
-      return cached_css;
     }
 
     public void DebugDump() {
@@ -141,7 +140,6 @@ public class Fonts {
       AddSystemFonts();
       // Debug:
       fonts.DebugDump();
-      Log.v("breviar", "font css: " + fonts.GetCss());
     }
     return fonts;
   }

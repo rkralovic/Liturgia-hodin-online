@@ -322,7 +322,7 @@ public class Server extends Thread {
           try {
             if (is_css) {
               client.getOutputStream().write(
-                  Fonts.GetFonts(ctx).GetCss().getBytes("UTF-8"));
+                  BreviarApp.getFontsCss(ctx).getBytes("UTF-8"));
             }
           } catch (java.io.IOException e) {
             Log.v("Breviar:", "IOException " + e.getMessage());

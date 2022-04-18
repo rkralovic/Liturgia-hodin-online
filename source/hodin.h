@@ -294,7 +294,7 @@ const char* nazov_obdobia_jazyk[POCET_OBDOBI + 1][POCET_JAZYKOV + 1] =
 	{ "Vianočné obdobie", "doba vánoční", "", "tempus Nativitatis", "", "doba vánoční", "karácsonyi idő", "ru_text", "перыяд Божага Нараджэння", "Jólatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Cezročné obdobie", "mezidobí", "", "tempus per annum", "", "mezidobí", "évközi idő", "ru_text", "звычайны перыяд", "Innan ársins", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Pôstne obdobie", "doba postní", "", "tempus Quadragesimæ", "", "doba postní", "nagyböjti idő", "ru_text", "перыяд Вялікага посту", "Föstutíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
-	{ "Veľký týždeň", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "nagyhét", "ru_text", "Вялікі тыдзень", "Dymbilvika", /* STRING_1_FOR_NEW_LANGUAGE */ },
+	{ "Svätý týždeň", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "nagyhét", "ru_text", "Вялікі тыдзень", "Dymbilvika", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné trojdnie", "Velikonoční triduum", "", "Sacrum Triduum paschale", "", "Velikonoční triduum", "szent három nap", "ru_text", "Святы Пасхальны Трыдуум", "Heilagir bænadagar", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočná oktáva", "velikonoční oktáv", "", "octava Paschæ", "", "velikonoční oktáv", "húsvét nyolcada", "ru_text", "актава Пасхі", "Páskaáttund", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné obdobie", "doba velikonoční", "", "tempus paschale", "", "doba velikonoční", "húsvéti idő", "ru_text", "Велікодны перыяд", "Páskatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
@@ -313,7 +313,7 @@ const char* nazov_obdobia_ext_jazyk[POCET_OBDOBI + 1][POCET_JAZYKOV + 1] =
 	{ "Vianočné obdobie II (po Zjavení Pána)", "doba vánoční II", "", "tempus Nativitatis II", "", "doba vánoční II", "karácsonyi idő II (Urunk megjelenése után)", "ru_text", "перыяд Божага Нараджэння II", "Jólatíð II (eftir Birtingu Drottins)", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Cezročné obdobie", "mezidobí", "", "tempus per annum", "", "mezidobí", "évközi idő", "ru_text", "звычайны перыяд", "Innan ársins", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Pôstne obdobie I (do Kvetnej nedele)", "doba postní I", "", "tempus Quadragesimæ I", "", "doba postní I", "nagyböjti idő I (Virágvasárnapig)", "ru_text", "перыяд Вялікага посту", "Föstutíð I (til Pálmasunnudags)", /* STRING_1_FOR_NEW_LANGUAGE */ },
-	{ "Pôstne obdobie II (veľký týždeň)", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "nagyböjti idő II (Nagyhét)", "ru_text", "Вялікі тыдзень", "Föstutíð II (Dymbilvika)", /* STRING_1_FOR_NEW_LANGUAGE */ },
+	{ "Pôstne obdobie II (Svätý týždeň)", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "nagyböjti idő II (Nagyhét)", "ru_text", "Вялікі тыдзень", "Föstutíð II (Dymbilvika)", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné trojdnie", "Velikonoční triduum", "", "Sacrum Triduum paschale", "", "Velikonoční triduum", "szent három nap", "ru_text", "Святы Пасхальны Трыдуум", "Heilagir bænadagar", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočná oktáva", "velikonoční oktáv", "", "octava Paschæ", "", "velikonoční oktáv", "húsvét nyolcada", "ru_text", "актава Пасхі", "Páskaáttund", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné obdobie I (do Nanebovstúpenia Pána)", "doba velikonoční I", "", "tempus paschale I", "", "doba velikonoční I", "húsvéti idő I (Urunk mennybemeneteléig)", "ru_text", "Велікодны перыяд I", "Páskatíð I (til Uppstigningar Drottins)", /* STRING_1_FOR_NEW_LANGUAGE */ },
@@ -332,7 +332,7 @@ const char* nazov_obdobia_short_jazyk[POCET_OBDOBI + 1][POCET_JAZYKOV + 1] =
 	{ "Vianočné obd. II", "doba vánoční II", "", "tempus Nativitatis II", "", "doba vánoční II", "karácsonyi idő II", "ru_text", "перыяд Божага Нараджэння II", "Jólatíð II (eftir Birtingu Drottins)", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Cezročné obd.", "mezidobí", "", "tempus per annum", "", "mezidobí", "évközi idő", "ru_text", "звычайны перыяд", "Innan ársins", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Pôstne obd. I", "doba postní I", "", "tempus Quadragesimæ I", "", "doba postní I", "nagyböjti idő I", "ru_text", "перыяд Вялікага посту", "Föstutíð I", /* STRING_1_FOR_NEW_LANGUAGE */ },
-	{ "Veľký týždeň", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "Nagyhét", "ru_text", "Вялікі тыдзень", "Dymbilvikaext", /* STRING_1_FOR_NEW_LANGUAGE */ },
+	{ "Svätý týždeň", "Svatý týden", "", "Hebdomada sancta", "", "Svatý týden", "Nagyhét", "ru_text", "Вялікі тыдзень", "Dymbilvikaext", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné trojdnie", "Velikonoční triduum", "", "Sacrum Triduum paschale", "", "Velikonoční triduum", "szent három nap", "ru_text", "Святы Пасхальны Трыдуум", "Heilagir bænadagar", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočná oktáva", "velikonoční oktáv", "", "octava Paschæ", "", "velikonoční oktáv", "húsvét nyolcada", "ru_text", "актава Пасхі", "Páskaáttund", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Veľkonočné obd. I", "doba velikonoční I", "", "tempus paschale I", "", "doba velikonoční I", "húsvéti idő I", "ru_text", "Велікодны перыяд I", "Páskatíð I (til Uppstigningar Drottins)", /* STRING_1_FOR_NEW_LANGUAGE */ },
@@ -346,7 +346,7 @@ const char* nazov_obdobia_[POCET_OBDOBI + 1] = // debuggovacie - preto netreba p
 {
 	"adventné obdobie I", "adventné obdobie II", "oktáva Narodenia Pána",
 	"vianočné obdobie I", "vianočné obdobie II", "cezročné obdobie",
-	"pôstne obdobie I", "pôstne obdobie II (Veľký týždeň)",
+	"pôstne obdobie I", "pôstne obdobie II (Svätý týždeň)",
 	"veľkonočné trojdnie", "veľkonočná oktáva", "veľkonočné obdobie I", "veľkonočné obdobie II",
 };
 
@@ -1748,6 +1748,20 @@ const char* html_text_ritus[POCET_JAZYKOV + 1] = {
 	"ru_text",
 	"by_text",
 	"Siður",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char* html_text_android_native_menu[POCET_JAZYKOV + 1] = {
+	"Pre zmenu nastavení použite menu aplikácie. Do menu sa dostanete ťuknutím na ikonu troch vodorovných čiar umiestnenú vľavo na hornej lište aplikácie (tzv. „hamburger“ ikona ☰). Ak máte aktivovaný režim „na celú obrazovku“ (fullscreen mode), stačí ho deaktivovať gestom dvojitého ťuknutia – tak zobrazíte hornú lištu. Menu sa dá štandardne vysunúť aj gestom posunutia od ľavého okraja obrazovky k stredu (vodorovný posun). Od Android 10 je potrebné pri ľavom okraji obrazovky chvíľu podržať a až následne posunúť (ináč sa aktivuje akcia „späť“, čo zväčša vedie k zatvoreniu appky a návratu na hlavnú obrazovku zariadenia).",
+	"Pro nastavení použijte menu aplikace. Do menu se dostanete klepnutím na ikonu tří vodorovných čar umístěnou vlevo na horní liště aplikace (tzv. „hamburger“ ikona ☰). Pokud máte aktivovaný režim „na celou obrazovku“ (fullscreen mode), stačí jej deaktivovat gestem dvojitého ťuknutí – tak zobrazíte horní lištu. Menu lze standardně vysunout i gestem posunutí od levého okraje obrazovky ke středu (vodorovný posun). Od Android 10 je třeba při levém okraji obrazovky chvíli podržet a až následně posunout (jinak se aktivuje akce „zpět“, což většinou vede k zavření appky a návratu na hlavní obrazovku zařízení).",
+	"Use app native menu for settings. You can open the menu by tapping the icon of three horizontal lines located on the left of the top bar of the application (so-called “hamburger” icon ☰). If you have activated the fullscreen mode just deactivate it with a double-tap gesture - this will display the top bar. By default, the menu can also be extended by swiping from the left edge of the screen to the center (horizontal swipte). From Android 10, you need to hold the left edge of the screen for a moment and then move (otherwise the “back” action is activated, which usually leads to closing the app and returning to the main device screen).",
+	"Utere app indigena menu pro occasus. Menu aperire potes, iconem trium linearum horizontalium in sinistro summo vectis applicationis positas (ut vocant «hamburger» iconem ☰). Si modum fullscreen modo reduxisti, illum cum duplici gestu deprime - hoc vectem summo ostendet. Defalta, menu etiam trahi potest ab ora sinistra screen ad centrum (swipte horizontalis). Ex Android 10, sinistram partem screen tenere debes ad momentum et tunc movere (aliter actio «terga» excitatur, quæ solet claudere ad app claudendum et ad principale tegumentum rediens).",
+	"",
+	"Pro nastavení použijte menu aplikace. Do menu se dostanete klepnutím na ikonu tří vodorovných čar umístěnou vlevo na horní liště aplikace (tzv. „hamburger“ ikona ☰). Pokud máte aktivovaný režim „na celou obrazovku“ (fullscreen mode), stačí jej deaktivovat gestem dvojitého ťuknutí – tak zobrazíte horní lištu. Menu lze standardně vysunout i gestem posunutí od levého okraje obrazovky ke středu (vodorovný posun). Od Android 10 je třeba při levém okraji obrazovky chvíli podržet a až následně posunout (jinak se aktivuje akce „zpět“, což většinou vede k zavření appky a návratu na hlavní obrazovku zařízení).",
+	"A beállításokhoz használja az alkalmazás menüt. A menüt az alkalmazás felső sávjának bal oldalán található három vízszintes vonal ikonjának megérintésével érheti el (ún. „hamburger” ikon ☰). Ha be van kapcsolva a „teljes képernyős” mód, egyszerűen kapcsolja ki egy dupla érintéssel – ekkor megjelenik a felső sáv. Alapértelmezés szerint a menü a képernyő bal szélétől a közepéig görgetéssel is bővíthető (vízszintes görgetés). Android 10-től egy pillanatig meg kell tartani a képernyő bal szélét, majd mozogni (ellenkező esetben a „vissza” művelet aktiválódik, ami általában az alkalmazás bezárásához és az eszköz főképernyőjére való visszatéréshez vezet).",
+	"",
+	"",
+	"Notaðu forritavalmyndina fyrir stillingar. Þú kemst í valmyndina með því að smella á táknið með þremur láréttum línum sem staðsettar eru vinstra megin á efstu stikunni í forritinu (svokallað „hamborgara“ tákn ☰). Ef þú ert með „fullan skjá“ stillingu virkan, slökktu bara á henni með tvisvar snertibending - þetta mun birta efstu stikuna. Sjálfgefið er að einnig er hægt að stækka valmyndina með því að fletta frá vinstri brún skjásins að miðju (lárétt flun). Frá Android 10 þarftu að halda í augnablik á vinstri brún skjásins og hreyfa þig svo (annars er „til baka“ aðgerðin virkjuð, sem venjulega leiðir til þess að appinu er lokað og farið aftur á aðalskjá tækisins).",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 
@@ -4507,7 +4521,7 @@ const char* html_text_opt_5_PopolStrPsalm_3PI[POCET_JAZYKOV + 1] =
 
 const char* html_text_opt_5_ZelStvPsalm_2STV[POCET_JAZYKOV + 1] =
 {
-	"psalmódia pre Zelený štvrtok zo štvrtka 2. týždňa žaltára",
+	"psalmódia pre Štvrtok Svätého týždňa (Zelený štvrtok) zo štvrtka 2. týždňa žaltára",
 	"žalmy pro Zelený čtvrtek ze čtvrtka 2. týdne žaltáře",
 	"for Maundy Thursday take psalmody from Thursday, 2th week of Psalter",
 	"psalmodia pro Feria V Hebdomadæ sanctæ de Feria V hebdomadæ II Psaltarii",
@@ -4522,7 +4536,7 @@ const char* html_text_opt_5_ZelStvPsalm_2STV[POCET_JAZYKOV + 1] =
 
 const char* html_text_opt_5_ZelStvPsalm_3PI[POCET_JAZYKOV + 1] =
 {
-	"psalmódia pre Zelený štvrtok z piatka 3. týždňa žaltára",
+	"psalmódia pre Štvrtok Svätého týždňa (Zelený štvrtok) z piatka 3. týždňa žaltára",
 	"žalmy pro Zelený čtvrtek z pátku 3. týdne žaltáře",
 	"for Maundy Thursday take psalmody from Friday, 3rd week of Psalter",
 	"psalmodia pro Feria V Hebdomadæ sanctæ de Feria IV hebdomadæ III Psaltarii",
@@ -9111,7 +9125,7 @@ const char* text_VELKONOCNA_NEDELA[POCET_JAZYKOV + 1] =
 };
 const char* text_NEDELA_PANOVHO_ZMRTVYCHVSTANIA[POCET_JAZYKOV + 1] = // 2012-12-13: XML nepodporuje &mdash; -- použitý číselný kód &#8212; http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
 {
-	HTML_LINE_BREAK " &#8212; Nedeľa Pánovho zmŕtvychvstania",
+	HTML_LINE_BREAK "Pánovho zmŕtvychvstania",
 	"",
 	"",
 	HTML_LINE_BREAK "In Resurrectione Domini",
@@ -9153,7 +9167,7 @@ const char* text_NEDELA_VO_VELKONOCNEJ_OKTAVE_SUBSTRING[POCET_JAZYKOV + 1] =
 };
 const char* text_DEN_VO_VELKONOCNEJ_OKTAVE[POCET_JAZYKOV + 1] =
 {
-	"Veľkonočn%s %s",
+	"%s vo Veľkonočnej oktáve", // kedysi: "Veľkonočn%s %s",
 	"%s velikonoční",
 	"",
 	"%s infra octavam Paschæ",
@@ -16718,7 +16732,7 @@ const char* text_VELKA_STREDA[POCET_JAZYKOV + 1] =
 };
 const char* text_ZELENY_STVRTOK[POCET_JAZYKOV + 1] =
 {
-	"Zelený (veľký) štvrtok – Pamiatka Pánovej večere",
+	"Štvrtok Svätého týždňa (Zelený štvrtok) – Pamiatka Pánovej večere",
 	"Zelený čtvrtek",
 	"Maundy Thursday",
 	"",
@@ -16732,7 +16746,7 @@ const char* text_ZELENY_STVRTOK[POCET_JAZYKOV + 1] =
 };
 const char* text_VELKY_PIATOK[POCET_JAZYKOV + 1] =
 {
-	"Veľký piatok",
+	"Piatok utrpenia Pána (Veľký piatok)",
 	"Velký pátek",
 	"Good Friday",
 	"Feria VI in Passione Domini",
@@ -16746,7 +16760,7 @@ const char* text_VELKY_PIATOK[POCET_JAZYKOV + 1] =
 };
 const char* text_BIELA_SOBOTA[POCET_JAZYKOV + 1] =
 {
-	"Biela (veľká) sobota",
+	"Svätá sobota (Biela sobota)",
 	"Bílá sobota",
 	"Holy Saturday",
 	"Sabbato sancto",
@@ -16760,7 +16774,7 @@ const char* text_BIELA_SOBOTA[POCET_JAZYKOV + 1] =
 };
 const char* text_KVETNA_NEDELA[POCET_JAZYKOV + 1] =
 {
-	"Kvetná nedeľa",
+	"Palmová (Kvetná) nedeľa",
 	"Květná neděle",
 	"Palm Sunday of the Passion of the Lord",
 	"Dominica in Palmis " HTML_LINE_BREAK "De Passione Domini",

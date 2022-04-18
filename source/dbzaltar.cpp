@@ -1359,7 +1359,7 @@ void set_hymnus_kompletorium_obd(short int den, short int tyzzal, short int modl
 			|| (litobd == OBD_VIANOCNE_II)
 			|| (litobd == OBD_POSTNE_II_VELKY_TYZDEN)
 			|| (litobd == OBD_VELKONOCNE_TROJDNIE)
-			) { // predpísaný hymnus "Kriste, ty svetlo a náš deň"; 2008-12-20: aj pre vian. II. a veľký týždeň
+			) { // predpísaný hymnus "Kriste, ty svetlo a náš deň"; 2008-12-20: aj pre vian. II. a Svätý týždeň
 			Log("set_hymnus_kompletorium_obd(): predpísaný hymnus B...\n");
 			ktory = 1;
 		}
@@ -3252,7 +3252,7 @@ void _set_zalmy_velkonocna_nedela(short int modlitba) {
 		_set_zalmy_1nedele_v();
 	}
 	// aj na prvé vešpery druhej veľkonočnej nedele sú žalmy z (druhých) vešpier veľkonočnej nedele; (prvá) veľkonočná nedeľa nemá prvé vešpery
-	// (biela sobota má svoje vešpery); pôvodne tu bolo: _set_zalmy_1nedele_1v();
+	// (Svätá sobota (Biela sobota) má svoje vešpery); pôvodne tu bolo: _set_zalmy_1nedele_1v();
 	else if (modlitba == MODL_PRVE_VESPERY) {
 		_set_zalmy_1nedele_v_pre_1v();
 	}
@@ -7821,12 +7821,12 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 	set_LOG_litobd;\
 }
 
-			// tu v skutočnosti začína POSTNE OBDOBIE II. (Veľký týždeň)
+			// tu v skutočnosti začína POSTNE OBDOBIE II. (Svätý týždeň)
 
 			// kompletórium vo Veľkom týždni
 			modlitba = MODL_KOMPLETORIUM;
 
-			// Zelený štvrtok má modlitbu a krátky responz z nedeľného 2. kompletória (ako na slávnosti)
+			// Štvrtok Svätého týždňa (Zelený štvrtok) má modlitbu a krátky responz z nedeľného 2. kompletória (ako na slávnosti)
 			if(den == DEN_STVRTOK){
 				_vtroj_popis;
 				_set_kompletorium_slavnost(modlitba);
@@ -7869,7 +7869,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			_post2_kresponz;
 			_post2_modlitba;
 
-			// špeciálne pre Zelený štvrtok
+			// špeciálne pre Štvrtok Svätého týždňa (Zelený štvrtok)
 			if (_global_den.denvr == ZELENY_STVRTOK) {
 
 				Log("liturgicke_obdobie(): ZELENY_STVRTOK\n...");
@@ -7904,7 +7904,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			_post2_modlitba;
 
 			if(den == DEN_NEDELA){
-				// Kvetná nedeľa
+				// Palmová (Kvetná) nedeľa
 
 				// prvé vešpery
 				modlitba = MODL_PRVE_VESPERY;
@@ -7940,7 +7940,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_vtroj_popis;
 
 				// kompletórium je z nedele po druhých vešperách -- ako na slávnosti; nastavenie je vyššie
-			}// nie nedeľa, ale zelený štvrtok
+			}// nie nedeľa, ale Štvrtok Svätého týždňa (Zelený štvrtok)
 			break;
 // switch(litobd), case OBD_POSTNE_II -- end --------------------------------------------------
 
@@ -8071,19 +8071,19 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			// kompletórium vo Veľkonočnom trojdní: až na krátky responz je z nedele po druhých vešperách
 			modlitba = MODL_KOMPLETORIUM;
 
-			// opravené, aby veľký piatok mal správnu modlitbu
+			// opravené, aby Piatok utrpenia Pána (Veľký piatok) mal správnu modlitbu
 			if(den == DEN_PIATOK){
 				_set_kompletorium_slavnost(modlitba);
 			}
 			else{
-				// aj pre Bielu sobotu je predpísané nedeľné kompletórium po druhých vešperách
+				// aj pre Svätú sobotu (Bielu sobotu) je predpísané nedeľné kompletórium po druhých vešperách
 				_set_kompletorium_nedela(modlitba);
 			}
 
 			set_kresponz_kompletorium_obd(den, modlitba, litobd);
 
 			if ((den != DEN_PIATOK) && (den != DEN_SOBOTA)) {
-				// pre veľký piatok aj bielu sobotu je hymnus ako vo veľkom týždni, teda "Kriste, ty svetlo a náš deň"
+				// pre Piatok utrpenia Pána (Veľký piatok) aj Svätú sobotu (Bielu sobotu) je hymnus ako vo veľkom týždni, teda "Kriste, ty svetlo a náš deň"
 				set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd);
 			}
 
@@ -8189,7 +8189,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				modlitba = MODL_KOMPLETORIUM;
 				// popis ku kompletóriu bielej soboty
 				_vtroj_popis;
-			}// nie nedeľa, ale biela sobota
+			}// nie nedeľa, ale Svätá sobota (Biela sobota)
 			else if (den == DEN_PIATOK) {
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_velky_piatok(modlitba);
@@ -8218,10 +8218,10 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_set_zalmy_velky_piatok(modlitba);
 				// popis k vešperám veľkého piatka
 				_vtroj_popis;
-				/* do budúcnosti: ak by mali jednotlivé modlitby svoju farbu, tak vigília má mať bielu; bežná biela sobota: fialová
+				/* do budúcnosti: ak by mali jednotlivé modlitby svoju farbu, tak vigília má mať bielu; bežná Svätá sobota (Biela sobota): fialová
 				_global_den.farba = LIT_FARBA_BIELA;
 				*/
-			}// nie nedeľa, ani sobota, ale veľký piatok
+			}// nie nedeľa, ani sobota, ale Piatok utrpenia Pána (Veľký piatok)
 			break;
 // switch(litobd), case OBD_VELKONOCNE_TROJDNIE -- end ----------------------------------------
 

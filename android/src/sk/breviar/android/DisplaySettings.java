@@ -88,15 +88,17 @@ public class DisplaySettings extends SettingsActivity {
   }
 
   static class FontInfo {
-    public FontInfo(String name_, String family_name_, Typeface typeface_) {
+    public FontInfo(String name_, String family_name_, Typeface typeface_, Fonts.FontMap.Variants variants_) {
       name = name_;
       family_name = family_name_;
       typeface = typeface_;
+      variants = variants_;
     }
 
     String name;
     String family_name;
     Typeface typeface;
+    Fonts.FontMap.Variants variants;
 
     public String toString() {
       return name;
@@ -107,14 +109,14 @@ public class DisplaySettings extends SettingsActivity {
     public FontSelectAdapter(Context ctx) {
       super(ctx, android.R.layout.simple_spinner_item);
       setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-      add(new FontInfo(ctx.getString(R.string.default_font), null, null));
-      add(new FontInfo(ctx.getString(R.string.default_serif_font), "serif", Typeface.SERIF));
-      add(new FontInfo(ctx.getString(R.string.default_sans_serif_font), "sans-serif", Typeface.SANS_SERIF));
+      add(new FontInfo(ctx.getString(R.string.default_font), null, null, null));
+      add(new FontInfo(ctx.getString(R.string.default_serif_font), "serif", Typeface.SERIF, null));
+      add(new FontInfo(ctx.getString(R.string.default_sans_serif_font), "sans-serif", Typeface.SANS_SERIF, null));
 
       Fonts.ResetFonts();
       for (Map.Entry<String, Fonts.FontMap.Variants> e : Fonts.GetFonts(ctx).families.entrySet()) {
         Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().filename);
-        add(new FontInfo(e.getKey(), e.getKey(), t));
+        add(new FontInfo(e.getKey(), e.getKey(), t, e.getValue()));
       }
 
       // todo: set current selection
@@ -157,7 +159,15 @@ public class DisplaySettings extends SettingsActivity {
         Log.v("breviar", "Setting font to " + fi.family_name);
         opts.setFont(fi.family_name);
       }
-      BreviarApp.setUrlOptions(getContext().getApplicationContext(), opts.build(true));
+      Context ctx = getContext().getApplicationContext();
+      BreviarApp.setUrlOptions(ctx, opts.build(true));
+      String css;
+      if (fi.variants == null) {
+        css = "";
+      } else {
+        css = fi.variants.GetCss();
+      }
+      BreviarApp.setFontsCss(ctx, css);
     }
 
     @Override

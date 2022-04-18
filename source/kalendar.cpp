@@ -4986,7 +4986,7 @@ short int sviatky_svatych_03_marec_04_april(short int den, short int mesiac, sho
 
 	// kontrola: Veľká noc padne na 22.-26. marca; vtedy je 19. marca vo veľkom týždni, a preto sa prekladá na sobotu pred Kvetnou nedeľou
 	if ((_global_den.denvt == DEN_SOBOTA) && (_global_den.denvr == _global_r._VELKONOCNA_NEDELA.denvr - 8) && (_global_r._VELKONOCNA_NEDELA.mesiac == MES_MAR + 1) && (_global_r._VELKONOCNA_NEDELA.den >= 22) && (_global_r._VELKONOCNA_NEDELA.den <= 26)) {
-		// t.j. slávnosť sv. Jozefa sa prekladá pred veľký týždeň, na sobotu pred Kvetnou nedeľou, ako to bolo v r. 2008
+		// t.j. slávnosť sv. Jozefa sa prekladá pred Svätý týždeň, na sobotu pred Kvetnou nedeľou, ako to bolo v r. 2008
 		sprintf(_anchor_head, "%02d%s_", 19, nazov_MES[mesiac - 1]); // MES_MAR
 		Log("  _anchor_head == %s\n", _anchor_head);
 		Log("(ako rok 2008, sobota 15. marca) jumping to label_19_MAR...\n");
