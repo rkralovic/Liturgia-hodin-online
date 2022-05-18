@@ -6860,7 +6860,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 
 	Log("2:_local_den.meno == %s\n", _local_den.meno);
 
-	// skontrolujeme ešte pondelok -- štvrtok vo veľkom týždni (nastavenie názvu aj pre export na viac dní)
+	// skontrolujeme ešte pondelok -- štvrtok svätého týždňa (nastavenie názvu aj pre export na viac dní)
 	if (_local_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) {
 		// aj kompletórium pre zelený štvrtok má svoj vlastný názov, tak isto ako doteraz vešpery
 		if (!((_local_den.denvt == DEN_NEDELA) || ((_local_den.denvt == DEN_STVRTOK) && ((typ != EXPORT_DNA_VIAC_DNI) && ((modlitba == MODL_VESPERY) || (modlitba == MODL_KOMPLETORIUM)))))) {
@@ -6870,9 +6870,19 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 				strcat(_local_den.meno, nazov_dna(_local_den.denvt));
 			}// HU only
 			else {
-				mystrcpy(_local_den.meno, nazov_dna(_local_den.denvt), MENO_SVIATKU);
-				strcat(_local_den.meno, " ");
-				strcat(_local_den.meno, nazov_obdobia_v(_local_den.litobd));
+				if (_local_den.denvt == DEN_STVRTOK) {
+					mystrcpy(_local_den.meno, text_ZELENY_STVRTOK[_global_jazyk], MENO_SVIATKU);
+				}
+				else {
+					mystrcpy(_local_den.meno, nazov_dna(_local_den.denvt), MENO_SVIATKU);
+					strcat(_local_den.meno, " ");
+					strcat(_local_den.meno, nazov_obdobia_v(_local_den.litobd));
+				}
+			}
+		}
+		else {
+			if (_local_den.denvt == DEN_STVRTOK) {
+				mystrcpy(_local_den.meno, text_ZELENY_STVRTOK_VESPERY[_global_jazyk], MENO_SVIATKU);
 			}
 		}
 
@@ -7455,7 +7465,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	// initialization of _global_string2
 	if ((
 			((_global_r._POPOLCOVA_STREDA.den == _local_den.den) && (_global_r._POPOLCOVA_STREDA.mesiac == _local_den.mesiac)) || // Popolcová streda
-			((_local_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) && (_local_den.denvt != DEN_NEDELA) && (_local_den.denvt != DEN_STVRTOK)) || // pondelok -- streda Veľkého týždňa
+			((_local_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) && (_local_den.denvt != DEN_NEDELA) && (_local_den.denvt != DEN_STVRTOK)) || // pondelok -- streda Svätého týždňa
 			(_local_den.smer > 7) // nie špeciálne dni: Trojdnie (1), Narodenie, Zjavenie, Nanebovstúpenie, ZDS (2), nedele (2, 6), slávnosti (3), 01NOV, sviatky Pána (5)
 		)
 		&& (_local_den.litobd != OBD_OKTAVA_NARODENIA) // nie Oktáva Narodenia Pána
@@ -8605,7 +8615,7 @@ void _export_rozbor_dna_buttons(short int typ, short int poradie_svateho, short 
 				)
 				&& !(
 					// a nie je to špeciálny deň
-					((_global_den.denvr <= VELKONOCNA_NEDELA + 6) && (_global_den.denvr >= KVETNA_NEDELA + 1)) // všedné dni veľkého týždňa počnúc pondelkom, veľkonočné trojdnie od veľkého piatka do veľkonočnej oktávy, soboty
+					((_global_den.denvr <= VELKONOCNA_NEDELA + 6) && (_global_den.denvr >= KVETNA_NEDELA + 1)) // všedné dni svätého týždňa počnúc pondelkom, veľkonočné trojdnie od veľkého piatka do veľkonočnej oktávy, soboty
 					|| (_global_den.denvr == POPOLCOVA_STREDA) // Popolcová streda
 					|| ((_global_den.denvt != DEN_NEDELA) && (_global_den.den == 2) && (_global_den.mesiac == MES_NOV + 1)) // 02NOV: Spomienka na všetkých verných zosnulých, ktorá nepadla na nedeľu
 					|| (_global_den.denvr == SV_RODINY && (_global_den.den == 26))	// pre sviatky Pána vo Vianočnom období treba doriešiť prípad, že Nedeľa Svätej rodiny padne na 26.12., teda na deň bezprostredne nasledujúci po slávnosti Narodenia Pána
@@ -12981,7 +12991,7 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 
 		// netyka sa to zeleneho stvrtka, velkeho tyzdna, velkonocneho trojdnia
 		if (((_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) && (_global_den.denvt != DEN_NEDELA)) || (_global_den.denvr == ZELENY_STVRTOK)) {
-			Log("netyka sa to Veľkého týždňa (okrem druhých vešpier Kvetnej nedele), ani Zeleného štvrtka\n");
+			Log("netyka sa to Svätého týždňa (okrem druhých vešpier Kvetnej nedele), ani Zeleného štvrtka\n");
 			goto LABEL_NIE_INE_VESPERY;
 		}
 		else if (_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) {
@@ -13393,7 +13403,7 @@ void showAllPrayers(short int typ, short int den, short int mesiac, short int ro
 			)
 			&& !(
 				// a nie je to špeciálny deň
-			((_global_den.denvr <= VELKONOCNA_NEDELA + 6) && (_global_den.denvr >= KVETNA_NEDELA + 1)) // všedné dni veľkého týždňa počnúc pondelkom, veľkonočné trojdnie od veľkého piatka do veľkonočnej oktávy, soboty
+			((_global_den.denvr <= VELKONOCNA_NEDELA + 6) && (_global_den.denvr >= KVETNA_NEDELA + 1)) // všedné dni svätého týždňa počnúc pondelkom, veľkonočné trojdnie od veľkého piatka do veľkonočnej oktávy, soboty
 				|| (_global_den.denvr == POPOLCOVA_STREDA) // Popolcová streda
 				|| ((_global_den.denvt != DEN_NEDELA) && (_global_den.den == 2) && (_global_den.mesiac == MES_NOV + 1)) // 02NOV: Spomienka na všetkých verných zosnulých, ktorá nepadla na nedeľu
 				)

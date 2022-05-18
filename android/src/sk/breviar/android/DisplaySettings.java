@@ -115,8 +115,12 @@ public class DisplaySettings extends SettingsActivity {
 
       Fonts.ResetFonts();
       for (Map.Entry<String, Fonts.FontMap.Variants> e : Fonts.GetFonts(ctx).families.entrySet()) {
-        Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().filename);
-        add(new FontInfo(e.getKey(), e.getKey(), t, e.getValue()));
+        try {
+          Typeface t = Typeface.createFromFile(e.getValue().GetDisplayFont().filename);
+          add(new FontInfo(e.getKey(), e.getKey(), t, e.getValue()));
+        } catch (java.lang.Exception exc) {
+          Log.v("breviar", "Skipped font: " + exc.getMessage());
+        }
       }
 
       // todo: set current selection

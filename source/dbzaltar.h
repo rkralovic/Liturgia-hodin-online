@@ -1694,6 +1694,7 @@ extern const char* text_PRVA_ADVENTNA_NEDELA[POCET_JAZYKOV + 1];
 extern const char* text_NEDELA_SV_RODINY[POCET_JAZYKOV + 1];
 extern const char* text_SPOMIENKA_PM_V_SOBOTU[POCET_JAZYKOV + 1];
 extern const char* text_ZELENY_STVRTOK[POCET_JAZYKOV + 1];
+extern const char* text_ZELENY_STVRTOK_VESPERY[POCET_JAZYKOV + 1];
 extern const char* text_VELKY_PIATOK[POCET_JAZYKOV + 1];
 extern const char* text_BIELA_SOBOTA[POCET_JAZYKOV + 1];
 extern const char* text_KVETNA_NEDELA[POCET_JAZYKOV + 1];

@@ -1632,7 +1632,7 @@ extern unsigned long long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_INVITATORIUM_ANT       65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.)
 #define BIT_OPT_5_OCR_34_HYMNS          131072 // different (special) hymns for 34th week per annum
 #define BIT_OPT_5_KOMPLETORIUM_OKTAVA   262144 // prvé alebo druhé nedeľné kompletórium (pre Veľkonočnú oktávu a Oktávu Narodenia Pána)
-#define BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  524288 // psalmódia pre posvätné čítanie štvrtka vo Veľkom týždni (default: štvrtok 2. týždňa žaltára; možnosť zvoliť z piatka 3. týždňa žaltára)
+#define BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  524288 // psalmódia pre posvätné čítanie štvrtka vo Svätom týždni (default: štvrtok 2. týždňa žaltára; možnosť zvoliť z piatka 3. týždňa žaltára)
 
 #define POCET_OPT_6_ALTERNATIVES_MULTI       11 // count equals to the highest PLACE_OPT_6_... used
 extern unsigned long long _global_opt_6_alternatives_multi[POCET_OPT_6_ALTERNATIVES_MULTI]; // this is not bitwise long, but simply decimal number; each decimal place representing one value (max. possibly 0--9)
@@ -1958,6 +1958,7 @@ extern const char* text_PRVA_ADVENTNA_NEDELA[POCET_JAZYKOV + 1];
 extern const char* text_NEDELA_SV_RODINY[POCET_JAZYKOV + 1];
 extern const char* text_SPOMIENKA_PM_V_SOBOTU[POCET_JAZYKOV + 1];
 extern const char* text_ZELENY_STVRTOK[POCET_JAZYKOV + 1];
+extern const char* text_ZELENY_STVRTOK_VESPERY[POCET_JAZYKOV + 1];
 extern const char* text_VELKY_PIATOK[POCET_JAZYKOV + 1];
 extern const char* text_BIELA_SOBOTA[POCET_JAZYKOV + 1];
 extern const char* text_KVETNA_NEDELA[POCET_JAZYKOV + 1];

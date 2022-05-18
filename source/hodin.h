@@ -360,7 +360,7 @@ const char* nazov_obdobia_v_jazyk[POCET_OBDOBI + 1][POCET_JAZYKOV + 1] =
 	{ "vo Vianočnom období", "v době vánoční", "", "tempore Nativitatis", "", "v době vánoční", "a karácsonyi időben", "ru_text", "by_text", "Á jólatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "v Cezročnom období", "v mezidobí", "", "per annum", "", "v mezidobí", "az évközi időben", "ru_text", "by_text", "Innan ársins", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "v Pôstnom období", "v době postní", "", "tempore Quadragesimæ", "", "v době postní", "a nagyböjti időben", "ru_text", "by_text", "Á föstutíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
-	{ "vo Veľkom týždni", "ve Svatém týdnu", "", "in Hebdomada sancta", "", "ve Svatém týdnu", "a nagyhéten", "ru_text", "by_text", "Í Dymbilviku", /* STRING_1_FOR_NEW_LANGUAGE */ },
+	{ "Svätého týždňa", "ve Svatém týdnu", "", "in Hebdomada sancta", "", "ve Svatém týdnu", "a nagyhéten", "ru_text", "by_text", "Í Dymbilviku", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "vo Veľkonočnom Trojdní", "ve velikonočním triduu", "", "in Triduo Paschali", "", "ve velikonočním triduu", "a szent három napban", "ru_text", "by_text", "Á heilögum bænadögum", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "vo Veľkonočnej oktáve", "ve velikonočním oktávu", "", "infra octavam Paschæ", "", "ve velikonočním oktávu", "húsvét nyolcadában", "ru_text", "у актаве Пасхі", "á páskaáttund", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "vo Veľkonočnom období", "v době velikonoční", "", "tempore Paschæ", "", "v době velikonoční", "a húsvéti időben", "ru_text", "by_text", "Á páskatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
@@ -380,7 +380,7 @@ const char* nazov_Obdobia_aka_jazyk[POCET_OBDOBI + 1][POCET_JAZYKOV + 1] =
 	{ "Vianočná", "vánoční", "", "post Nativitatem", "", "vánoční", "Karácsony", "ru_text", "by_text", "á jólatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Cezročná", "v mezidobí", "", "per annum", "", "během roku", "Évközi", "ru_text", "by_text", "innan ársins", /* STRING_1_FOR_NEW_LANGUAGE */ },
 	{ "Pôstna", "postní", "", "Quadragesimæ", "", "postní", "Nagyböjt", "ru_text", "by_text", "á föstutíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
-	{ "Vo Veľkom týždni", "ve Svatém týdnu", "", "in Hebdomada sancta", "", "ve Svatém týdnu", "hu_", "ru_text", "by_text", "í Dymbilviku", /* STRING_1_FOR_NEW_LANGUAGE */ }, // not used / nepoužíva sas
+	{ "Svätého týždňa", "ve Svatém týdnu", "", "in Hebdomada sancta", "", "ve Svatém týdnu", "hu_", "ru_text", "by_text", "í Dymbilviku", /* STRING_1_FOR_NEW_LANGUAGE */ }, // not used / nepoužíva sas
 	{ "Vo Veľkonočnom Trojdní", "ve velikonočním triduu", "", "in Triduo Paschali", "", "ve velikonočním triduu", "hu_", "ru_text", "by_text", "á heilögum bænadögum", /* STRING_1_FOR_NEW_LANGUAGE */ }, // not used / nepoužíva sa
 	{ "Vo Veľkonočnej oktáve", "ve velikonočním oktávu", "", "infra octavam Paschalis", "", "v oktávu velikonočním", "Húsvét nyolcacadában", "ru_text", "у актаве пасхі", "á páskaáttund", /* STRING_1_FOR_NEW_LANGUAGE */ }, // not used / nepoužíva sa
 	{ "Veľkonočná", "velikonoční", "", "Paschæ", "", "velikonoční", "Húsvét", "ru_text", "велікодная", "á páskatíð", /* STRING_1_FOR_NEW_LANGUAGE */ },
@@ -12787,7 +12787,7 @@ const char* text_SEP_02_2_OP[POCET_JAZYKOV + 1] =
 const char* text_SEP_02_1_OFM[POCET_JAZYKOV + 1] =
 {
 	"Bl. Jána Františka Burtého, kňaza a mučeníka, " HTML_LINE_BREAK "člena 1. rádu",
-	"",
+	"Bl. Jana Františka Burtè, kněze a mučedníka",
 	"",
 	"",
 	"",
@@ -12857,7 +12857,7 @@ const char* text_SEP_04_OP[POCET_JAZYKOV + 1] =
 const char* text_SEP_04_OFM[POCET_JAZYKOV + 1] =
 {
 	"Sv. Ruženy z Viterba, panny, členky 3. rádu",
-	"",
+	"Sv. Růženy z Viterba, panny",
 	"",
 	"",
 	"",
@@ -14862,7 +14862,7 @@ const char* text_OKT_26_OPRAEM[POCET_JAZYKOV + 1] =
 const char* text_OKT_26_OFM[POCET_JAZYKOV + 1] =
 {
 	"Bl. Bonaventúru z Potenzy, kňaza, člena 1. rádu",
-	"",
+	"Bl. Bonaventury z Potenzy, kněze",
 	"",
 	"",
 	"",
@@ -16240,7 +16240,7 @@ const char* text_DEC_02_CZ[POCET_JAZYKOV + 1] =
 const char* text_DEC_02_1_OFM[POCET_JAZYKOV + 1] =
 {
 	"Bl. Rafaela Chylińského, kňaza, člena 1. rádu",
-	"",
+	"Bl. Rafała Chylińského, kněze",
 	"",
 	"",
 	"",
@@ -16732,12 +16732,26 @@ const char* text_VELKA_STREDA[POCET_JAZYKOV + 1] =
 };
 const char* text_ZELENY_STVRTOK[POCET_JAZYKOV + 1] =
 {
-	"Štvrtok Svätého týždňa (Zelený štvrtok) – Pamiatka Pánovej večere",
+	"Štvrtok Svätého týždňa (Zelený štvrtok)",
 	"Zelený čtvrtek",
 	"Maundy Thursday",
 	"",
 	"",
-	"Zelený čtvrtek - Památka Večeře Páně",
+	"Zelený čtvrtek",
+	"Nagycsütörtök",
+	"ru_text",
+	"Вялікі чацвер",
+	"Skírdagur",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+const char* text_ZELENY_STVRTOK_VESPERY[POCET_JAZYKOV + 1] =
+{
+	"Štvrtok Pánovej večere",
+	"Zelený čtvrtek – Památka Večeře Páně",
+	"Maundy Thursday",
+	"",
+	"",
+	"Zelený čtvrtek – Památka Večeře Páně",
 	"Nagycsütörtök",
 	"ru_text",
 	"Вялікі чацвер",
@@ -16774,7 +16788,7 @@ const char* text_BIELA_SOBOTA[POCET_JAZYKOV + 1] =
 };
 const char* text_KVETNA_NEDELA[POCET_JAZYKOV + 1] =
 {
-	"Palmová (Kvetná) nedeľa",
+	"Palmová (Kvetná) nedeľa," HTML_LINE_BREAK "čiže Nedeľa utrpenia Pána",
 	"Květná neděle",
 	"Palm Sunday of the Passion of the Lord",
 	"Dominica in Palmis " HTML_LINE_BREAK "De Passione Domini",

@@ -252,7 +252,7 @@ short int su_kcit_kresp_modlitba_mcd_vlastne(short int m) {
  *		Vynecháva sa hymnus Teba, Bože, chválime.
  *		236. V modlitbe cez deň, čiže predpoludním, napoludnie a popoludní, a v kompletóriu sa neberie nič z ofícia o svätom, všetko je zo všedného dňa.
  *	--- b) Spomienky pripadajúce na privilegované dni ---
- *		237. V nedele, na slávnosti a na sviatky, ďalej na Popolcovú stredu, vo Veľkom týždni a vo Veľkonočnej oktáve sa vynechávajú všetky spomienky, ak by pripadli na tieto dni.
+ *		237. V nedele, na slávnosti a na sviatky, ďalej na Popolcovú stredu, vo Svätom týždni a vo Veľkonočnej oktáve sa vynechávajú všetky spomienky, ak by pripadli na tieto dni.
  *		238. Vo všedných dňoch od 17. do 24. decembra, vo Vianočnej oktáve a vo všedných dňoch v Pôstnom období sa neslávi nijaká záväzná spomienka, a to ani v partikulárnych kalendároch. Tie spomienky, ktoré azda na Pôstne obdobie pripadajú, sa v tom roku považujú za ľubovoľné spomienky.
  *		239. Ak by niekto chcel v tých obdobiach osláviť svätého, ktorého spomienka pripadá na ten deň: 
  *				* v posvätnom čítaní po čítaní z Otcov a po responzóriu z vlastnej časti liturgického obdobia pripojí vlastné hagiografické čítanie s responzóriom a uzavrie modlitbou o svätom; 
@@ -1325,11 +1325,11 @@ void set_hymnus_kompletorium_obd(short int den, short int tyzzal, short int modl
 		pom_litobd = OBD_VELKONOCNE_I;
 	}
 	else if ((litobd == OBD_POSTNE_II_VELKY_TYZDEN) && (den != DEN_STVRTOK) && (_global_jazyk == JAZYK_CZ)) {
-		// pre český breviář sa nepoužívajú vo veľkom týždni iné hymny; pre zelený štrvtok je samostatný hymnus
+		// pre český breviář sa nepoužívajú vo svätom týždni iné hymny; pre zelený štvrtok je samostatný hymnus
 		pom_litobd = OBD_CEZ_ROK;
 	}
 	else if ((litobd == OBD_POSTNE_II_VELKY_TYZDEN) && (den == DEN_STVRTOK) && (_global_jazyk == JAZYK_CZ)) {
-		// pre český breviář sa nepoužívajú vo veľkom týždni iné hymny; pre zelený štrvtok je samostatný hymnus
+		// pre český breviář sa nepoužívajú vo svätom týždni iné hymny; pre zelený štvrtok je samostatný hymnus
 		; // ponechá pom_litobd, ako je
 	}
 	else {
@@ -7823,7 +7823,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 
 			// tu v skutočnosti začína POSTNE OBDOBIE II. (Svätý týždeň)
 
-			// kompletórium vo Veľkom týždni
+			// kompletórium vo Svätom týždni
 			modlitba = MODL_KOMPLETORIUM;
 
 			// Štvrtok Svätého týždňa (Zelený štvrtok) má modlitbu a krátky responz z nedeľného 2. kompletória (ako na slávnosti)
@@ -8083,7 +8083,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			set_kresponz_kompletorium_obd(den, modlitba, litobd);
 
 			if ((den != DEN_PIATOK) && (den != DEN_SOBOTA)) {
-				// pre Piatok utrpenia Pána (Veľký piatok) aj Svätú sobotu (Bielu sobotu) je hymnus ako vo veľkom týždni, teda "Kriste, ty svetlo a náš deň"
+				// pre Piatok utrpenia Pána (Veľký piatok) aj Svätú sobotu (Bielu sobotu) je hymnus ako vo svätom týždni, teda "Kriste, ty svetlo a náš deň"
 				set_hymnus_kompletorium_obd(den, tyzzal, modlitba, litobd);
 			}
 
@@ -11086,9 +11086,9 @@ _struct_lang_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_VIAN1_2HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_VIAN1_3HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_VIAN2_cHYMNUS", 6 },
-	{ JAZYK_CZ, "CZ_VIAN2_1HYMNUS", 6 },
-	{ JAZYK_CZ, "CZ_VIAN2_rHYMNUS", 6 },
-	{ JAZYK_CZ, "CZ_VIAN2_vHYMNUS", 6 },
+	{ JAZYK_CZ, "CZ_VIAN2_1HYMNUS", 7 },
+	{ JAZYK_CZ, "CZ_VIAN2_rHYMNUS", 8 },
+	{ JAZYK_CZ, "CZ_VIAN2_vHYMNUS", 7 },
 	{ JAZYK_CZ, "CZ_VIAN2_9HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_VIAN2_2HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_VIAN2_3HYMNUS", 2 },
