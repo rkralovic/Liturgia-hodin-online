@@ -7884,7 +7884,7 @@ void xml_export_options(void) {
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_FONT_FAMILY)"%ld" ELEM_END(XML_BIT_OPT_2_FONT_FAMILY) "\n", BIT_OPT_2_FONT_FAMILY, STR_FORCE_BIT_OPT_2_FONT_FAMILY, html_text_opt_2_font_family[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_FAMILY)));
 					break;
 				case 3: // BIT_OPT_2_FONT_NAME_CHOOSER
-					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_FONT_NAME_CHOOSER)"%ld" ELEM_END(XML_BIT_OPT_2_FONT_NAME_CHOOSER) "\n", BIT_OPT_2_FONT_NAME_CHOOSER, STR_FORCE_BIT_OPT_2_FONT_NAME_CHOOSER, html_text_font_name[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_NAME_CHOOSER)));
+					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_FONT_NAME_CHOOSER)"%ld" ELEM_END(XML_BIT_OPT_2_FONT_NAME_CHOOSER) "\n", BIT_OPT_2_FONT_NAME_CHOOSER, STR_FORCE_BIT_OPT_2_FONT_NAME_CHOOSER, html_text_font_name_simple[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_NAME_CHOOSER)));
 					break;
 				case 4: // BIT_OPT_2_FONT_SIZE_CHOOSER
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_2_FONT_SIZE_CHOOSER)"%ld" ELEM_END(XML_BIT_OPT_2_FONT_SIZE_CHOOSER) "\n", BIT_OPT_2_FONT_SIZE_CHOOSER, STR_FORCE_BIT_OPT_2_FONT_SIZE, html_text_font_size[_global_jazyk], (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_SIZE_CHOOSER)));
@@ -8052,6 +8052,302 @@ void xml_export_options(void) {
 
 	Log("-- xml_export_options() -- koniec\n");
 } // xml_export_options()
+
+char* get_data_for_menu_item_app_specific(short int menu_group, short int menu_item) {
+	if (menu_item_type[menu_group][menu_item] != MENU_ITEM_TYPE_APP_SPECIFIC) {
+		return (char*)STR_EMPTY;
+	}
+	switch (menu_group) {
+	case MENU_0_GENERAL:
+		switch (menu_item) {
+		case MENU_0_ITEM_WHEN_ONLINE:
+			return (char*)menu_text_mode[_global_jazyk];
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_1_DEVICE:
+		switch (menu_item) {
+		case MENU_1_ITEM_VOLUME_BUTTONS:
+			return (char*)menu_text_volume_buttons[_global_jazyk];
+			break;
+		case MENU_1_ITEM_SCREEN_ALWAYS:
+			return (char*)menu_text_do_not_dim_screen[_global_jazyk];
+			break;
+		case MENU_1_ITEM_DO_NOT_DISTURB:
+			return (char*)menu_text_do_not_disturb[_global_jazyk];
+			break;
+		case MENU_1_ITEM_LOCK_FONT_SIZE:
+			return (char*)menu_text_lock_font_size[_global_jazyk];
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_2_LOOK:
+		switch (menu_item) {
+		case MENU_2_ITEM_ALT_BACKGROUND:
+			return (char*)menu_text_alt_background[_global_jazyk];
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_3_TEXT_CONTENT:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_4_CALENDAR:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_5_TTS:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	}// switch (menu_group)
+
+	return (char*)STR_EMPTY;
+}// get_data_for_menu_item_app_specific()
+
+// returns switch for menu items (those of type MENU_ITEM_TYPE_MAIN_SWITCH)
+menu_item_switch_str_name get_data_for_menu_item_switch(short int menu_group, short int menu_item) {
+	menu_item_switch_str_name output;
+	mystrcpy(output.switch_str, STR_EMPTY, SMALL);
+	mystrcpy(output.switch_xml, STR_EMPTY, SMALL);
+	mystrcpy(output.switch_name, STR_EMPTY, SMALL);
+
+	if (menu_item_type[menu_group][menu_item] != MENU_ITEM_TYPE_MAIN_SWITCH) {
+		return output;
+	}
+	switch (menu_group) {
+	case MENU_0_GENERAL:
+		switch (menu_item) {
+		case MENU_0_ITEM_LANGUAGE:
+			mystrcpy(output.switch_str, STR_JAZYK, SMALL);
+			mystrcpy(output.switch_xml, XML_SUPPORTED_LANGUAGES, SMALL);
+			mystrcpy(output.switch_name, html_text_Jazyk[_global_jazyk], SMALL);
+			break;
+		case MENU_0_ITEM_CALENDAR:
+			mystrcpy(output.switch_str, STR_KALENDAR, SMALL);
+			mystrcpy(output.switch_xml, XML_LIT_CALENDAR_VALUES, SMALL);
+			mystrcpy(output.switch_name, html_text_Kalendar[_global_jazyk], SMALL);
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_1_DEVICE:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_2_LOOK:
+		switch (menu_item) {
+		case MENU_2_ITEM_FONT:
+			mystrcpy(output.switch_str, STR_FONT_NAME, SMALL);
+			// no specific XML element
+			mystrcpy(output.switch_name, mystr_first_upper(html_text_font_name[_global_jazyk]).c_str(), SMALL);
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_3_TEXT_CONTENT:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_4_CALENDAR:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_5_TTS:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	}// switch (menu_group)
+
+	return output;
+}// get_switch_for_menu_item()
+
+// returns option and bit opt force for menu items (those of type MENU_ITEM_TYPE_BIT_OPTION)
+menu_item_option_str_name get_data_for_menu_item_option(short int menu_group, short int menu_item) {
+	menu_item_option_str_name output;
+	mystrcpy(output.option_str, STR_EMPTY, SMALL);
+	mystrcpy(output.option_force, STR_EMPTY, SMALL);
+	mystrcpy(output.option_xml, STR_EMPTY, SMALL);
+	mystrcpy(output.option_name, STR_EMPTY, SMALL);
+
+	if (menu_item_type[menu_group][menu_item] != MENU_ITEM_TYPE_BIT_OPTION) {
+		return output;
+	}
+	switch (menu_group) {
+	case MENU_0_GENERAL:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_1_DEVICE:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_2_LOOK:
+		switch (menu_item) {
+		case MENU_2_ITEM_COLOR_SCHEMA:
+			mystrcpy(output.option_str, STR_OPT_2, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_2_NOCNY_REZIM, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_2_NOCNY_REZIM, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_2_nocny_rezim[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_NORMAL_FONT:
+			mystrcpy(output.option_str, STR_OPT_0, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_0_FONT_NORMAL, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_0_FONT_NORMAL, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_0_font_normal[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_ROUNDED_CORNERS:
+			mystrcpy(output.option_str, STR_OPT_2, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_2_ROUNDED_CORNERS, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_2_ROUNDED_CORNERS, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_2_rounded_corners[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_NAVIGATION_ARROWS:
+			mystrcpy(output.option_str, STR_OPT_0, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_0_TRANSPARENT_NAV, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_0_transparent_nav[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_BUTTONS_CONDENSED:
+			mystrcpy(output.option_str, STR_OPT_2, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_2_BUTTONY_USPORNE, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_2_BUTTONY_USPORNE, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_2_buttons_usporne[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_BUTTONS_ORDERING:
+			mystrcpy(output.option_str, STR_OPT_0, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_0_BUTTONS_ORDER, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_0_BUTTONS_ORDER, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_0_buttons_order[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_NAVIGATION_IN_PRAYER:
+			mystrcpy(output.option_str, STR_OPT_2, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_2_NAVIGATION, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_2_NAVIGATION, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_2_navigation[_global_jazyk]).c_str(), SMALL);
+			break;
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_3_TEXT_CONTENT:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_4_CALENDAR:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	case MENU_5_TTS:
+		switch (menu_item) {
+		case GLOBAL_NULL:
+		default:
+			break;
+		} // switch (menu_item)
+		break;
+	}// switch (menu_group)
+
+	return output;
+}// get_data_for_menu_item_option()
+
+void xml_export_menu(void) {
+	short int i, j, mit;
+	menu_item_switch_str_name output1;
+	menu_item_option_str_name output2;
+	char output3[SMALL];
+
+	Log("-- xml_export_menu() -- začiatok\n");
+
+	Export(ELEM_BEGIN(XML_MENU) "\n");
+
+	for (i = 0; i < POCET_MENU_GROUPS; i++) {
+		Export(ELEM_BEGIN_ID_VALUE(XML_MENU_GROUP) "\n", i, text_menu_group(i));
+		for (j = 0; j < pocet_menu_items[i]; j++) {
+
+			mit = menu_item_type[i][j];
+
+			switch (mit) {
+
+			case MENU_ITEM_TYPE_MAIN_SWITCH:
+				output1 = get_data_for_menu_item_switch(i, j);
+				Export(ELEM_BEGIN_ID_TYPE_VALUE_ELEMENT(XML_MENU_ITEM)"%s" ELEM_END(XML_MENU_ITEM) "\n", j, menu_item_type_name[mit], output1.switch_str, output1.switch_xml, output1.switch_name);
+				break;
+
+			case MENU_ITEM_TYPE_BIT_OPTION:
+				output2 = get_data_for_menu_item_option(i, j);
+				Export(ELEM_BEGIN_ID_TYPE_OPTION_VALUE_ELEMENT(XML_MENU_ITEM)"%s" ELEM_END(XML_MENU_ITEM) "\n", j, menu_item_type_name[mit], output2.option_str, output2.option_force, output2.option_xml, output2.option_name);
+				break;
+
+			case MENU_ITEM_TYPE_APP_SPECIFIC:
+				mystrcpy(output3, get_data_for_menu_item_app_specific(i, j), SMALL);
+				Export(ELEM_BEGIN_ID_TYPE(XML_MENU_ITEM)"%s" ELEM_END(XML_MENU_ITEM) "\n", j, menu_item_type_name[mit], output3);
+				break;
+
+				// for MENU_ITEM_TYPE_UNDEFINED, do nothing
+			}// switch()
+		}// for j
+		Export(ELEM_END(XML_MENU_GROUP) "\n");
+	}// for i
+
+	Export(ELEM_END(XML_MENU)"\n\n");
+
+	Log("-- xml_export_menu() -- koniec\n");
+}// xml_export_menu()
+
+void xml_export_options_and_menu(void) {
+#ifdef OS_Windows_Ruby
+	// ToDo: not yet finished
+	xml_export_menu();
+#endif
+	xml_export_options();
+}// xml_export_options_and_menu()
 
 // predpokoladam, ze pred jeho volanim bolo pouzite analyzuj_rok(rok); ktore da vysledok do _global_r
 // dostane {den, mesiac} a rok
@@ -10887,10 +11183,10 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_FONT_NAME_CHOOSER)) {
 			Export(HTML_CRLF_LINE_BREAK);
 			Export(HTML_NONBREAKING_SPACE_LOOONG);
-			Export("<" HTML_SPAN_TOOLTIP ">%s" HTML_SPAN_END "\n", html_text_font_name_explain[_global_jazyk], html_text_font_name[_global_jazyk]);
+			Export("<" HTML_SPAN_TOOLTIP ">%s" HTML_SPAN_END "\n", html_text_font_name_simple_explain[_global_jazyk], html_text_font_name_simple[_global_jazyk]);
 
 			// pole WWW_/STR_FORCE_BIT_OPT_2_FONT_NAME_CHOOSER
-			Export(HTML_FORM_SELECT"name=\"%s\" title=\"%s\">\n", STR_FONT_NAME, html_text_font_name_explain[_global_jazyk]);
+			Export(HTML_FORM_SELECT"name=\"%s\" title=\"%s\">\n", STR_FONT_NAME, html_text_font_name_simple_explain[_global_jazyk]);
 			// FONT_CUSTOM neexportujeme do drop-down listu
 			for (font = FONT_CUSTOM + 1; font <= POCET_FONTOV; font++) {
 				// pom2 bolo nastavené funkciou prilep_request_options() a používa sa v ďalšom; použiť môžeme pom3
@@ -14584,7 +14880,7 @@ void _main_rozbor_dna_txt_xml(short int typ, short int d, short int m, short int
 
 		// XML export -- export options
 		if (t == EXPORT_DNA_XML) {
-			xml_export_options();
+			xml_export_options_and_menu();
 		}
 		else {
 			Export("\n");
@@ -14601,7 +14897,7 @@ void _main_rozbor_dna_txt_xml(short int typ, short int d, short int m, short int
 		}
 		// XML export -- export options (when no month's number was supplied)
 		else if (t == EXPORT_DNA_XML) {
-			xml_export_options();
+			xml_export_options_and_menu();
 		}
 
 	}// m != VSETKY_MESIACE

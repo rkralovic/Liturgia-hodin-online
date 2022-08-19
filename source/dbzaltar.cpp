@@ -4606,6 +4606,15 @@ void _velk1_hymnus(short int den, short int modlitba, short int litobd) {
 	Log("_velk1_hymnus(): začiatok\n");
 	short int ktory; // 0 alebo 1 (2 = obidve alternatívy; -1 = do not use this variable for generating anchor)
 	short int bit = BIT_OPT_5_HYMNUS_VN_RCH; // necessary to initialize
+	char _anchor_tmp[MAX_STR_AF_ANCHOR];
+	short int je_nanebovstupenie = (_global_den.denvr == NANEBOVSTUPENIE || litobd < 0);
+
+	if (je_nanebovstupenie == ANO) {
+		mystrcpy(_anchor_tmp, ANCHOR_NANEBOVSTUPENIE, MAX_STR_AF_ANCHOR);
+	}
+	else {
+		mystrcpy(_anchor_tmp, nazov_OBD[litobd], MAX_STR_AF_ANCHOR);
+	}
 
 	switch (modlitba) {
 	case MODL_POSV_CITANIE: bit = BIT_OPT_5_HYMNUS_VN_PC; break;
@@ -4621,7 +4630,10 @@ void _velk1_hymnus(short int den, short int modlitba, short int litobd) {
 		// pre vn1.htm je len jeden hymnus pre modlitbu cez deň; používa sa aj vo vn2.htm
 		ktory = -1;
 	}
-	else if ((den == DEN_NEDELA) || (_global_den.denvr == NANEBOVSTUPENIE)) {
+	else if (je_nanebovstupenie == ANO){
+		ktory = -1;
+	}
+	else if (den == DEN_NEDELA) {
 		ktory = 1;
 	}
 	else if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_ALTERNATIVES)) {
@@ -4635,17 +4647,11 @@ void _velk1_hymnus(short int den, short int modlitba, short int litobd) {
 	}
 
 	if (ktory < 0) {
-		if ((_global_jazyk == JAZYK_CZ) && (_global_den.denvr == NANEBOVSTUPENIE)) {
-			// special case for CZ
-			sprintf(_anchor, "%s%s_%c%s", _special_anchor_prefix, ANCHOR_NANEBOVSTUPENIE, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);
-		}
-		else {
-			sprintf(_anchor, "%s%s_%c%s", _special_anchor_prefix, nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_HYMNUS);
-		}
+		sprintf(_anchor, "%s%s_%c%s", _special_anchor_prefix, _anchor_tmp, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);
 	}
 	else {
 		// upravené kotvy, aby bolo použiteľné zjednodušene toto:
-		sprintf(_anchor, "%s%s_%c%s%d", _special_anchor_prefix, nazov_OBD[litobd], pismenko_modlitby(modlitba), ANCHOR_HYMNUS, ktory);
+		sprintf(_anchor, "%s%s_%c%s%d", _special_anchor_prefix, _anchor_tmp, pismenko_modlitby(modlitba), ANCHOR_HYMNUS, ktory);
 	}
 
 	if (modlitba == MODL_POSV_CITANIE) {
@@ -8400,11 +8406,12 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			set_kresponz_kompletorium_obd(den, modlitba, litobd);
 			set_antifony_kompletorium_obd(den, modlitba, litobd, zvazok_breviara[litobd]);
 
-			if(_global_den.denvr == _global_r._NANEBOVSTUPENIE_PANA.denvr){
+			if(_global_den.denvr == _global_r._NANEBOVSTUPENIE_PANA.denvr){ // ToDo: refaktor source\dbzaltar.cpp lines 8403--8520 (use proper anchor NAN instead of VN1_NE6)
 				// nanebovstupenie sice ma rovnake kotvy, ale v inom súbore
-				// odčlenené samostatne, lebo sa tu škaredo natvrdo pre ranné chvály a vešpery nastavuje den = DEN_NEDELA 
+				// odčlenené samostatne, lebo sa tu škaredo natvrdo pre ranné chvály a vešpery nastavuje den = DEN_NEDELA
 				mystrcpy(_file, FILE_NANEBOVSTUPENIE, MAX_STR_AF_FILE);
 				mystrcpy(_file_pc, FILE_NANEBOVSTUPENIE, MAX_STR_AF_FILE);
+				mystrcpy(_anchor, ANCHOR_NANEBOVSTUPENIE, MAX_STR_AF_ANCHOR);
 				mystrcpy(_anchor_vlastne_slavenie, ANCHOR_NANEBOVSTUPENIE, MAX_STR_AF_ANCHOR);
 				Log("  ide o nanebovstupenie Pana: _file = `%s', den = %s...\n", _file, nazov_dna(den));
 				Log("_anchor_vlastne_slavenie == %s...\n", _anchor_vlastne_slavenie);
@@ -8422,51 +8429,41 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				set_antifony_kompletorium_obd(den, modlitba, litobd, zvazok_breviara[litobd]);
 				set_kresponz_kompletorium_obd(den, modlitba, litobd);
 
-				den = DEN_NEDELA;
-				// kvôli kotvám
-				if (tyzden == 7) {
-					tyzden = 6;
-				}
-				t = tyzden;
-
 				// invitatórium
 				modlitba = MODL_INVITATORIUM;
 				_vlastne_slavenie_invitat(_anchor_vlastne_slavenie);
 
-				modlitba = MODL_PRVE_VESPERY;
-				_set_zalmy_nanebovstupenie(modlitba);
-				modlitba = MODL_RANNE_CHVALY;
-				_set_zalmy_nanebovstupenie(modlitba);
-				modlitba = MODL_VESPERY;
-				_set_zalmy_nanebovstupenie(modlitba);
-
 				// ranné chvály
 				modlitba = MODL_RANNE_CHVALY;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_kcitanie;
-				_velk1_kresponz;
-				_velk1_benediktus;
-				_velk1_prosby;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_benediktus(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_prosby(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 
 				// vešpery
 				modlitba = MODL_VESPERY;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_kcitanie;
-				_velk1_kresponz;
-				_velk1_magnifikat;
-				_velk1_prosby;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_magnifikat(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_prosby(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 
 				// pridané posvätné čítanie
 				modlitba = MODL_POSV_CITANIE;
 				_set_zalmy_nanebovstupenie(modlitba);
-				modlitba = MODL_PREDPOLUDNIM;
-				_set_zalmy_nanebovstupenie(modlitba);
-				modlitba = MODL_NAPOLUDNIE;
-				_set_zalmy_nanebovstupenie(modlitba);
-				modlitba = MODL_POPOLUDNI;
-				_set_zalmy_nanebovstupenie(modlitba);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_ine_1citanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_ine_2citanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				// posvätné čítanie -- predĺžené slávenie vigílie
 				modlitba = MODL_POSV_CITANIE;
 				_vlastne_slavenie_set_vig_ant(_anchor_vlastne_slavenie);
@@ -8474,48 +8471,37 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 				_vlastne_slavenie_set_vig_ev(_anchor_vlastne_slavenie);
 
 				modlitba = MODL_PRVE_VESPERY;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_kcitanie;
-				_velk1_kresponz;
-				_velk1_magnifikat;
-				_velk1_prosby;
-				_velk1_modlitba;
-				_velk1_ne_antifony;
-
-				modlitba = MODL_RANNE_CHVALY;
-				_velk1_ne_antifony;
-				modlitba = MODL_VESPERY;
-				_velk1_ne_antifony;
-
-				// naspäť pre posv. čítanie a modlitbu cez deň
-				den = DEN_STVRTOK;
-				modlitba = MODL_POSV_CITANIE;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_ne_antifony;
-				_velk1_citanie1;
-				_velk1_citanie2;
-				_velk1_kresponz;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_magnifikat(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_prosby(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
 
 				// modlitba cez deň
 				modlitba = MODL_PREDPOLUDNIM;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_mcd_antifony;
-				_velk1_kresponz;
-				_velk1_kcitanie;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				modlitba = MODL_NAPOLUDNIE;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_mcd_antifony;
-				_velk1_kresponz;
-				_velk1_kcitanie;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 				modlitba = MODL_POPOLUDNI;
-				_velk1_hymnus(den, modlitba, litobd);
-				_velk1_mcd_antifony;
-				_velk1_kresponz;
-				_velk1_kcitanie;
-				_velk1_modlitba;
+				_set_zalmy_nanebovstupenie(modlitba);
+				_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
+				_velk1_hymnus(den, modlitba, OBD_NEURCENE);
+				_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
+				_vlastne_slavenie_modlitba(_anchor_vlastne_slavenie);
 
 			}// je nanebovstúpenie
 			else{
@@ -8788,6 +8774,7 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 					modlitba = MODL_INVITATORIUM;
 					_vlastne_slavenie_invitat(_anchor_vlastne_slavenie);
 
+					// ranné chvály
 					modlitba = MODL_RANNE_CHVALY;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd);
@@ -11193,8 +11180,7 @@ _struct_lang_anchor_and_count pocet_maria_ant_multi_anchor_count[] = {
 _struct_lang_anchor_and_count pocet_modlitba_multi_anchor_count[] = {
 	{ JAZYK_UNDEF, "SPMVSr_MODLITBA", 6 },
 	{ JAZYK_SK, "SRDCA_MODLITBA", 2 },
-	{ JAZYK_SK, "VN1_MODLITBA6NE", 2 },
-	{ JAZYK_SK, "VN1_MODLITBA6STV", 2 },
+	{ JAZYK_SK, "NAN_MODLITBA", 2 },
 	{ JAZYK_SK, "ZDS_1MODLITBA", 2 },
 	{ JAZYK_SK, "23APR_MODLITBA", 2 },
 };
@@ -11205,6 +11191,7 @@ _struct_lang_anchor_and_count pocet_otcenas_uvod_multi_anchor_count[] = {
 	{ JAZYK_CZ_OP, "_OTCENAS-UVOD", 10 },
 	{ JAZYK_CZ, "_OTCENAS-UVOD", 7 },
 	{ JAZYK_HU, "_OTCENAS-UVOD", 10 }, // they have 12 intros (according to vol. I & II of first Latin editio) but technically we can support max. 10 options
+	{ JAZYK_IS, "_OTCENAS-UVOD", 10 },
 };
 
 _struct_lang_anchor_and_count pocet_prosby_multi_anchor_count[] = {

@@ -14,6 +14,8 @@
 
 #define Q_UNUSED(arg) (void)arg;
 
+#define GLOBAL_NULL	-1
+
 #define CHAR_EMPTY 0
 
 #define SMALL 160
