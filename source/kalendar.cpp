@@ -11748,13 +11748,22 @@ short int sviatky_svatych_05_maj(short int den, short int poradie_svaty, _struct
 					set_spolocna_cast(sc, poradie_svaty);
 
 				modlitba = MODL_POSV_CITANIE;
-				// _vlastna_cast_2citanie;
+				_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+				_vlastna_cast_2citanie;
 				_vlastna_cast_modlitba;
 
 				modlitba = MODL_RANNE_CHVALY;
+				_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+				_vlastna_cast_kcitanie;
+				_vlastna_cast_kresponz_ve_obd;
+				_vlastna_cast_benediktus;
 				_vlastna_cast_modlitba;
 
 				modlitba = MODL_VESPERY;
+				_vlastna_cast_hymnus(modlitba, _global_den.litobd);
+				_vlastna_cast_kcitanie;
+				_vlastna_cast_kresponz_ve_obd;
+				_vlastna_cast_magnifikat;
 				_vlastna_cast_modlitba;
 
 				break;
@@ -23353,8 +23362,8 @@ short int sviatky_svatych_09_september(short int den, short int poradie_svaty, _
 			}
 			else {
 				_vlastna_cast_full_okrem_prosieb(modlitba);
+				_set_zalmy_sviatok_marie(modlitba); // kvôli iným ako SK (SK má slávnosť, tam je to automaticky)
 			}
-			_set_zalmy_1nedele_rch(); // kvôli iným ako SK (SK má slávnosť, tam je to automaticky)
 
 			modlitba = MODL_POSV_CITANIE;
 			if ((_global_jazyk == JAZYK_SK) || (_global_jazyk == JAZYK_HU)) {
@@ -23379,7 +23388,7 @@ short int sviatky_svatych_09_september(short int den, short int poradie_svaty, _
 			else {
 				_vlastna_cast_full_okrem_prosieb(modlitba);
 			}
-			_set_zalmy_sviatok_panien(modlitba);
+			_set_zalmy_sviatok_marie(modlitba); // hoci ide len o spomienku pre ne-SK kalendár, predpísaná je psalmódia zo spoločnej časti; hoci efektívnejšie by bolo použiť _set_zalmy_sviatok_panien(modlitba); presnejšie je zo spoločnej časti PM
 
 			if (poradie_svaty != UNKNOWN_PORADIE_SVATEHO) {
 				break;
