@@ -1154,6 +1154,10 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_PRAHA_OFM						133
 #define LOKAL_SLAV_OP_MNISKY_PAMATKA				134
 #define LOKAL_SLAV_SPOMIENKA_OFS					135
+#define LOKAL_SLAV_SLAVNOST_FMA_HU					136
+#define LOKAL_SLAV_SPOMIENKA_FMA_HU					137
+#define LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB_HU			138
+#define LOKAL_SLAV_SVIATOK_VDB_HU					139
 
 // calendar
 #define KALENDAR_NEURCENY                   0 // undefined
@@ -1187,9 +1191,10 @@ extern const char* nazov_slavenia_lokal[];
 #define KALENDAR_CZ_OCD                    28
 #define KALENDAR_CZ_OFMCONV                29
 #define KALENDAR_SK_OPRAEM                 30
+#define KALENDAR_HU_SDB                    31
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   30
+#define POCET_KALENDAROV                   31
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1249,20 +1254,20 @@ const short int supported_languages[POCET_JAZYKOV + 1] =
 // note 3: ADD_VALUE_FOR_NEW_CALENDAR: change the number of supported calendars in proper language
 const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 {
-	12,
+	12, // JAZYK_SK
 #if defined(DEBUG) || defined(OS_Windows_Ruby)
-	9,
+	9, // JAZYK_CZ
 #else
-	8,
+	8, // JAZYK_CZ
 #endif
-	/* ToDo */ 1,
-	/* ToDo */ 1,
-	/* ToDo */ 1,
-	1,
-	4,
-	1,
-	1,
-	1,
+	/* ToDo */ 1, // JAZYK_EN
+	/* ToDo */ 1, // JAZYK_LA
+	/* ToDo */ 1, // JAZYK_UNDEF
+	1, // JAZYK_CZ_OP
+	5, // JAZYK_HU
+	1, // JAZYK_RU
+	1, // JAZYK_BY
+	1, // JAZYK_IS
 	/* ADD_VALUE_FOR_NEW_LANGUAGE */
 };
 
@@ -1275,7 +1280,7 @@ const short int supported_calendars_language[POCET_JAZYKOV + 1][SUPPORTED_CALEND
 	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, KALENDAR_HU_SDB, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -1971,6 +1976,11 @@ extern const char* text_V_OKTAVE_NARODENIA[POCET_JAZYKOV + 1];
 extern const char* text_DEC_08[POCET_JAZYKOV + 1];
 extern const char* text_AUG_15[POCET_JAZYKOV + 1];
 extern const char* text_NOV_01[POCET_JAZYKOV + 1];
+
+extern short int lokal_slav_slavnost_fma[POCET_JAZYKOV + 1];
+extern short int lokal_slav_spomienka_fma[POCET_JAZYKOV + 1];
+extern short int lokal_slav_lub_spomienka_fma_vdb[POCET_JAZYKOV + 1];
+extern short int lokal_slav_sviatok_vdb[POCET_JAZYKOV + 1];
 
 extern const char* html_text_batch_Back[POCET_JAZYKOV + 1];
 

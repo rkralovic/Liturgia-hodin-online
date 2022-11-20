@@ -3807,14 +3807,8 @@ void interpretParameter(short int typ, short int modlitba, char paramname[MAX_BU
 		}
 		else if (equals(paramname, PARAM_ZOBRAZ_OTCENAS_UVOD)) {
 			bit = BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD;
-			if (_global_jazyk == JAZYK_HU) {
-				mystrcpy(popis_show, HTML_TEXT_HU_OPTION_SKRYT, SMALL);
-				mystrcpy(popis_hide, HTML_TEXT_HU_OPTION_ZOBRAZIT, SMALL);
-			}
-			else {
-				sprintf(popis_show, "%s %s", html_text_option_skryt[_global_jazyk], html_text_opt_1_otcenas_uvod[_global_jazyk]);
-				sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_1_otcenas_uvod[_global_jazyk]);
-			}
+			sprintf(popis_show, "%s %s", html_text_option_skryt[_global_jazyk], html_text_opt_1_otcenas_uvod[_global_jazyk]);
+			sprintf(popis_hide, "%s %s", html_text_option_zobrazit[_global_jazyk], html_text_opt_1_otcenas_uvod[_global_jazyk]);
 		}
 		else if (equals(paramname, PARAM_MARIANSKE_ANTIFONY)) {
 			bit = BIT_OPT_1_KOMPL_MARIA_ANT;
@@ -6923,7 +6917,7 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 	else if ((_je_local_den_sviatok) && (poradie_svateho != PORADIE_PM_SOBOTA)) {
 		// sviatky
 		Log("SLAV_SVIATOK");
-		if ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_CZ_OP) || (_global_jazyk == JAZYK_IS)) {
+		if ((_global_jazyk == JAZYK_LA) || (_global_jazyk == JAZYK_CZ_OP) || (_global_jazyk == JAZYK_IS) || (_global_jazyk == JAZYK_SK)) {
 			velkost = CASE_KAPITALKY; // use small caps
 		}
 		else if (_global_jazyk == JAZYK_BY) {
