@@ -1,7 +1,7 @@
 /**************************************************************/
 /*                                                            */
 /* dbzaltar.cpp                                               */
-/* (c)1999-2022 | Juraj Vidéky | videky@breviar.sk            */
+/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk            */
 /*                                                            */
 /* description | contains 'database' of liturgical calendars  */
 /*                                                            */
@@ -2068,7 +2068,10 @@ void _set_zalmy_2nedele_mcd(void) {// modlitba cez deň; rovnaké žalmy sú pre
 void _set_zalmy_mcd_1nedela_or_doplnkova_psalmodia(void) {
 	// ak je modlitba cez deň na slávnosť, tak sa majú použiť žalmy z doplnkovej psalmódie
 	if (_global_den.denvt != DEN_NEDELA) {
-		_set_zalmy_mcd_doplnkova_psalmodia();
+		if (_je_global_den_slavnost) {
+			_set_zalmy_mcd_doplnkova_psalmodia();
+		}
+		// pre sviatok sa použije bežná psalmódia t férie
 	}
 	else if (!isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_MCD_DOPLNKOVA)) {
 		_set_zalmy_1nedele_mcd();
@@ -11157,7 +11160,6 @@ _struct_lang_anchor_and_count pocet_citanie2_multi_anchor_count[] = {
 	{ JAZYK_SK, "25NOV_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "03JAN2_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "07JAN2_cCIT2", 2 },
-//	{JAZYK_CZ_OP, "15JAN_cCIT2", 2}, // not used
 	{ JAZYK_CZ_OP, "19JAN_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "28JAN2_cCIT2", 3 },
 	{ JAZYK_CZ_OP, "04FEB_cCIT2", 2 },
@@ -11170,7 +11172,7 @@ _struct_lang_anchor_and_count pocet_citanie2_multi_anchor_count[] = {
 	{ JAZYK_CZ_OP, "10MAJ_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "30MAJ2_cCIT2", 4 },
 	{ JAZYK_CZ_OP, "04JUN_cCIT2", 2 },
-	{ JAZYK_CZ_OP, "07JUL_cCIT2", 2 },
+	{ JAZYK_CZ_OP, "04JUL3_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "09JUL_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "09JUL2_cCIT2", 2 },
 	{ JAZYK_CZ_OP, "17JUL2_cCIT2", 2 },
