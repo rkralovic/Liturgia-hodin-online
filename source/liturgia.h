@@ -148,11 +148,17 @@ extern const short int use_dot_for_ordinals[POCET_JAZYKOV + 1];
 #define FONT_SIZE_XX_LARGE	8
 
 // font size in pt, default
-#define FONT_SIZE_PT_DEFAULT 0 // pt; let user set what he/she wants
+#define FONT_SIZE_PT_DEFAULT  12
 
+// style margin, in percents (%)
 #define MIN_STYLE_MARGIN      0
 #define MAX_STYLE_MARGIN   1024
 #define DEF_STYLE_MARGIN      5
+
+// line height, in percents (%)
+#define MIN_LINE_HEIGHT_PERC      0
+#define MAX_LINE_HEIGHT_PERC    512
+#define DEF_LINE_HEIGHT_PERC    130
 
 // alternatives for some parts of prayers
 #define BIT_ALT_HYMNUS                  1
@@ -678,6 +684,9 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 #define PARAM_ALT_PSALM_MULTI               "ALT-PSALM-" KEYWORD_MULTI
 #define PARAM_ALT_UKONKAJ_MULTI             "ALT-UKONKAJ-" KEYWORD_MULTI // used as acronym for PARAM_ALT_PROSBY_MULTI
 #define PARAM_ALT_MARIA_ANT_MULTI           "ALT-MARIA-ANT-" KEYWORD_MULTI
+
+// variants (other alternatives)
+#define PARAM_VAR_CITANIE2                  "VAR-CITANIE2"
 
 // zobrazenie/skrytie číslovania veršov v žalmoch, chválospevoch a biblických čítaniach
 #define PARAM_CISLO_VERSA_BEGIN				"v"
@@ -1542,7 +1551,7 @@ extern unsigned long long _global_force_opt[POCET_GLOBAL_OPT];
 #define USE_STR_OPT           -2
 #define USE_STR_FORCE_OPT     -1
 
-#define POCET_OPT_0_SPECIALNE               17 // jednotlivé komponenty option 0 -- bity pre force option 0
+#define POCET_OPT_0_SPECIALNE               18 // jednotlivé komponenty option 0 -- bity pre force option 0
 extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 // 2011-04-08: úprava významu (a interpretácie) option 0 ==  OPT_0_SPECIALNE (zobraziť/nezobraziť "pridanú hodnotu" oproti papierovej LH)
 #define BIT_OPT_0_VERSE                      1 // export also verse numbers
@@ -1560,8 +1569,9 @@ extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_REF_BIBLE_COM           4096 // precondition: BIT_OPT_0_REFERENCIE must be true; instead of standard URL, generates link to bible.com
 #define BIT_OPT_0_ITALICS_CONDITIONAL     8192 // display text in italics (conditional), e. g. elisions
 #define BIT_OPT_0_PRINTED_EDITION        16384 // prefer printed edition (instead of corrections in our electronical version) = force usage of printed text
-#define BIT_OPT_0_USE_TWO_YEARS_CYCLE    32768 // use two-years' cycle for readings
+#define BIT_OPT_0_USE_TWO_YEARS_CYCLE    32768 // use two-years' cycle for readings (Biblical, first readings in prayer with readings)
 #define BIT_OPT_0_TWO_YEARS_CYCLE_ID     65536 // when use two-years' cycle for readings (BIT_OPT_0_TWO_YEARS_CYCLE is set), 0 = 1st year, 1 = 2nd year of two-years' cycle
+#define BIT_OPT_0_ALTERNATIVE_READINGS  131072 // use alternative second readings in prayer with readings (CZ only)
 
 #define POCET_OPT_1_CASTI_MODLITBY          20 // jednotlivé komponenty option 1 -- bity pre force option 1
 extern unsigned long long _global_opt_1_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];

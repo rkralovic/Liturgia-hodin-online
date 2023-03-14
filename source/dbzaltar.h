@@ -1492,6 +1492,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 // prefixes for special cases (anchors)
 #define CZ_HYMNUS_PREFIX    "CZ_"
+#define ALT_TEXT_PREFIX     "VAR_"
 
 // postfixes for special cases (anchors)
 #define CZ_HYMNUS_POSTFIX       "_CZ"
@@ -1954,6 +1955,7 @@ extern const char* text_DEC_14[POCET_JAZYKOV + 1];
 extern const char* text_DEC_21[POCET_JAZYKOV + 1];
 extern const char* text_DEC_22_CZ[POCET_JAZYKOV + 1];
 extern const char* text_DEC_23[POCET_JAZYKOV + 1];
+extern const char* text_DEC_23_IS[POCET_JAZYKOV + 1];
 extern const char* text_DEC_26[POCET_JAZYKOV + 1];
 extern const char* text_DEC_27[POCET_JAZYKOV + 1];
 extern const char* text_DEC_28[POCET_JAZYKOV + 1];

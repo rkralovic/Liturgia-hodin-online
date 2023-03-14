@@ -161,11 +161,13 @@ extern short int _global_font;
 extern short int _global_font_size;
 extern short int _global_font_size_pt;
 extern short int _global_style_margin; // for usage in <body> for style margin-left & margin-right
+extern short int _global_line_height_perc;
 
 extern short int _global_pocet_zalmov_kompletorium; // kompletórium niekedy obsahuje až dva žalmy
 
 extern char _special_anchor_prefix[SMALL]; // used for CZ hymns
 extern char _special_anchor_postfix[SMALL]; // used for CZ hymns in Per Annum
+extern char _special_anchor_prefix2[SMALL]; // used for CZ 2nd readings
 
 extern short int _global_opt_batch_monthly;
 
@@ -208,6 +210,7 @@ extern void setGlobalOption(short opt_i, unsigned long long bit_opt_i_component_
 
 #define je_vianocne(litobd) ((litobd == OBD_VIANOCNE_I) || (litobd == OBD_VIANOCNE_II))
 
+#define je_post_I_a_II ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN))
 #define je_post ((_global_den.litobd == OBD_POSTNE_I) || (_global_den.litobd == OBD_POSTNE_II_VELKY_TYZDEN) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && ((_global_den.denvt == DEN_PIATOK) || (_global_den.denvt == DEN_SOBOTA))))
 #define je_velka_noc ((_global_den.litobd == OBD_VELKONOCNE_I) || (_global_den.litobd == OBD_VELKONOCNE_II) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && (_global_den.denvt == DEN_NEDELA)) || (_global_den.litobd == OBD_VELKONOCNA_OKTAVA))
 #define je_aleluja_aleluja ((_global_den.litobd == OBD_VELKONOCNA_OKTAVA) || ((_global_den.litobd == OBD_VELKONOCNE_TROJDNIE) && (_global_den.denvt == DEN_NEDELA)) || ((_global_den.denvr == _global_r._ZOSLANIE_DUCHA_SV.denvr) && ((_global_modlitba == MODL_VESPERY) || (_global_modlitba == MODL_DRUHE_VESPERY))))
@@ -382,9 +385,11 @@ extern void setGlobalOption(short opt_i, unsigned long long bit_opt_i_component_
 (_global_modlitba == MODL_VESPERY && ((_global_modl_vespery.alternativy & BIT_ALT_HYMNUS_VN) == BIT_ALT_HYMNUS_VN)) \
 )
 
-// are alternates for antiphony for invitatory? (SK, CZ, HU: 
+// are alternates for antiphony for invitatory? (SK, CZ, HU)
 #define je_alternativa_invitatorium_ant (_global_modlitba == MODL_INVITATORIUM && ((_global_modl_invitatorium.alternativy & BIT_ALT_ANT_INVITATORIUM) == BIT_ALT_ANT_INVITATORIUM))
 
+// are chosen alternative readings for 2nd readigns? (currently CZ only)
+#define je_alternativne_2citanie ((_global_jazyk == JAZYK_CZ) && (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ALTERNATIVE_READINGS)))
 
 // for JAZYK_CZ, is chosen alternative for hymns of supplement?
 #define je_CZ_hymny_k_volnemu_vyberu ((_global_jazyk == JAZYK_CZ) && (isGlobalOption(OPT_5_ALTERNATIVES, BIT_OPT_5_CZ_HYMNY_VYBER)))
@@ -475,7 +480,9 @@ extern char pom_FONT[SMALL];
 
 #define PODMIENKA_EXPORTOVAT_CSS ((_global_css != CSS_UNDEF) && (_global_css != CSS_breviar_sk))
 
-#define PODMIENKA_EXPORTOVAT_STYLE_MARGIN ( (_global_style_margin > MIN_STYLE_MARGIN) && (_global_style_margin < MAX_STYLE_MARGIN) )
+#define PODMIENKA_EXPORTOVAT_STYLE_MARGIN ( (_global_style_margin > MIN_STYLE_MARGIN) && (_global_style_margin < MAX_STYLE_MARGIN)  && (_global_style_margin != DEF_STYLE_MARGIN) )
+
+#define PODMIENKA_EXPORTOVAT_LINE_HEIGHT_PERC ( (_global_line_height_perc > MIN_LINE_HEIGHT_PERC) && (_global_line_height_perc < MAX_LINE_HEIGHT_PERC) && (_global_line_height_perc != DEF_LINE_HEIGHT_PERC) )
 
 #define PODMIENKA_JE_BATCH_MODE_MONTHLY__AND__PLAIN_EXPORT ((_global_opt_batch_monthly == ANO) && (export_monthly_druh > 2))
 

@@ -438,6 +438,15 @@ void prilep_request_options(char pom2[MAX_STR], char pom3[MAX_STR], short int sp
 		Log("\tNetreba prilepiť style margin (_global_style_margin == %d)\n", _global_style_margin);
 	}
 
+	if (PODMIENKA_EXPORTOVAT_LINE_HEIGHT_PERC) {
+		sprintf(pom3, HTML_AMPERSAND"%s=%d", STR_LINE_HEIGHT_PERC, _global_line_height_perc);
+		strcat(pom2, pom3);
+		Log("\tPrilepil som aj line height: `%s'\n", pom3);
+	}
+	else {
+		Log("\tNetreba prilepiť line height (_global_line_height_perc == %d)\n", _global_line_height_perc);
+	}
+
 	// nastavenie parametra o1: odstránime nastavenie BIT_OPT_1_OVERRIDE_STUP_SLAV pre indikovanie, že sa má použiť vyšší stupeň slávenia
 	if ((special_handling > 0) && (isGlobalOption(OPT_1_CASTI_MODLITBY, BIT_OPT_1_OVERRIDE_STUP_SLAV))) {
 		was_changed_o1_override = ANO;
@@ -1847,6 +1856,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_0_PRINTED_EDITION, SMALL); break; // BIT_OPT_0_PRINTED_EDITION
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE, SMALL); break; // BIT_OPT_0_USE_TWO_YEARS_CYCLE
 			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID, SMALL); break; // BIT_OPT_0_TWO_YEARS_CYCLE_ID
+			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_0_ALTERNATIVE_READINGS, SMALL); break; // BIT_OPT_0_ALTERNATIVE_READINGS
 			}
 		}
 		break;

@@ -2506,12 +2506,12 @@ const char* html_text_opt_0_printed_edition_explain[POCET_JAZYKOV + 1] =
 
 const char* html_text_opt_0_use_two_years_cycle[POCET_JAZYKOV + 1] =
 {
-	"použiť dvojročný cyklus pre posvätné čítanie",
-	"vzít dvouroční cyklus pro čtení",
-	"use two years cycle for readings",
+	"použiť dvojročný cyklus pre posvätné čítanie (biblické čítania)",
+	"vzít dvouroční cyklus pro modlitbu se čtením (biblická čtení)",
+	"use two years cycle for prayer with readings (Biblical readings)",
 	"la_text",
 	"",
-	"vzít dvouroční cyklus pro čtení",
+	"vzít dvouroční cyklus pro modlitbu se čtením (biblická čtení)",
 	"",
 	"",
 	"",
@@ -2550,6 +2550,51 @@ const char* html_text_opt_0_two_years_cycle_id[POCET_JAZYKOV + 1] =
 };
 
 const char* html_text_opt_0_two_years_cycle_id_explain[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char* html_text_opt_0_alternative_readings_NORMAL[POCET_JAZYKOV + 1] =
+{
+	"použiť štandardné čítania pre posvätné čítanie",
+	"vzít standardní čtení pro modlitbu se čtením",
+	"use standard readings for prayer with readings",
+	"la_text",
+	"",
+	"vzít standardní čtení pro modlitbu se čtením",
+	"",
+	"",
+	"",
+	"",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char* html_text_opt_0_alternative_readings[POCET_JAZYKOV + 1] =
+{
+	"použiť alternatívne čítania pre posvätné čítanie",
+	"vzít alternativní čtení pro modlitbu se čtením",
+	"use alternative readings for prayer with readings",
+	"la_text",
+	"",
+	"vzít alternativní čtení pro modlitbu se čtením",
+	"",
+	"",
+	"",
+	"",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+
+const char* html_text_opt_0_alternative_readings_explain[POCET_JAZYKOV + 1] =
 {
 	"",
 	"",
@@ -16650,6 +16695,20 @@ const char* text_DEC_23[POCET_JAZYKOV + 1] =
 	"ru_text",
 	"Св. Яна Кенцкага, прэзбітэра",
 	"Hl. Jóhannesar frá Kęty, prests",
+	/* STRING_2_FOR_NEW_LANGUAGE */
+};
+const char* text_DEC_23_IS[POCET_JAZYKOV + 1] =
+{
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"Þorláksmessa á vetri",
 	/* STRING_2_FOR_NEW_LANGUAGE */
 };
 const char* text_DEC_26[POCET_JAZYKOV + 1] =
