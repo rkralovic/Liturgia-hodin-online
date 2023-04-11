@@ -3886,6 +3886,23 @@ void interpretParameter(short int typ, short int modlitba, char paramname[MAX_BU
 			opt = OPT_0_SPECIALNE;
 			bit = BIT_OPT_0_ALTERNATIVE_READINGS;
 			podmienka = podmienka && (_global_jazyk == JAZYK_CZ) && (je_post_I_a_II); // (isGlobalOption(opt, bit));
+
+			// slávnosť sv. Jozefa nemá vlastné alternatívne čítanie
+			if (je_slavnost_sv_Jozefa_prekladana_na_20MAR || je_slavnost_sv_Jozefa_prekladana_pred_Kvetnu_nedenu) {
+				podmienka = NIE;
+			}
+			else {
+				podmienka = podmienka && !((_global_den.den == 19) && (_global_den.mesiac == MES_MAR + 1) && (_global_den.typslav == SLAV_SLAVNOST));
+			}
+
+			// slávnosť Zvestovania Pána nemá vlastné alternatívne čítanie
+			if (je_slavnost_Zvestovania_prekladana_na_26MAR || je_slavnost_Zvestovania_prekladana_po_Velkonocnej_oktave_MAR || je_slavnost_Zvestovania_prekladana_po_Velkonocnej_oktave_APR) {
+				podmienka = NIE;
+			}
+			else {
+				podmienka = podmienka && !((_global_den.den == 25) && (_global_den.mesiac == MES_MAR + 1) && (_global_den.typslav == SLAV_SLAVNOST));
+			}
+
 			mystrcpy(popis_show, html_text_opt_0_alternative_readings_NORMAL[_global_jazyk], SMALL);
 			mystrcpy(popis_hide, html_text_opt_0_alternative_readings[_global_jazyk], SMALL);
 		}
@@ -7063,6 +7080,24 @@ short int init_global_string(short int typ, short int poradie_svateho, short int
 				else if (html_span_bold == ANO) {
 					strcat(_local_string, HTML_SPAN_END); // end of HTML_SPAN_BOLD
 				}
+
+				strcat(_local_string, HTML_LINE_BREAK);
+			}
+
+			// special cases
+
+			// ak padne toto slávenie na nedeľu, berie sa nedeľné ofícium pre Liturgiu hodín (hoci v direktóriu by malo byť uvedené, že je Všetkých zosnulých a omša je zo zosnulých)
+			if (je_Spomienka_na_zosnulych_02NOV_nedela) {
+				sprintf(pom, "<" HTML_SPAN_SMALL ">");
+				sprintf(pom2, "(");
+				strcat(pom, pom2);
+				sprintf(pom2, "%s", mystr_UPPERCASE((char *)text_NOV_02[_global_jazyk]));
+				strcat(pom, pom2);
+				sprintf(pom2, ")");
+				strcat(pom, pom2);
+				strcat(pom, HTML_SPAN_END);
+
+				strcat(_local_string, pom);
 
 				strcat(_local_string, HTML_LINE_BREAK);
 			}
@@ -12604,6 +12639,9 @@ void _export_rozbor_dna(short int typ) {
 	if (i == LINK_DEN_MESIAC_NIE) {
 		mystrcpy(_global_link, STR_EMPTY, MAX_STR);
 	}
+	else if (PODMIENKA_JE_BATCH_MODE_MONTHLY__AND__PLAIN_EXPORT) {
+		vytvor_global_link_class_new(_global_den.den, _global_den.mesiac, _global_den.rok, i, NIE, STR_EMPTY, pom3);
+	}
 	else {
 		vytvor_global_link_class_new(_global_den.den, _global_den.mesiac, _global_den.rok, i, NIE, HTML_CLASS_NAME_CALENDAR_DAY, pom3); // this method fills the following global string variables: _global_string, _global_string2 and _global_string_farba
 	}
@@ -13571,6 +13609,11 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 
 LABEL_NIE_INE_VESPERY:
 
+	// special cases
+	if (je_Spomienka_na_zosnulych_02NOV_nedela) {
+		set_popis_svaty_rch_mcd_pc_vesp_den_mesiac(2, MES_NOV + 1);
+	}
+
 	LOG_ciara;
 	Log("/* vypisanie udajov, podla ktorych vlastne budem generovat modlitbu */\n");
 	Log("/* datum bol vypisany uz predtym, preto teraz (pri prvych vesperach) \n");
@@ -14228,7 +14271,7 @@ void _rozparsuj_parametre_OPT(void) {
 		mystrcpy(optional_html_button_begin, STR_EMPTY, MAX_STR);
 		mystrcpy(optional_html_button_prayer_begin, STR_EMPTY, MAX_STR);
 		mystrcpy(optional_html_button_end, STR_EMPTY, MAX_STR);
-		mystrcpy(optional_html_class_button, " " HTML_CLASS_BUTTON, MAX_STR);
+		mystrcpy(optional_html_class_button, STR_EMPTY, MAX_STR); // mystrcpy(optional_html_class_button, " " HTML_CLASS_BUTTON, MAX_STR);
 		mystrcpy(optional_html_line_break, HTML_LINE_BREAK, MAX_STR);
 	}
 	else {
