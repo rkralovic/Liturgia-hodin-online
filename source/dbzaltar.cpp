@@ -2212,6 +2212,7 @@ void zaltar_kompletorium(short int den, short int obdobie, short int specialne, 
 		_global_modl_kompletorium.pocet_zalmov = 1;
 	}
 	Log("_global_modl_kompletorium.pocet_zalmov == %d; _global_modl_prve_kompletorium.pocet_zalmov == %d...\n", _global_modl_kompletorium.pocet_zalmov, _global_modl_prve_kompletorium.pocet_zalmov);
+	Log("_global_modl_kompletorium.alternativy == %d; _global_modl_prve_kompletorium.alternativy == %d...\n", _global_modl_kompletorium.alternativy, _global_modl_prve_kompletorium.alternativy);
 
 	if (specialne == ZALTAR_VSETKO) {
 		Log("ZALTAR_VSETKO -- takže nastavujem všetko zo žaltára... (zaltar_kompletorium)\n");
@@ -8638,8 +8639,8 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 }
 
 // citania ako v OBD_VELKONOCNE_I; 7. tyzden ma na vespery vlastne citanie
+// bol tu 1. riadok: Log("\n\n _velk2_kcitanie \n\n");
 #define _velk2_kcitanie {\
-	Log("\n\n _velk2_kcitanie \n\n");\
 	if(((den == DEN_NEDELA) || (modlitba == MODL_RANNE_CHVALY) || (tyzden == 6))\
 		/* modlitba cez deň */\
 		|| je_modlitba_cez_den(modlitba)){\
@@ -8769,8 +8770,8 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 			_velk2_kcitanie;
 			_velk2_modlitba;
 
-			if(den == DEN_NEDELA){
-				if(_global_den.denvr == _global_r._ZOSLANIE_DUCHA_SV.denvr){
+			if (den == DEN_NEDELA) {
+				if (_global_den.denvr == _global_r._ZOSLANIE_DUCHA_SV.denvr) {
 
 					// kompletórium po prvých vešperách
 					modlitba = MODL_PRVE_KOMPLETORIUM;
@@ -8840,27 +8841,36 @@ void liturgicke_obdobie(short int litobd, short int tyzden, short int den, short
 					modlitba = MODL_PREDPOLUDNIM;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
-					_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					if (_global_jazyk != JAZYK_CZ) {
+						// pro český breviář jsou užity stejné hymny jako pro dobu velikonoční po Nanebevstoupení Páně
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					}
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_zds_modlitba;
 					modlitba = MODL_NAPOLUDNIE;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
-					_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					if (_global_jazyk != JAZYK_CZ) {
+						// pro český breviář jsou užity stejné hymny jako pro dobu velikonoční po Nanebevstoupení Páně
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					}
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_zds_modlitba;
 					modlitba = MODL_POPOLUDNI;
 					_set_zalmy_zoslanie_ducha_sv(modlitba);
 					_vlastne_slavenie_antifony(_anchor_vlastne_slavenie);
-					_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					if (_global_jazyk != JAZYK_CZ) {
+						// pro český breviář jsou užity stejné hymny jako pro dobu velikonoční po Nanebevstoupení Páně
+						_vlastne_slavenie_hymnus(modlitba, _anchor_vlastne_slavenie, litobd, NIE);
+					}
 					_vlastne_slavenie_kresponz(_anchor_vlastne_slavenie);
 					_vlastne_slavenie_kcitanie(_anchor_vlastne_slavenie);
 					_zds_modlitba;
 
 				}// Zoslanie Ducha Svätého
-				else{ // nedeľa vo veľkonočnom období II.
+				else { // nedeľa vo veľkonočnom období II.
 					// posvätné čítanie -- predĺžené slávenie vigílie
 					modlitba = MODL_POSV_CITANIE;
 					_liturgicke_obdobie_set_vig_ant(modlitba);
@@ -10929,6 +10939,12 @@ _struct_lang_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "25APR_cHYMNUS", 2 },
 	{ JAZYK_CZ, "21SEP_cHYMNUS", 2 },
 	{ JAZYK_CZ, "18OKT_cHYMNUS", 2 },
+	{ JAZYK_CZ, "25APR_rHYMNUS", 2 },
+	{ JAZYK_CZ, "21SEP_rHYMNUS", 2 },
+	{ JAZYK_CZ, "18OKT_rHYMNUS", 2 },
+	{ JAZYK_CZ, "25APR_vHYMNUS", 2 },
+	{ JAZYK_CZ, "21SEP_vHYMNUS", 2 },
+	{ JAZYK_CZ, "18OKT_vHYMNUS", 2 },
 	{ JAZYK_UNDEF, "SPMVSr_HYMNUS", 3 },
 	{ JAZYK_UNDEF, "SPMVSc_HYMNUS", 3 },
 	{ JAZYK_CZ, "CZ_SPMVSr_HYMNUS", 6 },
@@ -10966,6 +10982,12 @@ _struct_lang_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "VN1_9HYMNUS", 2 },
 	{ JAZYK_CZ, "VN1_2HYMNUS", 2 },
 	{ JAZYK_CZ, "VN1_3HYMNUS", 2 },
+	{ JAZYK_CZ, "NAN_9HYMNUS", 2 },
+	{ JAZYK_CZ, "NAN_2HYMNUS", 2 },
+	{ JAZYK_CZ, "NAN_3HYMNUS", 2 },
+	{ JAZYK_CZ, "VN2_9HYMNUS", 2 },
+	{ JAZYK_CZ, "VN2_2HYMNUS", 2 },
+	{ JAZYK_CZ, "VN2_3HYMNUS", 2 },
 	{ JAZYK_CZ, "p_HYMNUS_NE", 2 },
 	{ JAZYK_CZ, "k_HYMNUS_SO", 2 },
 	{ JAZYK_CZ, "k_HYMNUS_NE", 2 },
@@ -11054,8 +11076,11 @@ _struct_lang_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_13NOV_vHYMNUS", 2 },
 	{ JAZYK_SK, "PMMC_vHYMNUS", 2 },
 	{ JAZYK_CZ, "PMMC_vHYMNUS", 2 },
+	{ JAZYK_HU, "PMMC_vHYMNUS", 2 },
+	{ JAZYK_LA, "PMMC_vHYMNUS", 2 },
 	{ JAZYK_CZ_OP, "PMMC_vHYMNUS", 2 },
-		// CZ mezidobí, modlitba uprostřed dne, hymny ze žaltáře
+	{ JAZYK_IS, "PMMC_vHYMNUS", 2 },
+	// CZ mezidobí, modlitba uprostřed dne, hymny ze žaltáře
 		// liché týdny
 	{ JAZYK_CZ, "9_HYMNUS_LICHY_NE", 2 },
 	{ JAZYK_CZ, "2_HYMNUS_LICHY_NE", 2 },
@@ -11149,6 +11174,9 @@ _struct_lang_anchor_and_count pocet_hymnus_multi_anchor_count[] = {
 	{ JAZYK_CZ, "CZ_NAN_1HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_NAN_rHYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_NAN_cHYMNUS", 2 },
+	{ JAZYK_CZ, "CZ_NAN_9HYMNUS", 2 },
+	{ JAZYK_CZ, "CZ_NAN_2HYMNUS", 2 },
+	{ JAZYK_CZ, "CZ_NAN_3HYMNUS", 2 },
 	{ JAZYK_CZ, "CZ_NAN_vHYMNUS", 2 },
 	// špeciálne hymny pre 34. týždeň Cezročného obdobia; not fot CZ
 	{ JAZYK_SK, "OCR34c_HYMNUS", 2 },
@@ -11403,6 +11431,7 @@ _struct_lang_cal_type_anchor_and_count pocet_multi_lang_cal_type_anchor_count[] 
 	{ JAZYK_SK, KALENDAR_SK_OPRAEM, BASE_OPT_6_HYMNUS_MULTI, "06JUN_vHYMNUS", 2 },
 	{ JAZYK_SK, KALENDAR_SK_OPRAEM, BASE_OPT_6_HYMNUS_MULTI, "02MAJ_vHYMNUS", 2 },
 	{ JAZYK_HU, KALENDAR_HU_SDB, BASE_OPT_6_CITANIE2_MULTI, "24MAJ_cCIT2", 2 },
+	{ JAZYK_SK, KALENDAR_SK_SCHP, BASE_OPT_6_CITANIE2_MULTI, "25NOV_cCIT2", 0 }, // !!! override language-default (not use multiple hymns)
 };
 
 short int pocet_multi(char* _anchor, unsigned long long type) {

@@ -205,6 +205,15 @@ public class UrlOptions {
     setBit("o0", 10, value);
   }
 
+  // of0ltn
+  public boolean isTransparentNavLeft() {
+    return hasBit("o0", 18);
+  }
+
+  public void setTransparentNavLeft(boolean value) {
+    setBit("o0", 18, value);
+  }
+
   // of1zspc
   public boolean isDisplayCommuniaInfo() {
     return hasBit("o1", 12);

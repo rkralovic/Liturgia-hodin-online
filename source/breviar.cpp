@@ -3514,6 +3514,7 @@ void interpretParameter(short int typ, short int modlitba, char paramname[MAX_BU
 		else if (startsWith(paramname, (char *)KEYWORD_KOMPLETORIUM_DVA_ZALMY)) {
 			Log("interpretParameter(): _global_modl_kompletorium.pocet_zalmov == %d...\n", _global_modl_kompletorium.pocet_zalmov);
 			Log("interpretParameter(): _global_modl_prve_kompletorium.pocet_zalmov == %d...\n", _global_modl_prve_kompletorium.pocet_zalmov);
+			Log("_global_modl_kompletorium.alternativy == %d; _global_modl_prve_kompletorium.alternativy == %d...\n", _global_modl_kompletorium.alternativy, _global_modl_prve_kompletorium.alternativy);
 			podmienka = podmienka && (_global_pocet_zalmov_kompletorium > 1);
 		}
 		else if (startsWith(paramname, (char *)KEYWORD_RUBRIKA)) {
@@ -4756,6 +4757,7 @@ void interpretParameter(short int typ, short int modlitba, char paramname[MAX_BU
 		case MODL_KOMPLETORIUM:
 			// 2008-04-03: pridaná podmienka, aby sa preskakovalo v modlitbe kompletória pre veľkonočné obdobie - vnorená kotva
 			Log("interpretParameter(): _global_modl_kompletorium.pocet_zalmov == %d...\n", _global_modl_kompletorium.pocet_zalmov);
+			Log("_global_modl_kompletorium.alternativy == %d...\n", _global_modl_kompletorium.alternativy);
 			if ((_global_modl_kompletorium.pocet_zalmov == 2) && (_global_skip_in_prayer == NIE)) {
 				ExportFileAnchor(typ, modlitba, paramname, _global_modl_kompletorium.antifona2);
 			}
@@ -4766,6 +4768,7 @@ void interpretParameter(short int typ, short int modlitba, char paramname[MAX_BU
 		case MODL_PRVE_KOMPLETORIUM:
 			// podmienka, aby sa preskakovalo v modlitbe kompletória pre veľkonočné obdobie - vnorená kotva
 			Log("interpretParameter(): _global_modl_prve_kompletorium.pocet_zalmov == %d...\n", _global_modl_prve_kompletorium.pocet_zalmov);
+			Log("_global_modl_prve_kompletorium.alternativy == %d...\n", _global_modl_prve_kompletorium.alternativy);
 			if ((_global_modl_prve_kompletorium.pocet_zalmov == 2) && (_global_skip_in_prayer == NIE)) {
 				ExportFileAnchor(typ, modlitba, paramname, _global_modl_prve_kompletorium.antifona2);
 			}
@@ -7849,6 +7852,9 @@ void xml_export_options(void) {
 				case 17: // BIT_OPT_0_ALTERNATIVE_READINGS
 					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_0_ALTERNATIVE_READINGS)"%ld" ELEM_END(XML_BIT_OPT_0_ALTERNATIVE_READINGS) "\n", BIT_OPT_0_ALTERNATIVE_READINGS, STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID, html_text_opt_0_alternative_readings[_global_jazyk], (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_ALTERNATIVE_READINGS)));
 					break;
+				case 18: // BIT_OPT_0_TRANSPARENT_NAV_LEFT
+					Export(ELEM_BEGIN_ID_FORCENAME_TEXT(XML_BIT_OPT_0_TRANSPARENT_NAV_LEFT)"%ld" ELEM_END(XML_BIT_OPT_0_TRANSPARENT_NAV_LEFT) "\n", BIT_OPT_0_TRANSPARENT_NAV_LEFT, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT, html_text_opt_0_transparent_nav_left[_global_jazyk], (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV_LEFT)));
+					break;
 				} // switch(j)
 			}// for j
 			Export(ELEM_END(XML_OPT_0_SPECIALNE) "\n");
@@ -8300,6 +8306,12 @@ menu_item_option_str_name get_data_for_menu_item_option(short int menu_group, sh
 			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV, SMALL);
 			mystrcpy(output.option_xml, XML_BIT_OPT_0_TRANSPARENT_NAV, SMALL);
 			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_0_transparent_nav[_global_jazyk]).c_str(), SMALL);
+			break;
+		case MENU_2_ITEM_NAVIGATION_ARROWS_LEFT:
+			mystrcpy(output.option_str, STR_OPT_0, SMALL);
+			mystrcpy(output.option_force, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT, SMALL);
+			mystrcpy(output.option_xml, XML_BIT_OPT_0_TRANSPARENT_NAV_LEFT, SMALL);
+			mystrcpy(output.option_name, mystr_first_upper(html_text_opt_0_transparent_nav_left[_global_jazyk]).c_str(), SMALL);
 			break;
 		case MENU_2_ITEM_BUTTONS_CONDENSED:
 			mystrcpy(output.option_str, STR_OPT_2, SMALL);
@@ -11182,6 +11194,11 @@ void _export_main_formular(short int den, short int mesiac, short int rok, short
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV, html_text_opt_0_transparent_nav[_global_jazyk], html_text_opt_0_transparent_nav_explain[_global_jazyk]);
 
+		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT
+		Export(HTML_CRLF_LINE_BREAK);
+		Export(HTML_NONBREAKING_SPACE_LOOONG);
+		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV_LEFT, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT, html_text_opt_0_transparent_nav_left[_global_jazyk], html_text_opt_0_transparent_nav_explain_left[_global_jazyk], NIE);
+
 		// pole (checkbox) WWW_/STR_FORCE_BIT_OPT_0_ZALMY_FULL_TEXT
 		_export_main_formular_checkbox(OPT_0_SPECIALNE, BIT_OPT_0_ZALMY_FULL_TEXT, STR_FORCE_BIT_OPT_0_ZALMY_FULL_TEXT, html_text_opt_0_zalmy_full_text[_global_jazyk], html_text_opt_0_zalmy_full_text_explain[_global_jazyk]);
 
@@ -13327,6 +13344,14 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 		// Log("_global_modl_prve_kompletorium obsahuje:\n"); Log(_global_modl_prve_kompletorium);
 		// Log("_local_modl_prve_kompletorium obsahuje:\n"); Log(_local_modl_prve_kompletorium);
 
+		// cleanup kvôli tomu, že sa idú nastavovať (kompletórium pre ZDS - nasledujúci deň je OCR s alternatívami hymnov A/B, ale ZDS to nemá ponúkať; ostalo nastavenie v member premennej alternativy)
+		Log("running cleanup pre _global_modl_* premenné...\n");
+
+		_INIT_TMODLITBA1(_global_modl_vespery);
+		_INIT_TMODLITBA3(_global_modl_kompletorium);
+		_INIT_TMODLITBA1(_global_modl_prve_vespery);
+		_INIT_TMODLITBA3(_global_modl_prve_kompletorium);
+
 		LOG_ciara;
 	}// kompletorium alebo vespery
 
@@ -13528,17 +13553,16 @@ void rozbor_dna_s_modlitbou(short int typ, short int den, short int mesiac, shor
 				}
 
 				if (su_vespery12(modlitba)) {
-					Log("priraďujem %s z ďalšieho dňa:\n", nazov_modlitby(modlitba));
+					Log("su_vespery12(); priraďujem %s z ďalšieho dňa:\n", nazov_modlitby(modlitba));
 					_global_modl_prve_vespery = _local_modl_prve_vespery;
 					_global_modl_vespery = _local_modl_prve_vespery;
 				}
 
 				if (je_kompletorium12(modlitba)) {
-					Log("priraďujem %s z ďalšieho dňa, ale iba ak ide o slávnosť!\n", nazov_modlitby(modlitba));
-					if (_local_den.smer < 5) {
-						_global_modl_prve_kompletorium = _local_modl_prve_kompletorium;
-						_global_modl_kompletorium = _local_modl_prve_kompletorium;
-					}
+					Log("je_kompletorium12(); priraďujem %s z ďalšieho dňa (do „dnešného“ kompletória dávam prvé kompletórium z ďalšieho dňa...\n", nazov_modlitby(modlitba));
+					// if (_local_den.smer < 5) { // introduced by # 7fc3d1a41306d9acb1254519db303561d9e27b00 (worked until # bad8fa0f0906472f4) // Log("priraďujem %s z ďalšieho dňa, ale iba ak ide o slávnosť (presnejšie, smer < 5)...\n", nazov_modlitby(modlitba));
+					_global_modl_prve_kompletorium = _local_modl_prve_kompletorium;
+					_global_modl_kompletorium = _local_modl_prve_kompletorium;
 				}
 
 				// 2012-11-20: doplnené priradenie, lebo sa zmenila premenná _global_den

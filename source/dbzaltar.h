@@ -118,6 +118,7 @@ extern void _set_zalmy_zjv(short int modlitba);
 extern void _set_zalmy_premenenie(short int modlitba);
 extern void _set_zalmy_sviatok_apostolov(short int modlitba);
 #define _set_zalmy_sviatok_sv_muzov(a) _set_zalmy_sviatok_duch_past(a)
+#define _set_zalmy_sviatok_sv_zien(a) _set_zalmy_sviatok_panien(a)
 extern void _set_zalmy_sviatok_duch_past(short int modlitba);
 extern void _set_zalmy_sviatok_panien(short int modlitba);
 extern void _set_zalmy_sviatok_marie(short int modlitba);
@@ -1893,7 +1894,7 @@ extern const char* text_OKT_17[POCET_JAZYKOV + 1];
 extern const char* text_OKT_18[POCET_JAZYKOV + 1];
 extern const char* text_OKT_19_1[POCET_JAZYKOV + 1];
 extern const char* text_OKT_19_2[POCET_JAZYKOV + 1];
-extern const char* text_OKT_21_CZ[POCET_JAZYKOV + 1];
+extern const char* text_OKT_21_CZ_HU[POCET_JAZYKOV + 1];
 extern const char* text_OKT_22[POCET_JAZYKOV + 1];
 extern const char* text_OKT_23[POCET_JAZYKOV + 1];
 extern const char* text_OKT_24[POCET_JAZYKOV + 1];
@@ -1953,6 +1954,7 @@ extern const char* text_DEC_11[POCET_JAZYKOV + 1];
 extern const char* text_DEC_12[POCET_JAZYKOV + 1];
 extern const char* text_DEC_13[POCET_JAZYKOV + 1];
 extern const char* text_DEC_14[POCET_JAZYKOV + 1];
+extern const char* text_DEC_15_HU[POCET_JAZYKOV + 1];
 extern const char* text_DEC_21[POCET_JAZYKOV + 1];
 extern const char* text_DEC_22_CZ[POCET_JAZYKOV + 1];
 extern const char* text_DEC_23[POCET_JAZYKOV + 1];
@@ -2436,6 +2438,19 @@ extern const char* text_JUL_09_OSU[POCET_JAZYKOV + 1];
 extern const char* text_SEP_04_OSU[POCET_JAZYKOV + 1];
 extern const char* text_OKT_21_OSU[POCET_JAZYKOV + 1];
 extern const char* text_OKT_23_OSU[POCET_JAZYKOV + 1];
+
+// --------------- SchP propriá ---------------
+extern const char* text_FEB_26_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_MAR_08_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_MAR_18_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_MAJ_08_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_JUL_15_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_AUG_25_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_SEP_19_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_SEP_22_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_OKT_16_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_NOV_18_SCHP[POCET_JAZYKOV + 1];
+extern const char* text_NOV_25_SCHP[POCET_JAZYKOV + 1];
 
 extern short int pocet_multi(char *_anchor, unsigned long long type);
 extern short int is_printed_edition_text(char* _anchor, char* _paramname);

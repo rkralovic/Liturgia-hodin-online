@@ -786,7 +786,7 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 // force pre jednotlivé časti modlitby, funkcie _set_spolocna_cast()...
 #define FORCE_NEBRAT               0
 #define FORCE_BRAT_ANTIFONY        1 // antifóny pre ranné chvály, posv. čítanie a vešpery
-#define FORCE_BRAT_ZALMY           2
+#define FORCE_BRAT_ZALMY           2 // psalmódia pre ranné chvály, posv. čítanie a vešpery; ak niekde je vlastná psalmódia len pre časť týchto modlitieb, je potrebné nastavovať ju ručne
 #define FORCE_BRAT_KCIT_1CIT       4 // krátke čítanie pre rch+v a mcd; 1. čítanie pre posvätné čítanie
 #define FORCE_BRAT_KRESP           8 // krátke responzórium pre ranné chvály, vešpery, posv. čítanie a mcd
 #define FORCE_BRAT_2CITANIE       16 // 2. čítanie pre posvätné čítanie
@@ -1201,9 +1201,10 @@ extern const char* nazov_slavenia_lokal[];
 #define KALENDAR_CZ_OFMCONV                29
 #define KALENDAR_SK_OPRAEM                 30
 #define KALENDAR_HU_SDB                    31
+#define KALENDAR_SK_SCHP                   32
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   31
+#define POCET_KALENDAROV                   32
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1255,7 +1256,7 @@ const short int supported_languages[POCET_JAZYKOV + 1] =
 };
 
 
-#define SUPPORTED_CALENDARS_COUNT_MAX 12
+#define SUPPORTED_CALENDARS_COUNT_MAX 13
 
 // count of supported calendars for specified language
 // note 1: KALENDAR_NEURCENY & KALENDAR_VSEOBECNY are always supported by default so these two do not count there
@@ -1263,7 +1264,7 @@ const short int supported_languages[POCET_JAZYKOV + 1] =
 // note 3: ADD_VALUE_FOR_NEW_CALENDAR: change the number of supported calendars in proper language
 const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 {
-	12, // JAZYK_SK
+	13, // JAZYK_SK
 #if defined(DEBUG) || defined(OS_Windows_Ruby)
 	9, // JAZYK_CZ
 #else
@@ -1280,19 +1281,19 @@ const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 	/* ADD_VALUE_FOR_NEW_LANGUAGE */
 };
 
-// array of supported calendars for specified language | note: pad with zeros
+// array of supported calendars for specified language | note: pad with zeros | /* ADD_VALUE_FOR_NEW_CALENDAR */ for specified language
 const short int supported_calendars_language[POCET_JAZYKOV + 1][SUPPORTED_CALENDARS_COUNT_MAX] =
 {
-	{ KALENDAR_VSEOBECNY_SK, KALENDAR_SK_CSSR, KALENDAR_SK_SVD, KALENDAR_SK_OFM, KALENDAR_SK_SDB, KALENDAR_SK_OP, KALENDAR_SK_SJ, KALENDAR_SK_CM, KALENDAR_SK_OCD, KALENDAR_SK_CSA, KALENDAR_SK_OSU, KALENDAR_SK_OPRAEM },
-	{ KALENDAR_VSEOBECNY_CZ, KALENDAR_CZ_OPRAEM, KALENDAR_CZ_OFMCAP, KALENDAR_CZ_SDB, KALENDAR_CZ_OFM, KALENDAR_CZ_SJ, KALENDAR_CZ_OCD, KALENDAR_CZ_OFMCONV, KALENDAR_CZ_CSSR, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, KALENDAR_HU_SDB, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_SK, KALENDAR_SK_CSSR, KALENDAR_SK_SVD, KALENDAR_SK_OFM, KALENDAR_SK_SDB, KALENDAR_SK_OP, KALENDAR_SK_SJ, KALENDAR_SK_CM, KALENDAR_SK_OCD, KALENDAR_SK_CSA, KALENDAR_SK_OSU, KALENDAR_SK_OPRAEM, KALENDAR_SK_SCHP },
+	{ KALENDAR_VSEOBECNY_CZ, KALENDAR_CZ_OPRAEM, KALENDAR_CZ_OFMCAP, KALENDAR_CZ_SDB, KALENDAR_CZ_OFM, KALENDAR_CZ_SJ, KALENDAR_CZ_OCD, KALENDAR_CZ_OFMCONV, KALENDAR_CZ_CSSR, 0, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, KALENDAR_HU_SDB, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/* ADD_VALUE_FOR_NEW_LANGUAGE */
 };
 
@@ -1551,7 +1552,7 @@ extern unsigned long long _global_force_opt[POCET_GLOBAL_OPT];
 #define USE_STR_OPT           -2
 #define USE_STR_FORCE_OPT     -1
 
-#define POCET_OPT_0_SPECIALNE               18 // jednotlivé komponenty option 0 -- bity pre force option 0
+#define POCET_OPT_0_SPECIALNE               19 // jednotlivé komponenty option 0 -- bity pre force option 0
 extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 // 2011-04-08: úprava významu (a interpretácie) option 0 ==  OPT_0_SPECIALNE (zobraziť/nezobraziť "pridanú hodnotu" oproti papierovej LH)
 #define BIT_OPT_0_VERSE                      1 // export also verse numbers
@@ -1564,7 +1565,7 @@ extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_BUTTONS_ORDER            128 // buttons order: 0 = date navigation BEFORE info on day (default for web); 1 = day details first (with prayer buttons) (default for mobile apps)
 #define BIT_OPT_0_VOICE_OUTPUT             256 // voice-output: 1 = use special CSS override to hide all red texts (rubrics) + display text for speech synthesis + do not display text which should not be heard
 #define BIT_OPT_0_FOOTNOTES                512 // display footnotes and footnote references
-#define BIT_OPT_0_TRANSPARENT_NAV         1024 // transparent navigation arrow in text
+#define BIT_OPT_0_TRANSPARENT_NAV         1024 // transparent navigation arrow in text; default: on the right side of the screen (right-handed)
 #define BIT_OPT_0_ZALMY_FULL_TEXT         2048 // display full text of psalms (also with carets from official LH edition, e. g. verse 6 in psalm 110)
 #define BIT_OPT_0_REF_BIBLE_COM           4096 // precondition: BIT_OPT_0_REFERENCIE must be true; instead of standard URL, generates link to bible.com
 #define BIT_OPT_0_ITALICS_CONDITIONAL     8192 // display text in italics (conditional), e. g. elisions
@@ -1572,6 +1573,7 @@ extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_USE_TWO_YEARS_CYCLE    32768 // use two-years' cycle for readings (Biblical, first readings in prayer with readings)
 #define BIT_OPT_0_TWO_YEARS_CYCLE_ID     65536 // when use two-years' cycle for readings (BIT_OPT_0_TWO_YEARS_CYCLE is set), 0 = 1st year, 1 = 2nd year of two-years' cycle
 #define BIT_OPT_0_ALTERNATIVE_READINGS  131072 // use alternative second readings in prayer with readings (CZ only)
+#define BIT_OPT_0_TRANSPARENT_NAV_LEFT  262144 // transparent navigation arrow in text; override: on the left side of the screen (left-handed)
 
 #define POCET_OPT_1_CASTI_MODLITBY          20 // jednotlivé komponenty option 1 -- bity pre force option 1
 extern unsigned long long _global_opt_1_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
@@ -2060,10 +2062,11 @@ extern const char* bible_version_id_default[POCET_JAZYKOV + 1];
 #define MENU_2_ITEM_NORMAL_FONT				2 // do not allow bold font
 #define MENU_2_ITEM_ROUNDED_CORNERS			3 // for buttons
 #define MENU_2_ITEM_ALT_BACKGROUND			4 // Android only
-#define MENU_2_ITEM_NAVIGATION_ARROWS		5 // used especially for e-book readers
-#define MENU_2_ITEM_BUTTONS_CONDENSED		6 // default (Android, web): ON; historically all buttons for prayers could be displayed in single line (table row)
-#define MENU_2_ITEM_BUTTONS_ORDERING		7 // ordering of buttons for prayers and buttons for date-navigation
-#define MENU_2_ITEM_NAVIGATION_IN_PRAYER	8 // navigation buttons in prayer text (iOS: never display; OFF); contains prayer buttons (laudes, vespers, etc.) + date/month/year navigation (in prayer text, prev/next/this day + today only)
+#define MENU_2_ITEM_NAVIGATION_ARROWS		5 // navigation arrows (default: on the right side); used especially for e-book readers
+#define MENU_2_ITEM_NAVIGATION_ARROWS_LEFT  6 // navigation arrows on the left side; used especially for e-book readers
+#define MENU_2_ITEM_BUTTONS_CONDENSED		7 // default (Android, web): ON; historically all buttons for prayers could be displayed in single line (table row)
+#define MENU_2_ITEM_BUTTONS_ORDERING		8 // ordering of buttons for prayers and buttons for date-navigation
+#define MENU_2_ITEM_NAVIGATION_IN_PRAYER	9 // navigation buttons in prayer text (iOS: never display; OFF); contains prayer buttons (laudes, vespers, etc.) + date/month/year navigation (in prayer text, prev/next/this day + today only)
 
 #define POCET_MENU_3_ITEMS	33
 
