@@ -4,7 +4,7 @@ buildscript {
     google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.0.0'
+    classpath 'com.android.tools.build:gradle:8.1.0'
   }
 }
 
@@ -39,10 +39,12 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-  compileSdkVersion 31
+  namespace 'sk.breviar.android'
+
+  compileSdkVersion 33
   
   defaultConfig {
-    targetSdkVersion 31
+    targetSdkVersion 33
       // TODO: api 33 has changes in notifications: POST_NOTIFICATIONS permission
     minSdkVersion 14
     ndk {

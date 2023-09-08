@@ -5780,7 +5780,7 @@ const char* text_JAN_14_OFM[POCET_JAZYKOV + 1] =
 };
 const char* text_JAN_14_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"Sv. Bohumíra, rehoľníka z našej rehole",
+	"Sv. Gottfrieda (Bohumíra), rehoľníka z našej rehole",
 	"Sv. Gotfrída, řeholníka z premonstrátského řádu",
 	"",
 	"",
@@ -6665,7 +6665,7 @@ const char* text_FEB_10[POCET_JAZYKOV + 1] =
 };
 const char* text_FEB_10_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"Bl. Huga, prvého opáta v Premóntré",
+	"Bl. Huga, prvého opáta v Prémontré",
 	"Bl. Huga, opata z premonstrátského řádu",
 	"",
 	"",
@@ -12049,7 +12049,7 @@ const char* text_AUG_09[POCET_JAZYKOV + 1] =
 	"Sv. Terézie Benedikty od Kríža, " HTML_LINE_BREAK "panny a mučenice, patrónky Európy", // podľa Direktória 2012, str. 178: "Sv. Terézie Benedikty z Kríža (Edity Steinovej), "; Direktórium 2020: oprava
 	"Sv. Terezie Benedikty od Kříže, panny a mučednice, " HTML_LINE_BREAK "patronky Evropy",
 	"",
-	"S. Teresiæ Benedictæ et Cruce, virginis et martyris",
+	"S. Teresiæ Benedictæ a Cruce, virginis et martyris",
 	"",
 	"Sv. Terezie Benedikty od Kříže, panny a mučednice, " HTML_LINE_BREAK "patronky Evropy",
 	"A keresztről nevezett Szent Teréz Benedikta (Edith Stein) " HTML_LINE_BREAK "szűz és vértanú, Európa társvédőszentje",
@@ -12522,7 +12522,7 @@ const char* text_AUG_21[POCET_JAZYKOV + 1] =
 };
 const char* text_OPATSKY_KOSTOL_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"",
+	"Výročie posviacky opátskeho chrámu " HTML_LINE_BREAK "sv. Jána Krstiteľa",
 	"Výročí posvěcení opatského kostela",
 	"",
 	"",
@@ -14516,7 +14516,7 @@ const char* text_OKT_13_SDB[POCET_JAZYKOV + 1] =
 };
 const char* text_OKT_13_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"",
+	"Bl. Petra Adriána Toulorge, " HTML_LINE_BREAK "kňaza a mučeníka z našej rehole",
 	"Bl. Petra Adriána Toulorge, kněze a mučedníka " HTML_LINE_BREAK "z premonstrátského řádu",
 	"",
 	"",
@@ -14782,7 +14782,7 @@ const char* text_OKT_20_OFM[POCET_JAZYKOV + 1] =
 };
 const char* text_OKT_20_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"Bl. Jakuba Kerna, kňaza našej rehole",
+	"Bl. Jakuba Kerna, kňaza z našej rehole",
 	"Bl. Jakuba Kerna, kněze z premonstrátského řádu",
 	"",
 	"",
@@ -15639,7 +15639,7 @@ const char* text_NOV_08_OP[POCET_JAZYKOV + 1] =
 };
 const char* text_NOV_13_OPRAEM[POCET_JAZYKOV + 1] =
 {
-	"Všetkých svätých vašej rehole " HTML_LINE_BREAK "a všetkých svätých rehoľných kanonikov",
+	"Všetkých svätých našej rehole " HTML_LINE_BREAK "a všetkých svätých rehoľných kanonikov",
 	"Všech svatých premonstrátského řádu " HTML_LINE_BREAK "a všech svatých z řádů řeholních kanovníků", // CZ 08NOV
 	"",
 	"",
