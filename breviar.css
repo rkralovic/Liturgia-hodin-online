@@ -29,45 +29,45 @@
 
 /* for HU/CZ first/second/third-ant is used; for SK ant-first/second/third is used */
 .antiphon.first-ant:before {
-    color: #ff0000;
-    content: '1. ant. ';
-    font-weight: bold;
+	color: #ff0000;
+	content: '1. ant. ';
+	font-weight: bold;
 }
 
 .antiphon.second-ant:before {
-    color: #ff0000;
-    content: '2. ant. ';
-    font-weight: bold;
+	color: #ff0000;
+	content: '2. ant. ';
+	font-weight: bold;
 }
 
 .antiphon.third-ant:before {
-    color: #ff0000;
-    content: '3. ant. ';
-    font-weight: bold;
+	color: #ff0000;
+	content: '3. ant. ';
+	font-weight: bold;
 }
 
 .antiphon.ant:before {
-    color: #ff0000;
-    content: 'Ant. ';
-    font-weight: bold;
+	color: #ff0000;
+	content: 'Ant. ';
+	font-weight: bold;
 }
 
 .antiphon.ant-first:before {
-    color: #ff0000;
-    content: 'Ant. 1 ';
-    font-weight: bold;
+	color: #ff0000;
+	content: 'Ant. 1 ';
+	font-weight: bold;
 }
 
 .antiphon.ant-second:before {
-    color: #ff0000;
-    content: 'Ant. 2 ';
-    font-weight: bold;
+	color: #ff0000;
+	content: 'Ant. 2 ';
+	font-weight: bold;
 }
 
 .antiphon.ant-third:before {
-    color: #ff0000;
-    content: 'Ant. 3 ';
-    font-weight: bold;
+	color: #ff0000;
+	content: 'Ant. 3 ';
+	font-weight: bold;
 }
 
 .respons p { 
@@ -507,12 +507,12 @@ p.bibleref {
 }
 
 #about h3 {
-    font-weight: bold;
-    font-size: 1.2em;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 #about b {
-    font-weight: bold !important;
+	font-weight: bold !important;
 }
 
 .indent { 
@@ -659,7 +659,7 @@ p.bibleref {
 /* apply to all elements */ 
 { 
 	font-family: inherit; 
-	font-size: 100%; 
+	font-size: 18pt; 
 	font-weight: normal; 
 }
 
@@ -667,6 +667,7 @@ body, html {
 	background-color: #FFFFFF;
 	color: #1a1a1a;
 	font-family: Cambria, Constantia, Georgia, Lido STF, "DejaVu Serif", Liberation, GentiumPlus, Gentium, Garamond, serif;
+	font-size: 18pt; 
 	font-weight: normal; 
 	line-height: 1.3;
 	-webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
@@ -1062,15 +1063,15 @@ sup {
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
 .tts_section {
-    display: none;
+	display: none;
 }
 
 .tts_pause, .tts_pause_short {
-    display: inline;
+	display: inline;
 }
 
 .psalm-indent, .psalm-indent p.verse {
@@ -1083,7 +1084,6 @@ sup {
 .psalm-indent p.last:after {
 	content: none; 
 }
-
 
 /* always use bold font - no override by breviar-normal-font.css */
 .strong-always { 
@@ -1123,4 +1123,74 @@ p.strong-always, h3.strong-always {
 
 #contentRoot {
   z-index: 0;
+}
+
+/* side hamburger menu - sidebar, open and close buttons */
+.sidebar {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #6F3028; /* logo background darker */
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 64px;
+}
+
+.sidebar a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 130%;
+	color: #dddddd;
+	display: block;
+	transition: 0.3s;
+	border-bottom: none; 
+}
+
+.sidebar a:hover {
+	color: #eeeeee;
+}
+
+.sidebar .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 200%;
+	margin-left: 10px;
+}
+
+a:hover.closebtn {
+	background-color: #6F3028; /* logo background darker */
+}
+
+.openbtn {
+	font-size: 130%;
+	cursor: pointer;
+	background-color: white;
+	color: black;
+	/* padding: 4px 4px; */
+	border: none;
+	position: fixed;
+}
+
+#main {
+	transition: margin-left .5s;
+	padding: 16px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+	.sidebar {
+	padding-top: 14px;
+	}
+	.sidebar a {
+	font-size: 16px;
+	}
+}
+
+hr.sidemenu {
+	margin-top: 24px;
+	margin-bottom: 24px;
 }

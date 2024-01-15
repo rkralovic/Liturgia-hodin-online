@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* liturgia.cpp                                             */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | basic 'liturgical' methods for calendar,   */
 /*               working with dates and strings             */
@@ -26,6 +26,7 @@
 #include "mystring.h"
 #include "myconf.h"
 #include "utf8-utils.h"
+
 #include <ctype.h>
 #include <wctype.h>
 #include <string.h>
@@ -769,7 +770,7 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 
 		prilep_request_options(_global_link, pom2, 1 /* special_handling: remove BIT_OPT_1_OVERRIDE_STUP_SLAV */);
 
-	}// if(_global_opt_batch_monthly == NIE)
+	}// if (_global_opt_batch_monthly == NIE)
 	else {
 		// najprv podľa typu exportu rozhodneme, či treba predlepiť aj adresár
 		if (typ == LINK_DEN_MESIAC_PREDOSLY || typ == LINK_DEN_MESIAC_NASLEDOVNY) {
@@ -849,7 +850,7 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 					sprintf(pom, " %d", rok);
 				}
 			}// mesiac != VSETKY_MESIACE
-		}// if(den == VSETKY_DNI)
+		}// if (den == VSETKY_DNI)
 		else {
 			if (typ == LINK_DEN_MESIAC_PREDOSLY) {
 				sprintf(pom, HTML_LEFT_ARROW_WIDE);
@@ -1858,6 +1859,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID, SMALL); break; // BIT_OPT_0_TWO_YEARS_CYCLE_ID
 			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_0_ALTERNATIVE_READINGS, SMALL); break; // BIT_OPT_0_ALTERNATIVE_READINGS
 			case 18: mystrcpy(str, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV_LEFT
+			case 19: mystrcpy(str, STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION, SMALL); break; // BIT_OPT_0_SIDE_NAVIGATION
 			}
 		}
 		break;
@@ -1952,7 +1954,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_5_CZ_HYMNY_VYBER, SMALL); break; // BIT_OPT_5_CZ_HYMNY_VYBER
 			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_5_OFF_DEF_PSALM_146_150, SMALL); break; // BIT_OPT_5_OFF_DEF_PSALM_146_150
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_5_ZAVER_KNAZ_DIAKON, SMALL); break; // BIT_OPT_5_ZAVER_KNAZ_DIAKON
-			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT, SMALL); break; // BIT_OPT_5_INVITATORIUM_ANT
+			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT, SMALL); break; // BIT_OPT_5_INVITATORIUM_ANT // not used
 			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_5_OCR_34_HYMNS, SMALL); break; // BIT_OPT_5_OCR_34_HYMNS
 			}
 		}

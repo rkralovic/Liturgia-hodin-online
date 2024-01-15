@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* common.h                                              */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | new core basic define's                 */
 /*                                                       */
@@ -90,6 +90,9 @@
 #define CHAR_QUOTATION_MARK_11 L'\x00BB' /*»*/ // right guillemet (Right-Pointing Double Angle Quotation Mark) | U+00BB
 
 #define CHAR_APOSTROPHE        L'\x2019' /*’*/ // single comma quotation mark | U+2019 | SK apostrophe // not to be excluded for voice output in method ExportChar()
+
+#define CHAR_MOON              L'\x263E' /*☾*/ // Last Quarter Moon
+#define CHAR_SUN               L'\x263C' /*☼*/ // White Sun with Rays
 
 // include parameters
 #define INCLUDE_BEGIN   "BEGIN" // zaciatok
@@ -197,6 +200,7 @@
 #define HTML_FORM_SELECT "<select "
 
 #define HTML_HR            "<hr/>"
+#define HTML_HR_SIDEMENU   "<hr class=\"sidemenu\"/>"
 
 #define HTML_EMPTY_TAG_END " />"
 

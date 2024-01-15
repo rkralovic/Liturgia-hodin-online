@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* mydefs.h                                              */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | core basic define's                     */
 /*                                                       */
@@ -75,6 +75,8 @@
 
 #define MAX_POCET_SVATY 5
 #define PORADIE_PM_SOBOTA  (MAX_POCET_SVATY + 1)
+
+#define POCET_SIDEMENU_ITEMS 5
 
 #define SCRIPT_NAME          "l.cgi"
 
@@ -613,11 +615,19 @@ extern short int query_type; // contains constants PRM_...
 #endif
 
 // transparent navigation arrows on the left
-#define FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT 148
+#define FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT 149
 #ifdef LONG_PARAM_NAMES
 #define STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT "FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT"
 #else
 #define STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT "of0ltn" // of0tnl would be more logical but we want to avoid the same prefixes to be used
+#endif
+
+// side navigation (side menu)
+#define FORCE_BIT_OPT_0_SIDE_NAVIGATION 150
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION "FORCE_BIT_OPT_0_SIDE_NAVIGATION"
+#else
+#define STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION "of0sn"
 #endif
 
 // full text of psalms etc.
@@ -1121,11 +1131,12 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_5_ZAVER_KNAZ_DIAKON "of5zkd"
 #endif
 
+// not used
 #define FORCE_BIT_OPT_5_INVITATORIUM_ANT 125
 #ifdef LONG_PARAM_NAMES
 #define STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT "FORCE_BIT_OPT_5_INVITATORIUM_ANT"
 #else
-#define STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT "of5i"
+#define STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT "of5i(deprecated)"
 #endif
 
 #define FORCE_BIT_OPT_5_OCR_34_HYMNS 137
@@ -1208,9 +1219,10 @@ extern short int query_type; // contains constants PRM_...
 #endif
 
 #define ALERT	{\
-	if(query_type != PRM_XML){\
+	if (query_type != PRM_XML) {\
 		Log("ALERT\n");\
 		hlavicka((char *)html_title[_global_jazyk]);\
+		hlavicka_sidemenu();\
 		char pom2[MAX_STR];\
 		mystrcpy(pom2, STR_EMPTY, MAX_STR);\
 		char pom3[MAX_STR];\
@@ -1253,7 +1265,7 @@ extern short int query_type; // contains constants PRM_...
 
 #define HTML_ISO_FORMAT      "%04d-%02d-%02d"
 
-#define TEXT_COPYRIGHT       "(c) 1999-2023 Juraj Vidéky"
+#define TEXT_COPYRIGHT       "(c) 1999-2024 Juraj Vidéky"
 #define TEXT_EMAIL           "videky@breviar.sk"
 
 // main XML element
@@ -1357,6 +1369,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_TWO_YEARS_CYCLE_ID        "BitOpt0TwoYearsCycleId"
 #define XML_BIT_OPT_0_ALTERNATIVE_READINGS      "BitOpt0AlternativeReadings"
 #define XML_BIT_OPT_0_TRANSPARENT_NAV_LEFT      "BitOpt0TransparentNavLeft"
+#define XML_BIT_OPT_0_SIDE_NAVIGATION           "BitOpt0NavigationMenu"
 
 // POCET_OPT_1_CASTI_MODLITBY
 #define XML_BIT_OPT_1_TEDEUM                    "BitOpt1TeDeum"
@@ -1416,7 +1429,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_5_CZ_HYMNY_VYBER            "BitOpt5CZhymnsAlt"
 #define XML_BIT_OPT_5_OFF_DEF_PSALM_146_150     "BitOpt5OffDefPsalm146or150"
 #define XML_BIT_OPT_5_ZAVER_KNAZ_DIAKON         "BitOpt5ConclusionPriestDiacon"
-#define XML_BIT_OPT_5_INVITATORIUM_ANT          "BitOpt5InvitatoryAnt"
+#define XML_BIT_OPT_5_INVITATORIUM_ANT          "BitOpt5InvitatoryAnt" // deprecated
 #define XML_BIT_OPT_5_OCR_34_HYMNS              "BitOpt5PerAnnum34Hymns"
 #define XML_BIT_OPT_5_KOMPLETORIUM_OKTAVA       "BitOpt5ComplOctaves"
 #define XML_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  "BitOpt5MaundyThursPsalmody"

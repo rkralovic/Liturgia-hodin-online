@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* myconf.h                                              */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | interface to config file CONFIG_FILE    */
 /*                                                       */
@@ -63,6 +63,12 @@ extern char cfg_bible_com_version_id_default[POCET_JAZYKOV + 1][MAX_SMALL_STR];
 
 const long cfg_option_default_PROG[POCET_GLOBAL_OPT] =
 { 8835, 5376, 29432, 0, 0, 0, 0 };
+
+extern char cfg_sidemenu_item[POCET_SIDEMENU_ITEMS][POCET_JAZYKOV + 1][MAX_VALUE_LENGTH];
+extern char cfg_sidemenu_item_link[POCET_SIDEMENU_ITEMS][POCET_JAZYKOV + 1][MAX_VALUE_LENGTH];
+
+#define CFG_SIDEMENU_ITEM(i) cfg_sidemenu_item[i][_global_jazyk]
+#define CFG_SIDEMENU_ITEM_LINK(i) cfg_sidemenu_item_link[i][_global_jazyk]
 
 void setConfigDefaultsOther(short int j);
 

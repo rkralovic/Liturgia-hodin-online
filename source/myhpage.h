@@ -1,7 +1,7 @@
 /************************************************************************/
 /*                                                                      */
 /* myhpage.h                                                            */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk                      */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk                      */
 /*                                                                      */
 /* description | HTML document dynamically generated header and footer  */
 /*                                                                      */
@@ -32,6 +32,23 @@
   "<div id=\"nav-arrow-down\" class=\"nav-arrow-left\" onclick=\"window.scrollBy(0, 0.95*window.innerHeight)\"></div>\n"
 #endif
 
+#define HTML_SIDE_NAVIGATION_SIDEBAR "<div id=\"mySidebar\" class=\"sidebar\">\n" \
+	"\t<a href=\"javascript:void(0)\" class=\"closebtn\" onclick=\"closeNav()\">×</a>"
+
+#define HTML_SIDE_NAVIGATION_MAIN "<div id=\"main\">\n" \
+	"\t<button class=\"openbtn\" onclick=\"openNav()\">☰</button>\n" \
+	"</div>"
+
+#define HTML_SIDE_NAVIGATION_SCRIPT "<script>" \
+"\nfunction openNav() {" \
+"\n\tdocument.getElementById(\"mySidebar\").style.width = \"240px\";" \
+"\n}" \
+"\n" \
+"\nfunction closeNav() {" \
+"\n\tdocument.getElementById(\"mySidebar\").style.width = \"0\";" \
+"\n}" \
+"\n</script>"
+
 #define HTML_BOTTOM "p-bottom"
 #define HTML_ANAME_BOTTOM "<a name=\"" HTML_BOTTOM "\"></a></div>"
 
@@ -40,6 +57,9 @@
 // header
 void hlavicka(char* title, short int level = 0, short int spec = 0);
 void hlavicka(char* title, FILE* expt, short int level = 0, short int spec = 0);
+
+void hlavicka_sidemenu();
+void hlavicka_sidemenu(FILE* expt);
 
 // XML header
 void xml_hlavicka(void);

@@ -1,7 +1,7 @@
 /************************************************************************/
 /*                                                                      */
 /* myhpage.cpp                                                          */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk                      */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk                      */
 /*                                                                      */
 /* description | HTML document dynamically generated header and footer  */
 /*                                                                      */
@@ -15,15 +15,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#include "mybuild.h"
 #include "myconf.h"
 #include "myhpage.h"
 #include "mydefs.h"
 #include "myexpt.h"
 #include "mystring.h"
 #include "mylog.h"
+#include "mybuild.h"
+
 #include "breviar.h"
 #include "liturgia.h"
-#include "mybuild.h"
 
 short int bol_content_type_text_html = NIE;
 short int bol_content_type_text_xml = NIE;
@@ -338,6 +341,11 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	}
 	Export_to_file(expt, ">\n");
 
+	// explicit override for hamburger icon
+	if (has_font_margin) {
+		Export_to_file(expt, "<style>\n\t.openbtn {\n\t\tmargin-left: -%dpx; \n\t}\n</style>\n", _global_style_margin);
+	}
+
 	// display transparent navigation (up/down arrows)
 	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV)) {
 		if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_TRANSPARENT_NAV_LEFT)) {
@@ -370,6 +378,46 @@ void hlavicka(char* title, short int level, short int spec) {
 void hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	_hlavicka(title, expt, level, spec);
 }// hlavicka()
+
+void _hlavicka_sidemenu(FILE* expt) {
+	// display side navigation (left menu)
+	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) {
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR "\n");
+
+		// Dnes (Today's prayers)
+		_export_link_menu_dnes();
+
+		// Téma light/dark (Theme day/night)
+		_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM, (char*)html_text_opt_2_nocny_rezim_menu_show[_global_jazyk], (char*)html_text_opt_2_nocny_rezim_menu_hide[_global_jazyk], (char*)STR_EMPTY, (char*)STR_EMPTY, (char*)"\t", (char*)"\n", (char*)STR_EMPTY, (char*)STR_EMPTY, 0, 0);
+
+		// ------ horizontal row ------ 
+		Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
+
+		// these should be similar to static HTML file sidemenu.htm
+		for (short int o = 0; o < POCET_SIDEMENU_ITEMS; o++) {
+			if ((!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_EMPTY))) 
+				&& (!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_SLASH))) // simple forward to webpage base
+				&& (!(equals(cfg_sidemenu_item[o][_global_jazyk], STR_EMPTY)))
+				) {
+				_export_link_menu_linkitem(o);
+			}
+		}// for o
+
+		Export_to_file(expt, HTML_DIV_END"\n");
+
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN "\n");
+
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_SCRIPT "\n");
+	}
+}// _hlavicka_sidemenu()
+
+void hlavicka_sidemenu() {
+	_hlavicka_sidemenu(NULL);
+}// hlavicka_sidemenu()
+
+void hlavicka_sidemenu(FILE* expt) {
+	_hlavicka_sidemenu(expt);
+}// hlavicka_sidemenu()
 
 // exportuje hlavicku XML dokumentu
 void _xml_hlavicka(FILE* expt) {

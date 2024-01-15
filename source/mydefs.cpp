@@ -1,7 +1,7 @@
 /*********************************************************/
 /*                                                       */
 /* mydefs.cpp                                            */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk       */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk       */
 /*                                                       */
 /* description | some basic define's                     */
 /*                                                       */
@@ -21,12 +21,12 @@
 char script_name[MAX_STR] = STR_EMPTY;
 char uncgi_name[MAX_STR] = STR_EMPTY;
 
-void updateScriptName(void){
+void updateScriptName(void) {
 	strcpy(script_name, cfg_http_address_default[_global_jazyk]);
 	strcat(script_name, SCRIPT_PATH(SCRIPT_NAME));
 }
 
-void updateUnCGIName(void){
+void updateUnCGIName(void) {
 	strcpy(uncgi_name, cfg_http_address_default[_global_jazyk]);
 	strcat(uncgi_name, UNCGI_SCRIPT_NAME);
 }

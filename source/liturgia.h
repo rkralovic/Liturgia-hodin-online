@@ -1,7 +1,7 @@
 /************************************************************/
 /*                                                          */
 /* liturgia.h                                               */
-/* (c)1999-2023 | Juraj Vidéky | videky@breviar.sk          */
+/* (c)1999-2024 | Juraj Vidéky | videky@breviar.sk          */
 /*                                                          */
 /* description | basic 'liturgical' constants, defines      */
 /*               and structures                             */
@@ -541,7 +541,6 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 #define PARAM_ZALM131                  "ZALM131"
 #define PARAM_ZALM146                  "ZALM146"
 #define PARAM_ZALM150                  "ZALM150"
-#define PARAM_INVITATORIUM_ANT(i)      "ANT-INVITAT" i
 #define PARAM_MARIANSKE_ANTIFONY       "MARIANSKE-ANTIFONY" // Maria antiphones at the end of compline
 #define PARAM_OKTAVA_PRVE_DRUHE_KOMPL  "OKTAVA-PRVE-DRUHE-KOMPLETORIUM"
 
@@ -726,6 +725,9 @@ extern const char* FILE_INFO[POCET_INFO_TEXTOV + 1];
 // these two have the same usage as previous two except adding div's (used within section divided due to different psalm strophes as in Ps 55)
 #define PARAM_PSALM_FULL_TEXT_SOFT_BEGIN    "full-text-soft"
 #define PARAM_PSALM_FULL_TEXT_SOFT_END      SYMBOL_END "" PARAM_PSALM_FULL_TEXT_SOFT_BEGIN
+// full text of other text [e.g. readings] (also verses omitted from official Latin LH)
+#define PARAM_PSALM_FULL_TEXT_TXT_BEGIN     "full-text-txt"
+#define PARAM_PSALM_FULL_TEXT_TXT_END       SYMBOL_END "" PARAM_PSALM_FULL_TEXT_TXT_BEGIN
 
 // pause, to be exported (in readings)
 #define PARAM_PAUSE                         "p"
@@ -1028,9 +1030,9 @@ extern const char* nazov_slavenia_na_spomienku_jazyk[POCET_JAZYKOV + 1];
 extern const char* nazov_slavenia_lokal[];
 
 #define LOKAL_SLAV_NEURCENE							0
-#define LOKAL_SLAV_ROZNAVA_KATEDRALA				1 // not used
+#define LOKAL_SLAV_ROZNAVA_SZLOVAKIA				1
 #define LOKAL_SLAV_TRNAVA_PATRON					2
-#define LOKAL_SLAV_TT_BB_KE_NR_RO					3 // not used
+#define LOKAL_SLAV_ROZNAVA_HU					    3
 #define LOKAL_SLAV_NITRA_PATRON						4
 #define LOKAL_SLAV_KOSICE							5
 #define LOKAL_SLAV_NITRA							6
@@ -1039,7 +1041,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_ROZNAVA							9
 #define LOKAL_SLAV_TRNAVA							10
 #define LOKAL_SLAV_DOM_SV_MARTINA					11
-#define LOKAL_SLAV_SPIS_PATRON						12
+#define LOKAL_SLAV_SZLOVAKIA_EMLEKNAP_HU			12
 #define LOKAL_SLAV_BYSTRICA_PATRON					13
 #define LOKAL_SLAV_TT_BB_NR_RO						14
 #define LOKAL_SLAV_KOSICE_PATRON					15
@@ -1048,7 +1050,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_KONSEKR_KOSTOLY					18
 #define LOKAL_SLAV_DRUHA_VELK_NEDELA				19
 #define LOKAL_SLAV_KONIEC_OKTAVY_NAR				20
-#define LOKAL_SLAV_OCD_IT							21
+#define LOKAL_SLAV_OCD_IT							21 // not used
 #define LOKAL_SLAV_PRAHA_PATRON						22
 #define LOKAL_SLAV_PRAHA							23
 #define LOKAL_SLAV_BRNO								24
@@ -1066,10 +1068,10 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_PLZEN 							36
 #define LOKAL_SLAV_OSTRAVA_OPAVA_SLAVNOST			37
 #define LOKAL_SLAV_CESKE_BUDEJOVICE_PAMATKA			38
-#define LOKAL_SLAV_SPIS_BA_PATRON					39 // pre 11. novembra, patróna BA-arcidiecézy; nahrádza LOKAL_SLAV_SPIS_PATRON
+#define LOKAL_SLAV_SPIS_BA_PATRON					39
 #define LOKAL_SLAV_BRATISLAVA						40
 #define LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB			41
-#define LOKAL_SLAV_KONGREGACIA_SSK					42
+#define LOKAL_SLAV_SZLOVAKIA_FOPATRONAJA_HU			42
 #define LOKAL_SLAV_SPOMIENKA_OFMCAP					43
 #define LOKAL_SLAV_SVIATOK_OFM						44
 #define LOKAL_SLAV_SPOMIENKA_OFM					45
@@ -1082,31 +1084,31 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SPOMIENKA_OFM_SLAVNOST_CONCEPT	52
 #define LOKAL_SLAV_SZOMBATHELYI_EGYH				53
 #define LOKAL_SLAV_NAGYSZ_PATRON					54
-#define LOKAL_SLAV_SZEGED_CSAN_PATRON				55
-#define LOKAL_SLAV_PECSI_EGYH						56
+#define LOKAL_SLAV_NITRA_HU							55
+#define LOKAL_SLAV_SZLOVAKIA_FOUNNEP				56
 #define LOKAL_SLAV_PECSI_EGYH_PATRON				57
-#define LOKAL_SLAV_SZEGED_CSAN_EGYH					58
+#define LOKAL_SLAV_NAGYVARADI_EGYH					58
 #define LOKAL_SLAV_VESZPREMI_EGYH_PATRON			59
 #define LOKAL_SLAV_GYORI_SZEKESFEH_EGYH				60
-#define LOKAL_SLAV_KAPORSVAR_FELSZ					61
-#define LOKAL_SLAV_VACI_FELSZ						62
+#define LOKAL_SLAV_IMRE_EMLEKNAP					61
+#define LOKAL_SLAV_KOSICE_HU						62
 #define LOKAL_SLAV_KAL_KECS_FOEGYH					63
-#define LOKAL_SLAV_ESZTERGOM_BUDA_FOEGYH			64
-#define LOKAL_SLAV_KAL_KECS_FELSZ					65
-#define LOKAL_SLAV_GYORI_SZEKESEGYH_FELSZ			66
+#define LOKAL_SLAV_KOSICE_FOUNNEP_HU				64
+#define LOKAL_SLAV_ARCI_CATHEDRAL_FOUNNEP_HU		65
+#define LOKAL_SLAV_BESZTERCEBANYA_EGYH				66
 #define LOKAL_SLAV_VACI_PATRON						67
 #define LOKAL_SLAV_SZEGED_CSAN_PATRON2				68
-#define LOKAL_SLAV_VESZPREM_FOEGYH					69
+#define LOKAL_SLAV_VESZPREM_FOEGYH					69 // not used
 #define LOKAL_SLAV_CSSR_SVIATOK						70
-#define LOKAL_SLAV_SZEGED_CSAN_EGYH2				71
+#define LOKAL_SLAV_SZEGED_CSAN_EGYH2				71 // not used
 #define LOKAL_SLAV_PECS_PATRON						72
 #define LOKAL_SLAV_SZOMBATHELYI_PATRON				73
-#define LOKAL_SLAV_SZEKESFEHERVAR_EGYH				74
+#define LOKAL_SLAV_SZEKESFEHERVAR_EGYH				74 // not used
 #define LOKAL_SLAV_EGER_FOEGYH						75
 #define LOKAL_SLAV_ESZTERGOM_EML					76
 #define LOKAL_SLAV_GYOR_EGYH						77
 #define LOKAL_SLAV_ESZTERGOM_FOEGYH					78
-#define LOKAL_SLAV_EGER_FOEGYH2						79
+#define LOKAL_SLAV_BAZILIKA_ARCI_FOUNNEP_HU			79
 #define LOKAL_SLAV_VESZPREM_FOEGYH_T				80
 #define LOKAL_SLAV_SZATMAR							81
 #define LOKAL_SLAV_CESKO_BRNO						82
@@ -1126,11 +1128,11 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SPOMIENKA_OSC					96
 #define LOKAL_SLAV_NEDOVOLENE_SK					97
 #define LOKAL_SLAV_KATONAI_ORDINARIAT				98
-#define LOKAL_SLAV_DEBR_NYIREGY						99
+#define LOKAL_SLAV_ESZTERGOM_BUD_FOEGYH				99
 #define LOKAL_SLAV_OPRAEM_DOKSANY					100
 #define LOKAL_SLAV_OPRAEM_DOKSANY_ZELIV				101
 #define LOKAL_SLAV_OPRAEM_TEPLA						102
-#define LOKAL_SLAV_KONGREGACIA_SMBM					103
+#define LOKAL_SLAV_KONGREGACIA_SMBM					103 // not used
 #define LOKAL_SLAV_SPOMIENKA_FMA_CZ					104
 #define LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB_CZ			105
 #define LOKAL_SLAV_SVIATOK_VDB_CZ					106
@@ -1142,7 +1144,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_LEN_MORAVA						112
 #define LOKAL_SLAV_LEN_CECHY						113
 #define LOKAL_SLAV_HU_CONCEPTIONISTAK_UN			114
-#define LOKAL_SLAV_OCD_BOSE_KARMEL_SPOM				115
+#define LOKAL_SLAV_OCD_BOSE_KARMEL_SPOM				115 // not used
 #define LOKAL_SLAV_SLAVNOST_SDB_CZ					116
 #define LOKAL_SLAV_SPOMIENKA_CM_PARIZ				117
 #define LOKAL_SLAV_VICEB_SPOMIENKA					118
@@ -1161,12 +1163,22 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_VICEB_SL_MINSK_PINSK_SV			131
 #define LOKAL_SLAV_GRODZ_SL_PINSK_MINSK_SP			132
 #define LOKAL_SLAV_PRAHA_OFM						133
-#define LOKAL_SLAV_OP_MNISKY_PAMATKA				134
+#define LOKAL_SLAV_OP_MNISKY_PAMATKA				134 // not used
 #define LOKAL_SLAV_SPOMIENKA_OFS					135
 #define LOKAL_SLAV_SLAVNOST_FMA_HU					136
 #define LOKAL_SLAV_SPOMIENKA_FMA_HU					137
 #define LOKAL_SLAV_LUB_SPOMIENKA_FMA_VDB_HU			138
 #define LOKAL_SLAV_SVIATOK_VDB_HU					139
+#define LOKAL_SLAV_SPOMIENKA_POZSONYI_HU			140
+#define LOKAL_SLAV_CATHERDAL_SLAVNOST_HU			141
+#define LOKAL_SLAV_SZABADKAI_SLAVNOST_HU			142
+#define LOKAL_SLAV_ESZTERGOM_BUD_SZLOVAK			143
+#define LOKAL_SLAV_SZOMBATHELYI_PANNONHALMI			144
+#define LOKAL_SLAV_MURASZOMBATI_SZLOVAKIA			145
+#define LOKAL_SLAV_PANNONHALMA_HU					146
+#define LOKAL_SLAV_NITRA_FOUNNEP_HU					147
+#define LOKAL_SLAV_SZLOVAKIA_HU						148
+#define LOKAL_SLAV_BAZILIKA_FOUNNEP_HU				149
 
 // calendar
 #define KALENDAR_NEURCENY                   0 // undefined
@@ -1202,9 +1214,10 @@ extern const char* nazov_slavenia_lokal[];
 #define KALENDAR_SK_OPRAEM                 30
 #define KALENDAR_HU_SDB                    31
 #define KALENDAR_SK_SCHP                   32
+#define KALENDAR_HU_SCHP                   33
 
 /* INCREMENT_FOR_NEW_CALENDAR */
-#define POCET_KALENDAROV                   32
+#define POCET_KALENDAROV                   33
 // when adding new calendar, the following comments MUST BE replaced:
 // 
 // few numeric/string constants [ADD_VALUE_FOR_NEW_CALENDAR]
@@ -1274,7 +1287,11 @@ const short int supported_calendars_count[POCET_JAZYKOV + 1] =
 	/* ToDo */ 1, // JAZYK_LA
 	/* ToDo */ 1, // JAZYK_UNDEF
 	1, // JAZYK_CZ_OP
+#if defined(DEBUG) || defined(OS_Windows_Ruby)
+	6, // JAZYK_HU
+#else
 	5, // JAZYK_HU
+#endif
 	1, // JAZYK_RU
 	1, // JAZYK_BY
 	1, // JAZYK_IS
@@ -1290,7 +1307,7 @@ const short int supported_calendars_language[POCET_JAZYKOV + 1][SUPPORTED_CALEND
 	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/* ToDo */ { KALENDAR_VSEOBECNY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_CZ_OP, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, KALENDAR_HU_SDB, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ KALENDAR_VSEOBECNY_HU, KALENDAR_HU_OFM, KALENDAR_HU_SVD, KALENDAR_HU_SJ, KALENDAR_HU_SDB, KALENDAR_HU_SCHP, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_RU, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_BY, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ KALENDAR_VSEOBECNY_IS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -1552,7 +1569,7 @@ extern unsigned long long _global_force_opt[POCET_GLOBAL_OPT];
 #define USE_STR_OPT           -2
 #define USE_STR_FORCE_OPT     -1
 
-#define POCET_OPT_0_SPECIALNE               19 // jednotlivé komponenty option 0 -- bity pre force option 0
+#define POCET_OPT_0_SPECIALNE               20 // jednotlivé komponenty option 0 -- bity pre force option 0
 extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 // 2011-04-08: úprava významu (a interpretácie) option 0 ==  OPT_0_SPECIALNE (zobraziť/nezobraziť "pridanú hodnotu" oproti papierovej LH)
 #define BIT_OPT_0_VERSE                      1 // export also verse numbers
@@ -1574,6 +1591,7 @@ extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_TWO_YEARS_CYCLE_ID     65536 // when use two-years' cycle for readings (BIT_OPT_0_TWO_YEARS_CYCLE is set), 0 = 1st year, 1 = 2nd year of two-years' cycle
 #define BIT_OPT_0_ALTERNATIVE_READINGS  131072 // use alternative second readings in prayer with readings (CZ only)
 #define BIT_OPT_0_TRANSPARENT_NAV_LEFT  262144 // transparent navigation arrow in text; override: on the left side of the screen (left-handed)
+#define BIT_OPT_0_SIDE_NAVIGATION       524288 // side navigation using JavaScript; for web usage (instead of frames)
 
 #define POCET_OPT_1_CASTI_MODLITBY          20 // jednotlivé komponenty option 1 -- bity pre force option 1
 extern unsigned long long _global_opt_1_casti_modlitby[POCET_OPT_1_CASTI_MODLITBY];
@@ -1648,7 +1666,8 @@ extern unsigned long long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_CZ_HYMNY_VYBER          8192 // CZ: hymny z breviáře ("písničky") nebo k volnému výběru (podle LA, "Renč")
 #define BIT_OPT_5_OFF_DEF_PSALM_146_150  16384 // pre ranné chvály ofícia za zosnulých možno brať ako tretí žalm 146 resp. 150
 #define BIT_OPT_5_ZAVER_KNAZ_DIAKON      32768 // prayer conclusions for morning and evening prayer: whether take when priest/diacon is present (default: 0, no)
-#define BIT_OPT_5_INVITATORIUM_ANT       65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.)
+// deprecated: BIT_OPT_5_INVITATORIUM_ANT
+#define BIT_OPT_5_INVITATORIUM_ANT       65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.) // not used
 #define BIT_OPT_5_OCR_34_HYMNS          131072 // different (special) hymns for 34th week per annum
 #define BIT_OPT_5_KOMPLETORIUM_OKTAVA   262144 // prvé alebo druhé nedeľné kompletórium (pre Veľkonočnú oktávu a Oktávu Narodenia Pána)
 #define BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  524288 // psalmódia pre posvätné čítanie štvrtka vo Svätom týždni (default: štvrtok 2. týždňa žaltára; možnosť zvoliť z piatka 3. týždňa žaltára)
