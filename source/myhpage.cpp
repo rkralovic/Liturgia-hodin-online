@@ -287,13 +287,23 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	}
 
 #if defined(IO_ANDROID)
+	// Android app only
 	Export_to_file(expt, "\t<meta name=\"viewport\" content=\"width=device-width, user-scalable=no, initial-scale=1.0\" />\n");
 #else
+	// not for Android app
 	Export_to_file(expt, "\t<meta name=\"viewport\" content=\"width=device-width, user-scalable=yes, initial-scale=1.0\" />\n");
 #endif
 
+#if defined(BEHAVIOUR_WEB) && !(defined(__APPLE__)) && !(defined(IO_ANDROID))
+	// JavaScript files for sidemenu; not for Android & iOS app
+	Log("elements <style> + <script>...\n");
+	Export_to_file(expt, "\t<style id=\"css_override\"></style>\n");
+	Export_to_file(expt, "\t<script type=\"text/javascript\" src=\"/jquery-3.7.1.min.js\"></script>\n");
+	Export_to_file(expt, "\t<script type=\"text/javascript\" src=\"/sidemenu.js\"></script>\n");
+#endif
+
 	Log("element <title>...</title>...\n");
-	Export_to_file(expt, "<title>%s</title>\n", title);
+	Export_to_file(expt, "\t<title>%s</title>\n", title);
 
 	Log("element </head>...\n");
 	Export_to_file(expt, "</head>\n\n");
@@ -335,10 +345,17 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	}
 #endif
 
-	// kvôli špeciálnemu "zoznam.htm"
+	// kvôli špeciálnemu "zoznam.htm"; used only for batchmode command-line execution...
 	if (spec == 1) {
-		Export_to_file(expt, " onLoad=\"fn_aktualne(0,0,0)\"");
+		Export_to_file(expt, " onload=\"fn_aktualne(0,0,0)\"");
 	}
+
+#if defined(BEHAVIOUR_WEB) && !(defined(__APPLE__)) && !(defined(IO_ANDROID))
+	// ...so it is save for web behaviour (and not for mobile OSs) to add onLoad method again
+	Export_to_file(expt, " onload=\"finishLoad()\"");
+#endif
+
+	// closing <body> element
 	Export_to_file(expt, ">\n");
 
 	// explicit override for hamburger icon
@@ -385,10 +402,17 @@ void _hlavicka_sidemenu(FILE* expt) {
 		Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR "\n");
 
 		// Dnes (Today's prayers)
-		_export_link_menu_dnes();
+		_export_link_menu_dnes(_global_jazyk);
 
 		// Téma light/dark (Theme day/night)
+#if defined(BEHAVIOUR_WEB)
+#if !(defined(__APPLE__)) && !(defined(IO_ANDROID))
+		// JavaScript files for sidemenu; not for Android & iOS app
+		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_WEB_THEME "%s" HTML_SIDE_NAVIGATION_WEB_THEME_SPAN "" HTML_A_END "\n", html_text_opt_2_nocny_rezim_menu_base[_global_jazyk]);
+#else
 		_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM, (char*)html_text_opt_2_nocny_rezim_menu_show[_global_jazyk], (char*)html_text_opt_2_nocny_rezim_menu_hide[_global_jazyk], (char*)STR_EMPTY, (char*)STR_EMPTY, (char*)"\t", (char*)"\n", (char*)STR_EMPTY, (char*)STR_EMPTY, 0, 0);
+#endif
+#endif // BEHAVIOUR_WEB
 
 		// ------ horizontal row ------ 
 		Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
@@ -403,11 +427,33 @@ void _hlavicka_sidemenu(FILE* expt) {
 			}
 		}// for o
 
+		// ------ dropdown for languages ------ 
+		Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_BTN "%s" HTML_NONBREAKING_SPACE "" HTML_NAVIGATION_DROPDOWN_BTN_2 "" HTML_DIV_END "\n", html_text_Jazyk[_global_jazyk]);
+		Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_CONTAINER "\n");
+
+		for (int i = 0; i <= POCET_JAZYKOV; i++) {
+			// supported languages explicitly defined
+			if ((supported_languages[i]) && (i != _global_jazyk)) {
+				_export_link_menu_dnes(i);
+				// Export_to_file(expt, "\t\t" HTML_A_HREF_BEGIN "%s>%s" HTML_A_END "\n", cfg_http_address_default[i], nazov_jazyka_native_jazyk(i)); // navigate to page root
+			}
+		}
+
+		Export_to_file(expt, "\t" HTML_DIV_END"\n");
+
+		// ------ horizontal row ------ 
+		Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
+
+		// copyright at the bottom of sidemenu
+		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_COPYRIGHT "\n");
+
 		Export_to_file(expt, HTML_DIV_END"\n");
 
 		Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN "\n");
 
-		Export_to_file(expt, HTML_SIDE_NAVIGATION_SCRIPT "\n");
+#if !defined(BEHAVIOUR_WEB) || (defined(__APPLE__)) || (defined(IO_ANDROID))
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_SCRIPT "\n"); // for reverse cases (web behaviour; not mobile OSs), already done by script sidemenu.js included in _hlavicka() method above
+#endif
 	}
 }// _hlavicka_sidemenu()
 
@@ -546,7 +592,7 @@ void _patka(FILE* expt) {
 
 #ifndef BEHAVIOUR_CMDLINE
 	// navigation to main page (URL breviar.sk) before (c) info
-	Export_to_file(expt, "<" HTML_LINK_NORMAL " href=\"%s\" " HTML_TARGET_TOP ">%s" HTML_A_END "\n", cfg_http_address_default[_global_jazyk], cfg_http_display_address_default[_global_jazyk]);
+	Export_to_file(expt, HTML_A_HREF_BEGIN "\"%s\" " HTML_TARGET_TOP ">%s" HTML_A_END "\n", cfg_http_address_default[_global_jazyk], cfg_http_display_address_default[_global_jazyk]);
 #endif
 
 	Log("cfg_mail_address_default[%d] (language: %s) == %s\n", _global_jazyk, skratka_jazyka[_global_jazyk], cfg_mail_address_default[_global_jazyk]);
@@ -558,7 +604,7 @@ void _patka(FILE* expt) {
 	}
 
 	Log("mail_addr == %s\n", mail_addr);
-	Export_to_file(expt, "&#169; %d%s <" HTML_LINK_NORMAL " href=\"mailto:%s\">%s" HTML_A_END "\n", baserok, rok, mail_addr, html_mail_label);
+	Export_to_file(expt, "&#169; %d%s " HTML_A_HREF_BEGIN "\"mailto:%s\">%s" HTML_A_END "\n", baserok, rok, mail_addr, html_mail_label);
 
 	Export_to_file(expt, HTML_P_END "\n");
 

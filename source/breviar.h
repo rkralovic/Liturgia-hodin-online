@@ -63,7 +63,7 @@ extern void _export_rozbor_dna_kalendar_core(short int typ);
 extern void _export_rozbor_dna_kalendar(short int typ);
 
 extern void _export_link_show_hide(short int opt, unsigned long long bit_opt, char popis_show[MAX_STR], char popis_hide[MAX_STR], char html_tag_begin[SMALL], char html_class[SMALL], char specific_string_before[SMALL], char specific_string_after[SMALL], char anchor[SMALL], char html_tag_end[SMALL], char left_parenthesis = '(', char right_parenthesis = ')');
-extern void _export_link_menu_dnes();
+extern void _export_link_menu_dnes(short int j);
 extern void _export_link_menu_linkitem(short int o);
 
 extern short int _global_pocet_navigacia; // 2011-07-03: počet prejdených/spracovaných parametrov PARAM_NAVIGACIA | counter of processed PARAM_NAVIGACIA params
@@ -566,8 +566,10 @@ extern char pom_FONT[SMALL];
 (_local_den.denvr == SV_RODINY) \
 )
 
+extern const char* html_text_opt_2_nocny_rezim_menu_base[POCET_JAZYKOV + 1];
 extern const char* html_text_opt_2_nocny_rezim_menu_hide[POCET_JAZYKOV + 1];
 extern const char* html_text_opt_2_nocny_rezim_menu_show[POCET_JAZYKOV + 1];
+extern const char* html_text_Jazyk[POCET_JAZYKOV + 1];
 
 #ifndef OS_linux
 // kedysi bolo void main; 2003-07-14, kvoli gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5) christ-net.sk 

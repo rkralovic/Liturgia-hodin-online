@@ -1487,7 +1487,7 @@ void _export_link_helper(char pom[MAX_STR], char pom2[MAX_STR], char pom3[MAX_ST
 	Log("_export_link_helper(): koniec.\n");
 } // _export_link_helper()
 
-void _export_link_menu_dnes() {
+void _export_link_menu_dnes(short int j) {
 	Log("_export_link_menu_dnes(): začiatok...\n");
 	
 	char popis[MAX_STR];
@@ -1502,11 +1502,22 @@ void _export_link_menu_dnes() {
 	// backup of some parameters
 	short int local_query_type = query_type;
 	short int local_modlitba = _global_modlitba;
+	short int local_jazyk = _global_jazyk;
+	short int local_kalendar = _global_kalendar;
 
 	query_type = PRM_DNES;
 	_global_modlitba = MODL_NEURCENA;
+	_global_jazyk = j;
+	_global_kalendar = default_kalendar[j];
 
-	mystrcpy(popis, (char*)html_button_Dnes[_global_jazyk], MAX_STR);
+	if (local_jazyk != j) {
+		// text containing name of language
+		mystrcpy(popis, (char*)nazov_jazyka_native_jazyk[_global_jazyk][local_jazyk], MAX_STR);
+	}
+	else {
+		// real "Today" text
+		mystrcpy(popis, (char*)html_button_Dnes[_global_jazyk], MAX_STR);
+	}
 
 	prilep_request_options(pom2, pom3);
 
@@ -1524,6 +1535,8 @@ void _export_link_menu_dnes() {
 	// restore of some parameters
 	query_type = local_query_type;
 	_global_modlitba = local_modlitba;
+	_global_jazyk = local_jazyk;
+	_global_kalendar = local_kalendar;
 
 	Log("_export_link_menu_dnes(): koniec.\n");
 } // _export_link_menu_dnes()

@@ -153,6 +153,14 @@ p.bibleref {
 	color: #FF3333;
 }
 
+.blue { 
+	color: #44aadd; 
+}
+
+.bluebold { 
+	color: #44aadd; 
+}
+
 .normal { 
 	color: #CCCCCC; 
 }
@@ -276,12 +284,17 @@ sup {
 	background: #222222;
 }
 
-.sidebar a {
+.sidebar a, .dropdown-btn {
 	color: #999999;
 }
 
-.sidebar a:hover {
-	color: #000;
+.sidebar a:hover, .dropdown-btn:hover {
+	background-color: #C39482; /* button middle-dark */
+	color: #000000;
+}
+
+.sidebar p {
+	color: #999999;
 }
 
 a:hover.closebtn {
@@ -290,6 +303,15 @@ a:hover.closebtn {
 }
 
 .openbtn {
-	background-color: #000;
+	background-color: rgba(0,0,0,0.3);
 	color: #CCCCCC;
 }
+
+.openbtn:hover {
+	background-color:  rgba(0,0,0,0.7);
+}
+
+.active {
+	background-color: #444444;
+}
+

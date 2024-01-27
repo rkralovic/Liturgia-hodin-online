@@ -35,9 +35,14 @@
 #define HTML_SIDE_NAVIGATION_SIDEBAR "<div id=\"mySidebar\" class=\"sidebar\">\n" \
 	"\t<a href=\"javascript:void(0)\" class=\"closebtn\" onclick=\"closeNav()\">×</a>"
 
+#define HTML_SIDE_NAVIGATION_COPYRIGHT "<p class=\"small\">©&nbsp;Juraj&nbsp;Vidéky</p>"
+
 #define HTML_SIDE_NAVIGATION_MAIN "<div id=\"main\">\n" \
-	"\t<button class=\"openbtn\" onclick=\"openNav()\">☰</button>\n" \
+	"\t<div class=\"openbtn\" onclick=\"openNav()\">☰</div>\n" \
 	"</div>"
+
+#define HTML_SIDE_NAVIGATION_WEB_THEME "<a href=\"javascript:void(0)\" onclick=\"switchNightMode()\">"
+#define HTML_SIDE_NAVIGATION_WEB_THEME_SPAN "<span id=\"themesign\"></span>"
 
 #define HTML_SIDE_NAVIGATION_SCRIPT "<script>" \
 "\nfunction openNav() {" \
@@ -48,6 +53,14 @@
 "\n\tdocument.getElementById(\"mySidebar\").style.width = \"0\";" \
 "\n}" \
 "\n</script>"
+
+#define HTML_NAVIGATION_DROPDOWN_BTN "<div class=\"dropdown-btn\">"
+
+#define HTML_NAVIGATION_DROPDOWN_BTN_2 "<span id=\"trianglesign\" style=\"font-size: 50%%;\">&#9660;</span>"
+
+#define HTML_NAVIGATION_DROPDOWN_CONTAINER "<div class=\"dropdown-container\">"
+
+#define HTML_NAVIGATION_DROPDOWN_ITEM ""
 
 #define HTML_BOTTOM "p-bottom"
 #define HTML_ANAME_BOTTOM "<a name=\"" HTML_BOTTOM "\"></a></div>"

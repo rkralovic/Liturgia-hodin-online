@@ -717,7 +717,7 @@ void _vytvor_global_link(short int den, short int mesiac, short int rok, short i
 			sprintf(_global_link, "<" HTML_LINK_CLASS_B "%s" HTML_LINK_CLASS_E " href=\"", html_class);
 		}
 		else {
-			mystrcpy(_global_link, "<" HTML_LINK_NORMAL " href=\"", MAX_GLOBAL_LINK);
+			mystrcpy(_global_link, HTML_A_HREF_BEGIN "\"", MAX_GLOBAL_LINK);
 		}
 	}
 
