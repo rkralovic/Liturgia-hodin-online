@@ -201,19 +201,6 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	}
 	_global_hlavicka_Export++;
 
-	// iné CSS sú len "doplnky" (overrides) k hlavnému CSS
-	if (_global_css != CSS_breviar_sk) {
-		Log("first, export CSS filename: nazov_css_suboru == %s...\n", nazov_css[CSS_breviar_sk]);
-	}
-	const char* nazov_css_suboru;
-	if (_global_css == CSS_UNDEF) {
-		nazov_css_suboru = nazov_css[CSS_breviar_sk];
-	}// _global_css == CSS_UNDEF
-	else {
-		nazov_css_suboru = nazov_css[_global_css];
-	}// else
-	Log("nazov_css_suboru == %s...\n", nazov_css_suboru);
-
 	// nastavenie font-family
 	// najprv sa testuje nastavenie _global_font; následne sa prípadne nastavia defaulty
 	if (_global_font == FONT_CHECKBOX) {
@@ -265,16 +252,14 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	Export_to_file(expt, (char*)html_header_1, nazov_charset[charset_jazyka[_global_jazyk]]);
 
 	// CSS (one or more)
-	if (_global_css != CSS_breviar_sk) {
-		_header_css(expt, level, nazov_css[CSS_breviar_sk]);
-	}
-	_header_css(expt, level, nazov_css_suboru);
+	_header_css(expt, level, nazov_css_default);
+
 	// CSS override rounded corners
 	if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_ROUNDED_CORNERS)) {
 		_header_css(expt, level, nazov_css_rounded_corners);
 	}
-	// CSS override night mode
-	if (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM)) {
+	// CSS override night mode: priority has _global_theme (if defined) over older BIT_OPT_2_NOCNY_REZIM
+	if ((_global_theme == THEME_DARK) || ((_global_theme == THEME_UNDEF) && (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM)))) {
 		_header_css(expt, level, nazov_css_invert_colors);
 	}
 	// CSS override normal font (no bold)
