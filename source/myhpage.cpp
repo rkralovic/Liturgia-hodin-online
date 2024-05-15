@@ -43,8 +43,10 @@ const char* html_header_1 =
 //	"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
 	"<!DOCTYPE html>\n"
 #endif
-    "<html lang=\"%s\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n\t<meta name=\"Author\" content=\"Juraj Vidéky\" />\n";
+    "<html lang=\"%s\" xmlns=\"http://www.w3.org/1999/xhtml\"%s>\n<head>\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n\t<meta name=\"Author\" content=\"Juraj Vidéky\" />\n";
 const char* html_header_css = "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"";
+
+const char* html_style_background_color_overrides = "\tselect, input.text, .openbtn, .openbtnR, .openbtn:hover, .openbtnR:hover {\n\t\tbackground-color: #%s;\n\t}\n\t.openbtn, .openbtnR {\n\t\topacity: 0.3;\n\t}\n\t.openbtn:hover, .openbtnR:hover {\n\t\topacity: 0.8;\n\t}\n";
 
 const char* xml_header = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n";
 
@@ -68,6 +70,7 @@ const char* HTML_MAIL_LABEL_SHORT = "J. Vidéky";
 
 #define MAX_MAIL_LABEL 20
 #define MAX_EXT 5
+char html_background_color[SMALL];
 char html_mail_label[MAX_MAIL_LABEL];
 char pismeno_modlitby;
 char pismeno_prev[8];
@@ -76,6 +79,7 @@ char ext[MAX_EXT];
 char file_name_pom[MAX_STR];
 char *ptr;
 short int _local_modlitba;
+char _local_background_color[SMALL];
 
 void myhpage_init_globals(void) {
 	bol_content_type_text_html = NIE;
@@ -246,10 +250,39 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 #endif
 		bol_content_type_text_html = ANO;
 	}
-	Log("creating header...\n");
+	Log("creating html + header...\n");
 
-	Log("element <head>...\n");
-	Export_to_file(expt, (char*)html_header_1, html_lang_jazyka[_global_jazyk]);
+	Log("_global_theme_light_background_color == %s...\n", _global_theme_light_background_color);
+	Log("_global_theme_dark_background_color == %s...\n", _global_theme_dark_background_color);
+
+	mystrcpy(_local_background_color, STR_EMPTY, SMALL);
+
+	bool has_background_color_override_light = (
+            PODMIENKA_IS_LIGHT_THEME &&
+            PODMIENKA_EXPORTOVAT_THEME_LIGHT_BACKGROUND_COLOR &&
+            isValidHexaCode(_global_theme_light_background_color));
+
+	bool has_background_color_override_dark = (
+            PODMIENKA_IS_DARK_THEME &&
+            PODMIENKA_EXPORTOVAT_THEME_DARK_BACKGROUND_COLOR &&
+            isValidHexaCode(_global_theme_dark_background_color));
+
+	if (has_background_color_override_light || has_background_color_override_dark) {
+		if (has_background_color_override_light) {
+			mystrcpy(_local_background_color, _global_theme_light_background_color, SMALL);
+		}
+		if (has_background_color_override_dark) {
+			mystrcpy(_local_background_color, _global_theme_dark_background_color, SMALL);
+		}
+	}
+
+	mystrcpy(html_background_color, STR_EMPTY, SMALL);
+
+	if (has_background_color_override_light || has_background_color_override_dark) {
+		sprintf(html_background_color, " style=\"background-color: #%s;\"", _local_background_color);
+	}
+	Log("element <html> followed by <head>...\n");
+	Export_to_file(expt, (char*)html_header_1, html_lang_jazyka[_global_jazyk], html_background_color);
 
 	// CSS (one or more)
 	_header_css(expt, level, nazov_css_default);
@@ -259,7 +292,7 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 		_header_css(expt, level, nazov_css_rounded_corners);
 	}
 	// CSS override night mode: priority has _global_theme (if defined) over older BIT_OPT_2_NOCNY_REZIM
-	if ((_global_theme == THEME_DARK) || ((_global_theme == THEME_UNDEF) && (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM)))) {
+	if (PODMIENKA_IS_DARK_THEME) {
 		_header_css(expt, level, nazov_css_invert_colors);
 	}
 	// CSS override normal font (no bold)
@@ -295,6 +328,8 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	Log("element </head>...\n");
 	Export_to_file(expt, "</head>\n\n");
 
+	Log("header created.\ncreating body...\n");
+
 	Log("element <body>...\n");
 	Export_to_file(expt, "<body");
 
@@ -304,7 +339,7 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	bool has_font_margin = _global_style_margin != 0;
 	bool has_line_height = _global_line_height_perc != 0;
 
-	if (has_font_family || has_font_size || has_font_size_global || has_font_margin || has_line_height) {
+	if (has_font_family || has_font_size || has_font_size_global || has_font_margin || has_line_height || has_background_color_override_light || has_background_color_override_dark) {
 		Export_to_file(expt, " style=\"");
 		if (has_font_family) {
 			Export_to_file(expt, "font-family: %s; ", _global_css_font_family);
@@ -320,6 +355,9 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 		}
 		if (has_line_height) {
 			Export_to_file(expt, "line-height: %d%%; ", _global_line_height_perc);
+		}
+		if (has_background_color_override_light || has_background_color_override_dark) {
+			Export_to_file(expt, "background-color: #%s; ", _local_background_color);
 		}
 		Export_to_file(expt, "\"");
 	}
@@ -338,16 +376,27 @@ void _hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	}
 
 #if defined(BEHAVIOUR_WEB) && !(defined(__APPLE__)) && !(defined(IO_ANDROID))
-	// ...so it is save for web behaviour (and not for mobile OSs) to add onLoad method again
-	Export_to_file(expt, " onload=\"finishLoad()\"");
+	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) {
+		// JavaScript files for sidemenu; not for Android & iOS app
+		Export_to_file(expt, " onload=\"finishLoad()\"");
+	}
 #endif
 
 	// closing <body> element
 	Export_to_file(expt, ">\n");
 
+	Log("body-opening element created.\ncreating style...\n");
+
 	// explicit override for hamburger icon
-	if (has_font_margin) {
-		Export_to_file(expt, "<style>\n\t.openbtn {\n\t\tmargin-left: -%dpx; \n\t}\n</style>\n", _global_style_margin);
+	if (has_font_margin || has_background_color_override_light || has_background_color_override_dark) {
+		Export_to_file(expt, "<style>\n");
+		if (has_font_margin) {
+			Export_to_file(expt, "\t.openbtn {\n\t\tmargin-left: -%dpx; \n\t}\n", _global_style_margin);
+		}
+		if (has_background_color_override_light || has_background_color_override_dark) {
+			Export_to_file(expt, html_style_background_color_overrides, _local_background_color);
+		}
+		Export_to_file(expt, "</style>\n");
 	}
 
 	// display transparent navigation (up/down arrows)
@@ -383,80 +432,107 @@ void hlavicka(char* title, FILE* expt, short int level, short int spec) {
 	_hlavicka(title, expt, level, spec);
 }// hlavicka()
 
-void _hlavicka_sidemenu(FILE* expt) {
-	// display side navigation (left menu)
-	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) {
-		if (!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION_RIGHT))) {
-			// sidemenu on the left
-			Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR "\n");
-		}
-		else {
-			// sidemenu on the right
-			Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR_RIGHT "\n");
-		}
+void _hlavicka_sidemenu_helper(FILE* expt, short int location_right = NIE) {
+	if (location_right == NIE) {
+		// sidemenu on the left
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR "\n");
+	}
+	else {
+		// sidemenu on the right
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_SIDEBAR_RIGHT "\n");
+	}
 
-		// Dnes (Today's prayers)
-		_export_link_menu_dnes(_global_jazyk);
+	// Dnes (Today's prayers)
+	_export_link_menu_dnes(_global_jazyk);
 
-		// Téma light/dark (Theme day/night)
+	// Téma light/dark (Theme day/night)
 #if defined(BEHAVIOUR_WEB)
 #if !(defined(__APPLE__)) && !(defined(IO_ANDROID))
-		// JavaScript files for sidemenu; not for Android & iOS app
-		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_WEB_THEME "%s" HTML_SIDE_NAVIGATION_WEB_THEME_SPAN "" HTML_A_END "\n", html_text_opt_2_nocny_rezim_menu_base[_global_jazyk]);
+	// JavaScript files for sidemenu; not for Android & iOS app
+	Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_WEB_THEME "%s", html_text_opt_2_nocny_rezim_menu_base[_global_jazyk]);
+	if (location_right == NIE) {
+		// sidemenu on the left
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_WEB_THEME_SPAN);
+	}
+	else {
+		// sidemenu on the right
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_WEB_THEME_SPAN_RIGHT);
+	}
+	Export_to_file(expt, HTML_A_END "\n");
 #else
-		// ToDo: instead of deprecated OPT_2_HTML_EXPORT::BIT_OPT_2_NOCNY_REZIM use parameter 'c'
-		_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM, (char*)html_text_opt_2_nocny_rezim_menu_show[_global_jazyk], (char*)html_text_opt_2_nocny_rezim_menu_hide[_global_jazyk], (char*)STR_EMPTY, (char*)STR_EMPTY, (char*)"\t", (char*)"\n", (char*)STR_EMPTY, (char*)STR_EMPTY, 0, 0);
+	// ToDo: instead of deprecated OPT_2_HTML_EXPORT::BIT_OPT_2_NOCNY_REZIM use parameter 'c'
+	_export_link_show_hide(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM, (char*)html_text_opt_2_nocny_rezim_menu_show[_global_jazyk], (char*)html_text_opt_2_nocny_rezim_menu_hide[_global_jazyk], (char*)STR_EMPTY, (char*)STR_EMPTY, (char*)"\t", (char*)"\n", (char*)STR_EMPTY, (char*)STR_EMPTY, 0, 0);
 #endif
 #endif // BEHAVIOUR_WEB
 
-		// ------ horizontal row ------ 
-		Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
+	// ------ horizontal row ------ 
+	Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
 
-		// these should be similar to static HTML file sidemenu.htm
-		for (short int o = 0; o < POCET_SIDEMENU_ITEMS; o++) {
-			if ((!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_EMPTY))) 
-				&& (!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_SLASH))) // simple forward to webpage base
-				&& (!(equals(cfg_sidemenu_item[o][_global_jazyk], STR_EMPTY)))
-				) {
-				_export_link_menu_linkitem(o);
-			}
-		}// for o
-
-		// ------ dropdown for languages ------ 
-		Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_BTN "%s" HTML_NONBREAKING_SPACE "" HTML_NAVIGATION_DROPDOWN_BTN_2 "" HTML_DIV_END "\n", html_text_Jazyk[_global_jazyk]);
-		Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_CONTAINER "\n");
-
-		for (int i = 0; i <= POCET_JAZYKOV; i++) {
-			// supported languages explicitly defined
-			if ((supported_languages[i]) && (i != _global_jazyk)) {
-				_export_link_menu_dnes(i);
-				// Export_to_file(expt, "\t\t" HTML_A_HREF_BEGIN "%s>%s" HTML_A_END "\n", cfg_http_address_default[i], nazov_jazyka_native_jazyk(i)); // navigate to page root
-			}
+	// these should be similar to static HTML file sidemenu.htm
+	for (short int o = 0; o < POCET_SIDEMENU_ITEMS; o++) {
+		if ((!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_EMPTY)))
+			&& (!(equals(cfg_sidemenu_item_link[o][_global_jazyk], STR_SLASH))) // simple forward to webpage base
+			&& (!(equals(cfg_sidemenu_item[o][_global_jazyk], STR_EMPTY)))
+			) {
+			_export_link_menu_linkitem(o);
 		}
+	}// for o
 
-		Export_to_file(expt, "\t" HTML_DIV_END"\n");
+	// ------ dropdown for languages ------ 
+	Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_BTN "%s" HTML_NONBREAKING_SPACE "" HTML_NAVIGATION_DROPDOWN_BTN_2 "" HTML_DIV_END "\n", html_text_Jazyk[_global_jazyk]);
+	Export_to_file(expt, "\t" HTML_NAVIGATION_DROPDOWN_CONTAINER "\n");
 
-		// ------ horizontal row ------ 
-		Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
-
-		// copyright at the bottom of sidemenu
-		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_COPYRIGHT "\n");
-
-		Export_to_file(expt, HTML_DIV_END"\n");
-
-		if (!(isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION_RIGHT))) {
-			// sidemenu on the left
-			Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN "\n");
+	for (int i = 0; i <= POCET_JAZYKOV; i++) {
+		// supported languages explicitly defined
+		if ((supported_languages[i]) && (i != _global_jazyk)) {
+			_export_link_menu_dnes(i);
+			// Export_to_file(expt, "\t\t" HTML_A_HREF_BEGIN "%s>%s" HTML_A_END "\n", cfg_http_address_default[i], nazov_jazyka_native_jazyk(i)); // navigate to page root
 		}
-		else {
-			// sidemenu on the right
-			Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN_RIGHT "\n");
-		}
+	}
+
+	Export_to_file(expt, "\t" HTML_DIV_END"\n");
+
+	// ------ horizontal row ------ 
+	Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
+
+	// changing sidemenu location
+	if (location_right == NIE) {
+		// sidemenu on the left
+		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_TO_RIGHT "\n", html_text_opt_0_sidemenu_right[_global_jazyk]);
+	}
+	else {
+		// sidemenu on the right
+		Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_TO_LEFT "\n", html_text_opt_0_sidemenu_left[_global_jazyk]);
+	}
+
+	// ------ horizontal row ------ 
+	Export_to_file(expt, "\t" HTML_HR_SIDEMENU "\n");
+
+	// copyright at the bottom of sidemenu
+	Export_to_file(expt, "\t" HTML_SIDE_NAVIGATION_COPYRIGHT "\n");
+
+	Export_to_file(expt, HTML_DIV_END"\n");
+
+	if (location_right == NIE) {
+		// sidemenu on the left
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN "\n");
+	}
+	else {
+		// sidemenu on the right
+		Export_to_file(expt, HTML_SIDE_NAVIGATION_MAIN_RIGHT "\n");
+	}
 
 #if !defined(BEHAVIOUR_WEB) || (defined(__APPLE__)) || (defined(IO_ANDROID))
-		// for reverse cases (web behaviour; not mobile OSs), already done by script sidemenu.js included in _hlavicka() method above
-		Export_to_file(expt, HTML_SIDE_NAVIGATION_SCRIPT "\n");
+	// for reverse cases (web behaviour; not mobile OSs), already done by script sidemenu.js included in _hlavicka() method above
+	Export_to_file(expt, HTML_SIDE_NAVIGATION_SCRIPT "\n");
 #endif
+}// _hlavicka_sidemenu_helper()
+
+void _hlavicka_sidemenu(FILE* expt) {
+	// display side navigation (left menu)
+	if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) {
+		_hlavicka_sidemenu_helper(expt, NIE);
+		_hlavicka_sidemenu_helper(expt, ANO);
 	}// if (isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION))
 }// _hlavicka_sidemenu()
 

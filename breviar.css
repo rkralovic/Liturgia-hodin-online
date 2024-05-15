@@ -1108,6 +1108,7 @@ p.strong-always, h3.strong-always {
 .nav-arrow-right, .nav-arrow-left {
 	background-size: contain;
 	background-repeat: no-repeat;
+	opacity: 0.5;
 	z-index: 1;
 	width: 4em;
 	height: 2.4em;
@@ -1190,6 +1191,10 @@ p.strong-always, h3.strong-always {
 	font-size: 70%; 
 }
 
+.sidebar a.small, .sidebarR a.small {
+	font-size: 100%; 
+}
+
 .sidebar .closebtn {
 	font-size: 180%;
 	padding: 0px 8px 0px 8px;
@@ -1210,10 +1215,11 @@ a:hover.closebtn, a:hover.closebtnR {
 	background-color: #6F3028; /* logo background darker */
 }
 
-.openbtn {
+.openbtn, .openbtnR {
 	font-size: 100%;
 	cursor: pointer;
 	background-color:  rgba(255,255,255,0.3);
+	opacity: 0.3;
 	color: black;
 	border: none;
 	padding: 0px;
@@ -1221,18 +1227,12 @@ a:hover.closebtn, a:hover.closebtnR {
 }
 
 .openbtnR {
-	font-size: 100%;
-	cursor: pointer;
-	background-color:  rgba(255,255,255,0.3);
-	color: black;
-	border: none;
-	padding: 0px;
 	right: 16px;
-	position: fixed;
 }
 
 .openbtn:hover, .openbtnR:hover {
 	background-color:  rgba(255,255,255,0.9);
+	opacity: 0.9;
 }
 
 #main {
@@ -1263,4 +1263,21 @@ a:hover.closebtn, a:hover.closebtnR {
 hr.sidemenu {
 	margin-top: 24px;
 	margin-bottom: 24px;
+}
+
+/* Avoid printing sidemenu, buttons etc. when using Ctrl+P in browser */
+@media print {
+	#main, #mySidebar, #mySidebarR {
+		display: none;
+		visibility: hidden;
+	}
+	input.button, input.reset, .button, a.button, .button-prayer, input.button-prayer /* prayer buttons */
+	, input.button0, input.reset0, .button0, input.button1, input.reset1, .button1 /* << button0 >> + button1 for today */
+	, input.button2, input.reset2, .button2 { 
+		display: none;
+		visibility: hidden;
+	}
+	.strophe {
+		break-inside: avoid;
+	}
 }

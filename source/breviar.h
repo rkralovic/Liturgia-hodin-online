@@ -162,6 +162,9 @@ extern short int _global_kalendar; // kalendáre (napr. rehoľné), súvisí s j
 extern short int _global_ritus;
 
 extern short int _global_theme;
+extern char _global_theme_light_background_color[SMALL]; // used for background color override for light theme
+extern char _global_theme_dark_background_color[SMALL]; // used for background color override for dark theme
+extern short int _global_sidemenu_location;
 
 extern short int _global_font;
 extern short int _global_font_size;
@@ -492,7 +495,20 @@ extern char pom_FONT[SMALL];
 
 #define PODMIENKA_EXPORTOVAT_STATIC_FONT ((_global_font != FONT_CUSTOM) && (_global_font != FONT_CSS) && (_global_font != FONT_CHECKBOX))
 
-#define PODMIENKA_EXPORTOVAT_THEME ((_global_theme == THEME_LIGHT) || (_global_theme == THEME_DARK))
+// export theme into URL only when sidemenu is NOT displayed
+#define PODMIENKA_EXPORTOVAT_THEME ((!isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) && ((_global_theme == THEME_LIGHT) || (_global_theme == THEME_DARK)))
+
+#define PODMIENKA_IS_LIGHT_THEME ((_global_theme == THEME_LIGHT) || ((_global_theme == THEME_UNDEF) && (!(isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM)))))
+#define PODMIENKA_IS_DARK_THEME ((_global_theme == THEME_DARK) || ((_global_theme == THEME_UNDEF) && (isGlobalOption(OPT_2_HTML_EXPORT, BIT_OPT_2_NOCNY_REZIM))))
+
+// We need to export both background colors whenever they are available, in
+// order to keep the settings correctly. It is important e.g. for android
+// display settings, which read these values.
+#define PODMIENKA_EXPORTOVAT_THEME_LIGHT_BACKGROUND_COLOR (isValidHexaCode(_global_theme_light_background_color))
+#define PODMIENKA_EXPORTOVAT_THEME_DARK_BACKGROUND_COLOR (isValidHexaCode(_global_theme_dark_background_color))
+
+// export sidemenu location into URL only when sidemenu is NOT displayed
+#define PODMIENKA_EXPORTOVAT_SIDEMENU_LOCATION ((!isGlobalOption(OPT_0_SPECIALNE, BIT_OPT_0_SIDE_NAVIGATION)) && ((_global_sidemenu_location == SIDEMENU_LOCATION_LEFT) || (_global_sidemenu_location == SIDEMENU_LOCATION_RIGHT)))
 
 #define PODMIENKA_EXPORTOVAT_STYLE_MARGIN ( (_global_style_margin > MIN_STYLE_MARGIN) && (_global_style_margin < MAX_STYLE_MARGIN)  && (_global_style_margin != DEF_STYLE_MARGIN) )
 
@@ -570,6 +586,8 @@ extern const char* html_text_opt_2_nocny_rezim_menu_base[POCET_JAZYKOV + 1];
 extern const char* html_text_opt_2_nocny_rezim_menu_hide[POCET_JAZYKOV + 1];
 extern const char* html_text_opt_2_nocny_rezim_menu_show[POCET_JAZYKOV + 1];
 extern const char* html_text_Jazyk[POCET_JAZYKOV + 1];
+extern const char* html_text_opt_0_sidemenu_left[POCET_JAZYKOV + 1];
+extern const char* html_text_opt_0_sidemenu_right[POCET_JAZYKOV + 1];
 
 #ifndef OS_linux
 // kedysi bolo void main; 2003-07-14, kvoli gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5) christ-net.sk 

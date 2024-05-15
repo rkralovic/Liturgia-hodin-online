@@ -47,7 +47,6 @@
     <string name="navigation">Navigace v textech modliteb</string>
     <string name="smart_buttons">Úsporné zobrazení tlačítek pro modlitby</string>
     <string name="night_mode">Noční režim</string>
-    <string name="background_override">Alternativní barva pozadí (žlutá)</string>
     <string name="normal_font">Obyčejné písmo (ne tučné)</string>
     <string name="buttons_rounded_corners">Zaoblené rohy pro tlačítka</string>
     <string name="buttons_order">Navigační tlačítka pro datum pod tlačítky pro modlitby</string>

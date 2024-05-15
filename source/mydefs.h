@@ -630,14 +630,6 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION "of0sn"
 #endif
 
-// side navigation (side menu) on the right side; does not have an effect unless FORCE_BIT_OPT_0_SIDE_NAVIGATION is set
-#define FORCE_BIT_OPT_0_SIDE_NAVIGATION_RIGHT 151
-#ifdef LONG_PARAM_NAMES
-#define STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION_RIGHT "FORCE_BIT_OPT_0_SIDE_NAVIGATION_RIGHT"
-#else
-#define STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION_RIGHT "of0srn"
-#endif
-
 // full text of psalms etc.
 #define FORCE_BIT_OPT_0_ZALMY_FULL_TEXT 121
 #ifdef LONG_PARAM_NAMES
@@ -1161,11 +1153,34 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_5_KOMPLETORIUM_OKTAVA "of5ko"
 #endif
 
+// css/theme (dark/light aka day/night mode)
 #define THEME 40
 #ifdef LONG_PARAM_NAMES
-	#define STR_THEME "THEME"
+#define STR_THEME "THEME"
 #else
-	#define STR_THEME "c"
+#define STR_THEME "c"
+#endif
+
+#define THEME_LIGHT_BACKGROUND_COLOR 48
+#ifdef LONG_PARAM_NAMES
+#define STR_THEME_LIGHT_BACKGROUND_COLOR "THEME_LIGHT_BACKGROUND_COLOR"
+#else
+#define STR_THEME_LIGHT_BACKGROUND_COLOR "c0"
+#endif
+
+#define THEME_DARK_BACKGROUND_COLOR 49
+#ifdef LONG_PARAM_NAMES
+#define STR_THEME_DARK_BACKGROUND_COLOR "THEME_DARK_BACKGROUND_COLOR"
+#else
+#define STR_THEME_DARK_BACKGROUND_COLOR "c1"
+#endif
+
+// side navigation (sidemenu location)
+#define SIDEMENU_LOCATION 152
+#ifdef LONG_PARAM_NAMES
+#define STR_SIDEMENU_LOCATION "SIDEMENU_LOCATION"
+#else
+#define STR_SIDEMENU_LOCATION "v"
 #endif
 
 #define OPT_DATE_FORMAT 41

@@ -273,6 +273,10 @@ sup {
 	color: #FF3333;
 }
 
+.nav-arrow-right, .nav-arrow-left {
+	opacity: 0.8;
+}
+
 #nav-arrow-down {
   background-image: url('sipkadole-night.png');
 }
@@ -307,10 +311,12 @@ a:hover.closebtn, a:hover.closebtnR {
 .openbtn, .openbtnR {
 	background-color: rgba(0,0,0,0.3);
 	color: #CCCCCC;
+	opacity: 0.3;
 }
 
 .openbtn:hover, .openbtnR:hover {
 	background-color:  rgba(0,0,0,0.7);
+	opacity: 0.7;
 }
 
 .active {

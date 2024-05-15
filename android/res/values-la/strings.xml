@@ -47,7 +47,6 @@
     <string name="navigation">Ostende navigationem in textibus orationum</string>
     <string name="smart_buttons">Ostende pulsabulas pro orationibus cum parsimonia</string>
     <string name="night_mode">Modus noctem</string>
-    <string name="background_override">Alius color reductiorum (flavus)</string>
     <string name="normal_font">Ostende ubique litteras formæ normalis (non crassas)</string>
     <string name="buttons_rounded_corners">Angulis rotundatis bullarum</string>
     <string name="buttons_order">Ostende pulsabulas navigatorias sub pulsabulis pro Horas</string>
