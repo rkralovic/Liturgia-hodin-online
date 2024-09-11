@@ -527,11 +527,11 @@ extern short int query_type; // contains constants PRM_...
 #endif
 
 // ktorý rok použiť pre dvojročný cyklus pre posvätné čítanie (prvé, biblické čítanie)?
-#define FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID 147
+#define FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT 147
 #ifdef LONG_PARAM_NAMES
-#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID "FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID"
+#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT "FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT"
 #else
-#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID "of02rcid"
+#define STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT "of02rcinv"
 #endif
 
 // použiť alternatívne čítania pre posvätné čítanie (druhé čítanie)
@@ -1010,6 +1010,13 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_PLACE_OPT_6_MARIA_ANT_MULTI "of6cma"
 #endif
 
+#define FORCE_PLACE_OPT_6_OTCENAS_UVOD_MULTI 151
+#ifdef LONG_PARAM_NAMES
+#define STR_FORCE_PLACE_OPT_6_OTCENAS_UVOD_MULTI "FORCE_PLACE_OPT_6_OTCENAS_UVOD_MULTI"
+#else
+#define STR_FORCE_PLACE_OPT_6_OTCENAS_UVOD_MULTI "of6pn"
+#endif
+
 // pre force option 5 jednotlivé bit-komponenty (parciálne voľby)
 
 #define FORCE_BIT_OPT_5_HYMNUS_KOMPL 101
@@ -1131,12 +1138,11 @@ extern short int query_type; // contains constants PRM_...
 #define STR_FORCE_BIT_OPT_5_ZAVER_KNAZ_DIAKON "of5zkd"
 #endif
 
-// not used
-#define FORCE_BIT_OPT_5_INVITATORIUM_ANT 125
+#define FORCE_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY 125
 #ifdef LONG_PARAM_NAMES
-#define STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT "FORCE_BIT_OPT_5_INVITATORIUM_ANT"
+#define STR_FORCE_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY "FORCE_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY"
 #else
-#define STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT "of5i(deprecated)"
+#define STR_FORCE_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY "of5i(deprecated)"
 #endif
 
 #define FORCE_BIT_OPT_5_OCR_34_HYMNS 137
@@ -1389,7 +1395,7 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_0_ITALICS_CONDITIONAL       "BitOpt0ItalicsConditional"
 #define XML_BIT_OPT_0_PRINTED_EDITION           "BitOpt0PrintedEdition"
 #define XML_BIT_OPT_0_USE_TWO_YEARS_CYCLE       "BitOpt0UseTwoYearsCycle"
-#define XML_BIT_OPT_0_TWO_YEARS_CYCLE_ID        "BitOpt0TwoYearsCycleId"
+#define XML_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT    "BitOpt0TwoYearsCycleInvert"
 #define XML_BIT_OPT_0_ALTERNATIVE_READINGS      "BitOpt0AlternativeReadings"
 #define XML_BIT_OPT_0_TRANSPARENT_NAV_LEFT      "BitOpt0TransparentNavLeft"
 #define XML_BIT_OPT_0_SIDE_NAVIGATION           "BitOpt0NavigationMenu"
@@ -1453,22 +1459,23 @@ extern short int query_type; // contains constants PRM_...
 #define XML_BIT_OPT_5_CZ_HYMNY_VYBER            "BitOpt5CZhymnsAlt"
 #define XML_BIT_OPT_5_OFF_DEF_PSALM_146_150     "BitOpt5OffDefPsalm146or150"
 #define XML_BIT_OPT_5_ZAVER_KNAZ_DIAKON         "BitOpt5ConclusionPriestDiacon"
-#define XML_BIT_OPT_5_INVITATORIUM_ANT          "BitOpt5InvitatoryAnt" // deprecated
+#define XML_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY     "BitOpt5InvitatoryAntWrapOnly"
 #define XML_BIT_OPT_5_OCR_34_HYMNS              "BitOpt5PerAnnum34Hymns"
 #define XML_BIT_OPT_5_KOMPLETORIUM_OKTAVA       "BitOpt5ComplOctaves"
 #define XML_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  "BitOpt5MaundyThursPsalmody"
 
 // POCET_OPT_6_ALTERNATIVES_MULTI
 #define XML_PLACE_OPT_6_HYMNUS_MULTI            "PlaceOpt6HymnusMulti"
+#define XML_PLACE_OPT_6_PSALM_MULTI             "PlaceOpt6PsalmMulti"
 #define XML_PLACE_OPT_6_CITANIE2_MULTI          "PlaceOpt6Reading2Multi"
 #define XML_PLACE_OPT_6_CITANIE1_MULTI          "PlaceOpt6Reading1Multi"
 #define XML_PLACE_OPT_6_ANTIFONA_MULTI          "PlaceOpt6AntiphoneMulti"
 #define XML_PLACE_OPT_6_MODLITBA_MULTI          "PlaceOpt6CollectaMulti"
 #define XML_PLACE_OPT_6_PROSBY_MULTI            "PlaceOpt6PrecesMulti"
-#define XML_PLACE_OPT_6_KCIT_RESP_MULTI         "PlaceOpt6ShortReadingRespMulti"
-#define XML_PLACE_OPT_6_KRESP_MULTI             "PlaceOpt6ShortRespMulti"
-#define XML_PLACE_OPT_6_PSALM_MULTI             "PlaceOpt6PsalmMulti"
 #define XML_PLACE_OPT_6_MARIA_ANT_MULTI         "PlaceOpt6ComplMariaAntMulti"
+#define XML_PLACE_OPT_6_KRESP_MULTI             "PlaceOpt6ShortRespMulti"
+#define XML_PLACE_OPT_6_KCIT_RESP_MULTI         "PlaceOpt6ShortReadingRespMulti"
+#define XML_PLACE_OPT_6_OTCENAS_UVOD_MULTI      "PlaceOpt6OurLordIntroMulti"
 
 // element XML_MENU with sub-elements
 #define XML_MENU				"Menu"

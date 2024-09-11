@@ -43,10 +43,15 @@ extern char _file[MAX_STR_AF_FILE]; // nazov súboru, napr. _1ne.htm
 extern char _file_pc[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania
 extern char _file_pc_tyzden[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania v zavislosti od tyzdna (obdobie cez rok)
 extern char _file_orig[MAX_STR_AF_FILE]; // nazov súboru, do ktorého sa v prípade kompletória dočasne odloží pôvodný súbor
+extern char _file_pc_two_years_cycle[MAX_STR_AF_FILE]; // nazov fajlu pre posvatne citania; tmp
 
-// "funkcie" na store/restore pôvodného filename
+// store/restore original filename (_file)
 #define file_name_zapamataj()	strcpy(_file_orig, _file);
 #define file_name_obnov()		strcpy(_file, _file_orig);
+
+// store/restore original filename for readings (_file_pc)
+#define file_pc_name_zapamataj()	strcpy(_file_orig, _file_pc);
+#define file_pc_name_obnov()		strcpy(_file_pc, _file_orig);
 
 extern void file_name_zaltar(short int den, short int tyzzal);
 extern void file_name_litobd(short int litobd);
@@ -55,7 +60,7 @@ extern void file_name_vlastny_kalendar(short int kalendar);
 extern void file_name_kompletorium(short int litobd);
 extern void file_name_litobd_pc_tyzden(short int litobd, short int tyzden);
 
-extern void _add_special_anchor_postfix();
+extern void _add_special_anchor_postfix_CZ_hymnus_cezrok();
 
 extern void set_hymnus_kompletorium_obd(short int den, short int tyzzal, short int modlitba, short int litobd);
 extern void set_hymnus(short int den, short int tyzzal, short int modlitba);
@@ -199,14 +204,16 @@ extern void _set_zalm3(short int modlitba, const char* file, const char* anchor)
 
 extern void set_zalm(short int ktory, short int modlitba, const char* file, const char* anchor);
 
-// pri posvatnom citani plati pre 1. citanie
-#define _set_citanie1 _set_kcitanie
+extern void _apply_anchor_filename_changes_for_two_years_cycle(); // uses global variable _anchor
+
+// pre posvätné čítanie: 1. čítanie; kedysi bolo: #define set_citanie1 _set_kcitanie
+extern void set_citanie1(short int modlitba, const char* file, const char* anchor);
 
 extern void _set_kcitanie(short int modlitba, const char* file, const char* anchor);
 extern void _set_kresponz(short int modlitba, const char* file, const char* anchor);
 
-// pre posvätné čítanie: 2. čítanie
-#define _set_citanie2 _set_benediktus
+// pre posvätné čítanie: 2. čítanie; kedysi bolo: #define _set_citanie2 _set_benediktus
+extern void set_citanie2(short int modlitba, const char* file, const char* anchor);
 
 #define _set_magnifikat _set_benediktus
 
@@ -462,25 +469,25 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 #define _vlastne_slavenie_1citanie(vlastny_anchor) {\
 	sprintf(_anchor, "%s_%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_CITANIE1);\
-	_set_citanie1(modlitba, _file, _anchor);\
+	set_citanie1(modlitba, _file, _anchor);\
 	set_LOG_litobd;\
 }
 
 #define _vlastne_slavenie_2citanie(vlastny_anchor) {\
 	sprintf(_anchor, "%s_%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_CITANIE2);\
-	_set_citanie2(modlitba, _file, _anchor);\
+	set_citanie2(modlitba, _file, _anchor);\
 	set_LOG_litobd;\
 }
 
 #define _vlastne_slavenie_ine_1citanie(vlastny_anchor) {\
 	sprintf(_anchor, "%s_%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_CITANIE1);\
-	_set_citanie1(modlitba, _file_pc, _anchor);\
+	set_citanie1(modlitba, _file_pc, _anchor);\
 	set_LOG_litobd_pc;\
 }
 
 #define _vlastne_slavenie_ine_2citanie(vlastny_anchor) {\
 	sprintf(_anchor, "%s_%c%s", vlastny_anchor, pismenko_modlitby(modlitba), ANCHOR_CITANIE2);\
-	_set_citanie2(modlitba, _file_pc, _anchor);\
+	set_citanie2(modlitba, _file_pc, _anchor);\
 	set_LOG_litobd_pc;\
 }
 
@@ -507,7 +514,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 // hymnus | pre Cezročné obdobie treba zrušiť možnosť brať alternatívy hymnov (posv. čítanie, I. resp. II.)
 #define _vlastna_cast_hymnus(modlitba, litobd) {\
 	_set_hymnus_alternativy_NO(modlitba, litobd);\
-	sprintf(_anchor, "%s%s%c%s", _special_anchor_prefix, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);\
+	sprintf(_anchor, "%s%s%c%s", _special_anchor_prefix_CZ_hymnus, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);\
 	if (modlitba == MODL_POSV_CITANIE) {\
 		_set_hymnus(modlitba, _file_pc, _anchor);\
 		}\
@@ -654,14 +661,14 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 // 1. čítanie
 #define _vlastna_cast_1citanie {\
 	sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_CITANIE1);\
-	_set_citanie1(modlitba, _file_pc, _anchor);\
+	set_citanie1(modlitba, _file_pc, _anchor);\
 	set_LOG_svsv;\
 }
 
 // 2. čítanie
 #define _vlastna_cast_2citanie {\
 	sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_CITANIE2);\
-	_set_citanie2(modlitba, _file_pc, _anchor);\
+	set_citanie2(modlitba, _file_pc, _anchor);\
 	set_LOG_svsv;\
 }
 
@@ -944,7 +951,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 // 1. čítanie
 #define _spolocna_cast_1citanie {\
 	sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_CITANIE1);\
-	_set_citanie1(modlitba, _file, _anchor);\
+	set_citanie1(modlitba, _file, _anchor);\
 	set_LOG_svsv;\
 }
 
@@ -953,7 +960,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 	if (su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(MODL_POSV_CITANIE) || ((force & FORCE_BRAT_2CITANIE) == FORCE_BRAT_2CITANIE)) {\
 		Log("_spolocna_cast_2citanie(%s)...\n", nazov_modlitby(MODL_POSV_CITANIE));\
 		sprintf(_anchor, "%s%c%s", _anchor_head, pismenko_modlitby(MODL_POSV_CITANIE), ANCHOR_CITANIE2);\
-		_set_citanie2(modlitba, _file, _anchor);\
+		set_citanie2(modlitba, _file, _anchor);\
 		set_LOG_svsv;\
 	}\
 }
@@ -1048,7 +1055,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 #define _spolocna_cast_hymnus(modlitba, litobd) {\
 	if (su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modlitba) || ((force & FORCE_BRAT_HYMNUS) == FORCE_BRAT_HYMNUS)) {\
 		_set_hymnus_alternativy_NO(modlitba, litobd);\
-		sprintf(_anchor, "%s%s%c%s", _special_anchor_prefix, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);\
+		sprintf(_anchor, "%s%s%c%s", _special_anchor_prefix_CZ_hymnus, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS);\
 		_set_hymnus(modlitba, _file, _anchor);\
 		set_LOG_svsv;\
 	}\
@@ -1056,7 +1063,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 #define _spolocna_cast_hymnus_po {\
 	if (su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modlitba) || ((force & FORCE_BRAT_HYMNUS) == FORCE_BRAT_HYMNUS)) {\
-		sprintf(_anchor, "%s%s%c%s%s", _special_anchor_prefix, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS, POSTNA_PRIPONA);\
+		sprintf(_anchor, "%s%s%c%s%s", _special_anchor_prefix_CZ_hymnus, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS, POSTNA_PRIPONA);\
 		_set_hymnus(modlitba, _file, _anchor);\
 		set_LOG_svsv;\
 	}\
@@ -1064,7 +1071,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 #define _spolocna_cast_hymnus_ve {\
 	if (su_inv_hymnus_kcit_kresp_benmagn_prosby_vlastne(modlitba) || ((force & FORCE_BRAT_HYMNUS) == FORCE_BRAT_HYMNUS)) {\
-		sprintf(_anchor, "%s%s%c%s%s", _special_anchor_prefix, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS, VELKONOCNA_PRIPONA);\
+		sprintf(_anchor, "%s%s%c%s%s", _special_anchor_prefix_CZ_hymnus, _anchor_head, pismenko_modlitby(modlitba), ANCHOR_HYMNUS, VELKONOCNA_PRIPONA);\
 		_set_hymnus(modlitba, _file, _anchor);\
 		set_LOG_svsv;\
 	}\
@@ -1329,7 +1336,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 #define _vlastna_cast_1citanie_ve {\
 	sprintf(_anchor, "%s%c%s%s", _anchor_head, pismenko_modlitby(modlitba), ANCHOR_CITANIE1, VELKONOCNA_PRIPONA);\
-	_set_citanie1(modlitba, _file_pc, _anchor);\
+	set_citanie1(modlitba, _file_pc, _anchor);\
 	set_LOG_svsv;\
 }
 
@@ -1489,7 +1496,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 // vlastné druhé čítanie na posvätné čítanie pre srdca PM
 #define _srdca_pm_2cit {\
 	sprintf(_anchor, "%s_%c%s", ANCHOR_SRDCA_PM, pismenko_modlitby(modlitba), ANCHOR_CITANIE2);\
-	_set_citanie2(modlitba, _file, _anchor);\
+	set_citanie2(modlitba, _file, _anchor);\
 	set_LOG_litobd;\
 }
 
@@ -1505,6 +1512,7 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 
 // postfixes for special cases (anchors)
 #define CZ_HYMNUS_POSTFIX       "_CZ"
+#define TWO_YEARS_CYCLE_POSTFIX "_D" // followed by 1 or 2
 #define VELKONOCNA_PRIPONA      "VE"
 #define POSTNA_PRIPONA          "PO"
 #define CEZROCNA_PRIPONA        "CR"
@@ -1532,6 +1540,9 @@ extern void set_spolocna_cast(_struct_sc sc, short int poradie_svaty, int force 
 #define ANCHOR_ANTIFONA_VIG  "ANTVG"
 #define ANCHOR_EVANJELIUM    "EV"
 #define ANCHOR_UKON_KAJ      "UKONKAJ" // úkon kajúcnosti -- act of repentance
+
+// prefixes for special cases (filenames)
+#define TWO_YEARS_CYCLE_PREFIX "d" // followed by 1 or 2 and STR_UNDERSCORE
 
 // special identifiers + filename indentifiers (tuples)
 #define SPOM_PM_SOBOTA "SPMVS"
@@ -2488,5 +2499,6 @@ extern const char* text_NOV_18_SCHP[POCET_JAZYKOV + 1];
 
 extern short int pocet_multi(char *_anchor, unsigned long long type);
 extern short int is_printed_edition_text(char* _anchor, char* _paramname);
+extern _struct_anchor_and_file map_reading(_struct_anchor_and_file orig);
 
 #endif // __DBZALTAR_H_

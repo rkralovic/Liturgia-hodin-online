@@ -1874,7 +1874,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_0_ITALICS_CONDITIONAL, SMALL); break; // BIT_OPT_0_ITALICS_CONDITIONAL
 			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_0_PRINTED_EDITION, SMALL); break; // BIT_OPT_0_PRINTED_EDITION
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_0_USE_TWO_YEARS_CYCLE, SMALL); break; // BIT_OPT_0_USE_TWO_YEARS_CYCLE
-			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_ID, SMALL); break; // BIT_OPT_0_TWO_YEARS_CYCLE_ID
+			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_0_TWO_YEARS_CYCLE_INVERT, SMALL); break; // BIT_OPT_0_TWO_YEARS_CYCLE_INVERT
 			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_0_ALTERNATIVE_READINGS, SMALL); break; // BIT_OPT_0_ALTERNATIVE_READINGS
 			case 18: mystrcpy(str, STR_FORCE_BIT_OPT_0_TRANSPARENT_NAV_LEFT, SMALL); break; // BIT_OPT_0_TRANSPARENT_NAV_LEFT
 			case 19: mystrcpy(str, STR_FORCE_BIT_OPT_0_SIDE_NAVIGATION, SMALL); break; // BIT_OPT_0_SIDE_NAVIGATION
@@ -1905,6 +1905,8 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZAVER, SMALL); break; // BIT_OPT_1_ZAVER
 			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_1_OVERRIDE_STUP_SLAV, SMALL); break; // BIT_OPT_1_OVERRIDE_STUP_SLAV
 			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_1_STUP_SVIATOK_SLAVNOST, SMALL); break; // BIT_OPT_1_STUP_SVIATOK_SLAVNOST
+			case 18: mystrcpy(str, STR_FORCE_BIT_OPT_1_KOMPL_MARIA_ANT, SMALL); break; // BIT_OPT_1_KOMPL_MARIA_ANT
+			case 19: mystrcpy(str, STR_FORCE_BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD, SMALL); break; // BIT_OPT_1_ZOBRAZ_OTCENAS_UVOD
 			}
 		}
 		break;
@@ -1918,7 +1920,7 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 1: mystrcpy(str, STR_FORCE_BIT_OPT_2_PRVE_VESPERY, SMALL); break; // BIT_OPT_2_BUTTON_PRVE_VESPERY
 			case 2: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_FAMILY, SMALL); break; // BIT_OPT_2_FONT_FAMILY
 			case 3: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_NAME_CHOOSER, SMALL); break; // BIT_OPT_2_FONT_NAME_CHOOSER
-				// case 4: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_SIZE, SMALL); break; // BIT_OPT_2_FONT_SIZE_CHOOSER
+			case 4: mystrcpy(str, STR_FORCE_BIT_OPT_2_FONT_SIZE, SMALL); break; // BIT_OPT_2_FONT_SIZE_CHOOSER
 			case 5: mystrcpy(str, STR_FORCE_BIT_OPT_2_NAVIGATION, SMALL); break; // BIT_OPT_2_NAVIGATION
 			case 6: mystrcpy(str, STR_FORCE_BIT_OPT_2_TEXT_WRAP, SMALL); break; // BIT_OPT_2_TEXT_WRAP
 			case 7: mystrcpy(str, STR_FORCE_BIT_OPT_2_BUTTONY_USPORNE, SMALL); break; // BIT_OPT_2_BUTTONY_USPORNE
@@ -1972,8 +1974,10 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case 13: mystrcpy(str, STR_FORCE_BIT_OPT_5_CZ_HYMNY_VYBER, SMALL); break; // BIT_OPT_5_CZ_HYMNY_VYBER
 			case 14: mystrcpy(str, STR_FORCE_BIT_OPT_5_OFF_DEF_PSALM_146_150, SMALL); break; // BIT_OPT_5_OFF_DEF_PSALM_146_150
 			case 15: mystrcpy(str, STR_FORCE_BIT_OPT_5_ZAVER_KNAZ_DIAKON, SMALL); break; // BIT_OPT_5_ZAVER_KNAZ_DIAKON
-			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_5_INVITATORIUM_ANT, SMALL); break; // BIT_OPT_5_INVITATORIUM_ANT // not used
+			case 16: mystrcpy(str, STR_FORCE_BIT_OPT_5_INVITAT_ANT_WRAP_ONLY, SMALL); break; // BIT_OPT_5_INVITAT_ANT_WRAP_ONLY
 			case 17: mystrcpy(str, STR_FORCE_BIT_OPT_5_OCR_34_HYMNS, SMALL); break; // BIT_OPT_5_OCR_34_HYMNS
+			case 18: mystrcpy(str, STR_FORCE_BIT_OPT_5_KOMPLETORIUM_OKTAVA, SMALL); break; // BIT_OPT_5_KOMPLETORIUM_OKTAVA
+			case 19: mystrcpy(str, STR_FORCE_BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA, SMALL); break; // BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA
 			}
 		}
 		break;
@@ -1984,12 +1988,16 @@ void strcat_str_opt_bit_order(char str_to_append[SMALL], short opt, short bit_or
 			case -2: mystrcpy(str, STR_OPT_6, SMALL); break; // no bit = ordinary option string | USE_STR_OPT
 			case -1: mystrcpy(str, STR_FORCE_OPT_6, SMALL); break; // no bit = force option string | USE_STR_FORCE_OPT
 			case 0: mystrcpy(str, STR_FORCE_PLACE_OPT_6_HYMNUS_MULTI, SMALL); break; // PLACE_OPT_6_HYMNUS_MULTI
-			case 1: mystrcpy(str, STR_FORCE_PLACE_OPT_6_CITANIE2_MULTI, SMALL); break; // PLACE_OPT_6_CITANIE2_MULTI
-			case 2: mystrcpy(str, STR_FORCE_PLACE_OPT_6_CITANIE1_MULTI, SMALL); break; // PLACE_OPT_6_CITANIE1_MULTI
-			case 3: mystrcpy(str, STR_FORCE_PLACE_OPT_6_ANTIFONA_MULTI, SMALL); break; // PLACE_OPT_6_ANTIFONA_MULTI
-			case 4: mystrcpy(str, STR_FORCE_PLACE_OPT_6_MODLITBA_MULTI, SMALL); break; // PLACE_OPT_6_MODLITBA_MULTI
-			case 5: mystrcpy(str, STR_FORCE_PLACE_OPT_6_PROSBY_MULTI, SMALL); break; // PLACE_OPT_6_PROSBY_MULTI
-			case 6: mystrcpy(str, STR_FORCE_PLACE_OPT_6_KCIT_RESP_MULTI, SMALL); break; // PLACE_OPT_6_KCIT_RESP_MULTI
+			case 1: mystrcpy(str, STR_FORCE_PLACE_OPT_6_PSALM_MULTI, SMALL); break; // PLACE_OPT_6_PSALM_MULTI
+			case 2: mystrcpy(str, STR_FORCE_PLACE_OPT_6_CITANIE2_MULTI, SMALL); break; // PLACE_OPT_6_CITANIE2_MULTI
+			case 3: mystrcpy(str, STR_FORCE_PLACE_OPT_6_CITANIE1_MULTI, SMALL); break; // PLACE_OPT_6_CITANIE1_MULTI
+			case 4: mystrcpy(str, STR_FORCE_PLACE_OPT_6_ANTIFONA_MULTI, SMALL); break; // PLACE_OPT_6_ANTIFONA_MULTI
+			case 5: mystrcpy(str, STR_FORCE_PLACE_OPT_6_MODLITBA_MULTI, SMALL); break; // PLACE_OPT_6_MODLITBA_MULTI
+			case 6: mystrcpy(str, STR_FORCE_PLACE_OPT_6_PROSBY_MULTI, SMALL); break; // PLACE_OPT_6_PROSBY_MULTI
+			case 7: mystrcpy(str, STR_FORCE_PLACE_OPT_6_MARIA_ANT_MULTI, SMALL); break; // PLACE_OPT_6_MARIA_ANT_MULTI
+			case 8: mystrcpy(str, STR_FORCE_PLACE_OPT_6_KRESP_MULTI, SMALL); break; // PLACE_OPT_6_KRESP_MULTI
+			case 9: mystrcpy(str, STR_FORCE_PLACE_OPT_6_KCIT_RESP_MULTI, SMALL); break; // PLACE_OPT_6_KCIT_RESP_MULTI
+			case 10: mystrcpy(str, STR_FORCE_PLACE_OPT_6_OTCENAS_UVOD_MULTI, SMALL); break; // PLACE_OPT_6_OTCENAS_UVOD_MULTI
 			}
 		}
 		break;

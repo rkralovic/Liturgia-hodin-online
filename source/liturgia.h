@@ -152,7 +152,7 @@ extern const short int use_dot_for_ordinals[POCET_JAZYKOV + 1];
 #define FONT_SIZE_XX_LARGE	8
 
 // font size in pt, default
-#define FONT_SIZE_PT_DEFAULT  12
+// #define FONT_SIZE_PT_DEFAULT  12
 
 // style margin, in pixels (px)
 #define MIN_STYLE_MARGIN      0
@@ -177,11 +177,18 @@ extern const short int use_dot_for_ordinals[POCET_JAZYKOV + 1];
 
 #define MAX_STR_AF_FILE   64
 #define MAX_STR_AF_ANCHOR 32
-struct _anchor_and_file{
+
+struct _anchor_and_file {
 	char file[MAX_STR_AF_FILE];
 	char anchor[MAX_STR_AF_ANCHOR];
 };
 typedef struct _anchor_and_file _struct_anchor_and_file;
+
+struct _anchor_and_file_mapping {
+	_struct_anchor_and_file source;
+	_struct_anchor_and_file dest;
+};
+typedef struct _anchor_and_file_mapping _struct_anchor_and_file_mapping;
 
 #define rchvalospev  zalm2
 #define vchvalospev  zalm3
@@ -935,7 +942,7 @@ struct dm{
 	short int denvt;      // cislo dna v tyzdni (0--6) DEN_...
 	short int denvr;      // cislo dna v roku (1--365/366) -- deň v roku
 	// toto boli "obcianske" zalezitosti
-	char litrok;          // liturgicky rok ('A'--'C')
+	char litrok;          // liturgicky rok ('A'--'C') -- nedeľný cyklus (Sunday's cycle for breviary & lectionaries)
 	short int tyzden;     // tyzden v danom liturgickom obdobi
 	short int tyzzal;     // tyzden v zaltari (vacsinou ((tyzden - 1) % 4) + 1)
 	short int litobd;     // liturgicke obdobie, OBD_...
@@ -1089,7 +1096,7 @@ extern const char* nazov_slavenia_lokal[];
 #define LOKAL_SLAV_SZOMBATHELYI_EGYH				53
 #define LOKAL_SLAV_NAGYSZ_PATRON					54
 #define LOKAL_SLAV_NITRA_HU							55
-#define LOKAL_SLAV_SZLOVAKIA_FOUNNEP				56
+#define LOKAL_SLAV_SZLOVAKIA_FOUNNEP				56 // not used
 #define LOKAL_SLAV_PECSI_EGYH_PATRON				57
 #define LOKAL_SLAV_NAGYVARADI_EGYH					58
 #define LOKAL_SLAV_VESZPREMI_EGYH_PATRON			59
@@ -1592,7 +1599,7 @@ extern unsigned long long _global_opt_0_specialne[POCET_OPT_0_SPECIALNE];
 #define BIT_OPT_0_ITALICS_CONDITIONAL      8192 // display text in italics (conditional), e. g. elisions
 #define BIT_OPT_0_PRINTED_EDITION         16384 // prefer printed edition (instead of corrections in our electronical version) = force usage of printed text
 #define BIT_OPT_0_USE_TWO_YEARS_CYCLE     32768 // use two-years' cycle for readings (Biblical, first readings in prayer with readings)
-#define BIT_OPT_0_TWO_YEARS_CYCLE_ID      65536 // when use two-years' cycle for readings (BIT_OPT_0_TWO_YEARS_CYCLE is set), 0 = 1st year, 1 = 2nd year of two-years' cycle
+#define BIT_OPT_0_TWO_YEARS_CYCLE_INVERT  65536 // when use two-years' cycle for readings (BIT_OPT_0_TWO_YEARS_CYCLE is set), reverse the usage of 1st/2nd year (default: according to ferial lectionary)
 #define BIT_OPT_0_ALTERNATIVE_READINGS   131072 // use alternative second readings in prayer with readings (CZ only)
 #define BIT_OPT_0_TRANSPARENT_NAV_LEFT   262144 // transparent navigation arrow in text; override: on the left side of the screen (left-handed)
 #define BIT_OPT_0_SIDE_NAVIGATION        524288 // side navigation using JavaScript; for web usage (instead of frames); default location on the left, can be changed via JavaScript
@@ -1670,8 +1677,7 @@ extern unsigned long long _global_opt_5_alternatives[POCET_OPT_5_ALTERNATIVES];
 #define BIT_OPT_5_CZ_HYMNY_VYBER          8192 // CZ: hymny z breviáře ("písničky") nebo k volnému výběru (podle LA, "Renč")
 #define BIT_OPT_5_OFF_DEF_PSALM_146_150  16384 // pre ranné chvály ofícia za zosnulých možno brať ako tretí žalm 146 resp. 150
 #define BIT_OPT_5_ZAVER_KNAZ_DIAKON      32768 // prayer conclusions for morning and evening prayer: whether take when priest/diacon is present (default: 0, no)
-// deprecated: BIT_OPT_5_INVITATORIUM_ANT
-#define BIT_OPT_5_INVITATORIUM_ANT       65536 // invitatory prayer: 1st or 2nd choice (SK: pôst I., CZ: advent I.) // not used
+#define BIT_OPT_5_INVITAT_ANT_WRAP_ONLY  65536 // invitatory prayer: the antiphone is NOT repeated; used only at the beginning and at the end (wraps the psalm only from outside)
 #define BIT_OPT_5_OCR_34_HYMNS          131072 // different (special) hymns for 34th week per annum
 #define BIT_OPT_5_KOMPLETORIUM_OKTAVA   262144 // prvé alebo druhé nedeľné kompletórium (pre Veľkonočnú oktávu a Oktávu Narodenia Pána)
 #define BIT_OPT_5_ZELENY_STVRTOK_PSALMODIA  524288 // psalmódia pre posvätné čítanie štvrtka vo Svätom týždni (default: štvrtok 2. týždňa žaltára; možnosť zvoliť z piatka 3. týždňa žaltára)
