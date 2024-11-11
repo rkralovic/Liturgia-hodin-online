@@ -336,7 +336,7 @@ public class UrlOptions {
   static int kDefaultLh = 130;
   public int getLh() {
     // Default value, must be consistent with liturgia.h.
-    // Alternatively, native code should always export mm parameter.
+    // Alternatively, native code should always export lh parameter.
     return getInt("lh", kDefaultLh);
   }
 
@@ -352,16 +352,18 @@ public class UrlOptions {
   static int kDefaultFf = 12;
   public int getFf() {
     // Default value, must be consistent with liturgia.h.
-    // Alternatively, native code should always export mm parameter.
+    // Alternatively, native code should always export ff parameter.
     return getInt("ff", kDefaultFf);
   }
 
   public void resetFf() {
-    resetInt("ff");
+    // Resetting to default means kDefaultFf, which must be explicitly set, because
+    // browser might have different default.
+    setInt("ff", kDefaultFf);
   }
 
   public void setFf(int value) {
-    setInt("ff", value, kDefaultFf);
+    setInt("ff", value);
   }
 
   public String getFont() {
@@ -399,6 +401,10 @@ public class UrlOptions {
     } else {
       params.put(key, "");
     }
+  }
+
+  void setInt(String key, int value) {
+    params.put(key, Integer.toString(value));
   }
 
   String maybeGetText(String key) {
